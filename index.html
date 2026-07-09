@@ -1,1248 +1,398 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MUZE TOOL BOX</title>
-  <meta name="description" content="MUZEの推し活に役立つ、非公式ファンメイドのツールまとめサイトです。">
-  <meta name="theme-color" content="#fff7fb">
-
-  <style>
-    :root {
-      --bg: #fff7fb;
-      --bg-2: #f7f3ff;
-      --paper: rgba(255, 255, 255, 0.86);
-      --paper-strong: #ffffff;
-      --ink: #4a4350; /* 本文用：背景になじむやわらかいグレー */
-      --heading-ink: #625b68; /* 見出し用：黒をもう一段階やわらかく */
-      --muted: #8a818e;
-      --line: rgba(224, 199, 218, 0.72);
-
-      --pink: #ff7eb6;
-      --pink-deep: #e84e92;
-      --peach: #ffd7bf;
-      --lavender: #d9cbff;
-      --blue: #cdefff;
-      --mint: #d7f7ee;
-      --cream: #fff4d8;
-
-      --useful: #d8f1fb;
-      --useful-deep: #27697f;
-      --play: #eadcff;
-      --play-deep: #6846a0;
-      --guide: #ffe5c8;
-      --guide-deep: #8b5528;
-
-      --radius-xl: 34px;
-      --radius-lg: 24px;
-      --shadow: 0 18px 50px rgba(70, 49, 82, 0.12);
-      --shadow-soft: 0 10px 30px rgba(70, 49, 82, 0.08);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      color: var(--ink);
-      background:
-        radial-gradient(circle at 12% 0%, rgba(255, 126, 182, 0.26), transparent 30%),
-        radial-gradient(circle at 86% 7%, rgba(205, 239, 255, 0.78), transparent 28%),
-        radial-gradient(circle at 48% 33%, rgba(234, 220, 255, 0.62), transparent 30%),
-        linear-gradient(180deg, #fff8fc 0%, #f8f3ff 48%, #fffaf2 100%);
-      font-family:
-        -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic",
-        "YuGothic", "Noto Sans JP", "Helvetica Neue", Arial, sans-serif;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background-image:
-        radial-gradient(circle, rgba(232, 78, 146, 0.15) 0 1px, transparent 1.6px),
-        radial-gradient(circle, rgba(104, 70, 160, 0.10) 0 1px, transparent 1.6px);
-      background-size: 34px 34px, 52px 52px;
-      background-position: 0 0, 20px 16px;
-      mask-image: linear-gradient(to bottom, black, transparent 78%);
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    button,
-    a {
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .shell {
-      width: min(1120px, calc(100% - 32px));
-      margin: 0 auto;
-    }
-
-    /* 共通ヘッダー */
-    .tool-header {
-      width: min(1120px, calc(100% - 24px));
-      margin: 12px auto 0;
-      background: rgba(255, 255, 255, 0.78);
-      border: 1px solid rgba(255, 126, 182, 0.34);
-      border-radius: 999px;
-      box-shadow: 0 12px 32px rgba(96, 64, 150, 0.12);
-      backdrop-filter: blur(16px);
-      position: sticky;
-      top: 10px;
-      z-index: 50;
-    }
-
-    .tool-header-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      padding: 12px 20px;
-    }
-
-    .tool-logo {
-      flex-shrink: 0;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 17px;
-      font-weight: 950;
-      letter-spacing: -0.02em;
-      color: #5a5160;
-      white-space: nowrap;
-    }
-
-    .tool-logo span {
-      color: var(--pink-deep);
-      transform: translateY(-1px) rotate(-8deg);
-    }
-
-    .tool-nav {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      font-size: 12px;
-      font-weight: 850;
-      white-space: nowrap;
-    }
-
-    .tool-nav a {
-      position: relative;
-      color: #5d5665;
-      padding: 7px 0;
-    }
-
-    .tool-nav a::after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      bottom: 1px;
-      width: 0;
-      height: 3px;
-      border-radius: 999px;
-      background: linear-gradient(90deg, var(--pink), var(--lavender));
-      transform: translateX(-50%);
-      transition: width 0.2s ease;
-    }
-
-    .tool-nav a:hover::after,
-    .tool-nav a.active::after {
-      width: 100%;
-    }
-
-    .tool-nav a.active {
-      color: var(--pink-deep);
-    }
-
-    .site-hero {
-      position: relative;
-      padding: clamp(34px, 7vw, 74px) 0 16px;
-    }
-
-    /* ヒーロー周りの装飾丸は、色数を抑えるため今回はなし */
-
-    .brand {
-      position: relative;
-      z-index: 2;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: end;
-      gap: 24px;
-    }
-
-    .brand-copy {
-      min-width: 0;
-    }
-
-    .hero-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 16px;
-      padding: 8px 13px;
-      border: 1px solid rgba(255, 126, 182, 0.32);
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.72);
-      color: var(--pink-deep);
-      font-size: 12px;
-      font-weight: 950;
-      letter-spacing: 0.08em;
-      box-shadow: var(--shadow-soft);
-    }
-
-    .hero-label::before {
-      content: "♡";
-      font-size: 13px;
-    }
-
-    .logo {
-      margin: 0;
-      color: #4a4350;
-      font-family: "Comic Sans MS", "Segoe Print", "Marker Felt", "Bradley Hand", "Hiragino Maru Gothic ProN", cursive;
-      font-weight: 900;
-      letter-spacing: -0.045em;
-      font-size: clamp(48px, 9vw, 94px);
-      line-height: 0.9;
-      text-shadow: 0 5px 0 rgba(255, 255, 255, 0.78);
-    }
-
-    .logo .logo-line {
-      display: block;
-      width: max-content;
-      transform-origin: left center;
-    }
-
-    .logo .logo-line:first-child {
-      transform: rotate(-2.8deg);
-    }
-
-    .logo .logo-line:last-child {
-      margin-top: 4px;
-      transform: translateX(10px) rotate(1.4deg);
-    }
-
-    .logo .logo-accent {
-      display: inline-block;
-      color: var(--pink-deep);
-      transform: translateY(-2px) rotate(-5deg);
-    }
-
-    .logo .logo-heart {
-      display: inline-block;
-      margin-left: 10px;
-      color: var(--pink-deep);
-      font-size: 0.52em;
-      letter-spacing: 0;
-      transform: translateY(-0.15em) rotate(14deg);
-    }
-
-    .logo::after {
-      content: "";
-      display: block;
-      width: min(360px, 74vw);
-      height: 10px;
-      margin-top: 10px;
-      border-radius: 999px;
-      background: linear-gradient(90deg, rgba(255,126,182,0.42), rgba(217,203,255,0.28), transparent);
-      transform: rotate(-1.4deg);
-    }
-
-    .hero-text {
-      max-width: 560px;
-      margin: 20px 0 0;
-      color: #685e6e;
-      font-size: 14px;
-      line-height: 2;
-      font-weight: 650;
-    }
-
-    .mini-note {
-      justify-self: end;
-      display: grid;
-      gap: 8px;
-      min-width: 210px;
-      padding: 18px;
-      border: 1px solid rgba(255, 255, 255, 0.72);
-      border-radius: 26px;
-      background: rgba(255, 255, 255, 0.58);
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 800;
-      line-height: 1.7;
-      box-shadow: var(--shadow-soft);
-      backdrop-filter: blur(10px);
-    }
-
-    .mini-note strong {
-      display: block;
-      color: var(--ink);
-      font-size: 15px;
-      letter-spacing: -0.03em;
-    }
-
-    .category-nav {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      padding: 28px 0 8px;
-      scrollbar-width: none;
-    }
-
-    .category-nav::-webkit-scrollbar {
-      display: none;
-    }
-
-    .category-nav a {
-      flex: 0 0 auto;
-      border: 1px solid rgba(255, 126, 182, 0.24);
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.68);
-      padding: 11px 16px;
-      color: #5a5160;
-      font-size: 13px;
-      font-weight: 900;
-      box-shadow: 0 8px 20px rgba(104, 70, 160, 0.08);
-      transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .category-nav a:hover {
-      transform: translateY(-2px);
-      background: #fff;
-      box-shadow: 0 12px 26px rgba(104, 70, 160, 0.12);
-    }
-
-    main {
-      padding: 14px 0 74px;
-    }
-
-    .category {
-      position: relative;
-      margin-top: 72px;
-      scroll-margin-top: 104px;
-    }
-
-    .category:first-child {
-      margin-top: 34px;
-    }
-
-    .section-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: end;
-      gap: 18px;
-      margin-bottom: 22px;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      margin-bottom: 10px;
-      color: var(--pink-deep);
-      font-size: 11px;
-      font-weight: 950;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-    }
-
-    .eyebrow::before {
-      content: "";
-      width: 28px;
-      height: 2px;
-      border-radius: 999px;
-      background: currentColor;
-    }
-
-    h2 {
-      margin: 0;
-      color: var(--heading-ink);
-      font-size: clamp(30px, 5vw, 48px);
-      line-height: 1.08;
-      letter-spacing: -0.055em;
-    }
-
-    .section-count {
-      flex-shrink: 0;
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 900;
-      padding: 8px 12px;
-      border: 1px solid rgba(255, 255, 255, 0.7);
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.54);
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 18px;
-    }
-
-    .tool-card {
-      grid-column: span 6;
-      position: relative;
-      display: flex;
-      min-height: 430px;
-      flex-direction: column;
-      justify-content: space-between;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.78);
-      border-radius: var(--radius-xl);
-      background:
-        linear-gradient(145deg, rgba(255,255,255,0.95), rgba(255,255,255,0.62)),
-        var(--paper-strong);
-      padding: 18px;
-      box-shadow: var(--shadow);
-      transition: transform 0.24s ease, box-shadow 0.24s ease;
-      isolation: isolate;
-    }
-
-    .tool-card:hover {
-      transform: translateY(-6px) rotate(-0.35deg);
-      box-shadow: 0 24px 60px rgba(70, 49, 82, 0.16);
-    }
-
-    .tool-card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: -2;
-      opacity: 0.95;
-      background:
-        linear-gradient(135deg, var(--card-accent), transparent 42%),
-        linear-gradient(315deg, rgba(255, 255, 255, 0.92), transparent 36%);
-    }
-
-    /* カード右上の丸装飾はなし。背景の薄いグラデだけで軽く見せる */
-    .tool-card::after {
-      content: none;
-    }
-
-    .tool-card.useful {
-      --card-accent: var(--useful);
-    }
-
-    .tool-card.play {
-      --card-accent: var(--play);
-    }
-
-    .tool-card.guide {
-      --card-accent: var(--guide);
-      grid-column: span 12;
-      min-height: 430px;
-    }
-
-    .tool-card.campaign {
-      --card-accent: #ffd8e8;
-    }
-
-    .card-top,
-    .card-bottom {
-      position: relative;
-      z-index: 2;
-    }
-
-    .card-media {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 4 / 3;
-      overflow: hidden;
-      border-radius: 26px;
-      margin-bottom: 18px;
-      padding: 18px;
-      border: 1px solid rgba(255, 255, 255, 0.8);
-      background:
-        linear-gradient(135deg, rgba(255,255,255,0.86), rgba(255,255,255,0.32)),
-        linear-gradient(135deg, #fff1f8, #f1ecff 54%, #e9f8ff);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.5);
-    }
-
-    .card-media::before {
-      content: "preview";
-      position: absolute;
-      left: 16px;
-      top: 14px;
-      z-index: 2;
-      padding: 5px 9px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.78);
-      color: rgba(232, 78, 146, 0.72);
-      font-size: 10px;
-      font-weight: 950;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    .card-media img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-      border-radius: 18px;
-      background: transparent;
-      filter: drop-shadow(0 12px 18px rgba(70, 49, 82, 0.16));
-    }
-
-    .card-media .placeholder-note {
-      position: absolute;
-      inset: 0;
-      display: grid;
-      place-items: center;
-      text-align: center;
-      padding: 42px 18px 18px;
-      color: rgba(74, 67, 80, 0.56);
-      font-size: 12px;
-      line-height: 1.85;
-      letter-spacing: 0.03em;
-      font-weight: 800;
-      background:
-        linear-gradient(to bottom, rgba(255,255,255,0.16), rgba(255,255,255,0.72));
-    }
-
-    .has-image .placeholder-note {
-      display: none;
-    }
-
-    .tool-meta {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-
-    .icon {
-      display: grid;
-      place-items: center;
-      width: 52px;
-      height: 52px;
-      border-radius: 18px;
-      color: var(--icon-color);
-      background: rgba(255, 255, 255, 0.7);
-      border: 1px solid rgba(255,255,255,0.75);
-      box-shadow: 0 8px 18px rgba(70, 49, 82, 0.08);
-    }
-
-    .useful .icon {
-      --icon-color: var(--useful-deep);
-    }
-
-    .play .icon {
-      --icon-color: var(--play-deep);
-    }
-
-    .guide .icon {
-      --icon-color: var(--guide-deep);
-    }
-
-    .campaign .icon {
-      --icon-color: var(--pink-deep);
-    }
-
-    .icon svg {
-      width: 26px;
-      height: 26px;
-      stroke: currentColor;
-      fill: none;
-      stroke-width: 1.8;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .mini-badge {
-      align-self: start;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 7px 10px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.68);
-      color: #7c7282;
-      font-size: 10px;
-      font-weight: 950;
-      letter-spacing: 0.11em;
-    }
-
-    .mini-badge::before {
-      content: "✦";
-      color: var(--pink-deep);
-      font-size: 10px;
-    }
-
-    .tool-title {
-      margin: 0 0 11px;
-      color: var(--heading-ink);
-      max-width: 92%;
-      font-size: clamp(22px, 3.8vw, 31px);
-      line-height: 1.24;
-      letter-spacing: -0.045em;
-    }
-
-    .tool-description {
-      margin: 0;
-      max-width: 38em;
-      color: #817887;
-      font-size: 14px;
-      line-height: 1.95;
-      font-weight: 580;
-    }
-
-    .card-bottom {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      margin-top: 26px;
-    }
-
-    .tag {
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 950;
-      letter-spacing: 0.12em;
-    }
-
-    .go {
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      min-height: 45px;
-      padding: 0 17px;
-      border-radius: 999px;
-      background: linear-gradient(100deg, #5a5260, #7d7188);
-      color: #fff;
-      font-size: 13px;
-      font-weight: 950;
-      box-shadow: 0 12px 24px rgba(90, 82, 96, 0.18);
-      transition: gap 0.2s ease, transform 0.2s ease;
-    }
-
-    .tool-card:hover .go {
-      gap: 13px;
-      transform: translateX(1px);
-    }
-
-    .go::after {
-      content: "↗";
-      font-size: 15px;
-    }
-
-    .profile {
-      position: relative;
-      overflow: hidden;
-      margin: 92px 0 0;
-      border: 1px solid rgba(255, 255, 255, 0.82);
-      border-radius: var(--radius-xl);
-      background:
-        radial-gradient(circle at 100% 0%, rgba(255, 126, 182, 0.22), transparent 30%),
-        linear-gradient(145deg, rgba(255,255,255,0.82), rgba(255,255,255,0.54));
-      padding: clamp(27px, 6vw, 50px);
-      box-shadow: var(--shadow-soft);
-      backdrop-filter: blur(14px);
-    }
-
-    .profile::after {
-      content: "share free ♡";
-      position: absolute;
-      right: 22px;
-      bottom: 18px;
-      color: rgba(232, 78, 146, 0.18);
-      font-size: clamp(28px, 7vw, 76px);
-      font-weight: 950;
-      letter-spacing: -0.07em;
-      transform: rotate(-4deg);
-      pointer-events: none;
-    }
-
-    .profile-grid {
-      position: relative;
-      z-index: 2;
-      display: grid;
-      grid-template-columns: 90px 1fr;
-      gap: 24px;
-      align-items: start;
-    }
-
-    .profile-mark {
-      display: grid;
-      place-items: center;
-      width: 78px;
-      height: 78px;
-      border-radius: 26px;
-      background:
-        linear-gradient(140deg, var(--blue), var(--lavender) 54%, var(--peach));
-      font-size: 25px;
-      font-weight: 950;
-      letter-spacing: -0.08em;
-      transform: rotate(-4deg);
-      box-shadow: 0 12px 24px rgba(104, 70, 160, 0.14);
-    }
-
-    .profile h3 {
-      margin: 0 0 14px;
-      color: var(--heading-ink);
-      font-size: 21px;
-      letter-spacing: -0.04em;
-    }
-
-    .profile p {
-      margin: 0;
-      color: #766d7b;
-      font-size: 14px;
-      line-height: 2;
-      font-weight: 580;
-    }
-
-    .share-note {
-      margin-top: 15px !important;
-      font-weight: 900;
-      color: var(--ink) !important;
-    }
-
-    /* 手書き画像を使う版 */
-    .logo.image-logo {
-      width: min(760px, 100%);
-      margin: 0;
-      line-height: 1;
-      font-size: 0;
-      letter-spacing: 0;
-      text-shadow: none;
-    }
-
-    .logo.image-logo img {
-      display: block;
-      width: 100%;
-      height: auto;
-      transform: rotate(-1.4deg);
-      filter: drop-shadow(0 12px 20px rgba(232, 78, 146, 0.10));
-    }
-
-    .logo.image-logo::after {
-      width: min(440px, 74vw);
-      height: 9px;
-      margin-top: -4px;
-      margin-left: 16px;
-      background: linear-gradient(90deg, rgba(255,126,182,0.32), rgba(217,203,255,0.22), transparent);
-    }
-
-    .profile::after {
-      display: none;
-    }
-
-    .share-free-lettering {
-      position: absolute;
-      right: clamp(12px, 4vw, 34px);
-      bottom: clamp(8px, 2.6vw, 20px);
-      width: min(300px, 42vw);
-      opacity: 0.30;
-      transform: rotate(-4deg);
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .profile-grid {
-      grid-template-columns: 1fr;
-      max-width: 760px;
-    }
-
-
-    footer {
-      padding: 26px 0 45px;
-      color: var(--muted);
-      font-size: 11px;
-      line-height: 1.8;
-    }
-
-    .footer-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 24px;
-      border-top: 1px solid rgba(224, 199, 218, 0.74);
-      padding-top: 22px;
-    }
-
-    code {
-      background: rgba(43,36,48,0.06);
-      padding: 2px 6px;
-      border-radius: 7px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 0.95em;
-    }
-
-    @media (max-width: 860px) {
-      .brand {
-        grid-template-columns: 1fr;
-      }
-
-      .mini-note {
-        justify-self: start;
-        min-width: 0;
-        width: 100%;
-      }
-    }
-
-    @media (max-width: 760px) {
-      .shell {
-        width: min(100% - 24px, 620px);
-      }
-
-      .tool-header {
-        width: calc(100% - 20px);
-        margin-top: 10px;
-        border-radius: 24px;
-      }
-
-      .tool-header-inner {
-        display: block;
-        padding: 12px 14px 10px;
-      }
-
-      .tool-logo {
-        justify-content: center;
-        margin-bottom: 10px;
-        font-size: 16px;
-      }
-
-      .tool-nav {
-        overflow-x: auto;
-        gap: 18px;
-        padding: 2px 4px 7px;
-        scrollbar-width: none;
-        -webkit-overflow-scrolling: touch;
-      }
-
-      .tool-nav::-webkit-scrollbar {
-        display: none;
-      }
-
-      .tool-nav a {
-        flex: 0 0 auto;
-        font-size: 12px;
-      }
-
-      .site-hero {
-        padding-top: 34px;
-      }
-
-      .hero-text {
-        font-size: 13px;
-      }
-
-      main {
-        padding-top: 8px;
-      }
-
-      .category {
-        margin-top: 58px;
-      }
-
-      .section-head {
-        align-items: start;
-      }
-
-      .section-count {
-        margin-top: 7px;
-      }
-
-      .tool-card,
-      .tool-card.guide {
-        grid-column: span 12;
-        min-height: 410px;
-      }
-
-      .card-media {
-        border-radius: 24px;
-      }
-
-      .profile {
-        margin-top: 70px;
-      }
-
-      .profile-grid {
-        grid-template-columns: 1fr;
-        gap: 17px;
-      }
-
-      .share-free-lettering {
-        width: min(230px, 54vw);
-        opacity: 0.20;
-      }
-
-      .footer-row {
-        flex-direction: column;
-        gap: 8px;
-      }
-    }
-
-    @media (max-width: 420px) {
-      .section-head {
-        display: block;
-      }
-
-      .section-count {
-        display: inline-flex;
-      }
-
-      .card-bottom {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .go {
-        width: 100%;
-        justify-content: center;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      html {
-        scroll-behavior: auto;
-      }
-
-      *,
-      *::before,
-      *::after {
-        transition: none !important;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>案C 作業机 — MUZE TOOL BOX デザインプロトタイプ</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* =====================================================
+   案C「作業机」
+   推し活の手を動かす楽しさをそのまま画面に。
+   机の上に、完成画像がプリント写真として置かれている。
+   影は“物が机に落とす影”だけ。マステと手書き注釈で温度を出し、
+   下段は素っ気ないほど整った道具一覧で大人に締める。
+   ===================================================== */
+:root{
+  --desk:#f1ebe1;          /* 生成りの机 */
+  --paper:#ffffff;         /* 写真の白フチ */
+  --pencil:#40382f;        /* 鉛筆の字 */
+  --faded:#8f8577;
+  --tape-berry:rgba(226,122,148,.8);  /* いちごマステ */
+  --tape-mint:rgba(164,197,175,.8);   /* ミントマステ */
+  --hand:"Klee One","Yu Gothic",cursive;
+  --gothic:"Zen Kaku Gothic New","Hiragino Sans",sans-serif;
+  --obj-shadow:0 10px 24px rgba(64,56,47,.18); /* 物理の影(ここ以外で影は使わない) */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:
+    /* 紙の繊維をドットで薄く(グラデ禁止に近い装飾を点で代替) */
+    radial-gradient(rgba(64,56,47,.05) 1px, transparent 1px) 0 0/22px 22px,
+    var(--desk);
+  color:var(--pencil);
+  font-family:var(--gothic);
+  line-height:1.9;
+  -webkit-text-size-adjust:100%;
+}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.desk{max-width:720px;margin:0 auto;padding:0 16px}
+
+
+/* ---------- 共通ヘッダー(紙もの風ナビ) ---------- */
+.tool-nav{
+  max-width:720px;
+  margin:0 auto;
+  padding:14px 16px 0;
+  position:relative;
+  z-index:10;
+}
+.tool-nav-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  background:rgba(255,255,255,.74);
+  border:1px solid rgba(64,56,47,.14);
+  padding:8px 10px;
+  transform:rotate(-.3deg);
+}
+.tool-nav-brand{
+  font-family:var(--hand);
+  font-size:14px;
+  font-weight:600;
+  color:var(--pencil);
+  white-space:nowrap;
+}
+.tool-nav-links{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.tool-nav-links::-webkit-scrollbar{display:none}
+.tool-nav-links a{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.06em;
+  color:var(--faded);
+  white-space:nowrap;
+  border-bottom:1px dashed rgba(64,56,47,.28);
+  line-height:1.6;
+}
+.tool-nav-links a:hover,.tool-nav-links a:active{color:var(--pencil);border-bottom-color:var(--pencil)}
+@media(max-width:520px){
+  .tool-nav{padding-top:10px}
+  .tool-nav-inner{align-items:flex-start;flex-direction:column;gap:6px}
+  .tool-nav-links{width:100%;padding-bottom:2px}
+}
+
+/* ---------- 机の上(ファーストビュー) ---------- */
+.board{position:relative;padding:30px 0 8px}
+.sticker-logo{
+  width:min(250px,62vw);
+  margin:0 auto;
+  background:var(--paper);
+  padding:14px 20px;
+  transform:rotate(-2.4deg);
+  box-shadow:var(--obj-shadow);
+  position:relative;
+  z-index:3;
+}
+.sticker-logo::before,.sticker-logo::after{ /* マステ */
+  content:"";
+  position:absolute;
+  width:64px;height:20px;
+  background:var(--tape-berry);
+  top:-9px;left:-18px;
+  transform:rotate(-14deg);
+}
+.sticker-logo::after{
+  left:auto;right:-16px;top:auto;bottom:-8px;
+  background:var(--tape-mint);
+  transform:rotate(10deg);
+}
+.board .note{
+  font-family:var(--hand);
+  text-align:center;
+  font-size:14px;
+  color:var(--faded);
+  margin-top:14px;
+  letter-spacing:.06em;
+}
+
+/* 散らばった写真 */
+.photos{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:6px 14px;
+  margin-top:26px;
+}
+.photo{
+  background:var(--paper);
+  padding:8px 8px 34px;             /* プリント写真の余白 */
+  box-shadow:var(--obj-shadow);
+  position:relative;
+  transition:transform .25s ease;
+}
+.photo img{
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:cover;
+  object-position:center top;
+}
+.photo .cap{
+  position:absolute;
+  left:0;right:0;bottom:7px;
+  text-align:center;
+  font-family:var(--hand);
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:.04em;
+}
+.photo .tape{
+  position:absolute;
+  width:56px;height:18px;
+  top:-8px;left:50%;
+  transform:translateX(-50%) rotate(-3deg);
+  background:var(--tape-berry);
+}
+.photo:nth-child(2n) .tape{background:var(--tape-mint);transform:translateX(-50%) rotate(4deg)}
+.photo:nth-child(1){transform:rotate(-2.2deg)}
+.photo:nth-child(2){transform:rotate(1.8deg);margin-top:22px}
+.photo:nth-child(3){transform:rotate(1.4deg);margin-top:-8px}
+.photo:nth-child(4){transform:rotate(-1.6deg);margin-top:14px}
+.photo:active,.photo:hover{transform:rotate(0deg) scale(1.015);z-index:4}
+
+/* 手書きの矢印注釈(SVG) = この案の署名 */
+.scribble{
+  position:absolute;
+  z-index:5;
+  font-family:var(--hand);
+  font-size:13.5px;
+  font-weight:600;
+  color:var(--pencil);
+  pointer-events:none;
+}
+.scribble svg{display:block;width:52px;height:36px;stroke:var(--pencil);fill:none;stroke-width:1.8;stroke-linecap:round}
+.scribble.fav{left:2%;bottom:34%;transform:rotate(-5deg)}
+@media(max-width:420px){.scribble.fav{display:none}}
+
+/* ---------- 道具一覧(実用の顔) ---------- */
+.inventory{margin-top:44px;padding-bottom:10px}
+.inventory>h2{
+  font-family:var(--hand);
+  font-weight:600;
+  font-size:22px;
+  letter-spacing:.08em;
+  border-bottom:2px solid var(--pencil);
+  display:inline-block;
+  padding:0 2px 2px;
+  transform:rotate(-.6deg);
+}
+.inv-group{margin-top:20px}
+.inv-group>h3{
+  font-size:11.5px;
+  font-weight:700;
+  letter-spacing:.26em;
+  color:var(--faded);
+  margin-bottom:2px;
+}
+.inv-item{
+  display:grid;
+  grid-template-columns:44px 1fr auto;
+  align-items:center;
+  gap:12px;
+  padding:12px 0;
+  border-bottom:1px dashed rgba(64,56,47,.28); /* 点線=ノートの罫 */
+}
+.inv-item img{
+  width:44px;height:44px;
+  object-fit:cover;object-position:center top;
+  background:var(--paper);
+  padding:3px;                 /* 小さな白フチ */
+}
+.inv-item .t{font-weight:700;font-size:15.5px;letter-spacing:.02em;line-height:1.5}
+.inv-item .d{font-size:11.5px;color:var(--faded);line-height:1.7}
+.inv-item .v{
+  font-family:var(--hand);
+  font-size:13px;
+  font-weight:600;
+  white-space:nowrap;
+  border:1.5px solid var(--pencil);
+  border-radius:50%;           /* 丸は“手で描いた囲み”として1種だけ */
+  padding:8px 9px;
+  transform:rotate(3deg);
+}
+.inv-item:active .v,.inv-item:hover .v{background:var(--pencil);color:var(--desk)}
+
+/* ---------- メモ(このサイトについて) ---------- */
+.memo{
+  margin:40px auto 52px;
+  max-width:520px;
+  background:var(--paper);
+  padding:20px 20px 22px;
+  transform:rotate(.8deg);
+  box-shadow:var(--obj-shadow);
+  position:relative;
+  font-size:12.5px;
+  line-height:2;
+}
+.memo::before{
+  content:"";
+  position:absolute;
+  width:70px;height:20px;
+  background:var(--tape-mint);
+  top:-10px;left:50%;
+  transform:translateX(-50%) rotate(-2deg);
+}
+.memo h2{font-family:var(--hand);font-size:16px;margin-bottom:6px}
+.memo .hand-img{width:110px;margin-top:10px;opacity:.9}
+.memo small{display:block;margin-top:8px;color:var(--faded)}
+
+@media(prefers-reduced-motion:no-preference){
+  .settle{opacity:0;transform:translateY(12px) rotate(0deg)!important;transition:opacity .6s ease,transform .6s ease}
+  .settle.in{opacity:1;transform:none!important}
+  /* 写真は各自の傾きへ“置かれる” */
+  .photo.settle.in:nth-child(1){transform:rotate(-2.2deg)!important}
+  .photo.settle.in:nth-child(2){transform:rotate(1.8deg)!important}
+  .photo.settle.in:nth-child(3){transform:rotate(1.4deg)!important}
+  .photo.settle.in:nth-child(4){transform:rotate(-1.6deg)!important}
+}
+:focus-visible{outline:2.5px solid var(--tape-berry);outline-offset:3px}
+</style>
 </head>
-
 <body>
-  <header class="tool-header">
-    <div class="tool-header-inner">
-      <a href="https://rikomuze.github.io/muze-tool-box/" class="tool-logo">
-        MUZE TOOL BOX <span>♡</span>
-      </a>
 
-      <nav class="tool-nav" aria-label="共通ナビゲーション">
-        <a href="https://rikomuze.github.io/muze-tool-box/" class="active">⌂ TOP</a>
-        <a href="https://rikomuze.github.io/mazzel-goods-calculator-new/">グッズ計算機</a>
-        <a href="https://rikomuze.github.io/mazzel-so-strawberry-campaign/">新曲キャンペーン</a>
-        <a href="https://rikomuze.github.io/mazzel-best-visual/">最強9マス</a>
-        <a href="https://rikomuze.github.io/oshi-visual-6/">推しビジュ6選</a>
-        <a href="https://abaft-conga-f54.notion.site/fanmeating?pvs=74">チケット解説</a>
-      </nav>
+<nav class="tool-nav" aria-label="共通ナビゲーション">
+  <div class="tool-nav-inner">
+    <a class="tool-nav-brand" href="https://rikomuze.github.io/tool-box/">Muze Tool Box</a>
+    <div class="tool-nav-links">
+      <a href="https://rikomuze.github.io/tool-box/">TOP</a>
+      <a href="https://rikomuze.github.io/oshi-visual-6/">推しビジュ6選</a>
+      <a href="https://rikomuze.github.io/mazzel-best-visual/">最強9マス</a>
+      <a href="https://rikomuze.github.io/mazzel-goods-calculator-new/">グッズ計算機</a>
+      <a href="https://rikomuze.github.io/otaku-numa-shindan/">オタク沼診断</a>
     </div>
-  </header>
+  </div>
+</nav>
 
-  <section class="site-hero shell">
-    <div class="brand">
-      <div class="brand-copy">
-        <div class="hero-label">UNOFFICIAL FAN-MADE TOOLS</div>
-        <h1 class="logo image-logo" aria-label="MUZE TOOL BOX">
-          <img src="images/muze-tool-box-logo.png" alt="MUZE TOOL BOX">
-        </h1>
-        <p class="hero-text">
-           便利なもの、遊べるもの、迷ったときに読みたいものをここに集めています。
-        </p>
-     
-    </div>
+<header class="board desk">
+  <div class="sticker-logo">
+    <img src="assets/images/muze-tool-box-logo.png" alt="MUZE TOOL BOX">
+  </div>
+  <p class="note">便利なもの、遊べるもの。つくったものここに並べてます</p>
 
-    <nav class="category-nav" aria-label="カテゴリー">
-      <a href="#useful">便利ツール</a>
-      <a href="#play">あそべるツール</a>
-      <a href="#guide">申込・解説ガイド</a>
-    </nav>
-  </section>
 
-  <main class="shell">
-    <section class="category" id="useful">
-      <div class="section-head">
-        <div>
-          <div class="eyebrow">Useful</div>
-          <h2>便利ツール</h2>
-        </div>
-        <div class="section-count">4 TOOLS</div>
-      </div>
+  <div class="photos" aria-label="あそべるツールの完成画像">
+    <a class="photo settle" href="https://rikomuze.github.io/oshi-visual-6/" target="_blank" rel="noopener">
+      <span class="tape"></span>
+      <img src="assets/images/oshi-visual-6.jpeg" alt="推しビジュ6選の作例">
+      <span class="cap">推しビジュ6選</span>
+    </a>
+    <a class="photo settle" href="https://rikomuze.github.io/mazzel-best-visual/" target="_blank" rel="noopener">
+      <span class="tape"></span>
+      <img src="assets/images/best-visual-photo.png" alt="最強9マス アー写の作例" loading="lazy">
+      <span class="cap">最強9マス アー写</span>
+    </a>
+    <a class="photo settle" href="https://rikomuze.github.io/mazzel-best-visual-performance/" target="_blank" rel="noopener">
+      <span class="tape"></span>
+      <img src="assets/images/best-visual-costume.PNG" alt="最強9マス パフォ衣装の作例" loading="lazy">
+      <span class="cap">パフォ衣装ver.</span>
+    </a>
+    <a class="photo settle" href="https://rikomuze.github.io/otaku-numa-shindan/" target="_blank" rel="noopener">
+      <span class="tape"></span>
+      <img src="assets/images/otaku-numa.jpeg" alt="オタク沼診断" loading="lazy">
+      <span class="cap">オタク沼診断</span>
+    </a>
+  </div>
 
-      <div class="grid">
-        <a class="tool-card useful" href="https://rikomuze.github.io/mazzel-goods-calculator-new/" target="_blank" rel="noopener" aria-label="グッズ計算機 EC">
-          <div class="card-top">
-            <div class="card-media">
-              <img src="images/goods-ec.png" data-base="images/goods-ec" data-ext-index="0" alt="グッズ計算機 ECのプレビュー画像" onload="this.parentElement.classList.add('has-image')" onerror="const exts=['png','jpg','jpeg','PNG','JPG','JPEG'];let i=Number(this.dataset.extIndex||0)+1;this.dataset.extIndex=i;if(i<exts.length){this.src=this.dataset.base+'.'+exts[i];}else{this.style.display='none';}">
-              <div class="placeholder-note">ここにツールのスクリーンショットを載せられる<br><code>images/goods-ec</code> の png / jpg / jpeg に対応</div>
-            </div>
-            <div class="tool-meta">
-              <div class="icon">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M5 4h14v16H5z"></path>
-                  <path d="M8 8h8"></path>
-                  <path d="M8 12h2M14 12h2M8 16h2M14 16h2"></path>
-                </svg>
-              </div>
-              <span class="mini-badge">SHOPPING</span>
-            </div>
-            <h3 class="tool-title">グッズ計算機<br>EC</h3>
-            <p class="tool-description">オンラインストアで購入するグッズを選びながら、合計金額をかんたんに確認。</p>
-          </div>
-          <div class="card-bottom">
-            <span class="tag">SHOPPING</span>
-            <span class="go">使う</span>
-          </div>
-        </a>
+  <div class="scribble fav">
+    ぜんぶ保存できるよ
+    <svg viewBox="0 0 52 36" aria-hidden="true"><path d="M6 6 C18 16 30 22 46 28 M46 28 l-11 1 M46 28 l-4 -10"/></svg>
+  </div>
+</header>
 
-        <a class="tool-card useful" href="https://rikomuze.github.io/mazzel-goods-calculator-venue/" target="_blank" rel="noopener" aria-label="グッズ計算機 会場">
-          <div class="card-top">
-            <div class="card-media">
-              <img src="images/goods-live.png" data-base="images/goods-live" data-ext-index="0" alt="グッズ計算機 会場のプレビュー画像" onload="this.parentElement.classList.add('has-image')" onerror="const exts=['png','jpg','jpeg','PNG','JPG','JPEG'];let i=Number(this.dataset.extIndex||0)+1;this.dataset.extIndex=i;if(i<exts.length){this.src=this.dataset.base+'.'+exts[i];}else{this.style.display='none';}">
-              <div class="placeholder-note">ここにツールのスクリーンショットを載せられる<br><code>images/goods-live</code> の png / jpg / jpeg に対応</div>
-            </div>
-            <div class="tool-meta">
-              <div class="icon">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M4 7h16l-1 13H5L4 7z"></path>
-                  <path d="M8 9V6a4 4 0 0 1 8 0v3"></path>
-                </svg>
-              </div>
-              <span class="mini-badge">LIVE</span>
-            </div>
-            <h3 class="tool-title">グッズ計算機<br>会場</h3>
-            <p class="tool-description">会場で買いたいグッズを選び、その場で合計金額と個数を確認。</p>
-          </div>
-          <div class="card-bottom">
-            <span class="tag">LIVE</span>
-            <span class="go">使う</span>
-          </div>
-        </a>
+<main class="inventory desk">
+  <h2>道具いちらん</h2>
 
-        <a class="tool-card useful" href="https://rikomuze.github.io/settlement-maker/" target="_blank" rel="noopener" aria-label="立替精算ツール">
-          <div class="card-top">
-            <div class="card-media">
-              <img src="images/payment-tool.png" data-base="images/payment-tool" data-ext-index="0" alt="立替精算ツールのプレビュー画像" onload="this.parentElement.classList.add('has-image')" onerror="const exts=['png','jpg','jpeg','PNG','JPG','JPEG'];let i=Number(this.dataset.extIndex||0)+1;this.dataset.extIndex=i;if(i<exts.length){this.src=this.dataset.base+'.'+exts[i];}else{this.style.display='none';}">
-              <div class="placeholder-note">ここにツールのスクリーンショットを載せられる<br><code>images/payment-tool</code> の png / jpg / jpeg に対応</div>
-            </div>
-            <div class="tool-meta">
-              <div class="icon">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <circle cx="8" cy="8" r="3"></circle>
-                  <circle cx="17" cy="9" r="2.5"></circle>
-                  <path d="M3.5 19c.6-3.4 2.2-5 4.5-5s3.9 1.6 4.5 5"></path>
-                  <path d="M14 15c2.8-.5 5 .8 6 3.5"></path>
-                </svg>
-              </div>
-              <span class="mini-badge">PAYMENT</span>
-            </div>
-            <h3 class="tool-title">立替精算<br>ツール</h3>
-            <p class="tool-description">チケット代やホテル代など、複数人の立替をまとめて分かりやすく精算。</p>
-          </div>
-          <div class="card-bottom">
-            <span class="tag">PAYMENT</span>
-            <span class="go">使う</span>
-          </div>
-        </a>
+  <div class="inv-group settle">
+    <h3>べんり</h3>
+    <a class="inv-item" href="https://rikomuze.github.io/mazzel-goods-calculator-new/" target="_blank" rel="noopener">
+      <img src="assets/images/goods-ec.jpeg" alt="" loading="lazy">
+      <span><span class="t">グッズ計算機 EC</span><br><span class="d">オンラインストアの合計金額をその場で</span></span>
+      <span class="v">使う</span>
+    </a>
+    <a class="inv-item" href="https://rikomuze.github.io/mazzel-goods-calculator-venue/" target="_blank" rel="noopener">
+      <img src="assets/images/goods-live.png" alt="" loading="lazy">
+      <span><span class="t">グッズ計算機 会場</span><br><span class="d">会場で買う分を選びながら合計を確認</span></span>
+      <span class="v">使う</span>
+    </a>
+    <a class="inv-item" href="https://rikomuze.github.io/settlement-maker/" target="_blank" rel="noopener">
+      <img src="assets/images/payment-tool.jpeg" alt="" loading="lazy">
+      <span><span class="t">立替精算ツール</span><br><span class="d">みんなの立替をまとめて精算</span></span>
+      <span class="v">使う</span>
+    </a>
+    <a class="inv-item" href="https://rikomuze.github.io/mazzel-so-strawberry-campaign/" target="_blank" rel="noopener">
+      <img src="assets/images/so-strawberry-campaign.png" alt="" loading="lazy">
+      <span><span class="t">新曲キャンペーン</span><br><span class="d">応募・DL・締切をまとめて確認</span></span>
+      <span class="v">見る</span>
+    </a>
+  </div>
 
-        <a class="tool-card useful campaign" href="https://rikomuze.github.io/mazzel-so-strawberry-campaign/" target="_blank" rel="noopener" aria-label="新曲キャンペーンサイト">
-          <div class="card-top">
-            <div class="card-media">
-              <img src="images/so-strawberry-campaign.png" data-base="images/so-strawberry-campaign" data-ext-index="0" alt="新曲キャンペーンサイトのプレビュー画像" onload="this.parentElement.classList.add('has-image')" onerror="const exts=['png','jpg','jpeg','PNG','JPG','JPEG'];let i=Number(this.dataset.extIndex||0)+1;this.dataset.extIndex=i;if(i<exts.length){this.src=this.dataset.base+'.'+exts[i];}else{this.style.display='none';}">
-              <div class="placeholder-note">ここにキャンペーンサイトのスクリーンショットを載せられる<br><code>images/so-strawberry-campaign</code> の png / jpg / jpeg に対応</div>
-            </div>
-            <div class="tool-meta">
-              <div class="icon">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M12 4c3 0 5 1.8 5 4.4C17 13 12 20 12 20S7 13 7 8.4C7 5.8 9 4 12 4z"></path>
-                  <path d="M10 4c.4-1 1.2-1.5 2-1.5S13.6 3 14 4"></path>
-                  <path d="M9.5 8.5h.01M12 10h.01M14.5 8.5h.01"></path>
-                </svg>
-              </div>
-              <span class="mini-badge">CAMPAIGN</span>
-            </div>
-            <h3 class="tool-title">新曲キャンペーン<br>サイト</h3>
-            <p class="tool-description">応募やDLなど、新曲期間にやることをまとめて確認できるキャンペーン整理ページ。</p>
-          </div>
-          <div class="card-bottom">
-            <span class="tag">SO STRAWBERRY</span>
-            <span class="go">見る</span>
-          </div>
-        </a>
-      </div>
-    </section>
+  <div class="inv-group settle">
+    <h3>あそぶ</h3>
+    <a class="inv-item" href="https://rikomuze.github.io/oshi-visual-6/" target="_blank" rel="noopener">
+      <img src="assets/images/oshi-visual-6.jpeg" alt="" loading="lazy">
+      <span><span class="t">推しビジュ6選</span><br><span class="d">好きなビジュ6枚をタグ画っぽい一枚に</span></span>
+      <span class="v">遊ぶ</span>
+    </a>
+    <a class="inv-item" href="https://rikomuze.github.io/mazzel-best-visual/" target="_blank" rel="noopener">
+      <img src="assets/images/best-visual-photo.png" alt="" loading="lazy">
+      <span><span class="t">最強9マス アー写</span><br><span class="d">アー写で組む自分だけの最強ビジュ</span></span>
+      <span class="v">遊ぶ</span>
+    </a>
+    <a class="inv-item" href="https://rikomuze.github.io/mazzel-best-visual-performance/" target="_blank" rel="noopener">
+      <img src="assets/images/best-visual-costume.PNG" alt="" loading="lazy">
+      <span><span class="t">最強9マス パフォ衣装</span><br><span class="d">好きな衣装で組むもうひとつの9マス</span></span>
+      <span class="v">遊ぶ</span>
+    </a>
+    <a class="inv-item" href="https://rikomuze.github.io/otaku-numa-shindan/" target="_blank" rel="noopener">
+      <img src="assets/images/otaku-numa.jpeg" alt="" loading="lazy">
+      <span><span class="t">オタク沼診断</span><br><span class="d">自分のオタクタイプが分かる診断</span></span>
+      <span class="v">遊ぶ</span>
+    </a>
+  </div>
 
-    <section class="category" id="play">
-      <div class="section-head">
-        <div>
-          <div class="eyebrow">Play</div>
-          <h2>あそべるツール</h2>
-        </div>
-        <div class="section-count">4 TOOLS</div>
-      </div>
+  <div class="inv-group settle">
+    <h3>よむ</h3>
+    <a class="inv-item" href="https://abaft-conga-f54.notion.site/fanmeating?pvs=74" target="_blank" rel="noopener">
+      <img src="assets/images/fanmi-guide.png" alt="" loading="lazy">
+      <span><span class="t">ファンミ申込ガイド</span><br><span class="d">名義・同行者・重複申込、迷いやすい所を整理</span></span>
+      <span class="v">読む</span>
+    </a>
+  </div>
 
-      <div class="grid">
-        <a class="tool-card play" href="https://rikomuze.github.io/otaku-numa-shindan/" target="_blank" rel="noopener" aria-label="オタク沼診断">
-          <div class="card-top">
-            <div class="card-media">
-              <img src="images/otaku-numa.png" data-base="images/otaku-numa" data-ext-index="0" alt="オタク沼診断のプレビュー画像" onload="this.parentElement.classList.add('has-image')" onerror="const exts=['png','jpg','jpeg','PNG','JPG','JPEG'];let i=Number(this.dataset.extIndex||0)+1;this.dataset.extIndex=i;if(i<exts.length){this.src=this.dataset.base+'.'+exts[i];}else{this.style.display='none';}">
-              <div class="placeholder-note">ここにツールのスクリーンショットを載せられる<br><code>images/otaku-numa</code> の png / jpg / jpeg に対応</div>
-            </div>
-            <div class="tool-meta">
-              <div class="icon">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M12 3l1.5 4.2L18 9l-4.5 1.8L12 15l-1.5-4.2L6 9l4.5-1.8L12 3z"></path>
-                  <path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15z"></path>
-                </svg>
-              </div>
-              <span class="mini-badge">DIAGNOSIS</span>
-            </div>
-            <h3 class="tool-title">オタク沼診断</h3>
-            <p class="tool-description">質問に答えると、自分のオタクタイプが分かる診断ツール。</p>
-          </div>
-          <div class="card-bottom">
-            <span class="tag">DIAGNOSIS</span>
-            <span class="go">遊ぶ</span>
-          </div>
-        </a>
+  <aside class="memo settle">
+    <h2>このサイトについて</h2>
+    MAZZELが好きで、推し活に「あったら便利かも」と思ったものを作っています。紹介やシェアは許可なくどうぞ。
+    <img class="hand-img" src="assets/images/share-free.png" alt="share free">
+    <small>MAZZEL・BMSG公式とは関係のない非公式ファンメイドサイトです。</small>
+  </aside>
+</main>
 
-        <a class="tool-card play" href="https://rikomuze.github.io/mazzel-best-visual/" target="_blank" rel="noopener" aria-label="最強9マス アー写">
-          <div class="card-top">
-            <div class="card-media">
-              <img src="images/best-visual-photo.png" data-base="images/best-visual-photo" data-ext-index="0" alt="最強9マス アー写のプレビュー画像" onload="this.parentElement.classList.add('has-image')" onerror="const exts=['png','jpg','jpeg','PNG','JPG','JPEG'];let i=Number(this.dataset.extIndex||0)+1;this.dataset.extIndex=i;if(i<exts.length){this.src=this.dataset.base+'.'+exts[i];}else{this.style.display='none';}">
-              <div class="placeholder-note">ここにツールのスクリーンショットを載せられる<br><code>images/best-visual-photo</code> の png / jpg / jpeg に対応</div>
-            </div>
-            <div class="tool-meta">
-              <div class="icon">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <rect x="4" y="4" width="6" height="6" rx="1"></rect>
-                  <rect x="14" y="4" width="6" height="6" rx="1"></rect>
-                  <rect x="4" y="14" width="6" height="6" rx="1"></rect>
-                  <rect x="14" y="14" width="6" height="6" rx="1"></rect>
-                </svg>
-              </div>
-              <span class="mini-badge">BEST VISUAL</span>
-            </div>
-            <h3 class="tool-title">最強9マス<br>アー写</h3>
-            <p class="tool-description">好きなアーティスト写真を選び、自分だけの最強ビジュを作成。</p>
-          </div>
-          <div class="card-bottom">
-            <span class="tag">BEST VISUAL</span>
-            <span class="go">遊ぶ</span>
-          </div>
-        </a>
-
-        <a class="tool-card play" href="https://rikomuze.github.io/mazzel-best-visual-performance/" target="_blank" rel="noopener" aria-label="最強9マス パフォーマンス衣装">
-          <div class="card-top">
-            <div class="card-media">
-              <img src="images/best-visual-costume.png" data-base="images/best-visual-costume" data-ext-index="0" alt="最強9マス パフォ衣装のプレビュー画像" onload="this.parentElement.classList.add('has-image')" onerror="const exts=['png','jpg','jpeg','PNG','JPG','JPEG'];let i=Number(this.dataset.extIndex||0)+1;this.dataset.extIndex=i;if(i<exts.length){this.src=this.dataset.base+'.'+exts[i];}else{this.style.display='none';}">
-              <div class="placeholder-note">ここにツールのスクリーンショットを載せられる<br><code>images/best-visual-costume</code> の png / jpg / jpeg に対応</div>
-            </div>
-            <div class="tool-meta">
-              <div class="icon">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M8 4l4 2 4-2 4 5-3 2v9H7v-9L4 9l4-5z"></path>
-                  <path d="M10 6l2 3 2-3"></path>
-                </svg>
-              </div>
-              <span class="mini-badge">COSTUME</span>
-            </div>
-            <h3 class="tool-title">最強9マス<br>パフォ衣装</h3>
-            <p class="tool-description">好きなパフォーマンス衣装を選び、最強の9マスを作成。</p>
-          </div>
-          <div class="card-bottom">
-            <span class="tag">COSTUME</span>
-            <span class="go">遊ぶ</span>
-          </div>
-        </a>
-
-        <a class="tool-card play" href="https://rikomuze.github.io/oshi-visual-6/" target="_blank" rel="noopener" aria-label="推しビジュ6選">
-          <div class="card-top">
-            <div class="card-media">
-              <img src="images/oshi-visual-6.png" data-base="images/oshi-visual-6" data-ext-index="0" alt="推しビジュ6選のプレビュー画像" onload="this.parentElement.classList.add('has-image')" onerror="const exts=['png','jpg','jpeg','PNG','JPG','JPEG'];let i=Number(this.dataset.extIndex||0)+1;this.dataset.extIndex=i;if(i<exts.length){this.src=this.dataset.base+'.'+exts[i];}else{this.style.display='none';}">
-              <div class="placeholder-note">ここに推しビジュ6選のスクリーンショットを載せられる<br><code>images/oshi-visual-6</code> の png / jpg / jpeg に対応</div>
-            </div>
-            <div class="tool-meta">
-              <div class="icon">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"></path>
-                  <path d="M9 11h6"></path>
-                  <path d="M12 8v6"></path>
-                </svg>
-              </div>
-              <span class="mini-badge">FAVORITE</span>
-            </div>
-            <h3 class="tool-title">推しビジュ<br>6選</h3>
-            <p class="tool-description">好きなビジュアルを6枚選んで、推しの好きなところをぎゅっと詰め込めるツール。</p>
-          </div>
-          <div class="card-bottom">
-            <span class="tag">FAVORITE 6</span>
-            <span class="go">遊ぶ</span>
-          </div>
-        </a>
-      </div>
-    </section>
-
-    <section class="category" id="guide">
-      <div class="section-head">
-        <div>
-          <div class="eyebrow">Guide</div>
-          <h2>申込・解説ガイド</h2>
-        </div>
-        <div class="section-count">1 GUIDE</div>
-      </div>
-
-      <div class="grid">
-        <a class="tool-card guide" href="https://abaft-conga-f54.notion.site/fanmeating?pvs=74" target="_blank" rel="noopener" aria-label="ファンミ申込ガイド">
-          <div class="card-top">
-            <div class="card-media">
-              <img src="images/fanmi-guide.png" data-base="images/fanmi-guide" data-ext-index="0" alt="ファンミ申込ガイドのプレビュー画像" onload="this.parentElement.classList.add('has-image')" onerror="const exts=['png','jpg','jpeg','PNG','JPG','JPEG'];let i=Number(this.dataset.extIndex||0)+1;this.dataset.extIndex=i;if(i<exts.length){this.src=this.dataset.base+'.'+exts[i];}else{this.style.display='none';}">
-              <div class="placeholder-note">ここにガイドのサムネイルを載せられる<br><code>images/fanmi-guide</code> の png / jpg / jpeg に対応</div>
-            </div>
-            <div class="tool-meta">
-              <div class="icon">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M5 4h10l4 4v12H5z"></path>
-                  <path d="M15 4v5h5"></path>
-                  <path d="M8 13h8M8 17h6"></path>
-                </svg>
-              </div>
-              <span class="mini-badge">TICKET GUIDE</span>
-            </div>
-            <h3 class="tool-title">ファンミ申込ガイド</h3>
-            <p class="tool-description">チケット料金、同行者、申込名義や重複申込など、迷いやすいポイントを整理した非公式ガイド。</p>
-          </div>
-          <div class="card-bottom">
-            <span class="tag">TICKET GUIDE</span>
-            <span class="go">読む</span>
-          </div>
-        </a>
-      </div>
-    </section>
-
-    <section class="profile" aria-labelledby="profile-title">
-      <img class="share-free-lettering" src="images/share-free.png" alt="" aria-hidden="true">
-      <div class="profile-grid">
-        <div>
-          <h3 id="profile-title">このサイトについて</h3>
-          <p>
-            MAZZELが好きで、推し活に「あったら便利かも」と思ったものを作っています。<br>
-            MUZEのみなさんが自由に楽しめる、非公式ファンメイドサイトです。
-          </p>
-          <p class="share-note">
-            ツールの紹介やシェアは、許可なくしていただいて大丈夫です。
-          </p>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="shell">
-    <div class="footer-row">
-      <span>© MUZE TOOL BOX</span>
-      <span>MAZZEL・BMSG公式とは関係のない非公式ファンメイドサイトです。</span>
-    </div>
-  </footer>
+<script>
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}
+}),{threshold:.1});
+document.querySelectorAll(".settle").forEach(el=>io.observe(el));
+</script>
 </body>
 </html>
