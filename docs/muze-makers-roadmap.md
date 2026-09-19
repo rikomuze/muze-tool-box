@@ -1,8 +1,8 @@
 # MUZE MAKERS Roadmap
 
-OSHI MAP / 推し衣装ドラフト / プロフィールカードを、単発サイトではなく同じ制作基盤で増やしていくための設計メモ。
+BIAS MAP / 推し衣装ドラフト / プロフィールカードを、単発サイトではなく同じ制作基盤で増やしていくための設計メモ。
 
-## Product 1: OSHI MAP
+## Product 1: BIAS MAP
 状態: MVP実装中
 
 共通化対象:
@@ -27,7 +27,7 @@ OSHI MAP / 推し衣装ドラフト / プロフィールカードを、単発サ
 4. BEST 3〜5生成
 5. 結果画像保存
 
-OSHI MAPから再利用:
+BIAS MAPから再利用:
 - ImageUploader
 - ImageStore
 - ResultCanvas
@@ -47,7 +47,7 @@ OSHI MAPから再利用:
 4. プロフィールカード生成
 5. 保存 / シェア
 
-OSHI MAPから再利用:
+BIAS MAPから再利用:
 - ImageUploader
 - ImageStore
 - ResultCanvas
@@ -60,14 +60,14 @@ OSHI MAPから再利用:
 - ProfileRenderer
 
 ## Shared modulesへ切り出すタイミング
-OSHI MAPをiPhoneで一度実地テストしてから切り出す。
+BIAS MAPをiPhoneで一度実地テストしてから切り出す。
 
 理由:
 最初に抽象化しすぎると、まだ確定していないUXに共通基盤が引っ張られるため。
 2本目（衣装ドラフト）を作り始める時点で、実際に重複した処理を /shared に移す。
 
 ## 優先順位
-1. OSHI MAPを実機で成立させる
+1. BIAS MAPを実機で成立させる
 2. 結果画像の見栄えを完成
 3. 共通Image/Export/Storageを切り出す
 4. 衣装ドラフト実装
