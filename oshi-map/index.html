@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>OSHI MAP｜MUZE TOOL BOX</title>
+  <meta name="description" content="好きな推し画像を2軸マップに並べて、自分だけの推し解釈図を作るツール">
+  <meta name="theme-color" content="#f4efe7">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <nav class="global-nav" aria-label="MUZE TOOL BOX">
+    <a class="brand" href="../">MUZE TOOL BOX</a>
+    <span class="current">OSHI MAP</span>
+  </nav>
+
+  <main class="shell">
+    <section id="screen-start" class="screen is-active">
+      <div class="hero-kicker">MAKE / OSHI MAP</div>
+      <h1>好きなビジュを、<br>あなたの解釈で。</h1>
+      <p class="lead">推しの写真を2軸マップに並べて、自分だけの「推し解釈図」をつくろう。</p>
+      <button class="primary big" data-next="screen-map">つくる →</button>
+    </section>
+
+    <section id="screen-map" class="screen">
+      <div class="step">01 / MAP</div>
+      <h2>どんな推しを分類する？</h2>
+      <div id="presetList" class="preset-list"></div>
+
+      <div id="customFields" class="custom-fields" hidden>
+        <label>上<input id="customTop" maxlength="10" placeholder="例：光"></label>
+        <label>下<input id="customBottom" maxlength="10" placeholder="例：闇"></label>
+        <label>左<input id="customLeft" maxlength="10" placeholder="例：かわいい"></label>
+        <label>右<input id="customRight" maxlength="10" placeholder="例：色気"></label>
+      </div>
+
+      <div class="actions">
+        <button class="ghost" data-back="screen-start">← 戻る</button>
+        <button id="toPhotos" class="primary" disabled>写真を選ぶ →</button>
+      </div>
+    </section>
+
+    <section id="screen-photos" class="screen">
+      <div class="step">02 / PHOTO</div>
+      <h2>好きな写真を選ぼう</h2>
+      <p class="sub">1〜9枚。人物切り抜きはせず、写真そのものをマップに置きます。</p>
+      <label class="upload-box">
+        <input id="photoInput" type="file" accept="image/*" multiple>
+        <span>＋ 写真を追加</span>
+        <small>最大9枚</small>
+      </label>
+      <div id="photoList" class="photo-list"></div>
+      <div class="actions">
+        <button class="ghost" data-back="screen-map">← 戻る</button>
+        <button id="toEditor" class="primary" disabled>マップをつくる →</button>
+      </div>
+    </section>
+
+    <section id="screen-editor" class="screen">
+      <div class="step">03 / EDIT</div>
+      <div class="editor-head">
+        <div>
+          <h2>置いて、悩んで、微調整。</h2>
+          <p class="sub">写真をドラッグ。選択中の写真は下のスライダーでサイズ変更できます。</p>
+        </div>
+      </div>
+
+      <label class="title-field">TITLE
+        <input id="mapTitle" maxlength="30" value="MY OSHI MAP">
+      </label>
+
+      <div id="mapWrap" class="map-wrap">
+        <div class="axis-label axis-top" id="axisTop">治安良</div>
+        <div class="axis-label axis-bottom" id="axisBottom">治安悪</div>
+        <div class="axis-label axis-left" id="axisLeft">クール</div>
+        <div class="axis-label axis-right" id="axisRight">色気</div>
+        <div id="mapCanvas" class="map-canvas" aria-label="推しグラフ">
+          <div class="axis-line vertical"></div>
+          <div class="axis-line horizontal"></div>
+          <div id="mapPhotos" class="map-photos"></div>
+        </div>
+      </div>
+
+      <div class="edit-panel">
+        <div id="selectedHint">写真をタップすると調整できます</div>
+        <label>サイズ
+          <input id="sizeRange" type="range" min="54" max="130" value="82" disabled>
+        </label>
+        <label>ひとこと
+          <input id="commentInput" maxlength="15" placeholder="例：完全にヴィラン" disabled>
+        </label>
+        <button id="deleteSelected" class="danger" disabled>この写真を外す</button>
+      </div>
+
+      <div class="actions">
+        <button class="ghost" data-back="screen-photos">← 写真選択</button>
+        <button id="toPreview" class="primary">完成を見る →</button>
+      </div>
+    </section>
+
+    <section id="screen-preview" class="screen">
+      <div class="step">04 / DONE</div>
+      <h2>できあがり。</h2>
+      <div class="result-sheet">
+        <canvas id="resultCanvas" width="1080" height="1080"></canvas>
+      </div>
+      <div class="actions stacked">
+        <button id="saveImage" class="primary big">画像を保存</button>
+        <button id="saveProject" class="secondary">このMAPを端末に保存</button>
+        <button class="ghost" data-back="screen-editor">← 編集に戻る</button>
+      </div>
+      <p id="saveStatus" class="status" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <div id="fallback" class="modal" hidden>
+    <div class="modal-inner">
+      <button id="closeFallback" class="modal-close" aria-label="閉じる">×</button>
+      <h3>画像を長押しして保存してね</h3>
+      <p>Xなどのアプリ内ブラウザでは自動保存できないことがあります。</p>
+      <img id="fallbackImage" alt="完成したOSHI MAP">
+    </div>
+  </div>
+
+  <footer>非公式ファンメイドツール / created with MUZE TOOL BOX</footer>
+  <script src="./app.js"></script>
+</body>
+</html>
