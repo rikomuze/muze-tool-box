@@ -115,31 +115,48 @@ function drawCover(ctx,img,item,x,y,w,h){
     sy=(item.cropPart-1)*sh;
   }
   const scale=Math.max(w/sw,h/sh),dw=sw*scale,dh=sh*scale;
-  const dx=x+(w-dw)/2,dy=y+(h-dh)/2;
+  const dx=x+(w-dw)/2;
+  // 通常写真は顔が切れにくいよう上寄せ。3分割素材は選択済みの領域内で中央寄せ。
+  const dy=item.cropPart ? y+(h-dh)/2 : y;
   ctx.save();ctx.beginPath();ctx.rect(x,y,w,h);ctx.clip();ctx.drawImage(img,sx,sy,sw,sh,dx,dy,dw,dh);ctx.restore();
 }
-async function drawCard(ctx,item,x,y,w,h,label){
-  ctx.fillStyle="#fff";ctx.fillRect(x-5,y-5,w+10,h+10);
+async function drawCard(ctx,item,x,y,w,h){
+  ctx.fillStyle="#fff";ctx.fillRect(x-6,y-6,w+12,h+12);
   const img=item?await loadImage(item.src):null;
   drawCover(ctx,img,item||{},x,y,w,h);
-  if(label){
-    const tagW=w*.48,tagH=48,tagX=x+(w-tagW)/2,tagY=y+h-24;
-    ctx.fillStyle="#fffdf9";ctx.fillRect(tagX,tagY,tagW,tagH);
-    ctx.fillStyle="#292724";ctx.textAlign="center";ctx.font='700 20px "Zen Kaku Gothic New",sans-serif';ctx.fillText(label,x+w/2,tagY+31);
-  }
 }
 async function finish(){await drawResult();show("result");}
 async function drawResult(){
   const c=$("#resultCanvas"),ctx=c.getContext("2d");
+  ctx.clearRect(0,0,1080,1080);
   ctx.fillStyle="#fffdf9";ctx.fillRect(0,0,1080,1080);
-  ctx.fillStyle="#292724";ctx.textAlign="left";ctx.font='700 56px "Zen Kaku Gothic New",sans-serif';ctx.fillText(state.member,64,76);
-  ctx.font='700 26px "Zen Kaku Gothic New",sans-serif';ctx.fillText("OUTFIT DRAFT",66,114);
-  await drawCard(ctx,state.winner,120,165,840,500,"WINNER");
-  ctx.font='700 18px "Zen Kaku Gothic New",sans-serif';ctx.fillStyle="#292724";ctx.textAlign="left";ctx.fillText("FINALIST",80,720);ctx.fillText("FINAL FOUR",560,720);
-  await drawCard(ctx,state.finalist,80,745,360,230,"");
-  await drawCard(ctx,state.finalFour[0],560,745,190,230,"");
-  await drawCard(ctx,state.finalFour[1],770,745,190,230,"");
-  ctx.fillStyle="#817a70";ctx.textAlign="right";ctx.font='500 14px "Zen Kaku Gothic New",sans-serif';ctx.fillText("created with MUZE TOOL BOX",1016,1045);
+
+  // Header
+  ctx.fillStyle="#292724";ctx.textAlign="left";
+  ctx.font='700 58px "Zen Kaku Gothic New",sans-serif';ctx.fillText(state.member,64,74);
+  ctx.font='700 22px "Zen Kaku Gothic New",sans-serif';ctx.fillText("OUTFIT DRAFT",66,108);
+
+  // Winner
+  ctx.textAlign="center";ctx.font='700 18px "Zen Kaku Gothic New",sans-serif';
+  ctx.fillStyle="#817a70";ctx.fillText("WINNER",540,151);
+  await drawCard(ctx,state.winner,260,174,560,548);
+
+  // thin divider
+  ctx.strokeStyle="rgba(41,39,36,.18)";ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(64,766);ctx.lineTo(1016,766);ctx.stroke();
+
+  // Finalist / Final Four
+  ctx.textAlign="left";ctx.fillStyle="#817a70";ctx.font='700 16px "Zen Kaku Gothic New",sans-serif';
+  ctx.fillText("FINALIST",70,801);
+  ctx.fillText("FINAL FOUR",410,801);
+
+  await drawCard(ctx,state.finalist,70,820,260,188);
+  await drawCard(ctx,state.finalFour[0],410,820,260,188);
+  await drawCard(ctx,state.finalFour[1],750,820,260,188);
+
+  // Footer
+  ctx.fillStyle="#817a70";ctx.textAlign="right";ctx.font='500 13px "Zen Kaku Gothic New",sans-serif';
+  ctx.fillText("created with MUZE TOOL BOX",1016,1048);
 }
 function dataURLtoBlob(dataURL){const [h,d]=dataURL.split(","),m=h.match(/:(.*?);/)[1],b=atob(d),a=new Uint8Array(b.length);for(let i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return new Blob([a],{type:m});}
 $("#saveImage").onclick=async()=>{
