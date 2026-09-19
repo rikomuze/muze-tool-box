@@ -48,10 +48,14 @@ function initMembers(){
 $("#toBattle").onclick=()=>startDraft();
 
 function startDraft(){
-  const selected=shuffle(sourcePool(state.member)).slice(0,8);
+  const selected=shuffle(sourcePool(state.member)).slice(0,16);
   state.pool=selected;state.history=[];state.roundIndex=0;state.matchIndex=0;state.winner=null;state.finalist=null;state.finalFour=[];
   state.rounds=[
-    {name:"QUARTER FINAL",matches:[[selected[0],selected[1]],[selected[2],selected[3]],[selected[4],selected[5]],[selected[6],selected[7]]],winners:[]},
+    {name:"ROUND OF 16",matches:[
+      [selected[0],selected[1]],[selected[2],selected[3]],[selected[4],selected[5]],[selected[6],selected[7]],
+      [selected[8],selected[9]],[selected[10],selected[11]],[selected[12],selected[13]],[selected[14],selected[15]]
+    ],winners:[]},
+    {name:"QUARTER FINAL",matches:[],winners:[]},
     {name:"SEMI FINAL",matches:[],winners:[]},
     {name:"FINAL",matches:[],winners:[]}
   ];
@@ -71,7 +75,7 @@ function renderBattle(){
   const r=currentRound(),m=currentMatch();
   $("#roundLabel").textContent=r.name;
   $("#battleCount").textContent=r.name==="FINAL"?"FINAL":(state.matchIndex+1)+" / "+r.matches.length;
-  $("#totalProgress").textContent=(state.history.length+1)+" / 7";
+  $("#totalProgress").textContent=(state.history.length+1)+" / 15";
   $("#undoBtn").disabled=state.history.length===0;
   const wrap=$("#battlePair");wrap.innerHTML="";
   m.forEach(item=>{
@@ -88,8 +92,16 @@ function choose(item){
   if(r.name==="FINAL"){state.winner=item;state.finalist=loser;finish();return;}
   state.matchIndex++;
   if(state.matchIndex>=r.matches.length){
-    if(state.roundIndex===0) state.rounds[1].matches=[[r.winners[0],r.winners[1]],[r.winners[2],r.winners[3]]];
-    else if(state.roundIndex===1) state.rounds[2].matches=[[r.winners[0],r.winners[1]]];
+    if(state.roundIndex===0){
+      state.rounds[1].matches=[
+        [r.winners[0],r.winners[1]],[r.winners[2],r.winners[3]],
+        [r.winners[4],r.winners[5]],[r.winners[6],r.winners[7]]
+      ];
+    }else if(state.roundIndex===1){
+      state.rounds[2].matches=[[r.winners[0],r.winners[1]],[r.winners[2],r.winners[3]]];
+    }else if(state.roundIndex===2){
+      state.rounds[3].matches=[[r.winners[0],r.winners[1]]];
+    }
     state.roundIndex++;state.matchIndex=0;
   }
   renderBattle();
