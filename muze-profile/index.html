@@ -37,8 +37,16 @@
   </div>
 
   <div class="field">
-    <div class="field-head"><label>一番好きなビジュ</label><span id="visualStatus">BIASを選択してください</span></div>
-    <div id="visualGrid" class="visual-grid"></div>
+    <div class="field-head"><label>一番好きなビジュ</label><span id="visualStatus">1枚アップロード</span></div>
+    <label class="visual-upload">
+      <input id="visualInput" type="file" accept="image/*">
+      <span>写真を選ぶ</span>
+      <small>端末内の画像を使用します</small>
+    </label>
+    <div id="visualPreview" class="visual-preview" hidden>
+      <img id="visualPreviewImg" alt="一番好きなビジュ">
+      <button id="visualClear" type="button">写真を変更</button>
+    </div>
   </div>
 
   <div class="field">
