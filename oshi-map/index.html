@@ -22,7 +22,11 @@
       <div class="hero-kicker">MAKE / OSHI MAP</div>
       <h1>好きなビジュを、<br>あなたの解釈で。</h1>
       <p class="lead">推しの写真を2軸マップに並べて、自分だけの「推し解釈図」をつくろう。</p>
-      <button class="primary big" data-next="screen-map">つくる →</button>
+      <section id="savedSection" class="saved-section" hidden>
+        <div class="saved-head"><span>SAVED MAPS</span><small>この端末に保存したMAP</small></div>
+        <div id="savedList" class="saved-list"></div>
+      </section>
+      <button class="primary big" data-next="screen-map">新しくつくる →</button>
     </section>
 
     <section id="screen-map" class="screen">
