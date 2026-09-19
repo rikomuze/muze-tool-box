@@ -94,11 +94,17 @@
       </div>
 
       <div class="edit-panel">
-        <div id="selectedHint">写真をタップするとサイズを調整できます</div>
-        <label>写真サイズ
-          <input id="sizeRange" type="range" min="40" max="100" value="58" disabled>
+        <label class="all-size-control">全写真サイズ
+          <input id="allSizeRange" type="range" min="40" max="100" value="58">
+          <small>すべての写真に一括で適用</small>
         </label>
-        <button id="deleteSelected" class="danger" disabled>この写真を外す</button>
+        <div class="individual-size-control">
+          <div id="selectedHint">写真をタップすると個別にサイズを調整できます</div>
+          <label>選択中の写真サイズ
+            <input id="sizeRange" type="range" min="40" max="100" value="58" disabled>
+          </label>
+          <button id="deleteSelected" class="danger" disabled>この写真を外す</button>
+        </div>
       </div>
 
       <div class="actions">
