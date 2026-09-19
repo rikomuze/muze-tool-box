@@ -100,32 +100,36 @@ function renderMap(){
   });
 }
 function escapeHtml(s){return (s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]));}
-function selectPhoto(id){
+function selectPhoto(id,rerender=true){
   state.selectedId=id; const p=state.photos.find(x=>x.id===id);
   $("#sizeRange").disabled=!p; $("#commentInput").disabled=!p; $("#deleteSelected").disabled=!p;
   $("#selectedHint").textContent=p?"選択中：サイズとひとことを調整":"写真をタップすると調整できます";
   if(p){$("#sizeRange").value=p.size;$("#commentInput").value=p.comment||"";}
-  renderMap();
+  if(rerender) renderMap();
+  else $(".map-photo").forEach(el=>el.classList.toggle("is-selected",el.dataset.id===id));
 }
 let drag=null;
 function startDrag(e){
   e.preventDefault();
-  const id=e.currentTarget.dataset.id; selectPhoto(id);
+  const id=e.currentTarget.dataset.id; selectPhoto(id,false);
   const p=state.photos.find(x=>x.id===id); const rect=$("#mapCanvas").getBoundingClientRect();
-  drag={p,rect,pointerId:e.pointerId};
+  drag={p,rect,pointerId:e.pointerId,el:e.currentTarget};
   e.currentTarget.setPointerCapture?.(e.pointerId);
   e.currentTarget.addEventListener("pointermove",moveDrag);
   e.currentTarget.addEventListener("pointerup",endDrag,{once:true});
+  e.currentTarget.addEventListener("pointercancel",endDrag,{once:true});
 }
 function moveDrag(e){
   if(!drag)return;
   drag.p.x=Math.min(.94,Math.max(.06,(e.clientX-drag.rect.left)/drag.rect.width));
   drag.p.y=Math.min(.94,Math.max(.06,(e.clientY-drag.rect.top)/drag.rect.height));
-  const el=document.querySelector('.map-photo[data-id="'+drag.p.id+'"]');
+  const el=drag.el;
   if(el){el.style.left=(drag.p.x*100)+"%";el.style.top=(drag.p.y*100)+"%";}
 }
 function endDrag(e){
-  e.currentTarget.removeEventListener("pointermove",moveDrag); drag=null;
+  e.currentTarget.removeEventListener("pointermove",moveDrag);
+  e.currentTarget.removeEventListener("pointercancel",endDrag);
+  drag=null;
 }
 $("#sizeRange").oninput=e=>{const p=state.photos.find(x=>x.id===state.selectedId);if(p){p.size=+e.target.value;renderMap();}};
 $("#commentInput").oninput=e=>{const p=state.photos.find(x=>x.id===state.selectedId);if(p){p.comment=e.target.value;renderMap();}};
@@ -190,6 +194,48 @@ function openDB(){
     r.onsuccess=()=>resolve(r.result);r.onerror=reject;
   });
 }
+function getAllProjects(){
+  return new Promise(async(resolve,reject)=>{
+    try{
+      const db=await openDB(),tx=db.transaction("oshiMaps","readonly"),req=tx.objectStore("oshiMaps").getAll();
+      req.onsuccess=()=>resolve(req.result||[]);req.onerror=reject;
+    }catch(e){reject(e);}
+  });
+}
+async function renderSavedProjects(){
+  try{
+    const projects=(await getAllProjects()).sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));
+    const section=$("#savedSection"),list=$("#savedList");
+    list.innerHTML="";
+    section.hidden=projects.length===0;
+    projects.forEach(p=>{
+      const card=document.createElement("div");card.className="saved-card";
+      const date=new Date(p.createdAt); const label=isNaN(date)?p.createdAt:date.toLocaleDateString("ja-JP",{month:"numeric",day:"numeric"});
+      card.innerHTML='<button class="saved-open" type="button"><span class="saved-title">'+escapeHtml(p.title||"MY OSHI MAP")+'</span><span class="saved-meta">'+escapeHtml((p.axes&&p.axes.name)||"OSHI MAP")+' · '+label+'</span></button><button class="saved-delete" type="button">削除</button>';
+      card.querySelector(".saved-open").onclick=()=>openProject(p);
+      card.querySelector(".saved-delete").onclick=()=>deleteProject(p.id);
+      list.appendChild(card);
+    });
+  }catch(e){}
+}
+function openProject(p){
+  state.preset=p.preset||"custom";
+  state.photos=(p.photos||[]).map(x=>({...x,_placed:true}));
+  state.selectedId=null;
+  $("#mapTitle").value=p.title||"MY OSHI MAP";
+  if(state.preset==="custom"&&p.axes){
+    $("#customTop").value=p.axes.top||"";$("#customBottom").value=p.axes.bottom||"";
+    $("#customLeft").value=p.axes.left||"";$("#customRight").value=p.axes.right||"";
+  }
+  renderPhotoList();applyAxes();renderMap();show("screen-editor");
+}
+async function deleteProject(id){
+  try{
+    const db=await openDB(),tx=db.transaction("oshiMaps","readwrite");tx.objectStore("oshiMaps").delete(id);
+    await new Promise((res,rej)=>{tx.oncomplete=res;tx.onerror=rej;});
+    renderSavedProjects();
+  }catch(e){}
+}
 $("#saveProject").onclick=async()=>{
   try{
     const db=await openDB(),tx=db.transaction("oshiMaps","readwrite"),store=tx.objectStore("oshiMaps");
@@ -197,7 +243,9 @@ $("#saveProject").onclick=async()=>{
     store.put(project);
     await new Promise((res,rej)=>{tx.oncomplete=res;tx.onerror=rej;});
     $("#saveStatus").textContent="この端末にMAPを保存しました";
+    renderSavedProjects();
   }catch(e){$("#saveStatus").textContent="端末保存に失敗しました";}
 };
 
 initPresets();
+renderSavedProjects();
