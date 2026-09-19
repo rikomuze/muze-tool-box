@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MUZE PROFILE｜MUZE TOOL BOX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<nav class="nav"><a href="../">MUZE TOOL BOX</a><span>MUZE PROFILE</span></nav>
+<main class="shell">
+<section id="start" class="screen active">
+  <div class="eyebrow">MUZE PROFILE</div>
+  <h1>MUZEプロフィールを<br>1枚にまとめる。</h1>
+  <div class="preview-placeholder">RESULT PREVIEW</div>
+  <button class="primary big" data-go="form">作成する</button>
+</section>
+
+<section id="form" class="screen">
+  <div class="step">01 / PROFILE</div>
+  <h2>プロフィールを入力</h2>
+
+  <div class="field"><label>NAME <small>任意</small></label><input id="nameInput" maxlength="20" placeholder="名前"></div>
+  <div class="field"><label>X ID <small>任意</small></label><input id="xInput" maxlength="30" placeholder="@xxxx"></div>
+
+  <div class="field">
+    <label>BIAS</label>
+    <div id="memberGrid" class="member-grid"></div>
+  </div>
+
+  <div class="field">
+    <label>沼ポイント</label>
+    <textarea id="numaInput" maxlength="40" placeholder="40文字まで"></textarea>
+  </div>
+
+  <div class="field">
+    <div class="field-head"><label>一番好きなビジュ</label><span id="visualStatus">BIASを選択してください</span></div>
+    <div id="visualGrid" class="visual-grid"></div>
+  </div>
+
+  <div class="field">
+    <div class="field-head"><label>好きな曲 TOP3</label><span>3曲まで</span></div>
+    <div id="songSelected" class="song-selected"></div>
+    <input id="songSearch" class="search" placeholder="曲名を検索">
+    <div id="songList" class="song-list"></div>
+  </div>
+
+  <div class="field two-col">
+    <div>
+      <label>初現場</label>
+      <select id="firstLive"></select>
+      <input id="firstLiveOther" class="sub-input" placeholder="自由入力" hidden>
+    </div>
+    <div>
+      <label>次の現場</label>
+      <select id="nextLive"></select>
+      <input id="nextLiveOther" class="sub-input" placeholder="自由入力" hidden>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>遠征エリア <small>複数選択可</small></label>
+    <div id="areaGrid" class="area-grid"></div>
+  </div>
+
+  <div class="actions"><button class="ghost" data-go="start">戻る</button><button id="toDesign" class="primary" disabled>次へ</button></div>
+</section>
+
+<section id="design" class="screen">
+  <div class="step">02 / DESIGN</div>
+  <h2>デザインを選ぶ</h2>
+  <div id="designGrid" class="design-grid"></div>
+  <div class="actions"><button class="ghost" data-go="form">戻る</button><button id="toResult" class="primary" disabled>完成画像を見る</button></div>
+</section>
+
+<section id="result" class="screen">
+  <div class="step">03 / RESULT</div>
+  <h2>完成画像</h2>
+  <div class="result-sheet"><canvas id="resultCanvas" width="1080" height="1350"></canvas></div>
+  <div class="actions stacked">
+    <button id="saveImage" class="primary big">画像を保存</button>
+    <button class="ghost" data-go="design">デザインを変える</button>
+    <button class="ghost" data-go="form">内容を編集</button>
+  </div>
+  <p id="saveStatus" class="status"></p>
+</section>
+</main>
+<div id="fallback" class="modal" hidden><div class="modal-inner"><button id="closeFallback">×</button><h3>画像を長押しして保存</h3><img id="fallbackImage" alt="MUZE PROFILE"></div></div>
+<footer>非公式ファンメイドツール / created with MUZE TOOL BOX</footer>
+<script src="./data.js"></script>
+<script src="./app.js"></script>
+</body>
+</html>
