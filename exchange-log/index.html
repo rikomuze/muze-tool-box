@@ -36,38 +36,75 @@ dialog{border:0;border-radius:0;width:min(94vw,620px);max-height:90vh;padding:0;
 <button class="save" type="submit">保存する</button><button class="del" type="button" id="del" hidden>この記録を削除</button>
 </form></dialog></div>
 <script>
+(function(){
+"use strict";
 const MEMBERS=["KAIRYU","NAOYA","RAN","SEITO","RYUKI","TAKUTO","HAYATO","EIKI"];
 const TYPES=["フォトカード","ICカード","フレークシールセット","MZ Mate ランダムぷりぷりチャーム","缶バッジ","アクリルスタンド","その他"];
 const SERIES=["So Strawberry","Touch","Play at the MUZEUM vol.2","その他"];
 const STATUSES=["仮約束","約束済","発送済","交換完了"];
-const KEY="muze_exchange_log_v1"; let rows=JSON.parse(localStorage.getItem(KEY)||"[]"), tab="open", filter="all", selected={give:"",get:""}, currentStatus="仮約束";
-rows=rows.map(r=>({...r,status:r.status==="発送準備"?"約束済":(r.status||"仮約束"),giveSeries:r.giveSeries||"",getSeries:r.getSeries||""}));localStorage.setItem(KEY,JSON.stringify(rows));
-const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-function esc(s=""){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
-function save(){localStorage.setItem(KEY,JSON.stringify(rows));render()}
-function init(){
- ["giveType","getType"].forEach(id=>$("#"+id).innerHTML=TYPES.map(x=>'<option>'+x+'</option>').join(""));["giveSeries","getSeries"].forEach(id=>$("#"+id).innerHTML=SERIES.map(x=>'<option>'+x+'</option>').join(""));
- ["give","get"].forEach(side=>{const box=$("#"+side+"Members"); MEMBERS.forEach(m=>{let b=document.createElement("button");b.type="button";b.textContent=m;b.onclick=()=>{selected[side]=m;[...box.children].forEach(x=>x.classList.toggle("on",x===b))};box.appendChild(b)})});
- $("#statusBtns").innerHTML=STATUSES.map(s=>'<button type="button" data-status="'+s+'">'+s+'</button>').join("");
- $("#statusBtns button").forEach(b=>b.onclick=()=>{currentStatus=b.dataset.status;syncStatusButtons()});
- $("#method").addEventListener("change",syncDateLabels);
-}
-function render(){
- let q=$("#search").value.trim().toLowerCase(); let out=rows.filter(r=>(tab==="done"?r.status==="交換完了":r.status!=="交換完了")).filter(r=>filter==="all"||r.method===filter||r.status===filter).filter(r=>JSON.stringify(r).toLowerCase().includes(q));
- $("#count").textContent=(tab==="done"?"完了 ":"未完了 ")+out.length+"件";
- $("#list").innerHTML=out.length?out.sort((a,b)=>(b.created||"").localeCompare(a.created||"")).map(r=>`<article class="card" data-id="${r.id}"><div class="cardtop"><div><span class="person">${esc(r.name)}</span> <span class="handle">${esc(r.handle)}</span></div><span class="badge ${r.status==="交換完了"?"done":r.status==="発送済"?"sent":r.status==="仮約束"?"temp":""}">${r.status}</span></div><div class="swap"><div class="thing"><b>${r.giveMember||"—"}</b>${esc(r.giveType)}<span class="series">${esc(r.giveSeries||"")}</span><span class="series">${esc(r.giveDetail||"")}</span></div><div class="arrow">⇄</div><div class="thing"><b>${r.getMember||"—"}</b>${esc(r.getType)}<span class="series">${esc(r.getSeries||"")}</span><span class="series">${esc(r.getDetail||"")}</span></div></div><div class="meta"><span>${r.method}</span><span>約束 ${r.promiseDate||"未設定"}</span>${r.dueDate?'<span>予定 '+r.dueDate+'</span>':""}${r.event?'<span>'+esc(r.event)+'</span>':""}</div></article>`).join(""):'<div class="empty">まだ記録がありません。<br>＋から交換約束を追加できます。</div>';
- $$(".card").forEach(c=>c.onclick=()=>openEdit(c.dataset.id));
-}
-function openDialog(){const d=$("#dlg");if(typeof d.showModal==="function"){d.showModal()}else{d.setAttribute("open","")}}
-function closeDialog(){const d=$("#dlg");if(typeof d.close==="function"){d.close()}else{d.removeAttribute("open")}}
+const KEY="muze_exchange_log_v1";
+const $=s=>document.querySelector(s);
+const $=s=>Array.from(document.querySelectorAll(s));
+let rows=[];
+try{rows=JSON.parse(localStorage.getItem(KEY)||"[]")}catch(e){rows=[]}
+rows=rows.map(r=>Object.assign({},r,{status:r.status==="発送準備"?"約束済":(r.status||"仮約束"),giveSeries:r.giveSeries||"",getSeries:r.getSeries||""}));
+try{localStorage.setItem(KEY,JSON.stringify(rows))}catch(e){}
+let tab="open",filter="all",selected={give:"",get:""},currentStatus="仮約束";
+
+function esc(s){return String(s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(rows))}catch(e){} render()}
+function openDialog(){const d=$("#dlg");if(!d)return;if(typeof d.showModal==="function"){try{d.showModal();return}catch(e){}}d.setAttribute("open","")}
+function closeDialog(){const d=$("#dlg");if(!d)return;if(typeof d.close==="function"){try{d.close();return}catch(e){}}d.removeAttribute("open")}
 function syncStatusButtons(){$("#statusBtns button").forEach(b=>b.classList.toggle("on",b.dataset.status===currentStatus))}
 function syncDateLabels(){const hand=$("#method").value==="手渡し";$("#dueLabel").textContent=hand?"受け渡し予定日":"発送予定日";$("#eventLabel").textContent=hand?"会場・イベント":"会場・イベント（手渡しの場合）"}
-function reset(){$("#form").reset();$("#editId").value="";selected={give:"",get:""};currentStatus="仮約束";$(".members button").forEach(b=>b.classList.remove("on"));$("#del").hidden=true;$("#formTitle").textContent="交換の新規登録";syncStatusButtons();syncDateLabels()}
-function openEdit(id){let r=rows.find(x=>x.id===id);reset();$("#editId").value=id;$("#formTitle").textContent="交換詳細";["name","handle","giveType","giveSeries","giveDetail","getType","getSeries","getDetail","method","promiseDate","dueDate","event","memo"].forEach(k=>$("#"+k).value=r[k]||"");selected={give:r.giveMember,get:r.getMember};currentStatus=r.status||"仮約束";["give","get"].forEach(side=>$('#'+side+'Members button').forEach(b=>b.classList.toggle("on",b.textContent===selected[side])));$("#del").hidden=false;syncStatusButtons();syncDateLabels();openDialog()}
-$("#add").addEventListener("click",()=>{reset();openDialog()});$("#close").addEventListener("click",()=>closeDialog());
-$("#form").addEventListener("submit",e=>{e.preventDefault();let id=$("#editId").value;let obj={id:id||crypto.randomUUID(),name:$("#name").value.trim(),handle:$("#handle").value.trim(),giveMember:selected.give,giveType:$("#giveType").value,giveSeries:$("#giveSeries").value,giveDetail:$("#giveDetail").value.trim(),getMember:selected.get,getType:$("#getType").value,getSeries:$("#getSeries").value,getDetail:$("#getDetail").value.trim(),method:$("#method").value,promiseDate:$("#promiseDate").value,dueDate:$("#dueDate").value,event:$("#event").value.trim(),memo:$("#memo").value.trim(),status:currentStatus,created:new Date().toISOString()};if(id){let old=rows.find(x=>x.id===id);obj.created=old.created;rows=rows.map(x=>x.id===id?obj:x)}else rows.push(obj);save();closeDialog()});
-$("#del").onclick=()=>{let id=$("#editId").value;if(confirm("この交換記録を削除しますか？")){rows=rows.filter(x=>x.id!==id);save();closeDialog()}};
-$$(".tabs button").forEach(b=>b.onclick=()=>{tab=b.dataset.tab;$$(".tabs button").forEach(x=>x.classList.toggle("on",x===b));render()});
-$$(".chips button").forEach(b=>b.onclick=()=>{filter=b.dataset.filter;$$(".chips button").forEach(x=>x.classList.toggle("on",x===b));render()});$("#search").oninput=render;
+function resetForm(){
+ $("#form").reset();$("#editId").value="";selected={give:"",get:""};currentStatus="仮約束";
+ $(".members button").forEach(b=>b.classList.remove("on"));
+ $("#del").hidden=true;$("#formTitle").textContent="交換の新規登録";syncStatusButtons();syncDateLabels();
+}
+function init(){
+ ["giveType","getType"].forEach(id=>$("#"+id).innerHTML=TYPES.map(x=>"<option>"+x+"</option>").join(""));
+ ["giveSeries","getSeries"].forEach(id=>$("#"+id).innerHTML=SERIES.map(x=>"<option>"+x+"</option>").join(""));
+ ["give","get"].forEach(side=>{
+   const box=$("#"+side+"Members");
+   MEMBERS.forEach(m=>{const b=document.createElement("button");b.type="button";b.textContent=m;b.addEventListener("click",()=>{selected[side]=m;Array.from(box.children).forEach(x=>x.classList.toggle("on",x===b))});box.appendChild(b)});
+ });
+ $("#statusBtns").innerHTML=STATUSES.map(s=>'<button type="button" data-status="'+s+'">'+s+"</button>").join("");
+ $("#statusBtns button").forEach(b=>b.addEventListener("click",()=>{currentStatus=b.dataset.status;syncStatusButtons()}));
+ $("#method").addEventListener("change",syncDateLabels);
+ $("#add").addEventListener("click",()=>{resetForm();openDialog()});
+ $("#close").addEventListener("click",closeDialog);
+ $("#form").addEventListener("submit",submitForm);
+ $("#del").addEventListener("click",deleteRow);
+ $(".tabs button").forEach(b=>b.addEventListener("click",()=>{tab=b.dataset.tab;$(".tabs button").forEach(x=>x.classList.toggle("on",x===b));render()}));
+ $(".chips button").forEach(b=>b.addEventListener("click",()=>{filter=b.dataset.filter;$(".chips button").forEach(x=>x.classList.toggle("on",x===b));render()}));
+ $("#search").addEventListener("input",render);
+}
+function render(){
+ const q=$("#search").value.trim().toLowerCase();
+ const out=rows.filter(r=>(tab==="done"?r.status==="交換完了":r.status!=="交換完了"))
+   .filter(r=>filter==="all"||r.method===filter||r.status===filter)
+   .filter(r=>JSON.stringify(r).toLowerCase().includes(q))
+   .sort((a,b)=>(b.created||"").localeCompare(a.created||""));
+ $("#count").textContent=(tab==="done"?"完了 ":"未完了 ")+out.length+"件";
+ $("#list").innerHTML=out.length?out.map(r=>'<article class="card" data-id="'+esc(r.id)+'"><div class="cardtop"><div><span class="person">'+esc(r.name)+'</span> <span class="handle">'+esc(r.handle)+'</span></div><span class="badge '+(r.status==="交換完了"?"done":r.status==="発送済"?"sent":r.status==="仮約束"?"temp":"")+'">'+esc(r.status)+'</span></div><div class="swap"><div class="thing"><b>'+esc(r.giveMember||"—")+'</b>'+esc(r.giveType)+'<span class="series">'+esc(r.giveSeries)+'</span><span class="series">'+esc(r.giveDetail)+'</span></div><div class="arrow">⇄</div><div class="thing"><b>'+esc(r.getMember||"—")+'</b>'+esc(r.getType)+'<span class="series">'+esc(r.getSeries)+'</span><span class="series">'+esc(r.getDetail)+'</span></div></div><div class="meta"><span>'+esc(r.method)+'</span><span>約束 '+esc(r.promiseDate||"未設定")+'</span>'+(r.dueDate?'<span>予定 '+esc(r.dueDate)+'</span>':"")+(r.event?'<span>'+esc(r.event)+'</span>':"")+'</div></article>').join(""):'<div class="empty">まだ記録がありません。<br>下の「交換約束を追加」から登録できます。</div>';
+ $(".card").forEach(c=>c.addEventListener("click",()=>openEdit(c.dataset.id)));
+}
+function openEdit(id){
+ const r=rows.find(x=>x.id===id);if(!r)return;resetForm();
+ $("#editId").value=id;$("#formTitle").textContent="交換詳細";
+ ["name","handle","giveType","giveSeries","giveDetail","getType","getSeries","getDetail","method","promiseDate","dueDate","event","memo"].forEach(k=>$("#"+k).value=r[k]||"");
+ selected={give:r.giveMember||"",get:r.getMember||""};currentStatus=r.status||"仮約束";
+ ["give","get"].forEach(side=>$('#'+side+'Members button').forEach(b=>b.classList.toggle("on",b.textContent===selected[side])));
+ $("#del").hidden=false;syncStatusButtons();syncDateLabels();openDialog();
+}
+function submitForm(e){
+ e.preventDefault();const id=$("#editId").value;
+ const obj={id:id||("x"+Date.now()+Math.random().toString(36).slice(2)),name:$("#name").value.trim(),handle:$("#handle").value.trim(),giveMember:selected.give,giveType:$("#giveType").value,giveSeries:$("#giveSeries").value,giveDetail:$("#giveDetail").value.trim(),getMember:selected.get,getType:$("#getType").value,getSeries:$("#getSeries").value,getDetail:$("#getDetail").value.trim(),method:$("#method").value,promiseDate:$("#promiseDate").value,dueDate:$("#dueDate").value,event:$("#event").value.trim(),memo:$("#memo").value.trim(),status:currentStatus,created:new Date().toISOString()};
+ if(id){const old=rows.find(x=>x.id===id);if(old)obj.created=old.created;rows=rows.map(x=>x.id===id?obj:x)}else{rows.push(obj)}
+ persist();closeDialog();
+}
+function deleteRow(){const id=$("#editId").value;if(id&&confirm("この交換記録を削除しますか？")){rows=rows.filter(x=>x.id!==id);persist();closeDialog()}}
 init();render();
+})();
 </script></body></html>
