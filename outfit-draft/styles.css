@@ -1,3 +1,4 @@
+html,body{max-width:100%;overflow-x:hidden}
 :root{--bg:#f3eee6;--paper:#fff;--ink:#292724;--muted:#817a70;--line:#b9b1a6;--accent:#d5a3a5;--sans:"Zen Kaku Gothic New","Hiragino Sans",sans-serif;--hand:"Klee One","Yu Gothic",cursive}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(rgba(41,39,36,.045) 1px,transparent 1px) 0 0/22px 22px,var(--bg);color:var(--ink);font-family:var(--sans);min-height:100vh}button{font:inherit}
 .nav{max-width:780px;margin:auto;padding:14px 18px;border-bottom:1px solid rgba(41,39,36,.16);display:flex;justify-content:space-between;gap:12px}.nav a{color:inherit;text-decoration:none;font-family:var(--hand);font-weight:600}.nav span{font-size:11px;letter-spacing:.18em;color:var(--muted)}

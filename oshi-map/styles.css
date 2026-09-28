@@ -1,3 +1,4 @@
+html,body{max-width:100%;overflow-x:hidden}
 :root{
   --bg:#f3eee6;--paper:#fff;--ink:#292724;--muted:#817a70;--line:#b9b1a6;
   --accent:#d5a3a5;--mint:#a8c5af;--danger:#9a3d46;
