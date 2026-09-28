@@ -261,6 +261,8 @@ dialog::backdrop{background:rgba(40,37,34,.55)}
 .delete-form.show{display:block}
 .toast{position:fixed;z-index:50;left:50%;bottom:90px;transform:translateX(-50%) translateY(12px);background:var(--ink);color:#fff;padding:9px 13px;font-size:10px;opacity:0;pointer-events:none;transition:.2s;max-width:calc(100vw - 32px);text-align:center}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.top-actions{display:flex;align-items:center;gap:10px}.key-chip{border:1px solid rgba(40,37,34,.22);background:rgba(255,255,255,.35);padding:5px 7px;font-size:8px;letter-spacing:.08em}
+.key-panel{padding:18px 17px 22px}.key-panel p{margin:0 0 13px;color:var(--muted);font-size:10px;line-height:1.7}.key-value{width:100%;border:1px solid var(--line);background:var(--white);padding:11px 10px;font-family:var(--gothic);font-size:12px;letter-spacing:.06em}.key-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.key-actions button{padding:10px;border:1px solid var(--ink);background:transparent;font-size:10px}.key-actions .primary{background:var(--ink);color:#fff}.key-new{width:100%;margin-top:8px;padding:9px;border:0;background:transparent;color:var(--muted);font-size:9px;text-decoration:underline;text-underline-offset:3px}
 @media(max-width:460px){
   .app{padding-inline:8px}.book{padding:28px 13px 44px 50px}.summary{gap:9px;margin-bottom:36px}
   .entry-head{grid-template-columns:65px minmax(0,1fr);gap:10px}.event-title{font-size:17px}
@@ -271,7 +273,7 @@ dialog::backdrop{background:rgba(40,37,34,.55)}
 </head>
 <body>
 <div class="app">
-  <div class="topbar"><a href="../">MUZE TOOL BOX</a><span>MEMORY LOG</span></div>
+  <div class="topbar"><a href="../">MUZE TOOL BOX</a><div class="top-actions"><span>MEMORY LOG</span><button class="key-chip" id="keyOpen" type="button">MUZE KEY</button></div></div>
   <main class="book">
     <section class="list-view" id="listView">
       <div class="cover-kicker">LIVE ARCHIVE</div>
@@ -344,12 +346,23 @@ dialog::backdrop{background:rgba(40,37,34,.55)}
     <div class="form-actions"><button class="save" type="submit">このページを保存</button><button class="delete-form" id="deleteForm" type="button">このページを削除</button></div>
   </form>
 </dialog>
+<dialog id="keyDlg">
+  <div class="sheet-head"><b>MUZE KEY</b><button class="close" id="keyClose" type="button">×</button></div>
+  <div class="key-panel">
+    <p>参戦ログと交換約束ログで共通して使うKEYです。この端末では自動で保存されます。</p>
+    <input class="key-value" id="keyValue" autocomplete="off" autocapitalize="characters" spellcheck="false">
+    <div class="key-actions"><button id="keyCopy" type="button">コピー</button><button class="primary" id="keyUse" type="button">このKEYを使う</button></div>
+    <button class="key-new" id="keyNew" type="button">新しいMUZE KEYを発行</button>
+  </div>
+</dialog>
 <div class="toast" id="toast"></div>
 
+<script src="../assets/muze-key.js"></script>
 <script>
 (function(){
 "use strict";
-var KEY="muze_log_v1";
+var BASE_KEY="muze_log_v1";
+var KEY=MUZEKey.storageKey(BASE_KEY);
 var DB_NAME="muze_log_media_v1";
 var DB_VERSION=1;
 var rows=[];
@@ -366,7 +379,13 @@ function byId(id){return document.getElementById(id)}
 function all(sel){return Array.from(document.querySelectorAll(sel))}
 function esc(value){return String(value||"").replace(/[&<>"']/g,function(m){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]})}
 function uid(){return (window.crypto&&crypto.randomUUID)?crypto.randomUUID():"log_"+Date.now()+"_"+Math.random().toString(36).slice(2)}
-function load(){try{var parsed=JSON.parse(localStorage.getItem(KEY)||"[]");rows=Array.isArray(parsed)?parsed:[]}catch(e){rows=[]}}
+function migrateLegacy(){
+  if(localStorage.getItem(KEY)===null){
+    var legacy=localStorage.getItem(BASE_KEY);
+    if(legacy!==null)localStorage.setItem(KEY,legacy);
+  }
+}
+function load(){migrateLegacy();try{var parsed=JSON.parse(localStorage.getItem(KEY)||"[]");rows=Array.isArray(parsed)?parsed:[]}catch(e){rows=[]}}
 function persist(){localStorage.setItem(KEY,JSON.stringify(rows))}
 function toast(msg){var el=byId("toast");el.textContent=msg;el.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(function(){el.classList.remove("on")},1800)}
 function openDialog(){var d=byId("dlg");if(typeof d.showModal==="function"){try{d.showModal();return}catch(e){}}d.setAttribute("open","")}
@@ -579,13 +598,40 @@ function handleFiles(fileList){
   byId("mediaInput").value="";renderMediaDraft()
 }
 
-load();
+function openKeyDialog(){
+  byId("keyValue").value=MUZEKey.get();
+  openSpecificDialog(byId("keyDlg"));
+}
+function openSpecificDialog(d){
+  if(typeof d.showModal==="function"){try{d.showModal();return}catch(e){}}
+  d.setAttribute("open","");
+}
+function closeSpecificDialog(d){
+  if(typeof d.close==="function"){try{d.close();return}catch(e){}}
+  d.removeAttribute("open");
+}
+function refreshKeyChip(){
+  byId("keyOpen").textContent="KEY "+MUZEKey.get().slice(-4);
+}
+async function switchKey(raw){
+  var normalized=MUZEKey.normalize(raw);
+  if(!MUZEKey.valid(normalized)){toast("MUZE KEYの形式を確認してください");return}
+  MUZEKey.set(normalized);
+  KEY=MUZEKey.storageKey(BASE_KEY);
+  load();closeDetail();await renderList();refreshKeyChip();closeSpecificDialog(byId("keyDlg"));toast("MUZE KEYを切り替えました");
+}
+load();refreshKeyChip();
 all("#members button").forEach(function(b){b.addEventListener("click",function(){var m=b.dataset.member;var i=selectedMembers.indexOf(m);if(i>=0)selectedMembers.splice(i,1);else selectedMembers.push(m);syncMembers()})});
 byId("add").addEventListener("click",openNew);byId("addInline").addEventListener("click",openNew);byId("close").addEventListener("click",closeDialog);
 byId("backToList").addEventListener("click",closeDetail);byId("form").addEventListener("submit",saveForm);byId("mediaInput").addEventListener("change",function(e){handleFiles(e.target.files)});
 byId("editDetail").addEventListener("click",function(){if(currentDetailId)openEdit(currentDetailId,false)});byId("addMediaDetail").addEventListener("click",function(){if(currentDetailId)openEdit(currentDetailId,true)});
 byId("deleteDetail").addEventListener("click",function(){deleteEvent(currentDetailId)});byId("deleteForm").addEventListener("click",function(){deleteEvent(byId("editId").value)});
 byId("dlg").addEventListener("click",function(e){if(e.target===byId("dlg"))closeDialog()});
+byId("keyOpen").addEventListener("click",openKeyDialog);
+byId("keyClose").addEventListener("click",function(){closeSpecificDialog(byId("keyDlg"))});
+byId("keyCopy").addEventListener("click",async function(){try{await navigator.clipboard.writeText(MUZEKey.get());toast("MUZE KEYをコピーしました")}catch(e){byId("keyValue").select();document.execCommand("copy");toast("MUZE KEYをコピーしました")}});
+byId("keyUse").addEventListener("click",function(){switchKey(byId("keyValue").value)});
+byId("keyNew").addEventListener("click",function(){if(confirm("新しいMUZE KEYへ切り替えますか？ 現在のKEYの記録は削除されません。"))switchKey(MUZEKey.generate())});
 renderList();
 })();
 </script>
