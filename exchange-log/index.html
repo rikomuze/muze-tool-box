@@ -402,7 +402,7 @@ async function exportVisibleList(){
    ctx.fillText(tab==="done"?"交換履歴":"交換約束ログ",pad+26,145);
    ctx.textAlign="right";
    ctx.font='500 19px "Zen Kaku Gothic New","Hiragino Sans",sans-serif';
-   ctx.fillStyle="#8f8577";
+   ctx.fillStyle="#6b6258";
    const filterLabel=filter==="all"?"すべて":filter;
    ctx.fillText(filterLabel+" / "+out.length+"件",W-pad-24,143);
    ctx.textAlign="left";
@@ -431,8 +431,8 @@ async function exportVisibleList(){
      ctx.fillStyle="#40382f";
      ctx.font='600 29px "Klee One","Yu Gothic",sans-serif';
      ctx.fillText(fitText(ctx,r.name||"お相手",360),x+30,y+55);
-     ctx.font='400 18px "Zen Kaku Gothic New","Hiragino Sans",sans-serif';
-     ctx.fillStyle="#8f8577";
+     ctx.font='500 19px "Zen Kaku Gothic New","Hiragino Sans",sans-serif';
+     ctx.fillStyle="#6b6258";
      ctx.fillText(fitText(ctx,r.handle||"",260),x+32,y+82);
 
      // status badge
@@ -456,10 +456,12 @@ async function exportVisibleList(){
        ctx.fillText(fitText(ctx,member||"—",boxW-30),px+boxW/2,boxY+30);
        ctx.font='500 17px "Zen Kaku Gothic New","Hiragino Sans",sans-serif';
        ctx.fillText(fitText(ctx,type||"",boxW-30),px+boxW/2,boxY+57);
-       ctx.font='400 14px "Zen Kaku Gothic New","Hiragino Sans",sans-serif';
-       ctx.fillStyle="#8f8577";
-       ctx.fillText(fitText(ctx,series||"",boxW-30),px+boxW/2,boxY+80);
-       ctx.fillText(fitText(ctx,detail||"",boxW-30),px+boxW/2,boxY+101);
+       ctx.font='500 17px "Zen Kaku Gothic New","Hiragino Sans",sans-serif';
+       ctx.fillStyle="#6b6258";
+       ctx.fillText(fitText(ctx,series||"",boxW-30),px+boxW/2,boxY+81);
+       ctx.font='500 16px "Zen Kaku Gothic New","Hiragino Sans",sans-serif';
+       ctx.fillStyle="#5f574f";
+       ctx.fillText(fitText(ctx,detail||"",boxW-30),px+boxW/2,boxY+104);
        ctx.textAlign="left";
      }
      drawThing(x+30,r.giveMember,r.giveType,r.giveSeries,r.giveDetail);
@@ -471,8 +473,8 @@ async function exportVisibleList(){
      // meta
      ctx.strokeStyle="rgba(64,56,47,.16)";ctx.setLineDash([6,6]);
      ctx.beginPath();ctx.moveTo(x+30,y+235);ctx.lineTo(x+w-30,y+235);ctx.stroke();ctx.setLineDash([]);
-     ctx.font='400 15px "Zen Kaku Gothic New","Hiragino Sans",sans-serif';
-     ctx.fillStyle="#8f8577";
+     ctx.font='500 18px "Zen Kaku Gothic New","Hiragino Sans",sans-serif';
+     ctx.fillStyle="#665e55";
      const meta=[
        r.method||"",
        "約束 "+(r.promiseDate||"未設定"),
@@ -483,8 +485,8 @@ async function exportVisibleList(){
    });
 
    ctx.textAlign="center";
-   ctx.fillStyle="#8f8577";
-   ctx.font='400 15px "Zen Kaku Gothic New","Hiragino Sans",sans-serif';
+   ctx.fillStyle="#746b61";
+   ctx.font='500 16px "Zen Kaku Gothic New","Hiragino Sans",sans-serif';
    ctx.fillText("MUZE TOOL BOX / 交換約束ログ",W/2,H-52);
    ctx.textAlign="left";
 
