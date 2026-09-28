@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#eee7dc">
+<meta name="robots" content="noindex">
+<title>MUZE MEMORY — LIVE JOURNAL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --desk:#e6ddd0;
+  --paper:#f9f6ef;
+  --paper2:#fffdfa;
+  --ink:#302b27;
+  --muted:#877d72;
+  --line:rgba(48,43,39,.22);
+  --rule:rgba(84,111,126,.14);
+  --berry:#b95f76;
+  --mint:#92a99a;
+  --stamp:#a34d4f;
+  --hand:"Klee One","Yu Gothic",cursive;
+  --gothic:"Zen Kaku Gothic New","Hiragino Sans",sans-serif;
+  --shadow:0 12px 28px rgba(62,49,38,.15);
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;max-width:100%;overflow-x:hidden}
+body{
+  color:var(--ink);
+  font-family:var(--gothic);
+  background:
+    radial-gradient(rgba(48,43,39,.045) .8px,transparent .8px) 0 0/18px 18px,
+    var(--desk);
+  -webkit-text-size-adjust:100%;
+}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+.app{width:min(100%,720px);margin:0 auto;min-height:100vh;padding:12px 12px 120px}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:8px 5px 12px;font-size:11px;letter-spacing:.12em;color:var(--muted)
+}
+.topbar b{font-family:var(--hand);font-size:14px;letter-spacing:.04em;color:var(--ink)}
+.book{
+  position:relative;
+  background:
+    linear-gradient(90deg,transparent 0 41px,rgba(185,95,118,.24) 41px 42px,transparent 42px),
+    repeating-linear-gradient(to bottom,transparent 0 31px,var(--rule) 31px 32px),
+    var(--paper);
+  min-height:760px;
+  border:1px solid rgba(48,43,39,.16);
+  box-shadow:var(--shadow);
+  padding:28px 18px 46px 58px;
+}
+.book:before{
+  content:"";
+  position:absolute;left:17px;top:22px;bottom:22px;width:10px;
+  background:radial-gradient(circle,#d6cbbc 0 3px,transparent 3.5px) center top/10px 34px repeat-y;
+  opacity:.9;
+}
+.cover-kicker{font-size:10px;letter-spacing:.24em;color:var(--muted);font-weight:700}
+.cover-title{
+  font-family:var(--hand);
+  font-size:clamp(38px,10vw,58px);
+  line-height:1.02;
+  margin:10px 0 2px;
+  letter-spacing:.01em
+}
+.cover-sub{font-family:var(--hand);font-size:13px;color:var(--muted);margin:0 0 22px}
+.cover-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.stamp{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:28px;padding:3px 9px;
+  border:1.5px solid var(--stamp);color:var(--stamp);
+  font-size:10px;font-weight:700;letter-spacing:.08em;
+  transform:rotate(-2deg)
+}
+.stamp:nth-child(2){transform:rotate(1.5deg);color:#5e7568;border-color:#5e7568}
+.summary{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;
+  margin:18px 0 28px
+}
+.summary div{
+  border-top:1px solid var(--ink);padding-top:6px;min-width:0
+}
+.summary strong{font-family:var(--hand);font-size:25px;line-height:1}
+.summary small{display:block;color:var(--muted);font-size:9px;letter-spacing:.08em;margin-top:4px}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:4px 0 14px}
+.section-head h2{font-family:var(--hand);font-size:21px;margin:0;transform:rotate(-.6deg)}
+.section-head span{font-size:9px;color:var(--muted);letter-spacing:.14em}
+.entries{display:grid;gap:24px}
+.entry{position:relative;padding:0 0 4px}
+.entry-no{
+  position:absolute;left:-45px;top:5px;font-family:var(--hand);font-size:11px;color:var(--muted);
+  transform:rotate(-90deg);transform-origin:center
+}
+.date{
+  display:flex;align-items:baseline;gap:8px;margin-bottom:6px
+}
+.date strong{font-family:var(--hand);font-size:21px}
+.date span{font-size:10px;letter-spacing:.12em;color:var(--muted)}
+.event-title{font-size:17px;font-weight:700;line-height:1.45;margin:0 0 5px}
+.place{font-size:11px;color:var(--muted);margin-bottom:11px}
+.memory-layout{display:grid;grid-template-columns:minmax(0,1fr) 104px;gap:12px;align-items:start}
+.note{
+  font-family:var(--hand);font-size:13px;line-height:1.9;
+  padding:4px 0 9px;border-bottom:1px dashed var(--line)
+}
+.photo{
+  position:relative;background:#fff;padding:6px 6px 20px;box-shadow:0 7px 16px rgba(62,49,38,.13);transform:rotate(2deg)
+}
+.photo-box{
+  aspect-ratio:4/5;background:
+    linear-gradient(135deg,rgba(185,95,118,.10),rgba(146,169,154,.14)),
+    #e9e4dc;
+  display:grid;place-items:center;color:var(--muted);font-family:var(--hand);font-size:10px
+}
+.photo:before{
+  content:"";position:absolute;width:42px;height:13px;left:50%;top:-7px;transform:translateX(-50%) rotate(-4deg);
+  background:rgba(205,181,151,.72)
+}
+.tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
+.tag{font-size:9px;padding:3px 7px;border:1px solid var(--line);background:rgba(255,255,255,.5)}
+.people{font-size:10px;color:var(--muted);margin-top:7px}
+.ticket{
+  margin-top:14px;
+  display:grid;grid-template-columns:1fr 72px;
+  border:1px solid rgba(48,43,39,.32);background:rgba(255,255,255,.54);
+  min-height:72px;position:relative
+}
+.ticket-main{padding:9px 11px}
+.ticket-side{border-left:1px dashed rgba(48,43,39,.34);display:grid;place-items:center;text-align:center;font-size:8px;letter-spacing:.11em}
+.ticket b{font-family:var(--hand);font-size:12px}.ticket small{display:block;color:var(--muted);font-size:9px;margin-top:2px}
+.entry-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:8px}
+.text-btn{border:0;background:transparent;padding:5px 0;font-size:10px;color:var(--muted);border-bottom:1px dashed var(--line)}
+.add-paper{
+  width:100%;margin:30px 0 2px;padding:15px;
+  border:1px dashed rgba(48,43,39,.36);background:rgba(255,255,255,.4);
+  font-family:var(--hand);font-size:14px
+}
+.add-paper strong{color:var(--berry)}
+.bottom-note{
+  position:absolute;right:14px;bottom:11px;font-family:var(--hand);font-size:9px;color:var(--muted)
+}
+.floating{
+  position:fixed;z-index:20;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%);
+  width:min(330px,calc(100vw - 34px));height:56px;border:1px solid #984b60;background:var(--berry);color:#fff;
+  box-shadow:0 10px 22px rgba(117,58,76,.26);
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  font-family:var(--hand);font-size:15px;font-weight:600
+}
+.floating .plus{font-size:23px;line-height:1}
+dialog{
+  width:min(94vw,620px);max-width:calc(100vw - 20px);max-height:90vh;
+  border:0;padding:0;background:var(--paper2);overflow-x:hidden;overflow-y:auto;touch-action:pan-y;
+  box-shadow:0 18px 60px rgba(30,24,20,.32)
+}
+dialog::backdrop{background:rgba(48,43,39,.55)}
+.sheet-head{
+  position:sticky;top:0;z-index:2;background:var(--paper2);
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 16px;border-bottom:1px solid var(--line)
+}
+.sheet-head b{font-family:var(--hand);font-size:18px}
+.close{border:0;background:transparent;font-size:24px;padding:2px 6px}
+.form{padding:8px 16px 24px;overflow-x:hidden;touch-action:pan-y}
+.form h3{font-family:var(--hand);font-size:14px;margin:17px 0 7px}
+.field{margin:9px 0}
+.field label{display:block;font-size:9px;color:var(--muted);letter-spacing:.08em;margin-bottom:4px}
+.field input,.field textarea,.field select{
+  width:100%;max-width:100%;min-width:0;border:0;border-bottom:1px solid var(--line);background:transparent;padding:9px 3px
+}
+.field textarea{min-height:84px;resize:vertical}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.member-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.member-grid button{border:1px solid var(--line);background:#fff;padding:8px 2px;font-size:9px}
+.member-grid button.on{border-color:var(--berry);background:#f6e8ec;color:#8d4458;font-weight:700}
+.upload{
+  display:grid;place-items:center;min-height:96px;border:1px dashed var(--line);background:#fffaf4;
+  font-family:var(--hand);font-size:12px;text-align:center;padding:12px
+}
+.save{
+  width:100%;margin-top:20px;padding:13px;border:1px solid var(--ink);background:var(--ink);color:#fff;font-weight:700
+}
+@media(max-width:430px){
+  .app{padding-inline:8px}.book{padding:24px 13px 40px 50px}
+  .memory-layout{grid-template-columns:minmax(0,1fr) 90px}.photo{padding:5px 5px 18px}
+  .grid2{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar"><b>MUZE MEMORY</b><span>LIVE JOURNAL / 2026</span></div>
+
+  <main class="book">
+    <div class="cover-kicker">MY LIVE ARCHIVE</div>
+    <h1 class="cover-title">参戦<br>journal</h1>
+    <p class="cover-sub">ライブの日のことを、忘れないうちに。</p>
+
+    <div class="cover-meta">
+      <span class="stamp">MY MUZE</span>
+      <span class="stamp">MEMORY LOG</span>
+    </div>
+
+    <div class="summary">
+      <div><strong>12</strong><small>EVENTS</small></div>
+      <div><strong>8</strong><small>CITIES</small></div>
+      <div><strong>24</strong><small>MEMORIES</small></div>
+    </div>
+
+    <div class="section-head">
+      <h2>recent pages</h2>
+      <span>NEW → OLD</span>
+    </div>
+
+    <section class="entries">
+      <article class="entry">
+        <span class="entry-no">PAGE 012</span>
+        <div class="date"><strong>09.27</strong><span>2026 / SUN</span></div>
+        <h3 class="event-title">EVENT TITLE</h3>
+        <div class="place">TOKYO — VENUE NAME</div>
+        <div class="memory-layout">
+          <div>
+            <div class="note">ここにその日の感想。ステージで覚えておきたいこと、嬉しかったこと、帰り道に考えていたこと。</div>
+            <div class="tags"><span class="tag">EIKI</span><span class="tag">NAOYA</span><span class="tag">LIVE</span></div>
+            <div class="people">会えたMUZE：2人</div>
+          </div>
+          <div class="photo"><div class="photo-box">PHOTO</div></div>
+        </div>
+        <div class="ticket">
+          <div class="ticket-main"><b>MEMORY TICKET</b><small>photo / video / note / members</small></div>
+          <div class="ticket-side">MUZE<br>MEMORY</div>
+        </div>
+        <div class="entry-actions"><button class="text-btn">ひらく</button><button class="text-btn">共有</button></div>
+      </article>
+
+      <article class="entry">
+        <span class="entry-no">PAGE 011</span>
+        <div class="date"><strong>08.16</strong><span>2026 / SUN</span></div>
+        <h3 class="event-title">EVENT TITLE</h3>
+        <div class="place">OSAKA — VENUE NAME</div>
+        <div class="memory-layout">
+          <div>
+            <div class="note">写真がなくても、文章だけでちゃんと「その日のページ」になるデザイン。</div>
+            <div class="tags"><span class="tag">MAZZEL</span><span class="tag">FAN EVENT</span></div>
+            <div class="people">会えたMUZE：—</div>
+          </div>
+          <div class="photo"><div class="photo-box">VIDEO</div></div>
+        </div>
+        <div class="entry-actions"><button class="text-btn">ひらく</button><button class="text-btn">共有</button></div>
+      </article>
+    </section>
+
+    <button class="add-paper" id="addInline"><strong>＋</strong> 新しいページを書く</button>
+    <div class="bottom-note">MUZE MEMORY · personal live archive</div>
+  </main>
+</div>
+
+<button class="floating" id="add"><span class="plus">＋</span><span>参戦記録を追加</span></button>
+
+<dialog id="dlg">
+  <div class="sheet-head"><b>新しいページを書く</b><button class="close" id="close" type="button">×</button></div>
+  <form class="form" id="form">
+    <h3>event</h3>
+    <div class="field"><label>イベント名</label><input placeholder="EVENT TITLE"></div>
+    <div class="grid2">
+      <div class="field"><label>日付</label><input type="date"></div>
+      <div class="field"><label>会場</label><input placeholder="VENUE"></div>
+    </div>
+
+    <h3>members</h3>
+    <div class="member-grid" id="members">
+      <button type="button">KAIRYU</button><button type="button">NAOYA</button><button type="button">RAN</button><button type="button">SEITO</button>
+      <button type="button">RYUKI</button><button type="button">TAKUTO</button><button type="button">HAYATO</button><button type="button">EIKI</button>
+    </div>
+
+    <h3>memory</h3>
+    <div class="field"><label>その日の感想</label><textarea placeholder="忘れたくないことを書いておく"></textarea></div>
+    <div class="field"><label>会えたMUZE</label><input placeholder="ニックネームなど"></div>
+    <div class="upload">写真・動画を追加<br><small>ここに添付UIが入る想定</small></div>
+
+    <button class="save" type="submit">このページを保存</button>
+  </form>
+</dialog>
+
+<script>
+const d=document.getElementById("dlg");
+function openD(){if(typeof d.showModal==="function")d.showModal();else d.setAttribute("open","")}
+function closeD(){if(typeof d.close==="function")d.close();else d.removeAttribute("open")}
+document.getElementById("add").addEventListener("click",openD);
+document.getElementById("addInline").addEventListener("click",openD);
+document.getElementById("close").addEventListener("click",closeD);
+document.querySelectorAll("#members button").forEach(b=>b.addEventListener("click",()=>b.classList.toggle("on")));
+document.getElementById("form").addEventListener("submit",e=>{e.preventDefault();closeD()});
+</script>
+</body>
+</html>
