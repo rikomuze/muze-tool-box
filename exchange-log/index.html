@@ -48,7 +48,6 @@ const STATUSES=["仮約束","約束済","発送済","交換完了"];
 const BASE_KEY="muze_exchange_log_v1";
 const API_BASE="https://muze-toolbox-api.logical-bear-ishi.workers.dev";
 const API_URL=API_BASE+"/api/exchange-v2";
-const LEGACY_API_URL=API_BASE+"/api/exchange-legacy";
 const CRYPTO_ITERATIONS=180000;
 const CRYPTO_SALT_PREFIX="MUZE-TOOL-BOX:EXCHANGE:V2:";
 let KEY=MUZEKey.storageKey(BASE_KEY);
@@ -58,7 +57,6 @@ function normalizeRows(input){
   return (Array.isArray(input)?input:[]).map(r=>Object.assign({},r,{status:r.status==="発送準備"?"約束済":(r.status||"仮約束"),giveSeries:r.giveSeries||"",getSeries:r.getSeries||""}));
 }
 function dirtyKey(){return "muze_exchange_dirty_v2:"+MUZEKey.get()}
-function migrationKey(){return "muze_exchange_migrated_v2:"+MUZEKey.get()}
 function loadRows(){
   if(localStorage.getItem(KEY)===null){
     const legacy=localStorage.getItem(BASE_KEY);
@@ -165,56 +163,6 @@ async function putEncryptedCloud(value){
   if(!data||data.ok!==true)throw new Error("invalid response");
   return data;
 }
-async function legacyHash(){
-  return sha256Hex(MUZEKey.get());
-}
-async function fetchLegacyCloud(){
-  const hash=await legacyHash();
-  const res=await fetch(LEGACY_API_URL,{method:"GET",headers:{"X-Legacy-Key-Hash":hash}});
-  if(!res.ok)throw new Error("HTTP "+res.status);
-  return res.json();
-}
-async function deleteLegacyCloud(){
-  const hash=await legacyHash();
-  const res=await fetch(LEGACY_API_URL,{method:"DELETE",headers:{"X-Legacy-Key-Hash":hash}});
-  if(!res.ok)throw new Error("HTTP "+res.status);
-  return res.json();
-}
-async function migrateLegacyIfNeeded(){
-  if(localStorage.getItem(migrationKey())==="1")return false;
-
-  const encrypted=await fetchEncryptedCloud();
-  if(encrypted&&encrypted.found){
-    localStorage.setItem(migrationKey(),"1");
-    return false;
-  }
-
-  const legacy=await fetchLegacyCloud();
-  const legacyRows=legacy&&legacy.found?normalizeRows(legacy.rows):[];
-
-  let sourceRows=legacyRows.length?legacyRows:rows;
-  if(!sourceRows.length){
-    localStorage.setItem(migrationKey(),"1");
-    return false;
-  }
-
-  await putEncryptedCloud(sourceRows);
-
-  const verify=await fetchEncryptedCloud();
-  if(!verify||!verify.found)throw new Error("migration verify missing");
-  const verifiedRows=await decryptEnvelope(verify.envelope);
-  if(JSON.stringify(verifiedRows)!==JSON.stringify(normalizeRows(sourceRows)))throw new Error("migration verify failed");
-
-  rows=normalizeRows(sourceRows);
-  saveLocal(false);
-
-  if(legacy&&legacy.found){
-    await deleteLegacyCloud();
-  }
-
-  localStorage.setItem(migrationKey(),"1");
-  return true;
-}
 async function cloudSave(){
   setSyncStatus("sync","暗号化してクラウド同期中…");
   try{
@@ -231,13 +179,6 @@ async function cloudSave(){
 async function syncFromCloud(){
   setSyncStatus("sync","暗号化クラウドを確認中…");
   try{
-    const migrated=await migrateLegacyIfNeeded();
-    if(migrated){
-      render();
-      setSyncStatus("ok","旧データを暗号化して移行済み");
-      return;
-    }
-
     const data=await fetchEncryptedCloud();
     const dirty=localStorage.getItem(dirtyKey())==="1";
 
