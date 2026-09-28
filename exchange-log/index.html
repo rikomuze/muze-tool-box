@@ -83,7 +83,7 @@ dialog{border:0;border-radius:0;width:min(94vw,620px);max-width:calc(100vw - 24p
 <header><div class="head"><h1>交換・買取ログ</h1><button class="keychip" id="keyOpen" type="button">MUZE KEY</button></div></header>
 <main><div class="tabs"><button class="on" data-tab="open">未完了</button><button data-tab="done">交換履歴</button></div>
 <input class="search" id="search" placeholder="交換相手・メンバー・グッズで検索">
-<div class="chips" id="filters"><button class="on" data-filter="all">すべて</button><button data-filter="交換">交換</button><button data-filter="買取">買取</button><button data-filter="郵送">郵送</button><button data-filter="手渡し">手渡し</button><button data-filter="仮約束">仮約束</button><button data-filter="約束済">約束済</button><button data-filter="発送済">発送済</button></div>
+<div class="chips" id="filters"><button class="on" data-filter="all">すべて</button><button data-filter="交換">交換</button><button data-filter="買取">買取</button><button data-filter="郵送">郵送</button><button data-filter="手渡し">手渡し</button><button data-filter="仮約束">仮約束</button><button data-filter="約束済">約束済</button><button data-filter="発送済">発送済</button><button data-filter="買取確定">買取確定</button><button data-filter="支払済">支払済</button></div>
 <div class="listHead"><div class="count" id="count"></div><button class="downloadBtn" id="downloadImage" type="button">画像をシェア</button></div><div class="list" id="list"></div><p class="note"><span class="syncStatus" id="syncStatus" data-state="local">この端末に保存中</span><button class="syncNow" id="syncNow" type="button">今すぐ同期</button></p></main>
 <button class="fab" id="add" type="button" aria-label="取引を追加"><span class="fabPlus">＋</span><span class="fabText">交換・買取を追加</span></button>
 <dialog id="dlg"><div class="formhead"><b id="formTitle">交換の新規登録</b><button class="close" id="close">×</button></div><form class="form" id="form">
@@ -299,8 +299,9 @@ function syncTradeTypeUI(){
  $("#methodHeading").textContent=buy?"受け取り方法・日程":"交換方法・日程";
  $("#formTitle").textContent=$("#editId").value?(buy?"買取詳細":"交換詳細"):(buy?"買取の新規登録":"交換の新規登録");
  renderStatusButtons();
+ syncDateLabels();
 }
-function syncDateLabels(){const hand=$("#method").value==="手渡し";$("#dueLabel").textContent=hand?"受け渡し予定日":"発送予定日";$("#eventLabel").textContent=hand?"会場・イベント":"会場・イベント（手渡しの場合）"}
+function syncDateLabels(){const hand=$("#method").value==="手渡し",buy=currentTradeType==="買取";$("#dueLabel").textContent=hand?"受け渡し予定日":(buy?"到着予定日":"発送予定日");$("#eventLabel").textContent=hand?"会場・イベント":"会場・イベント（手渡しの場合）"}
 function resetForm(){
  $("#form").reset();$("#editId").value="";selected={give:"",get:""};currentStatus="仮約束";currentTradeType="交換";
  document.querySelectorAll(".members button").forEach(b=>b.classList.remove("on"));
@@ -490,9 +491,13 @@ async function exportVisibleList(){
        const fullW=w-60;
        drawThing(x+30,r.getMember,r.getType,r.getSeries,r.getDetail,fullW);
        if(r.price){
-         ctx.textAlign="right";ctx.fillStyle="#40382f";
-         ctx.font='600 20px "Klee One","Yu Gothic",sans-serif';
-         ctx.fillText("¥"+Number(r.price).toLocaleString("ja-JP"),x+w-45,boxY+102);
+         const priceText="¥"+Number(r.price).toLocaleString("ja-JP");
+         ctx.font='600 19px "Klee One","Yu Gothic",sans-serif';
+         const pw=ctx.measureText(priceText).width+26;
+         ctx.fillStyle="#eef3fb";ctx.strokeStyle="rgba(64,56,47,.18)";
+         ctx.fillRect(x+w-pw-42,boxY+12,pw,34);ctx.strokeRect(x+w-pw-42,boxY+12,pw,34);
+         ctx.textAlign="center";ctx.fillStyle="#40382f";
+         ctx.fillText(priceText,x+w-pw/2-42,boxY+36);
          ctx.textAlign="left";
        }
      }else{
