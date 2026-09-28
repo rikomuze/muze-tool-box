@@ -20,11 +20,11 @@ button,input,textarea,select{font:inherit;color:inherit}button{cursor:pointer}a{
 .summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:18px 0 28px}.summary div{border-top:1px solid var(--ink);padding-top:6px;min-width:0}.summary strong{font-family:var(--hand);font-size:25px;line-height:1}.summary small{display:block;color:var(--muted);font-size:9px;letter-spacing:.08em;margin-top:4px}
 .section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:4px 0 14px}.section-head h2{font-family:var(--hand);font-size:21px;margin:0;transform:rotate(-.6deg)}.section-head span{font-size:9px;color:var(--muted);letter-spacing:.14em}
 .entries{display:grid;gap:25px}.entry{position:relative;padding:0 0 5px;cursor:pointer}.entry-no{position:absolute;left:-45px;top:5px;font-family:var(--hand);font-size:11px;color:var(--muted);transform:rotate(-90deg);transform-origin:center}.date{display:flex;align-items:baseline;gap:8px;margin-bottom:6px}.date strong{font-family:var(--hand);font-size:21px}.date span{font-size:10px;letter-spacing:.12em;color:var(--muted)}.event-title{font-size:17px;font-weight:700;line-height:1.45;margin:0 0 5px}.place{font-size:11px;color:var(--muted);margin-bottom:11px}
-.memory-layout{display:grid;grid-template-columns:minmax(0,1fr) 104px;gap:12px;align-items:start}.note{font-family:var(--hand);font-size:13px;line-height:1.9;padding:4px 0 9px;border-bottom:1px dashed var(--line);white-space:pre-wrap;overflow-wrap:anywhere}.note.empty{color:var(--muted)}.photo{position:relative;background:#fff;padding:6px 6px 20px;box-shadow:0 7px 16px rgba(62,49,38,.13);transform:rotate(2deg)}.photo-box{aspect-ratio:4/5;background:#e9e4dc;display:grid;place-items:center;color:var(--muted);font-family:var(--hand);font-size:10px;overflow:hidden}.photo-box img,.photo-box video{width:100%;height:100%;object-fit:cover;display:block}.photo:before{content:"";position:absolute;width:42px;height:13px;left:50%;top:-7px;transform:translateX(-50%) rotate(-4deg);background:rgba(205,181,151,.72)}
+.memory-layout{display:block}.note{position:relative;font-family:var(--hand);font-weight:600;font-size:14px;line-height:2;padding:14px 14px 15px;margin:3px 0 12px;background:rgba(255,253,248,.88);border:1px solid rgba(48,43,39,.14);box-shadow:0 4px 10px rgba(62,49,38,.06);white-space:pre-wrap;overflow-wrap:anywhere}.note:before{content:"NOTE";position:absolute;right:10px;top:-7px;background:var(--paper);padding:0 5px;font-family:var(--gothic);font-size:8px;letter-spacing:.16em;color:var(--berry);font-weight:700}.note.empty{color:var(--muted);font-weight:400}.entry-media-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:13px 0 2px}.entry-media-grid[hidden]{display:none}.entry-photo{position:relative;background:#fff;padding:4px;box-shadow:0 5px 12px rgba(62,49,38,.12);min-width:0}.entry-photo:nth-child(1){transform:rotate(-1.2deg)}.entry-photo:nth-child(2){transform:rotate(1deg)}.entry-photo:nth-child(3){transform:rotate(.6deg)}.entry-photo:nth-child(4){transform:rotate(-.8deg)}.entry-photo-box{aspect-ratio:4/3;background:#e9e4dc;overflow:hidden;display:grid;place-items:center;font-family:var(--hand);font-size:9px;color:var(--muted)}.entry-photo-box img,.entry-photo-box video{width:100%;height:100%;object-fit:cover;display:block}
 .tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}.tag{font-size:9px;padding:3px 7px;border:1px solid var(--line);background:rgba(255,255,255,.5)}.people{font-size:10px;color:var(--muted);margin-top:7px;overflow-wrap:anywhere}.entry-foot{display:flex;justify-content:flex-end;margin-top:7px}.open-label{font-family:var(--hand);font-size:10px;color:var(--muted);border-bottom:1px dashed var(--line)}
 .empty-state{padding:46px 6px 34px;text-align:center;color:var(--muted);font-family:var(--hand);font-size:13px}.add-paper{width:100%;margin:28px 0 2px;padding:15px;border:1px dashed rgba(48,43,39,.36);background:rgba(255,255,255,.4);font-family:var(--hand);font-size:14px}.add-paper strong{color:var(--berry)}.bottom-note{position:absolute;right:14px;bottom:11px;font-family:var(--hand);font-size:9px;color:var(--muted)}
 .floating{position:fixed;z-index:20;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(330px,calc(100vw - 34px));height:56px;border:1px solid #984b60;background:var(--berry);color:#fff;box-shadow:0 10px 22px rgba(117,58,76,.26);display:flex;align-items:center;justify-content:center;gap:9px;font-family:var(--hand);font-size:15px;font-weight:600}.floating .plus{font-size:23px;line-height:1}
-.detail-view{display:none}.detail-view.on{display:block}.list-view.off{display:none}.detail-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}.back{border:0;background:transparent;padding:4px 0;font-family:var(--hand);font-size:12px;border-bottom:1px dashed var(--line)}.detail-date{font-family:var(--hand);font-size:30px;line-height:1;margin:4px 0 8px}.detail-title{font-size:22px;line-height:1.45;margin:0}.detail-place{font-size:11px;color:var(--muted);margin:5px 0 20px}.detail-block{margin:24px 0}.detail-block h3{font-family:var(--hand);font-size:15px;margin:0 0 8px;transform:rotate(-.5deg)}.detail-note{font-family:var(--hand);font-size:14px;line-height:2;padding:4px 2px 10px;white-space:pre-wrap;overflow-wrap:anywhere}
+.detail-view{display:none}.detail-view.on{display:block}.list-view.off{display:none}.detail-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}.back{border:0;background:transparent;padding:4px 0;font-family:var(--hand);font-size:12px;border-bottom:1px dashed var(--line)}.detail-date{font-family:var(--hand);font-size:30px;line-height:1;margin:4px 0 8px}.detail-title{font-size:22px;line-height:1.45;margin:0}.detail-place{font-size:11px;color:var(--muted);margin:5px 0 20px}.detail-block{margin:24px 0}.detail-block h3{font-family:var(--hand);font-size:15px;margin:0 0 8px;transform:rotate(-.5deg)}.detail-note{font-family:var(--hand);font-weight:600;font-size:15px;line-height:2.05;padding:16px 15px;background:rgba(255,253,248,.9);border:1px solid rgba(48,43,39,.14);box-shadow:0 5px 12px rgba(62,49,38,.06);white-space:pre-wrap;overflow-wrap:anywhere}.setlist{margin:0;padding:12px 12px 12px 34px;background:rgba(255,255,255,.45);border-top:1px solid var(--ink);font-family:var(--hand);font-size:13px;line-height:1.85}.setlist li{padding-left:4px}.setlist li::marker{font-family:var(--gothic);font-size:9px;color:var(--muted)}
 .people-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.people-card{border-top:1px solid var(--ink);padding-top:7px;min-width:0}.people-card span{display:block;font-size:9px;color:var(--muted);letter-spacing:.08em}.people-card b{display:block;font-family:var(--hand);font-size:13px;overflow-wrap:anywhere}
 .media-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start}.media-card{position:relative;background:#fff;padding:6px 6px 22px;box-shadow:0 7px 16px rgba(62,49,38,.13);min-width:0}.media-card:nth-child(odd){transform:rotate(-1.2deg)}.media-card:nth-child(even){transform:rotate(1.2deg)}.media-box{aspect-ratio:4/5;background:#e9e4dc;display:grid;place-items:center;font-family:var(--hand);font-size:10px;color:var(--muted);overflow:hidden}.media-box img,.media-box video{width:100%;height:100%;object-fit:cover;display:block}.media-cap{position:absolute;left:7px;right:7px;bottom:5px;text-align:center;font-family:var(--hand);font-size:8px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ticket{margin-top:20px;display:grid;grid-template-columns:1fr 72px;border:1px solid rgba(48,43,39,.32);background:rgba(255,255,255,.54);min-height:72px}.ticket-main{padding:9px 11px}.ticket-side{border-left:1px dashed rgba(48,43,39,.34);display:grid;place-items:center;text-align:center;font-size:8px;letter-spacing:.11em}.ticket b{font-family:var(--hand);font-size:12px}.ticket small{display:block;color:var(--muted);font-size:9px;margin-top:2px}
@@ -33,7 +33,7 @@ dialog{width:min(94vw,620px);max-width:calc(100vw - 20px);max-height:90vh;border
 .sheet-head{position:sticky;top:0;z-index:2;background:var(--paper2);display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line)}.sheet-head b{font-family:var(--hand);font-size:18px}.close{border:0;background:transparent;font-size:24px;padding:2px 6px}.form{width:100%;max-width:100%;padding:8px 16px 24px;overflow-x:hidden;touch-action:pan-y}.form h3{font-family:var(--hand);font-size:14px;margin:17px 0 7px}.field{margin:9px 0}.field label{display:block;font-size:9px;color:var(--muted);letter-spacing:.08em;margin-bottom:4px}.field input,.field textarea,.field select{display:block;width:100%;max-width:100%;min-width:0;border:0;border-bottom:1px solid var(--line);background:transparent;padding:9px 3px}.field textarea{min-height:110px;resize:vertical}.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}.member-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;width:100%;max-width:100%;overflow:hidden}.member-grid button{border:1px solid var(--line);background:#fff;padding:8px 2px;font-size:9px;min-width:0}.member-grid button.on{border-color:var(--berry);background:#f6e8ec;color:#8d4458;font-weight:700}
 .upload{display:grid;place-items:center;min-height:96px;border:1px dashed var(--line);background:#fffaf4;font-family:var(--hand);font-size:12px;text-align:center;padding:12px;cursor:pointer}.upload input{display:none}.upload small{display:block;color:var(--muted);font-family:var(--gothic);font-size:9px;margin-top:4px}.media-draft{display:grid;gap:6px;margin-top:8px}.draft-row{display:grid;grid-template-columns:42px minmax(0,1fr) auto;align-items:center;gap:8px;border-bottom:1px dashed var(--line);padding:6px 0}.draft-thumb{width:42px;height:42px;background:#e9e4dc;display:grid;place-items:center;font-size:8px;overflow:hidden}.draft-thumb img{width:100%;height:100%;object-fit:cover}.draft-name{min-width:0;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.draft-remove{border:0;background:transparent;color:var(--danger);font-size:11px}.form-actions{display:grid;grid-template-columns:1fr;gap:8px}.save{width:100%;margin-top:20px;padding:13px;border:1px solid var(--ink);background:var(--ink);color:#fff;font-weight:700}.delete-form{display:none;width:100%;padding:10px;border:0;background:transparent;color:var(--danger);font-size:11px}.delete-form.show{display:block}
 .toast{position:fixed;z-index:50;left:50%;bottom:90px;transform:translateX(-50%) translateY(12px);background:var(--ink);color:#fff;padding:9px 13px;font-size:11px;opacity:0;pointer-events:none;transition:.2s;max-width:calc(100vw - 32px);text-align:center}.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
-@media(max-width:430px){.app{padding-inline:8px}.book{padding:24px 13px 40px 50px}.memory-layout{grid-template-columns:minmax(0,1fr) 90px}.photo{padding:5px 5px 18px}.grid2{grid-template-columns:1fr}.people-grid{grid-template-columns:1fr}}
+@media(max-width:430px){.app{padding-inline:8px}.book{padding:24px 13px 40px 50px}.grid2{grid-template-columns:1fr}.people-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -61,6 +61,7 @@ dialog{width:min(94vw,620px);max-width:calc(100vw - 20px);max-height:90vh;border
       <h2 class="detail-title" id="detailTitle"></h2>
       <div class="detail-place" id="detailPlace"></div>
       <div class="detail-block"><h3>today's note</h3><div class="detail-note" id="detailNote"></div><div class="tags" id="detailTags"></div></div>
+      <div class="detail-block" id="setlistBlock" hidden><h3>setlist</h3><ol class="setlist" id="detailSetlist"></ol></div>
       <div class="detail-block"><h3>people</h3><div class="people-grid"><div class="people-card"><span>一緒に参戦したMUZE</span><b id="detailCompanions">—</b></div><div class="people-card"><span>会えたMUZE</span><b id="detailMet">—</b></div></div></div>
       <div class="detail-block" id="mediaBlock"><h3>photo & video</h3><div class="media-grid" id="detailMedia"></div></div>
       <div class="ticket"><div class="ticket-main"><b>MEMORY TICKET</b><small id="ticketText"></small></div><div class="ticket-side">MUZE<br>LOG</div></div>
@@ -89,6 +90,7 @@ dialog{width:min(94vw,620px);max-width:calc(100vw - 20px);max-height:90vh;border
 
     <h3>memory</h3>
     <div class="field"><label>その日の感想</label><textarea id="eventNote" placeholder="ここにその日の感想を書いてね。&#10;ステージで覚えておきたいこと、嬉しかったこと、帰り道に考えていたことなどなど…"></textarea></div>
+    <div class="field"><label>セトリ（任意・1曲1行）</label><textarea id="eventSetlist" placeholder="1. 曲名&#10;2. 曲名&#10;3. 曲名"></textarea></div>
     <div class="field"><label>一緒に参戦したMUZE</label><input id="eventCompanions" placeholder="同行したMUZEのニックネームなど"></div>
     <div class="field"><label>会えたMUZE</label><input id="eventMet" placeholder="現地で会えたMUZEのニックネームなど"></div>
 
@@ -216,14 +218,22 @@ function renderSummary(){
   byId("sumCities").textContent=cities.size;
   countMedia().then(function(n){byId("sumMedia").textContent=n});
 }
-function renderThumb(box,media){
-  if(!box||!media){if(box)box.textContent="NO PHOTO";return}
-  var url=URL.createObjectURL(media.blob);activeUrls.push(url);
-  if(String(media.type||"").indexOf("image/")===0){
-    box.innerHTML='<img alt="">';box.querySelector("img").src=url;
-  }else if(String(media.type||"").indexOf("video/")===0){
-    box.innerHTML='<video muted playsinline preload="metadata"></video>';box.querySelector("video").src=url;
-  }else box.textContent="FILE";
+function renderListMedia(box,media){
+  if(!box)return;
+  var items=(media||[]).slice(0,4);
+  if(!items.length){box.hidden=true;box.innerHTML="";return}
+  box.hidden=false;box.innerHTML="";
+  items.forEach(function(m){
+    var card=document.createElement("div");card.className="entry-photo";
+    var inner=document.createElement("div");inner.className="entry-photo-box";
+    var url=URL.createObjectURL(m.blob);activeUrls.push(url);
+    if(String(m.type||"").indexOf("image/")===0){
+      var img=document.createElement("img");img.src=url;img.alt="";inner.appendChild(img);
+    }else if(String(m.type||"").indexOf("video/")===0){
+      var video=document.createElement("video");video.src=url;video.muted=true;video.playsInline=true;video.preload="metadata";inner.appendChild(video);
+    }else{inner.textContent="FILE"}
+    card.appendChild(inner);box.appendChild(card);
+  });
 }
 async function renderList(){
   clearActiveUrls();
@@ -244,16 +254,16 @@ async function renderList(){
       '<div class="date"><strong>'+d.md+'</strong><span>'+esc(d.meta)+'</span></div>'+
       '<h3 class="event-title">'+esc(r.title)+'</h3>'+
       '<div class="place">'+esc(placeText(r))+'</div>'+
-      '<div class="memory-layout"><div><div class="note">'+note+'</div><div class="tags">'+tags+'</div>'+
+      '<div class="memory-layout"><div class="note">'+note+'</div><div class="tags">'+tags+'</div>'+
       '<div class="people">一緒に参戦したMUZE：'+esc(peopleText(r.companions))+'</div>'+
-      '<div class="people">会えたMUZE：'+esc(peopleText(r.met))+'</div></div>'+
-      '<div class="photo"><div class="photo-box" id="thumb_'+esc(r.id)+'">NO PHOTO</div></div></div>'+
+      '<div class="people">会えたMUZE：'+esc(peopleText(r.met))+'</div>'+
+      '<div class="entry-media-grid" id="thumbs_'+esc(r.id)+'" hidden></div></div>'+
       '<div class="entry-foot"><span class="open-label">ひらく →</span></div></article>';
   }).join("");
   all(".entry").forEach(function(card){card.addEventListener("click",function(){openDetail(card.dataset.id)})});
   for(var i=0;i<sorted.length;i++){
     var media=await getMedia(sorted[i].id);
-    renderThumb(byId("thumb_"+sorted[i].id),media[0]);
+    renderListMedia(byId("thumbs_"+sorted[i].id),media);
   }
 }
 async function openDetail(id){
@@ -270,6 +280,9 @@ async function openDetail(id){
   byId("detailPlace").textContent=[d.meta,placeText(r)].filter(Boolean).join(" — ");
   byId("detailNote").textContent=r.note||"感想はまだありません。";
   byId("detailTags").innerHTML=(r.members||[]).map(function(m){return '<span class="tag">'+esc(m)+'</span>'}).join("");
+  var setlist=String(r.setlist||"").split(/\n/).map(function(x){return x.trim()}).filter(Boolean);
+  byId("setlistBlock").hidden=!setlist.length;
+  byId("detailSetlist").innerHTML=setlist.map(function(song){return "<li>"+esc(song.replace(/^\s*\d+[.．)]\s*/,""))+"</li>"}).join("");
   byId("detailCompanions").textContent=peopleText(r.companions);
   byId("detailMet").textContent=peopleText(r.met);
   byId("ticketText").textContent=[r.date,r.city,r.venue,"PAGE "+no].filter(Boolean).join(" / ");
@@ -319,7 +332,7 @@ async function openEdit(id,focusMedia){
   resetForm();
   byId("editId").value=id;byId("formTitle").textContent="ページを編集";
   byId("eventTitle").value=r.title||"";byId("eventDate").value=r.date||"";byId("eventCity").value=r.city||"";byId("eventVenue").value=r.venue||"";
-  byId("eventNote").value=r.note||"";byId("eventCompanions").value=r.companions||"";byId("eventMet").value=r.met||"";
+  byId("eventNote").value=r.note||"";byId("eventSetlist").value=r.setlist||"";byId("eventCompanions").value=r.companions||"";byId("eventMet").value=r.met||"";
   selectedMembers=(r.members||[]).slice();syncMembers();
   existingMedia=await getMedia(id);renderMediaDraft();
   byId("deleteForm").classList.add("show");openDialog();
@@ -350,7 +363,7 @@ async function saveForm(e){
   var id=byId("editId").value||uid();
   var old=rows.find(function(x){return x.id===id});
   var now=new Date().toISOString();
-  var obj={id:id,title:byId("eventTitle").value.trim(),date:byId("eventDate").value,city:byId("eventCity").value.trim(),venue:byId("eventVenue").value.trim(),members:selectedMembers.slice(),note:byId("eventNote").value.trim(),companions:byId("eventCompanions").value.trim(),met:byId("eventMet").value.trim(),createdAt:old&&old.createdAt?old.createdAt:now,updatedAt:now};
+  var obj={id:id,title:byId("eventTitle").value.trim(),date:byId("eventDate").value,city:byId("eventCity").value.trim(),venue:byId("eventVenue").value.trim(),members:selectedMembers.slice(),note:byId("eventNote").value.trim(),setlist:byId("eventSetlist").value.trim(),companions:byId("eventCompanions").value.trim(),met:byId("eventMet").value.trim(),createdAt:old&&old.createdAt?old.createdAt:now,updatedAt:now};
   if(old)rows=rows.map(function(x){return x.id===id?obj:x});else rows.push(obj);
   persist();
   try{
