@@ -5,383 +5,394 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#eee7dc">
 <meta name="robots" content="noindex">
-<title>MUZE MEMORY — LIVE JOURNAL</title>
+<title>MUZE LOG</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --desk:#e6ddd0;
-  --paper:#f9f6ef;
-  --paper2:#fffdfa;
-  --ink:#302b27;
-  --muted:#877d72;
-  --line:rgba(48,43,39,.22);
-  --rule:rgba(84,111,126,.14);
-  --berry:#b95f76;
-  --mint:#92a99a;
-  --stamp:#a34d4f;
-  --hand:"Klee One","Yu Gothic",cursive;
-  --gothic:"Zen Kaku Gothic New","Hiragino Sans",sans-serif;
-  --shadow:0 12px 28px rgba(62,49,38,.15);
-}
-*{box-sizing:border-box}
-html,body{margin:0;width:100%;max-width:100%;overflow-x:hidden}
-body{
-  color:var(--ink);
-  font-family:var(--gothic);
-  background:
-    radial-gradient(rgba(48,43,39,.045) .8px,transparent .8px) 0 0/18px 18px,
-    var(--desk);
-  -webkit-text-size-adjust:100%;
-}
-button,input,textarea,select{font:inherit;color:inherit}
-button{cursor:pointer}
-a{color:inherit;text-decoration:none}
-.app{width:min(100%,720px);margin:0 auto;min-height:100vh;padding:12px 12px 120px}
-.topbar{
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
-  padding:8px 5px 12px;font-size:11px;letter-spacing:.12em;color:var(--muted)
-}
-.topbar b{font-family:var(--hand);font-size:14px;letter-spacing:.04em;color:var(--ink)}
-.book{
-  position:relative;
-  background:
-    linear-gradient(90deg,transparent 0 41px,rgba(185,95,118,.24) 41px 42px,transparent 42px),
-    repeating-linear-gradient(to bottom,transparent 0 31px,var(--rule) 31px 32px),
-    var(--paper);
-  min-height:760px;
-  border:1px solid rgba(48,43,39,.16);
-  box-shadow:var(--shadow);
-  padding:28px 18px 46px 58px;
-}
-.book:before{
-  content:"";
-  position:absolute;left:17px;top:22px;bottom:22px;width:10px;
-  background:radial-gradient(circle,#d6cbbc 0 3px,transparent 3.5px) center top/10px 34px repeat-y;
-  opacity:.9;
-}
-.cover-kicker{font-size:10px;letter-spacing:.24em;color:var(--muted);font-weight:700}
-.cover-title{
-  font-family:var(--hand);
-  font-size:clamp(36px,9vw,54px);
-  line-height:1.05;
-  margin:10px 0 20px;
-  letter-spacing:.01em;
-  white-space:nowrap
-}
-.summary{
-  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;
-  margin:18px 0 28px
-}
-.summary div{
-  border-top:1px solid var(--ink);padding-top:6px;min-width:0
-}
-.summary strong{font-family:var(--hand);font-size:25px;line-height:1}
-.summary small{display:block;color:var(--muted);font-size:9px;letter-spacing:.08em;margin-top:4px}
-.section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:4px 0 14px}
-.section-head h2{font-family:var(--hand);font-size:21px;margin:0;transform:rotate(-.6deg)}
-.section-head span{font-size:9px;color:var(--muted);letter-spacing:.14em}
-.entries{display:grid;gap:24px}
-.entry{position:relative;padding:0 0 4px}
-.entry-no{
-  position:absolute;left:-45px;top:5px;font-family:var(--hand);font-size:11px;color:var(--muted);
-  transform:rotate(-90deg);transform-origin:center
-}
-.date{
-  display:flex;align-items:baseline;gap:8px;margin-bottom:6px
-}
-.date strong{font-family:var(--hand);font-size:21px}
-.date span{font-size:10px;letter-spacing:.12em;color:var(--muted)}
-.event-title{font-size:17px;font-weight:700;line-height:1.45;margin:0 0 5px}
-.place{font-size:11px;color:var(--muted);margin-bottom:11px}
-.memory-layout{display:grid;grid-template-columns:minmax(0,1fr) 104px;gap:12px;align-items:start}
-.note{
-  font-family:var(--hand);font-size:13px;line-height:1.9;
-  padding:4px 0 9px;border-bottom:1px dashed var(--line)
-}
-.photo{
-  position:relative;background:#fff;padding:6px 6px 20px;box-shadow:0 7px 16px rgba(62,49,38,.13);transform:rotate(2deg)
-}
-.photo-box{
-  aspect-ratio:4/5;background:
-    linear-gradient(135deg,rgba(185,95,118,.10),rgba(146,169,154,.14)),
-    #e9e4dc;
-  display:grid;place-items:center;color:var(--muted);font-family:var(--hand);font-size:10px
-}
-.photo:before{
-  content:"";position:absolute;width:42px;height:13px;left:50%;top:-7px;transform:translateX(-50%) rotate(-4deg);
-  background:rgba(205,181,151,.72)
-}
-.tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
-.tag{font-size:9px;padding:3px 7px;border:1px solid var(--line);background:rgba(255,255,255,.5)}
-.people{font-size:10px;color:var(--muted);margin-top:7px}
-.ticket{
-  margin-top:14px;
-  display:grid;grid-template-columns:1fr 72px;
-  border:1px solid rgba(48,43,39,.32);background:rgba(255,255,255,.54);
-  min-height:72px;position:relative
-}
-.ticket-main{padding:9px 11px}
-.ticket-side{border-left:1px dashed rgba(48,43,39,.34);display:grid;place-items:center;text-align:center;font-size:8px;letter-spacing:.11em}
-.ticket b{font-family:var(--hand);font-size:12px}.ticket small{display:block;color:var(--muted);font-size:9px;margin-top:2px}
-.entry-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:8px}
-.text-btn{border:0;background:transparent;padding:5px 0;font-size:10px;color:var(--muted);border-bottom:1px dashed var(--line)}
-.add-paper{
-  width:100%;margin:30px 0 2px;padding:15px;
-  border:1px dashed rgba(48,43,39,.36);background:rgba(255,255,255,.4);
-  font-family:var(--hand);font-size:14px
-}
-.add-paper strong{color:var(--berry)}
-.bottom-note{
-  position:absolute;right:14px;bottom:11px;font-family:var(--hand);font-size:9px;color:var(--muted)
-}
-.floating{
-  position:fixed;z-index:20;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%);
-  width:min(330px,calc(100vw - 34px));height:56px;border:1px solid #984b60;background:var(--berry);color:#fff;
-  box-shadow:0 10px 22px rgba(117,58,76,.26);
-  display:flex;align-items:center;justify-content:center;gap:9px;
-  font-family:var(--hand);font-size:15px;font-weight:600
-}
-.floating .plus{font-size:23px;line-height:1}
-dialog{
-  width:min(94vw,620px);max-width:calc(100vw - 20px);max-height:90vh;
-  border:0;padding:0;background:var(--paper2);overflow-x:hidden;overflow-y:auto;touch-action:pan-y;
-  box-shadow:0 18px 60px rgba(30,24,20,.32)
-}
-dialog::backdrop{background:rgba(48,43,39,.55)}
-.sheet-head{
-  position:sticky;top:0;z-index:2;background:var(--paper2);
-  display:flex;justify-content:space-between;align-items:center;
-  padding:14px 16px;border-bottom:1px solid var(--line)
-}
-.sheet-head b{font-family:var(--hand);font-size:18px}
-.close{border:0;background:transparent;font-size:24px;padding:2px 6px}
-.form{padding:8px 16px 24px;overflow-x:hidden;touch-action:pan-y}
-.form h3{font-family:var(--hand);font-size:14px;margin:17px 0 7px}
-.field{margin:9px 0}
-.field label{display:block;font-size:9px;color:var(--muted);letter-spacing:.08em;margin-bottom:4px}
-.field input,.field textarea,.field select{
-  width:100%;max-width:100%;min-width:0;border:0;border-bottom:1px solid var(--line);background:transparent;padding:9px 3px
-}
-.field textarea{min-height:84px;resize:vertical}
-.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
-.member-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
-.member-grid button{border:1px solid var(--line);background:#fff;padding:8px 2px;font-size:9px}
-.member-grid button.on{border-color:var(--berry);background:#f6e8ec;color:#8d4458;font-weight:700}
-.upload{
-  display:grid;place-items:center;min-height:96px;border:1px dashed var(--line);background:#fffaf4;
-  font-family:var(--hand);font-size:12px;text-align:center;padding:12px
-}
-.save{
-  width:100%;margin-top:20px;padding:13px;border:1px solid var(--ink);background:var(--ink);color:#fff;font-weight:700
-}
-.detail-view{display:none}.detail-view.on{display:block}.list-view.off{display:none}
-.detail-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
-.back{border:0;background:transparent;padding:4px 0;font-family:var(--hand);font-size:12px;border-bottom:1px dashed var(--line)}
-.share{border:1px solid var(--line);background:#fffdf8;padding:7px 10px;font-size:10px}
-.detail-date{font-family:var(--hand);font-size:30px;line-height:1;margin:4px 0 8px}
-.detail-title{font-size:22px;line-height:1.45;margin:0}.detail-place{font-size:11px;color:var(--muted);margin:5px 0 20px}
-.detail-block{margin:24px 0}.detail-block h3{font-family:var(--hand);font-size:15px;margin:0 0 8px;transform:rotate(-.5deg)}
-.detail-note{font-family:var(--hand);font-size:14px;line-height:2;padding:4px 2px 10px}
-.people-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.people-card{border-top:1px solid var(--ink);padding-top:7px}.people-card span{display:block;font-size:9px;color:var(--muted);letter-spacing:.08em}.people-card b{font-family:var(--hand);font-size:13px}
-.media-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start}
-.media-card{position:relative;background:#fff;padding:6px 6px 22px;box-shadow:0 7px 16px rgba(62,49,38,.13)}
-.media-card:nth-child(1){transform:rotate(-1.5deg)}.media-card:nth-child(2){transform:rotate(1.3deg)}.media-card:nth-child(3){transform:rotate(.5deg)}
-.media-box{aspect-ratio:4/5;background:linear-gradient(135deg,rgba(185,95,118,.10),rgba(146,169,154,.14)),#e9e4dc;display:grid;place-items:center;font-family:var(--hand);font-size:10px;color:var(--muted)}
-.media-card.wide{grid-column:1/-1}.media-card.wide .media-box{aspect-ratio:16/9}
-.media-cap{position:absolute;left:7px;right:7px;bottom:5px;text-align:center;font-family:var(--hand);font-size:9px;color:var(--muted)}
-.guest-note{position:relative;background:#fffdf6;border:1px solid rgba(48,43,39,.16);padding:13px 13px 12px 18px;margin-top:12px;box-shadow:0 5px 12px rgba(62,49,38,.08);transform:rotate(.3deg)}
-.guest-note:before{content:"";position:absolute;left:-5px;top:11px;bottom:11px;width:3px;background:var(--mint)}
-.guest-head{display:flex;justify-content:space-between;gap:8px;font-size:9px;color:var(--muted);margin-bottom:5px}
-.guest-body{font-family:var(--hand);font-size:12px;line-height:1.8}
-.detail-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:26px}.detail-actions button{padding:11px;border:1px solid var(--ink);background:#fff}.detail-actions .primary{background:var(--ink);color:#fff}
-.page-num{font-family:var(--hand);font-size:10px;color:var(--muted);margin-top:26px;text-align:right}
-@media(max-width:430px){
-  .app{padding-inline:8px}.book{padding:24px 13px 40px 50px}
-  .memory-layout{grid-template-columns:minmax(0,1fr) 90px}.photo{padding:5px 5px 18px}
-  .grid2{grid-template-columns:1fr}
-}
+:root{--desk:#e6ddd0;--paper:#f9f6ef;--paper2:#fffdfa;--ink:#302b27;--muted:#877d72;--line:rgba(48,43,39,.22);--rule:rgba(84,111,126,.14);--berry:#b95f76;--mint:#92a99a;--danger:#984952;--hand:"Klee One","Yu Gothic",cursive;--gothic:"Zen Kaku Gothic New","Hiragino Sans",sans-serif;--shadow:0 12px 28px rgba(62,49,38,.15)}
+*{box-sizing:border-box}html,body{margin:0;width:100%;max-width:100%;overflow-x:hidden}body{color:var(--ink);font-family:var(--gothic);background:radial-gradient(rgba(48,43,39,.045) .8px,transparent .8px) 0 0/18px 18px,var(--desk);-webkit-text-size-adjust:100%}
+button,input,textarea,select{font:inherit;color:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}.app{width:min(100%,720px);margin:0 auto;min-height:100vh;padding:12px 12px 120px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 5px 12px;font-size:10px;letter-spacing:.12em;color:var(--muted)}.topbar a{font-family:var(--hand);font-size:13px;letter-spacing:.04em;color:var(--ink);border-bottom:1px dashed var(--line)}
+.book{position:relative;background:linear-gradient(90deg,transparent 0 41px,rgba(185,95,118,.24) 41px 42px,transparent 42px),repeating-linear-gradient(to bottom,transparent 0 31px,var(--rule) 31px 32px),var(--paper);min-height:760px;border:1px solid rgba(48,43,39,.16);box-shadow:var(--shadow);padding:28px 18px 46px 58px}
+.book:before{content:"";position:absolute;left:17px;top:22px;bottom:22px;width:10px;background:radial-gradient(circle,#d6cbbc 0 3px,transparent 3.5px) center top/10px 34px repeat-y;opacity:.9}
+.cover-kicker{font-size:10px;letter-spacing:.24em;color:var(--muted);font-weight:700}.cover-title{font-family:var(--hand);font-size:clamp(36px,9vw,54px);line-height:1.05;margin:10px 0 20px;letter-spacing:.01em;white-space:nowrap}
+.summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:18px 0 28px}.summary div{border-top:1px solid var(--ink);padding-top:6px;min-width:0}.summary strong{font-family:var(--hand);font-size:25px;line-height:1}.summary small{display:block;color:var(--muted);font-size:9px;letter-spacing:.08em;margin-top:4px}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:4px 0 14px}.section-head h2{font-family:var(--hand);font-size:21px;margin:0;transform:rotate(-.6deg)}.section-head span{font-size:9px;color:var(--muted);letter-spacing:.14em}
+.entries{display:grid;gap:25px}.entry{position:relative;padding:0 0 5px;cursor:pointer}.entry-no{position:absolute;left:-45px;top:5px;font-family:var(--hand);font-size:11px;color:var(--muted);transform:rotate(-90deg);transform-origin:center}.date{display:flex;align-items:baseline;gap:8px;margin-bottom:6px}.date strong{font-family:var(--hand);font-size:21px}.date span{font-size:10px;letter-spacing:.12em;color:var(--muted)}.event-title{font-size:17px;font-weight:700;line-height:1.45;margin:0 0 5px}.place{font-size:11px;color:var(--muted);margin-bottom:11px}
+.memory-layout{display:grid;grid-template-columns:minmax(0,1fr) 104px;gap:12px;align-items:start}.note{font-family:var(--hand);font-size:13px;line-height:1.9;padding:4px 0 9px;border-bottom:1px dashed var(--line);white-space:pre-wrap;overflow-wrap:anywhere}.note.empty{color:var(--muted)}.photo{position:relative;background:#fff;padding:6px 6px 20px;box-shadow:0 7px 16px rgba(62,49,38,.13);transform:rotate(2deg)}.photo-box{aspect-ratio:4/5;background:#e9e4dc;display:grid;place-items:center;color:var(--muted);font-family:var(--hand);font-size:10px;overflow:hidden}.photo-box img,.photo-box video{width:100%;height:100%;object-fit:cover;display:block}.photo:before{content:"";position:absolute;width:42px;height:13px;left:50%;top:-7px;transform:translateX(-50%) rotate(-4deg);background:rgba(205,181,151,.72)}
+.tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}.tag{font-size:9px;padding:3px 7px;border:1px solid var(--line);background:rgba(255,255,255,.5)}.people{font-size:10px;color:var(--muted);margin-top:7px;overflow-wrap:anywhere}.entry-foot{display:flex;justify-content:flex-end;margin-top:7px}.open-label{font-family:var(--hand);font-size:10px;color:var(--muted);border-bottom:1px dashed var(--line)}
+.empty-state{padding:46px 6px 34px;text-align:center;color:var(--muted);font-family:var(--hand);font-size:13px}.add-paper{width:100%;margin:28px 0 2px;padding:15px;border:1px dashed rgba(48,43,39,.36);background:rgba(255,255,255,.4);font-family:var(--hand);font-size:14px}.add-paper strong{color:var(--berry)}.bottom-note{position:absolute;right:14px;bottom:11px;font-family:var(--hand);font-size:9px;color:var(--muted)}
+.floating{position:fixed;z-index:20;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(330px,calc(100vw - 34px));height:56px;border:1px solid #984b60;background:var(--berry);color:#fff;box-shadow:0 10px 22px rgba(117,58,76,.26);display:flex;align-items:center;justify-content:center;gap:9px;font-family:var(--hand);font-size:15px;font-weight:600}.floating .plus{font-size:23px;line-height:1}
+.detail-view{display:none}.detail-view.on{display:block}.list-view.off{display:none}.detail-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}.back{border:0;background:transparent;padding:4px 0;font-family:var(--hand);font-size:12px;border-bottom:1px dashed var(--line)}.detail-date{font-family:var(--hand);font-size:30px;line-height:1;margin:4px 0 8px}.detail-title{font-size:22px;line-height:1.45;margin:0}.detail-place{font-size:11px;color:var(--muted);margin:5px 0 20px}.detail-block{margin:24px 0}.detail-block h3{font-family:var(--hand);font-size:15px;margin:0 0 8px;transform:rotate(-.5deg)}.detail-note{font-family:var(--hand);font-size:14px;line-height:2;padding:4px 2px 10px;white-space:pre-wrap;overflow-wrap:anywhere}
+.people-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.people-card{border-top:1px solid var(--ink);padding-top:7px;min-width:0}.people-card span{display:block;font-size:9px;color:var(--muted);letter-spacing:.08em}.people-card b{display:block;font-family:var(--hand);font-size:13px;overflow-wrap:anywhere}
+.media-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start}.media-card{position:relative;background:#fff;padding:6px 6px 22px;box-shadow:0 7px 16px rgba(62,49,38,.13);min-width:0}.media-card:nth-child(odd){transform:rotate(-1.2deg)}.media-card:nth-child(even){transform:rotate(1.2deg)}.media-box{aspect-ratio:4/5;background:#e9e4dc;display:grid;place-items:center;font-family:var(--hand);font-size:10px;color:var(--muted);overflow:hidden}.media-box img,.media-box video{width:100%;height:100%;object-fit:cover;display:block}.media-cap{position:absolute;left:7px;right:7px;bottom:5px;text-align:center;font-family:var(--hand);font-size:8px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ticket{margin-top:20px;display:grid;grid-template-columns:1fr 72px;border:1px solid rgba(48,43,39,.32);background:rgba(255,255,255,.54);min-height:72px}.ticket-main{padding:9px 11px}.ticket-side{border-left:1px dashed rgba(48,43,39,.34);display:grid;place-items:center;text-align:center;font-size:8px;letter-spacing:.11em}.ticket b{font-family:var(--hand);font-size:12px}.ticket small{display:block;color:var(--muted);font-size:9px;margin-top:2px}
+.detail-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:26px}.detail-actions button{padding:11px;border:1px solid var(--ink);background:#fff}.detail-actions .primary{background:var(--ink);color:#fff}.detail-actions .danger{grid-column:1/-1;color:var(--danger);border-color:rgba(152,73,82,.5);background:transparent}.page-num{font-family:var(--hand);font-size:10px;color:var(--muted);margin-top:26px;text-align:right}
+dialog{width:min(94vw,620px);max-width:calc(100vw - 20px);max-height:90vh;border:0;padding:0;background:var(--paper2);overflow-x:hidden;overflow-y:auto;touch-action:pan-y;overscroll-behavior-x:none;box-shadow:0 18px 60px rgba(30,24,20,.32)}dialog::backdrop{background:rgba(48,43,39,.55)}
+.sheet-head{position:sticky;top:0;z-index:2;background:var(--paper2);display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line)}.sheet-head b{font-family:var(--hand);font-size:18px}.close{border:0;background:transparent;font-size:24px;padding:2px 6px}.form{width:100%;max-width:100%;padding:8px 16px 24px;overflow-x:hidden;touch-action:pan-y}.form h3{font-family:var(--hand);font-size:14px;margin:17px 0 7px}.field{margin:9px 0}.field label{display:block;font-size:9px;color:var(--muted);letter-spacing:.08em;margin-bottom:4px}.field input,.field textarea,.field select{display:block;width:100%;max-width:100%;min-width:0;border:0;border-bottom:1px solid var(--line);background:transparent;padding:9px 3px}.field textarea{min-height:110px;resize:vertical}.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}.member-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;width:100%;max-width:100%;overflow:hidden}.member-grid button{border:1px solid var(--line);background:#fff;padding:8px 2px;font-size:9px;min-width:0}.member-grid button.on{border-color:var(--berry);background:#f6e8ec;color:#8d4458;font-weight:700}
+.upload{display:grid;place-items:center;min-height:96px;border:1px dashed var(--line);background:#fffaf4;font-family:var(--hand);font-size:12px;text-align:center;padding:12px;cursor:pointer}.upload input{display:none}.upload small{display:block;color:var(--muted);font-family:var(--gothic);font-size:9px;margin-top:4px}.media-draft{display:grid;gap:6px;margin-top:8px}.draft-row{display:grid;grid-template-columns:42px minmax(0,1fr) auto;align-items:center;gap:8px;border-bottom:1px dashed var(--line);padding:6px 0}.draft-thumb{width:42px;height:42px;background:#e9e4dc;display:grid;place-items:center;font-size:8px;overflow:hidden}.draft-thumb img{width:100%;height:100%;object-fit:cover}.draft-name{min-width:0;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.draft-remove{border:0;background:transparent;color:var(--danger);font-size:11px}.form-actions{display:grid;grid-template-columns:1fr;gap:8px}.save{width:100%;margin-top:20px;padding:13px;border:1px solid var(--ink);background:var(--ink);color:#fff;font-weight:700}.delete-form{display:none;width:100%;padding:10px;border:0;background:transparent;color:var(--danger);font-size:11px}.delete-form.show{display:block}
+.toast{position:fixed;z-index:50;left:50%;bottom:90px;transform:translateX(-50%) translateY(12px);background:var(--ink);color:#fff;padding:9px 13px;font-size:11px;opacity:0;pointer-events:none;transition:.2s;max-width:calc(100vw - 32px);text-align:center}.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:430px){.app{padding-inline:8px}.book{padding:24px 13px 40px 50px}.memory-layout{grid-template-columns:minmax(0,1fr) 90px}.photo{padding:5px 5px 18px}.grid2{grid-template-columns:1fr}.people-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="app">
-  <div class="topbar"><b>MUZE LOG</b><span>MEMORY LOG</span></div>
-
-  <main class="book"><section class="list-view" id="listView">
-    <div class="cover-kicker">LIVE ARCHIVE</div>
-    <h1 class="cover-title">MUZE LOG</h1>
-
-    <div class="summary">
-      <div><strong>12</strong><small>EVENTS</small></div>
-      <div><strong>8</strong><small>CITIES</small></div>
-      <div><strong>24</strong><small>MEMORIES</small></div>
-    </div>
-
-    <div class="section-head">
-      <h2>recent pages</h2>
-      <span>NEW → OLD</span>
-    </div>
-
-    <section class="entries">
-      <article class="entry open-detail" data-page="012">
-        <span class="entry-no">PAGE 012</span>
-        <div class="date"><strong>09.27</strong><span>2026 / SUN</span></div>
-        <h3 class="event-title">EVENT TITLE</h3>
-        <div class="place">TOKYO — VENUE NAME</div>
-        <div class="memory-layout">
-          <div>
-            <div class="note">ここにその日の感想を書いてね。<br>ステージで覚えておきたいこと、嬉しかったこと、帰り道に考えていたことなどなど…</div>
-            <div class="tags"><span class="tag">EIKI</span><span class="tag">NAOYA</span><span class="tag">LIVE</span></div>
-            <div class="people">一緒に参戦したMUZE：1人</div><div class="people">会えたMUZE：2人</div>
-          </div>
-          <div class="photo"><div class="photo-box">PHOTO</div></div>
-        </div>
-        <div class="ticket">
-          <div class="ticket-main"><b>MEMORY TICKET</b><small>photo / video / note / members</small></div>
-          <div class="ticket-side">MUZE<br>MEMORY</div>
-        </div>
-        <div class="entry-actions"><button class="text-btn open-detail-btn" type="button">ひらく</button><button class="text-btn">共有</button></div>
-      </article>
-
-      <article class="entry open-detail" data-page="011">
-        <span class="entry-no">PAGE 011</span>
-        <div class="date"><strong>08.16</strong><span>2026 / SUN</span></div>
-        <h3 class="event-title">EVENT TITLE</h3>
-        <div class="place">OSAKA — VENUE NAME</div>
-        <div class="memory-layout">
-          <div>
-            <div class="note"></div>
-            <div class="tags"><span class="tag">MAZZEL</span><span class="tag">FAN EVENT</span></div>
-            <div class="people">一緒に参戦したMUZE：—</div><div class="people">会えたMUZE：—</div>
-          </div>
-          <div class="photo"><div class="photo-box">VIDEO</div></div>
-        </div>
-        <div class="entry-actions"><button class="text-btn open-detail-btn" type="button">ひらく</button><button class="text-btn">共有</button></div>
-      </article>
+  <div class="topbar"><a href="../">MUZE TOOL BOX</a><span>MEMORY LOG</span></div>
+  <main class="book">
+    <section class="list-view" id="listView">
+      <div class="cover-kicker">LIVE ARCHIVE</div>
+      <h1 class="cover-title">MUZE LOG</h1>
+      <div class="summary">
+        <div><strong id="sumEvents">0</strong><small>EVENTS</small></div>
+        <div><strong id="sumCities">0</strong><small>CITIES</small></div>
+        <div><strong id="sumMedia">0</strong><small>MEDIA</small></div>
+      </div>
+      <div class="section-head"><h2>recent pages</h2><span>NEW → OLD</span></div>
+      <section class="entries" id="entries"></section>
+      <button class="add-paper" id="addInline" type="button"><strong>＋</strong> 新しいページを書く</button>
+      <div class="bottom-note">MUZE LOG · personal live archive</div>
     </section>
 
-    <button class="add-paper" id="addInline"><strong>＋</strong> 新しいページを書く</button>
-    <div class="bottom-note">MUZE MEMORY · personal live archive</div>
-  </section>
-
-  <section class="detail-view" id="detailView">
-    <div class="detail-top">
-      <button class="back" id="backToList">← journal に戻る</button>
-      <button class="share">このページを共有</button>
-    </div>
-
-    <div class="cover-kicker">LIVE MEMORY / PAGE 012</div>
-    <div class="detail-date">09.27</div>
-    <h2 class="detail-title">EVENT TITLE</h2>
-    <div class="detail-place">2026 / SUN — TOKYO / VENUE NAME</div>
-
-    <div class="detail-block">
-      <h3>today's note</h3>
-      <div class="detail-note">ここにその日の感想。ステージで覚えておきたいこと、嬉しかったこと、帰り道に考えていたこと。長文でもちゃんと日記として読める余白を残す。</div>
-      <div class="tags"><span class="tag">EIKI</span><span class="tag">NAOYA</span><span class="tag">LIVE</span></div>
-    </div>
-
-    <div class="detail-block">
-      <h3>people</h3>
-      <div class="people-grid">
-        <div class="people-card"><span>一緒に参戦したMUZE</span><b>MUZE 01</b></div>
-        <div class="people-card"><span>会えたMUZE</span><b>MUZE 02 / MUZE 03</b></div>
-      </div>
-    </div>
-
-    <div class="detail-block">
-      <h3>photo & video</h3>
-      <div class="media-grid">
-        <div class="media-card"><div class="media-box">PHOTO 01</div><div class="media-cap">before the show</div></div>
-        <div class="media-card"><div class="media-box">PHOTO 02</div><div class="media-cap">memory</div></div>
-        <div class="media-card wide"><div class="media-box">VIDEO</div><div class="media-cap">movie clip</div></div>
-      </div>
-    </div>
-
-    <div class="detail-block">
-      <h3>guest notes</h3>
-      <div class="guest-note">
-        <div class="guest-head"><span>MUZE 01</span><span>09.27 / 23:41</span></div>
-        <div class="guest-body">友達がこのイベントに追加した感想は、コメント欄ではなく「ページに貼られた追記」みたいに残る。</div>
-      </div>
-      <div class="guest-note">
-        <div class="guest-head"><span>MUZE 02</span><span>09.28 / 00:12</span></div>
-        <div class="guest-body">写真や動画もこのイベントだけに追加。MY MUZE全体は見えない設計のまま。</div>
-      </div>
-    </div>
-
-    <div class="ticket">
-      <div class="ticket-main"><b>MEMORY TICKET</b><small>09.27 / TOKYO / PAGE 012</small></div>
-      <div class="ticket-side">MUZE<br>MEMORY</div>
-    </div>
-
-    <div class="detail-actions">
-      <button>ページを編集</button>
-      <button class="primary">写真・感想を追加</button>
-    </div>
-    <div class="page-num">— 012 —</div>
-  </section>
+    <section class="detail-view" id="detailView">
+      <div class="detail-top"><button class="back" id="backToList" type="button">← journal に戻る</button></div>
+      <div class="cover-kicker" id="detailKicker">LIVE MEMORY</div>
+      <div class="detail-date" id="detailDate"></div>
+      <h2 class="detail-title" id="detailTitle"></h2>
+      <div class="detail-place" id="detailPlace"></div>
+      <div class="detail-block"><h3>today's note</h3><div class="detail-note" id="detailNote"></div><div class="tags" id="detailTags"></div></div>
+      <div class="detail-block"><h3>people</h3><div class="people-grid"><div class="people-card"><span>一緒に参戦したMUZE</span><b id="detailCompanions">—</b></div><div class="people-card"><span>会えたMUZE</span><b id="detailMet">—</b></div></div></div>
+      <div class="detail-block" id="mediaBlock"><h3>photo & video</h3><div class="media-grid" id="detailMedia"></div></div>
+      <div class="ticket"><div class="ticket-main"><b>MEMORY TICKET</b><small id="ticketText"></small></div><div class="ticket-side">MUZE<br>LOG</div></div>
+      <div class="detail-actions"><button id="editDetail" type="button">ページを編集</button><button class="primary" id="addMediaDetail" type="button">写真・動画を追加</button><button class="danger" id="deleteDetail" type="button">このページを削除</button></div>
+      <div class="page-num" id="detailPageNo"></div>
+    </section>
   </main>
 </div>
 
-<button class="floating" id="add"><span class="plus">＋</span><span>参戦記録を追加</span></button>
+<button class="floating" id="add" type="button"><span class="plus">＋</span><span>参戦記録を追加</span></button>
 
 <dialog id="dlg">
-  <div class="sheet-head"><b>新しいページを書く</b><button class="close" id="close" type="button">×</button></div>
+  <div class="sheet-head"><b id="formTitle">新しいページを書く</b><button class="close" id="close" type="button">×</button></div>
   <form class="form" id="form">
+    <input type="hidden" id="editId">
     <h3>event</h3>
-    <div class="field"><label>イベント名</label><input placeholder="EVENT TITLE"></div>
-    <div class="grid2">
-      <div class="field"><label>日付</label><input type="date"></div>
-      <div class="field"><label>会場</label><input placeholder="VENUE"></div>
-    </div>
+    <div class="field"><label>イベント名</label><input id="eventTitle" placeholder="イベント名" required></div>
+    <div class="grid2"><div class="field"><label>日付</label><input id="eventDate" type="date" required></div><div class="field"><label>地域 / 都市</label><input id="eventCity" placeholder="例：東京"></div></div>
+    <div class="field"><label>会場</label><input id="eventVenue" placeholder="例：有明アリーナ"></div>
 
     <h3>members</h3>
     <div class="member-grid" id="members">
-      <button type="button">KAIRYU</button><button type="button">NAOYA</button><button type="button">RAN</button><button type="button">SEITO</button>
-      <button type="button">RYUKI</button><button type="button">TAKUTO</button><button type="button">HAYATO</button><button type="button">EIKI</button>
+      <button type="button" data-member="KAIRYU">KAIRYU</button><button type="button" data-member="NAOYA">NAOYA</button><button type="button" data-member="RAN">RAN</button><button type="button" data-member="SEITO">SEITO</button>
+      <button type="button" data-member="RYUKI">RYUKI</button><button type="button" data-member="TAKUTO">TAKUTO</button><button type="button" data-member="HAYATO">HAYATO</button><button type="button" data-member="EIKI">EIKI</button>
     </div>
 
     <h3>memory</h3>
-    <div class="field"><label>その日の感想</label><textarea placeholder="忘れたくないことを書いておく"></textarea></div>
-    <div class="field"><label>一緒に参戦したMUZE</label><input placeholder="同行したMUZEのニックネームなど"></div>
-    <div class="field"><label>会えたMUZE</label><input placeholder="現地で会えたMUZEのニックネームなど"></div>
-    <div class="upload">写真・動画を追加<br><small>ここに添付UIが入る想定</small></div>
+    <div class="field"><label>その日の感想</label><textarea id="eventNote" placeholder="ここにその日の感想を書いてね。&#10;ステージで覚えておきたいこと、嬉しかったこと、帰り道に考えていたことなどなど…"></textarea></div>
+    <div class="field"><label>一緒に参戦したMUZE</label><input id="eventCompanions" placeholder="同行したMUZEのニックネームなど"></div>
+    <div class="field"><label>会えたMUZE</label><input id="eventMet" placeholder="現地で会えたMUZEのニックネームなど"></div>
 
-    <button class="save" type="submit">このページを保存</button>
+    <h3>photo & video</h3>
+    <label class="upload" for="mediaInput">写真・動画を追加<input id="mediaInput" type="file" accept="image/*,video/*" multiple><small>最大8件・1ファイル25MBまで。この端末に保存されます。</small></label>
+    <div class="media-draft" id="mediaDraft"></div>
+
+    <div class="form-actions"><button class="save" type="submit">このページを保存</button><button class="delete-form" id="deleteForm" type="button">このページを削除</button></div>
   </form>
 </dialog>
+<div class="toast" id="toast"></div>
 
 <script>
-const d=document.getElementById("dlg");
-function openD(){if(typeof d.showModal==="function")d.showModal();else d.setAttribute("open","")}
-function closeD(){if(typeof d.close==="function")d.close();else d.removeAttribute("open")}
-document.getElementById("add").addEventListener("click",openD);
-document.getElementById("addInline").addEventListener("click",openD);
-document.getElementById("close").addEventListener("click",closeD);
-document.querySelectorAll("#members button").forEach(b=>b.addEventListener("click",()=>b.classList.toggle("on")));
-document.getElementById("form").addEventListener("submit",e=>{e.preventDefault();closeD()});
-const listView=document.getElementById("listView");
-const detailView=document.getElementById("detailView");
-function openDetail(){
-  listView.classList.add("off");
-  detailView.classList.add("on");
-  document.getElementById("add").style.display="none";
+(function(){
+"use strict";
+var KEY="muze_log_v1";
+var DB_NAME="muze_log_media_v1";
+var DB_VERSION=1;
+var rows=[];
+var selectedMembers=[];
+var pendingFiles=[];
+var removedMediaIds=[];
+var existingMedia=[];
+var currentDetailId=null;
+var dbPromise=null;
+var activeUrls=[];
+var draftUrls=[];
+
+function byId(id){return document.getElementById(id)}
+function all(sel){return Array.from(document.querySelectorAll(sel))}
+function esc(value){return String(value||"").replace(/[&<>"']/g,function(m){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]})}
+function uid(){return (window.crypto&&crypto.randomUUID)?crypto.randomUUID():"log_"+Date.now()+"_"+Math.random().toString(36).slice(2)}
+function load(){try{var parsed=JSON.parse(localStorage.getItem(KEY)||"[]");rows=Array.isArray(parsed)?parsed:[]}catch(e){rows=[]}}
+function persist(){localStorage.setItem(KEY,JSON.stringify(rows))}
+function toast(msg){var el=byId("toast");el.textContent=msg;el.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(function(){el.classList.remove("on")},1800)}
+function openDialog(){var d=byId("dlg");if(typeof d.showModal==="function"){try{d.showModal();return}catch(e){}}d.setAttribute("open","")}
+function closeDialog(){var d=byId("dlg");if(typeof d.close==="function"){try{d.close();return}catch(e){}}d.removeAttribute("open");clearDraftUrls()}
+function clearActiveUrls(){activeUrls.forEach(function(u){URL.revokeObjectURL(u)});activeUrls=[]}
+function clearDraftUrls(){draftUrls.forEach(function(u){URL.revokeObjectURL(u)});draftUrls=[]}
+function formatDate(value){if(!value)return {md:"--.--",meta:""};var d=new Date(value+"T00:00:00");var wd=["SUN","MON","TUE","WED","THU","FRI","SAT"][d.getDay()];return {md:String(d.getMonth()+1).padStart(2,"0")+"."+String(d.getDate()).padStart(2,"0"),meta:d.getFullYear()+" / "+wd}}
+function pageNumberFor(id){var ordered=rows.slice().sort(function(a,b){return String(a.date||"").localeCompare(String(b.date||""))||String(a.createdAt||"").localeCompare(String(b.createdAt||""))});var i=ordered.findIndex(function(r){return r.id===id});return i<0?1:i+1}
+function placeText(r){return [r.city,r.venue].filter(Boolean).join(" — ")||"会場未設定"}
+function peopleText(v){return String(v||"").trim()||"—"}
+
+function openDB(){
+  if(dbPromise)return dbPromise;
+  dbPromise=new Promise(function(resolve,reject){
+    if(!("indexedDB" in window)){reject(new Error("IndexedDB unavailable"));return}
+    var req=indexedDB.open(DB_NAME,DB_VERSION);
+    req.onupgradeneeded=function(){
+      var db=req.result;
+      if(!db.objectStoreNames.contains("media")){
+        var store=db.createObjectStore("media",{keyPath:"id"});
+        store.createIndex("eventId","eventId",{unique:false});
+      }
+    };
+    req.onsuccess=function(){resolve(req.result)};
+    req.onerror=function(){reject(req.error||new Error("DB error"))};
+  });
+  return dbPromise;
+}
+function getMedia(eventId){
+  return openDB().then(function(db){
+    return new Promise(function(resolve,reject){
+      var tx=db.transaction("media","readonly");
+      var req=tx.objectStore("media").index("eventId").getAll(IDBKeyRange.only(eventId));
+      req.onsuccess=function(){resolve(req.result||[])};
+      req.onerror=function(){reject(req.error)};
+    });
+  }).catch(function(){return []});
+}
+function countMedia(){
+  return openDB().then(function(db){
+    return new Promise(function(resolve){
+      var req=db.transaction("media","readonly").objectStore("media").count();
+      req.onsuccess=function(){resolve(req.result||0)};
+      req.onerror=function(){resolve(0)};
+    });
+  }).catch(function(){return 0});
+}
+function putMedia(records){
+  if(!records.length)return Promise.resolve();
+  return openDB().then(function(db){
+    return new Promise(function(resolve,reject){
+      var tx=db.transaction("media","readwrite");
+      var store=tx.objectStore("media");
+      records.forEach(function(r){store.put(r)});
+      tx.oncomplete=function(){resolve()};
+      tx.onerror=function(){reject(tx.error)};
+      tx.onabort=function(){reject(tx.error)};
+    });
+  });
+}
+function deleteMediaIds(ids){
+  if(!ids.length)return Promise.resolve();
+  return openDB().then(function(db){
+    return new Promise(function(resolve,reject){
+      var tx=db.transaction("media","readwrite");
+      var store=tx.objectStore("media");
+      ids.forEach(function(id){store.delete(id)});
+      tx.oncomplete=function(){resolve()};
+      tx.onerror=function(){reject(tx.error)};
+    });
+  });
+}
+function deleteMediaByEvent(eventId){
+  return openDB().then(function(db){
+    return new Promise(function(resolve,reject){
+      var tx=db.transaction("media","readwrite");
+      var idx=tx.objectStore("media").index("eventId");
+      var req=idx.openCursor(IDBKeyRange.only(eventId));
+      req.onsuccess=function(){
+        var cursor=req.result;
+        if(cursor){cursor.delete();cursor.continue()}
+      };
+      tx.oncomplete=function(){resolve()};
+      tx.onerror=function(){reject(tx.error)};
+    });
+  }).catch(function(){});
+}
+
+function renderSummary(){
+  byId("sumEvents").textContent=rows.length;
+  var cities=new Set(rows.map(function(r){return String(r.city||"").trim()}).filter(Boolean));
+  byId("sumCities").textContent=cities.size;
+  countMedia().then(function(n){byId("sumMedia").textContent=n});
+}
+function renderThumb(box,media){
+  if(!box||!media){if(box)box.textContent="NO PHOTO";return}
+  var url=URL.createObjectURL(media.blob);activeUrls.push(url);
+  if(String(media.type||"").indexOf("image/")===0){
+    box.innerHTML='<img alt="">';box.querySelector("img").src=url;
+  }else if(String(media.type||"").indexOf("video/")===0){
+    box.innerHTML='<video muted playsinline preload="metadata"></video>';box.querySelector("video").src=url;
+  }else box.textContent="FILE";
+}
+async function renderList(){
+  clearActiveUrls();
+  renderSummary();
+  var sorted=rows.slice().sort(function(a,b){return String(b.date||"").localeCompare(String(a.date||""))||String(b.createdAt||"").localeCompare(String(a.createdAt||""))});
+  var wrap=byId("entries");
+  if(!sorted.length){
+    wrap.innerHTML='<div class="empty-state">まだ参戦記録がありません。</div>';
+    return;
+  }
+  wrap.innerHTML=sorted.map(function(r){
+    var d=formatDate(r.date);
+    var no=String(pageNumberFor(r.id)).padStart(3,"0");
+    var tags=(r.members||[]).map(function(m){return '<span class="tag">'+esc(m)+'</span>'}).join("");
+    var note=r.note?esc(r.note):'<span class="note empty">感想はまだありません。</span>';
+    return '<article class="entry" data-id="'+esc(r.id)+'">'+
+      '<span class="entry-no">PAGE '+no+'</span>'+
+      '<div class="date"><strong>'+d.md+'</strong><span>'+esc(d.meta)+'</span></div>'+
+      '<h3 class="event-title">'+esc(r.title)+'</h3>'+
+      '<div class="place">'+esc(placeText(r))+'</div>'+
+      '<div class="memory-layout"><div><div class="note">'+note+'</div><div class="tags">'+tags+'</div>'+
+      '<div class="people">一緒に参戦したMUZE：'+esc(peopleText(r.companions))+'</div>'+
+      '<div class="people">会えたMUZE：'+esc(peopleText(r.met))+'</div></div>'+
+      '<div class="photo"><div class="photo-box" id="thumb_'+esc(r.id)+'">NO PHOTO</div></div></div>'+
+      '<div class="entry-foot"><span class="open-label">ひらく →</span></div></article>';
+  }).join("");
+  all(".entry").forEach(function(card){card.addEventListener("click",function(){openDetail(card.dataset.id)})});
+  for(var i=0;i<sorted.length;i++){
+    var media=await getMedia(sorted[i].id);
+    renderThumb(byId("thumb_"+sorted[i].id),media[0]);
+  }
+}
+async function openDetail(id){
+  var r=rows.find(function(x){return x.id===id});if(!r)return;
+  currentDetailId=id;
+  byId("listView").classList.add("off");
+  byId("detailView").classList.add("on");
+  byId("add").style.display="none";
+  var d=formatDate(r.date);
+  var no=String(pageNumberFor(id)).padStart(3,"0");
+  byId("detailKicker").textContent="LIVE MEMORY / PAGE "+no;
+  byId("detailDate").textContent=d.md;
+  byId("detailTitle").textContent=r.title||"";
+  byId("detailPlace").textContent=[d.meta,placeText(r)].filter(Boolean).join(" — ");
+  byId("detailNote").textContent=r.note||"感想はまだありません。";
+  byId("detailTags").innerHTML=(r.members||[]).map(function(m){return '<span class="tag">'+esc(m)+'</span>'}).join("");
+  byId("detailCompanions").textContent=peopleText(r.companions);
+  byId("detailMet").textContent=peopleText(r.met);
+  byId("ticketText").textContent=[r.date,r.city,r.venue,"PAGE "+no].filter(Boolean).join(" / ");
+  byId("detailPageNo").textContent="— "+no+" —";
+  clearActiveUrls();
+  var media=await getMedia(id);
+  var grid=byId("detailMedia");
+  if(!media.length){
+    byId("mediaBlock").style.display="none";
+  }else{
+    byId("mediaBlock").style.display="block";
+    grid.innerHTML="";
+    media.forEach(function(m){
+      var card=document.createElement("div");card.className="media-card";
+      var box=document.createElement("div");box.className="media-box";
+      var url=URL.createObjectURL(m.blob);activeUrls.push(url);
+      if(String(m.type||"").indexOf("image/")===0){
+        var img=document.createElement("img");img.src=url;img.alt="";box.appendChild(img);
+      }else{
+        var video=document.createElement("video");video.src=url;video.controls=true;video.playsInline=true;video.preload="metadata";box.appendChild(video);
+      }
+      var cap=document.createElement("div");cap.className="media-cap";cap.textContent=m.name||"memory";
+      card.appendChild(box);card.appendChild(cap);grid.appendChild(card);
+    });
+  }
   window.scrollTo({top:0,behavior:"smooth"});
 }
 function closeDetail(){
-  detailView.classList.remove("on");
-  listView.classList.remove("off");
-  document.getElementById("add").style.display="flex";
+  currentDetailId=null;clearActiveUrls();
+  byId("detailView").classList.remove("on");
+  byId("listView").classList.remove("off");
+  byId("add").style.display="flex";
   window.scrollTo({top:0,behavior:"smooth"});
 }
-document.querySelectorAll(".open-detail").forEach(card=>card.addEventListener("click",e=>{
-  if(e.target.closest(".share"))return;
-  openDetail();
-}));
-document.querySelectorAll(".open-detail-btn").forEach(b=>b.addEventListener("click",e=>{e.stopPropagation();openDetail()}));
-document.getElementById("backToList").addEventListener("click",closeDetail);
+function syncMembers(){
+  all("#members button").forEach(function(b){b.classList.toggle("on",selectedMembers.indexOf(b.dataset.member)>=0)});
+}
+function resetForm(){
+  byId("form").reset();byId("editId").value="";selectedMembers=[];pendingFiles=[];removedMediaIds=[];existingMedia=[];
+  byId("formTitle").textContent="新しいページを書く";byId("deleteForm").classList.remove("show");clearDraftUrls();syncMembers();renderMediaDraft();
+}
+function openNew(){
+  resetForm();openDialog();
+}
+async function openEdit(id,focusMedia){
+  var r=rows.find(function(x){return x.id===id});if(!r)return;
+  resetForm();
+  byId("editId").value=id;byId("formTitle").textContent="ページを編集";
+  byId("eventTitle").value=r.title||"";byId("eventDate").value=r.date||"";byId("eventCity").value=r.city||"";byId("eventVenue").value=r.venue||"";
+  byId("eventNote").value=r.note||"";byId("eventCompanions").value=r.companions||"";byId("eventMet").value=r.met||"";
+  selectedMembers=(r.members||[]).slice();syncMembers();
+  existingMedia=await getMedia(id);renderMediaDraft();
+  byId("deleteForm").classList.add("show");openDialog();
+  if(focusMedia){setTimeout(function(){byId("mediaInput").closest(".upload").scrollIntoView({behavior:"smooth",block:"center"})},150)}
+}
+function renderMediaDraft(){
+  clearDraftUrls();
+  var wrap=byId("mediaDraft");wrap.innerHTML="";
+  existingMedia.filter(function(m){return removedMediaIds.indexOf(m.id)<0}).forEach(function(m){
+    wrap.appendChild(makeDraftRow(m.name,m.type,m.blob,function(){removedMediaIds.push(m.id);renderMediaDraft()}));
+  });
+  pendingFiles.forEach(function(file,index){
+    wrap.appendChild(makeDraftRow(file.name,file.type,file,function(){pendingFiles.splice(index,1);renderMediaDraft()}));
+  });
+}
+function makeDraftRow(name,type,blob,onRemove){
+  var row=document.createElement("div");row.className="draft-row";
+  var th=document.createElement("div");th.className="draft-thumb";
+  if(String(type||"").indexOf("image/")===0){
+    var u=URL.createObjectURL(blob);draftUrls.push(u);var img=document.createElement("img");img.src=u;img.alt="";th.appendChild(img);
+  }else th.textContent=String(type||"").indexOf("video/")===0?"VIDEO":"FILE";
+  var nm=document.createElement("div");nm.className="draft-name";nm.textContent=name||"memory";
+  var rm=document.createElement("button");rm.className="draft-remove";rm.type="button";rm.textContent="削除";rm.addEventListener("click",onRemove);
+  row.appendChild(th);row.appendChild(nm);row.appendChild(rm);return row;
+}
+async function saveForm(e){
+  e.preventDefault();
+  var id=byId("editId").value||uid();
+  var old=rows.find(function(x){return x.id===id});
+  var now=new Date().toISOString();
+  var obj={id:id,title:byId("eventTitle").value.trim(),date:byId("eventDate").value,city:byId("eventCity").value.trim(),venue:byId("eventVenue").value.trim(),members:selectedMembers.slice(),note:byId("eventNote").value.trim(),companions:byId("eventCompanions").value.trim(),met:byId("eventMet").value.trim(),createdAt:old&&old.createdAt?old.createdAt:now,updatedAt:now};
+  if(old)rows=rows.map(function(x){return x.id===id?obj:x});else rows.push(obj);
+  persist();
+  try{
+    await deleteMediaIds(removedMediaIds);
+    var records=pendingFiles.map(function(file){return {id:uid(),eventId:id,name:file.name,type:file.type,size:file.size,createdAt:now,blob:file}});
+    await putMedia(records);
+  }catch(err){toast("記録は保存しましたが、写真・動画の保存に失敗しました")}
+  closeDialog();await renderList();
+  if(currentDetailId===id)await openDetail(id);
+  else toast("保存しました");
+}
+async function deleteEvent(id){
+  if(!id)return;
+  if(!confirm("この参戦記録を削除しますか？"))return;
+  rows=rows.filter(function(x){return x.id!==id});persist();await deleteMediaByEvent(id);
+  closeDialog();closeDetail();await renderList();toast("削除しました");
+}
+function handleFiles(fileList){
+  var files=Array.from(fileList||[]);
+  var currentCount=existingMedia.filter(function(m){return removedMediaIds.indexOf(m.id)<0}).length+pendingFiles.length;
+  files.forEach(function(file){
+    if(currentCount>=8){toast("添付は1ページ8件までです");return}
+    if(file.size>25*1024*1024){toast("25MBを超えるファイルは追加できません");return}
+    if(String(file.type).indexOf("image/")!==0&&String(file.type).indexOf("video/")!==0)return;
+    pendingFiles.push(file);currentCount++;
+  });
+  byId("mediaInput").value="";renderMediaDraft();
+}
+
+load();
+all("#members button").forEach(function(b){b.addEventListener("click",function(){var m=b.dataset.member;var i=selectedMembers.indexOf(m);if(i>=0)selectedMembers.splice(i,1);else selectedMembers.push(m);syncMembers()})});
+byId("add").addEventListener("click",openNew);byId("addInline").addEventListener("click",openNew);byId("close").addEventListener("click",closeDialog);
+byId("backToList").addEventListener("click",closeDetail);
+byId("form").addEventListener("submit",saveForm);
+byId("mediaInput").addEventListener("change",function(e){handleFiles(e.target.files)});
+byId("editDetail").addEventListener("click",function(){if(currentDetailId)openEdit(currentDetailId,false)});
+byId("addMediaDetail").addEventListener("click",function(){if(currentDetailId)openEdit(currentDetailId,true)});
+byId("deleteDetail").addEventListener("click",function(){deleteEvent(currentDetailId)});
+byId("deleteForm").addEventListener("click",function(){deleteEvent(byId("editId").value)});
+byId("dlg").addEventListener("click",function(e){if(e.target===byId("dlg"))closeDialog()});
+renderList();
+})();
 </script>
 </body>
 </html>
