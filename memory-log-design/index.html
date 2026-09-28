@@ -64,21 +64,12 @@ a{color:inherit;text-decoration:none}
 .cover-kicker{font-size:10px;letter-spacing:.24em;color:var(--muted);font-weight:700}
 .cover-title{
   font-family:var(--hand);
-  font-size:clamp(38px,10vw,58px);
-  line-height:1.02;
-  margin:10px 0 2px;
-  letter-spacing:.01em
+  font-size:clamp(36px,9vw,54px);
+  line-height:1.05;
+  margin:10px 0 20px;
+  letter-spacing:.01em;
+  white-space:nowrap
 }
-.cover-sub{font-family:var(--hand);font-size:13px;color:var(--muted);margin:0 0 22px}
-.cover-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
-.stamp{
-  display:inline-flex;align-items:center;justify-content:center;
-  min-height:28px;padding:3px 9px;
-  border:1.5px solid var(--stamp);color:var(--stamp);
-  font-size:10px;font-weight:700;letter-spacing:.08em;
-  transform:rotate(-2deg)
-}
-.stamp:nth-child(2){transform:rotate(1.5deg);color:#5e7568;border-color:#5e7568}
 .summary{
   display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;
   margin:18px 0 28px
@@ -194,17 +185,11 @@ dialog::backdrop{background:rgba(48,43,39,.55)}
 </head>
 <body>
 <div class="app">
-  <div class="topbar"><b>MUZE MEMORY</b><span>LIVE JOURNAL / 2026</span></div>
+  <div class="topbar"><b>MUZE LOG</b><span>MEMORY LOG</span></div>
 
   <main class="book">
-    <div class="cover-kicker">MY LIVE ARCHIVE</div>
-    <h1 class="cover-title">参戦<br>journal</h1>
-    <p class="cover-sub">ライブの日のことを、忘れないうちに。</p>
-
-    <div class="cover-meta">
-      <span class="stamp">MY MUZE</span>
-      <span class="stamp">MEMORY LOG</span>
-    </div>
+    <div class="cover-kicker">LIVE ARCHIVE</div>
+    <h1 class="cover-title">MUZE LOG</h1>
 
     <div class="summary">
       <div><strong>12</strong><small>EVENTS</small></div>
@@ -227,7 +212,7 @@ dialog::backdrop{background:rgba(48,43,39,.55)}
           <div>
             <div class="note">ここにその日の感想。ステージで覚えておきたいこと、嬉しかったこと、帰り道に考えていたこと。</div>
             <div class="tags"><span class="tag">EIKI</span><span class="tag">NAOYA</span><span class="tag">LIVE</span></div>
-            <div class="people">会えたMUZE：2人</div>
+            <div class="people">一緒に参戦したMUZE：1人</div><div class="people">会えたMUZE：2人</div>
           </div>
           <div class="photo"><div class="photo-box">PHOTO</div></div>
         </div>
@@ -247,7 +232,7 @@ dialog::backdrop{background:rgba(48,43,39,.55)}
           <div>
             <div class="note">写真がなくても、文章だけでちゃんと「その日のページ」になるデザイン。</div>
             <div class="tags"><span class="tag">MAZZEL</span><span class="tag">FAN EVENT</span></div>
-            <div class="people">会えたMUZE：—</div>
+            <div class="people">一緒に参戦したMUZE：—</div><div class="people">会えたMUZE：—</div>
           </div>
           <div class="photo"><div class="photo-box">VIDEO</div></div>
         </div>
@@ -280,7 +265,8 @@ dialog::backdrop{background:rgba(48,43,39,.55)}
 
     <h3>memory</h3>
     <div class="field"><label>その日の感想</label><textarea placeholder="忘れたくないことを書いておく"></textarea></div>
-    <div class="field"><label>会えたMUZE</label><input placeholder="ニックネームなど"></div>
+    <div class="field"><label>一緒に参戦したMUZE</label><input placeholder="同行したMUZEのニックネームなど"></div>
+    <div class="field"><label>会えたMUZE</label><input placeholder="現地で会えたMUZEのニックネームなど"></div>
     <div class="upload">写真・動画を追加<br><small>ここに添付UIが入る想定</small></div>
 
     <button class="save" type="submit">このページを保存</button>
