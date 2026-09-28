@@ -6,6 +6,58 @@
 <style>
 :root{--desk:#f1ebe1;--paper:#fff;--ink:#40382f;--muted:#8f8577;--line:rgba(64,56,47,.2);--berry:#e27a94;--mint:#a4c5af;--lav:#b9a6d8;--blue:#a9c8df;--hand:"Klee One","Yu Gothic",cursive;--gothic:"Zen Kaku Gothic New","Hiragino Sans",sans-serif;--shadow:0 10px 24px rgba(64,56,47,.13)}
 *{box-sizing:border-box}html,body{width:100%;max-width:100%;overflow-x:hidden}body{margin:0;color:var(--ink);font-family:var(--gothic);background:radial-gradient(rgba(64,56,47,.045) 1px,transparent 1px) 0 0/22px 22px,var(--desk)}button,input,select,textarea{font:inherit;color:inherit}.app{width:100%;max-width:720px;margin:auto;min-height:100vh;padding-bottom:98px}
+/* ---------- MUZE TOOL BOX 共通ヘッダー ---------- */
+.tool-nav{
+  max-width:720px;
+  margin:0 auto;
+  padding:14px 16px 0;
+  position:relative;
+  z-index:30;
+}
+.tool-nav-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  background:rgba(255,255,255,.74);
+  border:1px solid rgba(64,56,47,.14);
+  padding:8px 10px;
+  transform:rotate(-.3deg);
+}
+.tool-nav-brand{
+  font-family:var(--hand);
+  font-size:14px;
+  font-weight:600;
+  color:var(--ink);
+  white-space:nowrap;
+  text-decoration:none;
+}
+.tool-nav-links{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.tool-nav-links::-webkit-scrollbar{display:none}
+.tool-nav-links a{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.06em;
+  color:var(--muted);
+  white-space:nowrap;
+  border-bottom:1px dashed rgba(64,56,47,.28);
+  line-height:1.6;
+  text-decoration:none;
+}
+.tool-nav-links a:hover,.tool-nav-links a:active{color:var(--ink);border-bottom-color:var(--ink)}
+@media(max-width:520px){
+  .tool-nav{padding-top:10px}
+  .tool-nav-inner{align-items:flex-start;flex-direction:column;gap:6px}
+  .tool-nav-links{width:100%;padding-bottom:2px}
+}
+
 header{padding:14px 16px 6px}.brandrow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:4px}.brand{font-family:var(--hand);font-size:13px;font-weight:600}.keychip{border:1px solid var(--line);background:#ffffff88;padding:5px 8px;font-size:9px;letter-spacing:.06em}.head{display:flex;align-items:center;justify-content:space-between;background:#ffffffbd;border:1px solid var(--line);padding:8px 10px;transform:rotate(-.25deg)}.head h1{font-family:var(--hand);font-size:17px;margin:0}.home{font-size:11px;color:var(--muted);text-decoration:none;border-bottom:1px dashed var(--line)}
 main{padding:18px 14px}.tabs,.chips{display:flex;gap:7px;overflow:auto;scrollbar-width:none}.tabs button,.chips button{border:1px solid var(--line);background:#fff;padding:8px 12px;white-space:nowrap;font-size:12px}.tabs button.on{background:var(--ink);color:var(--desk)}.chips{margin-top:9px}.chips button.on{background:#efe6f7;border-color:#b9a6d8;font-weight:700}
 .search{width:100%;border:0;border-bottom:1px solid var(--line);background:#fffdf9;padding:11px 10px;margin:12px 0 0;font-size:14px}.listHead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:14px 4px 9px}.count{font-family:var(--hand);font-size:12px;color:var(--muted);margin:0}.downloadBtn{border:1.5px solid #b85d76;background:#e27a94;color:#fff;padding:9px 13px;font-family:var(--hand);font-size:11px;font-weight:600;box-shadow:0 4px 10px rgba(142,73,92,.18);white-space:nowrap}.downloadBtn:disabled{opacity:.5;box-shadow:none}
@@ -13,8 +65,22 @@ main{padding:18px 14px}.tabs,.chips{display:flex;gap:7px;overflow:auto;scrollbar
 .empty{text-align:center;color:var(--muted);font-family:var(--hand);padding:58px 20px}.note{font-size:10px;color:var(--muted);margin:14px 3px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}.syncNow{border:0;background:none;padding:0;color:var(--ink);font-size:10px;border-bottom:1px dashed var(--line)}.syncStatus[data-state="ok"]{color:#52705d}.syncStatus[data-state="sync"]{color:#756392}.syncStatus[data-state="local"]{color:var(--muted)}.fab{position:fixed;z-index:20;left:50%;right:auto;transform:translateX(-50%);bottom:calc(22px + env(safe-area-inset-bottom));width:min(310px,calc(100vw - 40px));height:58px;padding:0 20px;border:1.5px solid #b85d76;border-radius:0;background:#e27a94;color:#fff;font-family:var(--hand);box-shadow:0 10px 24px rgba(142,73,92,.28);display:flex;align-items:center;justify-content:center;gap:9px}.fabPlus{font-size:26px;line-height:1}.fabText{font-size:15px;font-weight:600;white-space:nowrap;letter-spacing:.03em}
 dialog{border:0;border-radius:0;width:min(94vw,620px);max-width:calc(100vw - 24px);max-height:90vh;padding:0;background:#fffdf9;box-shadow:0 20px 70px #0003;overflow-x:hidden;overflow-y:auto;overscroll-behavior-x:none;touch-action:pan-y}dialog::backdrop{background:#40382f66}.formhead{position:sticky;top:0;z-index:2;width:100%;max-width:100%;background:#fffdf9;padding:15px 18px;border-bottom:1px dashed var(--line);display:flex;justify-content:space-between;overflow:hidden}.formhead b{font-family:var(--hand);font-size:17px}.form{width:100%;max-width:100%;padding:8px 18px 24px;overflow-x:hidden;overscroll-behavior-x:none;touch-action:pan-y}.form h3{font-family:var(--hand);font-size:14px;margin:18px 0 8px}.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;max-width:100%}.form input,.form select,.form textarea{display:block;width:100%;min-width:0;max-width:100%;border:1px solid var(--line);background:#fff;padding:10px;border-radius:0}.form textarea{min-height:72px}.members{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;width:100%;max-width:100%;overflow:hidden}.members button{border:1px solid var(--line);background:#fff;padding:8px 2px;font-size:10px}.members button.on{background:#efe6f7;border-color:#aa91cf;font-weight:700}.fieldlabel{display:block;font-size:10px;color:var(--muted);margin:8px 0 4px}.save{width:100%;border:1.5px solid var(--ink);background:var(--ink);color:#fff;padding:12px;font-weight:700;margin-top:18px}.close{border:0;background:none;font-size:20px}.statusBox{margin:14px 0 4px;padding:12px;background:#f7f0fb;border:1px dashed #b9a6d8}.statusBox h3{margin:0 0 8px}.statusBtns{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.statusBtns button{border:1px solid var(--line);background:#fff;padding:10px;font-weight:700}.statusBtns button.on{background:var(--ink);color:#fff;border-color:var(--ink)}.del{border:0;background:none;color:#b34b65;font-size:11px;margin-top:15px;width:100%}.keyPanel{padding:16px 18px 20px}.keyPanel p{margin:0 0 12px;font-size:10px;line-height:1.7;color:var(--muted)}.keyValue{width:100%;border:1px solid var(--line);background:#fff;padding:10px;font-size:12px;letter-spacing:.05em}.keyActions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.keyActions button{padding:10px;border:1px solid var(--ink);background:#fff;font-size:10px}.keyActions .primary{background:var(--ink);color:#fff}.keyNew{width:100%;margin-top:8px;border:0;background:none;color:var(--muted);font-size:9px;text-decoration:underline;text-underline-offset:3px}.keyHelp{display:block;margin-top:13px;padding-top:11px;border-top:1px dashed var(--line);text-align:center;font-size:10px;color:var(--ink);text-decoration:none}.keyHelp span{border-bottom:1px dashed var(--line)}
 @media(max-width:460px){.grid2{grid-template-columns:1fr}}
-</style></head><body><div class="app">
-<header><div class="brandrow"><div class="brand">MUZE TOOL BOX</div><button class="keychip" id="keyOpen" type="button">MUZE KEY</button></div><div class="head"><h1>交換約束ログ</h1><a class="home" href="../">TOOL BOXへ</a></div></header>
+</style></head><body>
+<nav class="tool-nav" aria-label="共通ナビゲーション">
+  <div class="tool-nav-inner">
+    <a class="tool-nav-brand" href="https://rikomuze.github.io/muze-tool-box/">Muze Tool Box</a>
+    <div class="tool-nav-links">
+      <a href="https://rikomuze.github.io/muze-tool-box/">MUZE TOOL BOXのトップ</a>
+      <a href="https://rikomuze.github.io/mazzel-best-visual/">アー写編９マス</a>
+      <a href="https://rikomuze.github.io/mazzel-best-visual-performance/">パフォ衣装編９マス</a>
+      <a href="https://rikomuze.github.io/oshi-visual-6/">推しビジュ6選</a>
+      <a href="https://rikomuze.github.io/otaku-numa-shindan/">オタクタイプ診断</a>
+      <a href="https://rikomuze.github.io/mazzel-touch-campaign/">新曲キャンペーン</a>
+    </div>
+  </div>
+</nav>
+<div class="app">
+<header><div class="head"><h1>交換約束ログ</h1><button class="keychip" id="keyOpen" type="button">MUZE KEY</button></div></header>
 <main><div class="tabs"><button class="on" data-tab="open">未完了</button><button data-tab="done">交換履歴</button></div>
 <input class="search" id="search" placeholder="交換相手・メンバー・グッズで検索">
 <div class="chips" id="filters"><button class="on" data-filter="all">すべて</button><button data-filter="郵送">郵送</button><button data-filter="手渡し">手渡し</button><button data-filter="仮約束">仮約束</button><button data-filter="約束済">約束済</button><button data-filter="発送済">発送済</button></div>
