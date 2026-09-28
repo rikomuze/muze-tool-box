@@ -44,7 +44,6 @@ const SERIES=["So Strawberry","Touch","Play at the MUZEUM vol.2","その他"];
 const STATUSES=["仮約束","約束済","発送済","交換完了"];
 const KEY="muze_exchange_log_v1";
 const $=s=>document.querySelector(s);
-const $=s=>Array.from(document.querySelectorAll(s));
 let rows=[];
 try{rows=JSON.parse(localStorage.getItem(KEY)||"[]")}catch(e){rows=[]}
 rows=rows.map(r=>Object.assign({},r,{status:r.status==="発送準備"?"約束済":(r.status||"仮約束"),giveSeries:r.giveSeries||"",getSeries:r.getSeries||""}));
