@@ -35,7 +35,7 @@ dialog{border:0;border-radius:0;width:min(94vw,620px);max-width:calc(100vw - 24p
 <div id="statusArea" class="statusBox"><h3>ステータス</h3><div class="statusBtns" id="statusBtns"></div></div>
 <button class="save" type="submit">保存する</button><button class="del" type="button" id="del" hidden>この記録を削除</button>
 </form></dialog>
-<dialog id="keyDlg"><div class="formhead"><b>MUZE KEY</b><button class="close" id="keyClose" type="button">×</button></div><div class="keyPanel"><p>MUZE TOOL BOXで使う共通KEYです。交換約束ログは、このKEYでクラウド保存・復元できます。</p><input class="keyValue" id="keyValue" autocomplete="off" autocapitalize="characters" spellcheck="false"><div class="keyActions"><button id="keyCopy" type="button">コピー</button><button class="primary" id="keyUse" type="button">このKEYを使う</button></div><button class="keyNew" id="keyNew" type="button">新しいMUZE KEYを発行</button></div></dialog>
+<dialog id="keyDlg"><div class="formhead"><b>MUZE KEY</b><button class="close" id="keyClose" type="button">×</button></div><div class="keyPanel"><p>MUZE TOOL BOXで使う共通KEYです。交換約束ログは、このKEYを使ってブラウザ内で暗号化してからクラウド保存します。</p><p><b>このKEYは必ずスクショやメモで保管してください。</b><br>KEYを失うと、運営側でも交換内容を復元できません。</p><input class="keyValue" id="keyValue" autocomplete="off" autocapitalize="characters" spellcheck="false"><div class="keyActions"><button id="keyCopy" type="button">コピー</button><button class="primary" id="keyUse" type="button">このKEYを使う</button></div><button class="keyNew" id="keyNew" type="button">新しいMUZE KEYを発行</button></div></dialog>
 </div>
 <script src="../assets/muze-key.js"></script>
 <script>
@@ -46,14 +46,19 @@ const TYPES=["フォトカード","ICカード","フレークシールセット"
 const SERIES=["So Strawberry","Touch","Play at the MUZEUM vol.2","その他"];
 const STATUSES=["仮約束","約束済","発送済","交換完了"];
 const BASE_KEY="muze_exchange_log_v1";
-const API_URL="https://muze-toolbox-api.logical-bear-ishi.workers.dev/api/exchange";
+const API_BASE="https://muze-toolbox-api.logical-bear-ishi.workers.dev";
+const API_URL=API_BASE+"/api/exchange-v2";
+const LEGACY_API_URL=API_BASE+"/api/exchange-legacy";
+const CRYPTO_ITERATIONS=180000;
+const CRYPTO_SALT_PREFIX="MUZE-TOOL-BOX:EXCHANGE:V2:";
 let KEY=MUZEKey.storageKey(BASE_KEY);
 const $=s=>document.querySelector(s);
 let rows=[];
 function normalizeRows(input){
   return (Array.isArray(input)?input:[]).map(r=>Object.assign({},r,{status:r.status==="発送準備"?"約束済":(r.status||"仮約束"),giveSeries:r.giveSeries||"",getSeries:r.getSeries||""}));
 }
-function dirtyKey(){return "muze_exchange_dirty_v1:"+MUZEKey.get()}
+function dirtyKey(){return "muze_exchange_dirty_v2:"+MUZEKey.get()}
+function migrationKey(){return "muze_exchange_migrated_v2:"+MUZEKey.get()}
 function loadRows(){
   if(localStorage.getItem(KEY)===null){
     const legacy=localStorage.getItem(BASE_KEY);
@@ -76,50 +81,188 @@ function saveLocal(markDirty=true){
     if(markDirty)localStorage.setItem(dirtyKey(),"1");
   }catch(e){}
 }
+function bytesToBase64(bytes){
+  let s="";const chunk=0x8000;
+  for(let i=0;i<bytes.length;i+=chunk){
+    s+=String.fromCharCode.apply(null,bytes.subarray(i,Math.min(i+chunk,bytes.length)));
+  }
+  return btoa(s);
+}
+function base64ToBytes(s){
+  const bin=atob(s),out=new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++)out[i]=bin.charCodeAt(i);
+  return out;
+}
+async function sha256Hex(value){
+  const digest=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(value));
+  return Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,"0")).join("");
+}
+async function getKeyId(){
+  return sha256Hex("MUZE-TOOL-BOX:EXCHANGE:ID:V2:"+MUZEKey.get());
+}
+async function deriveAesKey(saltBytes){
+  const material=await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(MUZEKey.get()),
+    "PBKDF2",
+    false,
+    ["deriveKey"]
+  );
+  return crypto.subtle.deriveKey(
+    {name:"PBKDF2",salt:saltBytes,iterations:CRYPTO_ITERATIONS,hash:"SHA-256"},
+    material,
+    {name:"AES-GCM",length:256},
+    false,
+    ["encrypt","decrypt"]
+  );
+}
+async function encryptRows(value){
+  const salt=crypto.getRandomValues(new Uint8Array(16));
+  const iv=crypto.getRandomValues(new Uint8Array(12));
+  const key=await deriveAesKey(salt);
+  const plain=new TextEncoder().encode(JSON.stringify(value));
+  const cipher=await crypto.subtle.encrypt({name:"AES-GCM",iv},key,plain);
+  return {
+    v:2,
+    alg:"AES-GCM",
+    kdf:"PBKDF2-SHA256",
+    iter:CRYPTO_ITERATIONS,
+    salt:bytesToBase64(salt),
+    iv:bytesToBase64(iv),
+    ct:bytesToBase64(new Uint8Array(cipher))
+  };
+}
+async function decryptEnvelope(envelope){
+  if(!envelope||envelope.v!==2||!envelope.salt||!envelope.iv||!envelope.ct)throw new Error("invalid envelope");
+  const salt=base64ToBytes(envelope.salt);
+  const iv=base64ToBytes(envelope.iv);
+  const key=await deriveAesKey(salt);
+  const plain=await crypto.subtle.decrypt(
+    {name:"AES-GCM",iv},
+    key,
+    base64ToBytes(envelope.ct)
+  );
+  const parsed=JSON.parse(new TextDecoder().decode(plain));
+  if(!Array.isArray(parsed))throw new Error("invalid rows");
+  return normalizeRows(parsed);
+}
+async function fetchEncryptedCloud(){
+  const keyId=await getKeyId();
+  const res=await fetch(API_URL,{method:"GET",headers:{"X-MUZE-ID":keyId}});
+  if(!res.ok)throw new Error("HTTP "+res.status);
+  return res.json();
+}
+async function putEncryptedCloud(value){
+  const keyId=await getKeyId();
+  const envelope=await encryptRows(value);
+  const res=await fetch(API_URL,{
+    method:"PUT",
+    headers:{"Content-Type":"application/json","X-MUZE-ID":keyId},
+    body:JSON.stringify({envelope})
+  });
+  if(!res.ok)throw new Error("HTTP "+res.status);
+  const data=await res.json();
+  if(!data||data.ok!==true)throw new Error("invalid response");
+  return data;
+}
+async function legacyHash(){
+  return sha256Hex(MUZEKey.get());
+}
+async function fetchLegacyCloud(){
+  const hash=await legacyHash();
+  const res=await fetch(LEGACY_API_URL,{method:"GET",headers:{"X-Legacy-Key-Hash":hash}});
+  if(!res.ok)throw new Error("HTTP "+res.status);
+  return res.json();
+}
+async function deleteLegacyCloud(){
+  const hash=await legacyHash();
+  const res=await fetch(LEGACY_API_URL,{method:"DELETE",headers:{"X-Legacy-Key-Hash":hash}});
+  if(!res.ok)throw new Error("HTTP "+res.status);
+  return res.json();
+}
+async function migrateLegacyIfNeeded(){
+  if(localStorage.getItem(migrationKey())==="1")return false;
+
+  const encrypted=await fetchEncryptedCloud();
+  if(encrypted&&encrypted.found){
+    localStorage.setItem(migrationKey(),"1");
+    return false;
+  }
+
+  const legacy=await fetchLegacyCloud();
+  const legacyRows=legacy&&legacy.found?normalizeRows(legacy.rows):[];
+
+  let sourceRows=legacyRows.length?legacyRows:rows;
+  if(!sourceRows.length){
+    localStorage.setItem(migrationKey(),"1");
+    return false;
+  }
+
+  await putEncryptedCloud(sourceRows);
+
+  const verify=await fetchEncryptedCloud();
+  if(!verify||!verify.found)throw new Error("migration verify missing");
+  const verifiedRows=await decryptEnvelope(verify.envelope);
+  if(JSON.stringify(verifiedRows)!==JSON.stringify(normalizeRows(sourceRows)))throw new Error("migration verify failed");
+
+  rows=normalizeRows(sourceRows);
+  saveLocal(false);
+
+  if(legacy&&legacy.found){
+    await deleteLegacyCloud();
+  }
+
+  localStorage.setItem(migrationKey(),"1");
+  return true;
+}
 async function cloudSave(){
-  setSyncStatus("sync","クラウド同期中…");
+  setSyncStatus("sync","暗号化してクラウド同期中…");
   try{
-    const res=await fetch(API_URL,{
-      method:"PUT",
-      headers:{"Content-Type":"application/json","X-MUZE-Key":MUZEKey.get()},
-      body:JSON.stringify({rows})
-    });
-    if(!res.ok)throw new Error("HTTP "+res.status);
-    const data=await res.json();
-    if(!data||data.ok!==true)throw new Error("invalid response");
+    await putEncryptedCloud(rows);
     try{localStorage.removeItem(dirtyKey())}catch(e){}
-    setSyncStatus("ok","KEYにクラウド保存済み");
+    setSyncStatus("ok","暗号化してクラウド保存済み");
     return true;
   }catch(e){
+    console.error("cloudSave",e);
     setSyncStatus("local","この端末には保存済み・クラウド未接続");
     return false;
   }
 }
 async function syncFromCloud(){
-  setSyncStatus("sync","クラウド確認中…");
+  setSyncStatus("sync","暗号化クラウドを確認中…");
   try{
-    const res=await fetch(API_URL,{method:"GET",headers:{"X-MUZE-Key":MUZEKey.get()}});
-    if(!res.ok)throw new Error("HTTP "+res.status);
-    const data=await res.json();
+    const migrated=await migrateLegacyIfNeeded();
+    if(migrated){
+      render();
+      setSyncStatus("ok","旧データを暗号化して移行済み");
+      return;
+    }
+
+    const data=await fetchEncryptedCloud();
     const dirty=localStorage.getItem(dirtyKey())==="1";
+
     if(dirty){
       await cloudSave();
       return;
     }
+
     if(data&&data.found){
-      rows=normalizeRows(data.rows);
+      rows=await decryptEnvelope(data.envelope);
       saveLocal(false);
       render();
-      setSyncStatus("ok","KEYから復元・同期済み");
+      setSyncStatus("ok","暗号化データをKEYから復元・同期済み");
       return;
     }
+
     if(rows.length){
       localStorage.setItem(dirtyKey(),"1");
       await cloudSave();
       return;
     }
-    setSyncStatus("ok","クラウドに接続済み");
+
+    setSyncStatus("ok","暗号化クラウドに接続済み");
   }catch(e){
+    console.error("syncFromCloud",e);
     setSyncStatus("local","この端末には保存済み・クラウド未接続");
   }
 }
