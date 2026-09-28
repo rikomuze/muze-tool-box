@@ -88,8 +88,8 @@ dialog{border:0;border-radius:0;width:min(94vw,620px);max-width:calc(100vw - 24p
 <button class="fab" id="add" type="button" aria-label="取引を追加"><span class="fabPlus">＋</span><span class="fabText">交換・買取を追加</span></button>
 <dialog id="dlg"><div class="formhead"><b id="formTitle">交換の新規登録</b><button class="close" id="close">×</button></div><form class="form" id="form">
 <input type="hidden" id="editId"><h3>取引タイプ</h3><div class="typeSwitch" id="tradeTypeSwitch"><button type="button" data-type="交換" class="on">交換</button><button type="button" data-type="買取">買取</button></div><h3>お相手</h3><div class="grid2"><input id="name" placeholder="ニックネーム" required><input id="handle" placeholder="@ID"></div>
-<div class="tradeSection" id="giveSection"><h3>自分が渡す</h3><div class="members" id="giveMembers"></div><label class="fieldlabel">グッズ</label><select id="giveType"></select><label class="fieldlabel">絵柄 / シリーズ</label><select id="giveSeries"></select><label class="fieldlabel">詳細</label><input id="giveDetail" placeholder="例：EIKI 引き"></div>
-<div class="tradeSection" id="getSection"><h3 id="getSectionTitle">相手からもらう</h3><div class="members" id="getMembers"></div><label class="fieldlabel">グッズ</label><select id="getType"></select><label class="fieldlabel">絵柄 / シリーズ</label><select id="getSeries"></select><label class="fieldlabel">詳細</label><input id="getDetail" placeholder="例：NAOYA 寄り"><div class="priceWrap" id="priceWrap" hidden><label class="fieldlabel">買取金額</label><div class="priceInput"><input id="price" type="number" min="0" step="1" inputmode="numeric" placeholder="3000"></div></div></div>
+<div class="tradeSection" id="giveSection"><h3>自分が渡す</h3><div class="members" id="giveMembers"></div><div id="giveOtherWrap" hidden><label class="fieldlabel">メンバー / アーティスト名</label><input id="giveOther" placeholder="例：MANATO / CHIKA"></div><label class="fieldlabel">グッズ</label><select id="giveType"></select><label class="fieldlabel">絵柄 / シリーズ</label><select id="giveSeries"></select><label class="fieldlabel">詳細</label><input id="giveDetail" placeholder="例：EIKI 引き"></div>
+<div class="tradeSection" id="getSection"><h3 id="getSectionTitle">相手からもらう</h3><div class="members" id="getMembers"></div><div id="getOtherWrap" hidden><label class="fieldlabel">メンバー / アーティスト名</label><input id="getOther" placeholder="例：MANATO / CHIKA"></div><label class="fieldlabel">グッズ</label><select id="getType"></select><label class="fieldlabel">絵柄 / シリーズ</label><select id="getSeries"></select><label class="fieldlabel">詳細</label><input id="getDetail" placeholder="例：NAOYA 寄り"><div class="priceWrap" id="priceWrap" hidden><label class="fieldlabel">買取金額</label><div class="priceInput"><input id="price" type="number" min="0" step="1" inputmode="numeric" placeholder="3000"></div></div></div>
 <h3 id="methodHeading">交換方法・日程</h3>
 <label class="fieldlabel">交換方法</label><select id="method"><option>郵送</option><option>手渡し</option></select>
 <div class="grid2" style="margin-top:8px">
@@ -107,9 +107,9 @@ dialog{border:0;border-radius:0;width:min(94vw,620px);max-width:calc(100vw - 24p
 <script>
 (function(){
 "use strict";
-const MEMBERS=["KAIRYU","NAOYA","RAN","SEITO","RYUKI","TAKUTO","HAYATO","EIKI"];
-const TYPES=["フォトカード","ICカード","フレークシールセット","MZ Mate ランダムぷりぷりチャーム","缶バッジ","アクリルスタンド","その他"];
-const SERIES=["So Strawberry","Touch","Play at the MUZEUM vol.2","その他"];
+const MEMBERS=["KAIRYU","NAOYA","RAN","SEITO","RYUKI","TAKUTO","HAYATO","EIKI","その他"];
+const TYPES=["フォトカード","ICカード","フレークシールセット","MZ Mate ランダムぷりぷりチャーム","マーカーチャーム2P","缶バッジ","アクリルスタンド","その他"];
+const SERIES=["So Strawberry","Touch","Play at the MUZEUM vol.2","BMSG FES ’26","その他"];
 const EXCHANGE_STATUSES=["仮約束","約束済","発送済","交換完了"];
 const BUY_STATUSES=["仮約束","買取確定","支払済","受取完了"];
 const BASE_KEY="muze_exchange_log_v1";
@@ -121,7 +121,7 @@ let KEY=MUZEKey.storageKey(BASE_KEY);
 const $=s=>document.querySelector(s);
 let rows=[];
 function normalizeRows(input){
-  return (Array.isArray(input)?input:[]).map(r=>Object.assign({},r,{tradeType:r.tradeType==="買取"?"買取":"交換",status:r.status==="発送準備"?"約束済":(r.status||"仮約束"),giveSeries:r.giveSeries||"",getSeries:r.getSeries||"",price:r.price==null?"":String(r.price)}));
+  return (Array.isArray(input)?input:[]).map(r=>Object.assign({},r,{tradeType:r.tradeType==="買取"?"買取":"交換",status:r.status==="発送準備"?"約束済":(r.status||"仮約束"),giveSeries:r.giveSeries||"",getSeries:r.getSeries||"",price:r.price==null?"":String(r.price),giveOther:r.giveOther||"",getOther:r.getOther||""}));
 }
 function dirtyKey(){return "muze_exchange_dirty_v2:"+MUZEKey.get()}
 function loadRows(){
@@ -136,6 +136,7 @@ loadRows();
 let tab="open",filter="all",selected={give:"",get:""},currentStatus="仮約束",currentTradeType="交換";
 
 function esc(s){return String(s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function memberLabel(r,side){const m=r[side+"Member"]||"";return m==="その他"?(r[side+"Other"]||"その他"):m}
 function setSyncStatus(state,text){
   const el=$("#syncStatus");if(!el)return;
   el.dataset.state=state;el.textContent=text;
@@ -303,7 +304,7 @@ function syncTradeTypeUI(){
 }
 function syncDateLabels(){const hand=$("#method").value==="手渡し",buy=currentTradeType==="買取";$("#dueLabel").textContent=hand?"受け渡し予定日":(buy?"到着予定日":"発送予定日");$("#eventLabel").textContent=hand?"会場・イベント":"会場・イベント（手渡しの場合）"}
 function resetForm(){
- $("#form").reset();$("#editId").value="";selected={give:"",get:""};currentStatus="仮約束";currentTradeType="交換";
+ $("#form").reset();$("#editId").value="";selected={give:"",get:""};currentStatus="仮約束";currentTradeType="交換";$("#giveOtherWrap").hidden=true;$("#getOtherWrap").hidden=true;
  document.querySelectorAll(".members button").forEach(b=>b.classList.remove("on"));
  $("#del").hidden=true;syncTradeTypeUI();syncDateLabels();
 }
@@ -312,11 +313,13 @@ function init(){
  ["giveSeries","getSeries"].forEach(id=>$("#"+id).innerHTML=SERIES.map(x=>"<option>"+x+"</option>").join(""));
  ["give","get"].forEach(side=>{
    const box=$("#"+side+"Members");
-   MEMBERS.forEach(m=>{const b=document.createElement("button");b.type="button";b.textContent=m;b.addEventListener("click",()=>{selected[side]=m;Array.from(box.children).forEach(x=>x.classList.toggle("on",x===b))});box.appendChild(b)});
+   MEMBERS.forEach(m=>{const b=document.createElement("button");b.type="button";b.textContent=m;b.addEventListener("click",()=>{selected[side]=m;Array.from(box.children).forEach(x=>x.classList.toggle("on",x===b));$("#"+side+"OtherWrap").hidden=m!=="その他";if(m!=="その他")$("#"+side+"Other").value=""});box.appendChild(b)});
  });
  renderStatusButtons();
  document.querySelectorAll("#tradeTypeSwitch button").forEach(b=>b.addEventListener("click",()=>{currentTradeType=b.dataset.type;currentStatus="仮約束";syncTradeTypeUI()}));
  $("#method").addEventListener("change",syncDateLabels);
+ $("#giveType").addEventListener("change",()=>{$("#getType").value=$("#giveType").value});
+ $("#giveSeries").addEventListener("change",()=>{$("#getSeries").value=$("#giveSeries").value});
  $("#add").addEventListener("click",()=>{resetForm();openDialog()});
  $("#close").addEventListener("click",closeDialog);
  $("#form").addEventListener("submit",submitForm);
@@ -489,7 +492,7 @@ async function exportVisibleList(){
      }
      if(r.tradeType==="買取"){
        const fullW=w-60;
-       drawThing(x+30,r.getMember,r.getType,r.getSeries,r.getDetail,fullW);
+       drawThing(x+30,memberLabel(r,"get"),r.getType,r.getSeries,r.getDetail,fullW);
        if(r.price){
          const priceText="¥"+Number(r.price).toLocaleString("ja-JP");
          ctx.font='600 19px "Klee One","Yu Gothic",sans-serif';
@@ -501,8 +504,8 @@ async function exportVisibleList(){
          ctx.textAlign="left";
        }
      }else{
-       drawThing(x+30,r.giveMember,r.giveType,r.giveSeries,r.giveDetail);
-       drawThing(x+30+boxW+gap,r.getMember,r.getType,r.getSeries,r.getDetail);
+       drawThing(x+30,memberLabel(r,"give"),r.giveType,r.giveSeries,r.giveDetail);
+       drawThing(x+30+boxW+gap,memberLabel(r,"get"),r.getType,r.getSeries,r.getDetail);
        ctx.textAlign="center";ctx.fillStyle="#40382f";
        ctx.font='600 28px "Klee One","Yu Gothic",sans-serif';
        ctx.fillText("⇄",x+w/2,boxY+66);ctx.textAlign="left";
@@ -565,8 +568,8 @@ function render(){
  $("#list").innerHTML=out.length?out.map(r=>{
    const buy=r.tradeType==="買取";
    const body=buy
-     ? '<div class="purchaseLine"><b>'+esc(r.getMember||"—")+'</b>'+esc(r.getType)+'<span class="series">'+esc(r.getSeries)+'</span><span class="series">'+esc(r.getDetail)+'</span>'+(r.price?'<span class="purchasePrice">¥'+Number(r.price).toLocaleString("ja-JP")+'</span>':"")+'</div>'
-     : '<div class="swap"><div class="thing"><b>'+esc(r.giveMember||"—")+'</b>'+esc(r.giveType)+'<span class="series">'+esc(r.giveSeries)+'</span><span class="series">'+esc(r.giveDetail)+'</span></div><div class="arrow">⇄</div><div class="thing"><b>'+esc(r.getMember||"—")+'</b>'+esc(r.getType)+'<span class="series">'+esc(r.getSeries)+'</span><span class="series">'+esc(r.getDetail)+'</span></div></div>';
+     ? '<div class="purchaseLine"><b>'+esc(memberLabel(r,"get")||"—")+'</b>'+esc(r.getType)+'<span class="series">'+esc(r.getSeries)+'</span><span class="series">'+esc(r.getDetail)+'</span>'+(r.price?'<span class="purchasePrice">¥'+Number(r.price).toLocaleString("ja-JP")+'</span>':"")+'</div>'
+     : '<div class="swap"><div class="thing"><b>'+esc(memberLabel(r,"give")||"—")+'</b>'+esc(r.giveType)+'<span class="series">'+esc(r.giveSeries)+'</span><span class="series">'+esc(r.giveDetail)+'</span></div><div class="arrow">⇄</div><div class="thing"><b>'+esc(memberLabel(r,"get")||"—")+'</b>'+esc(r.getType)+'<span class="series">'+esc(r.getSeries)+'</span><span class="series">'+esc(r.getDetail)+'</span></div></div>';
    return '<article class="card" data-id="'+esc(r.id)+'"><div class="cardtop"><div><span class="typeTag '+(buy?"buy":"")+'">'+esc(r.tradeType)+'</span><span class="person">'+esc(r.name)+'</span> <span class="handle">'+esc(r.handle)+'</span></div><span class="badge '+((r.status==="交換完了"||r.status==="受取完了")?"done":(r.status==="発送済"||r.status==="支払済")?"sent":r.status==="仮約束"?"temp":"")+'">'+esc(r.status)+'</span></div>'+body+'<div class="meta"><span>'+esc(r.method)+'</span><span>約束 '+esc(r.promiseDate||"未設定")+'</span>'+(r.dueDate?'<span>予定 '+esc(r.dueDate)+'</span>':"")+(r.event?'<span>'+esc(r.event)+'</span>':"")+'</div></article>';
  }).join(""):'<div class="empty">まだ記録がありません。<br>下の「交換・買取を追加」から登録できます。</div>';
  document.querySelectorAll(".card").forEach(c=>c.addEventListener("click",()=>openEdit(c.dataset.id)));
@@ -574,14 +577,14 @@ function render(){
 function openEdit(id){
  const r=rows.find(x=>x.id===id);if(!r)return;resetForm();
  $("#editId").value=id;currentTradeType=r.tradeType==="買取"?"買取":"交換";
- ["name","handle","giveType","giveSeries","giveDetail","getType","getSeries","getDetail","method","promiseDate","dueDate","event","memo","price"].forEach(k=>$("#"+k).value=r[k]||"");
+ ["name","handle","giveType","giveSeries","giveDetail","getType","getSeries","getDetail","method","promiseDate","dueDate","event","memo","price","giveOther","getOther"].forEach(k=>$("#"+k).value=r[k]||"");
  selected={give:r.giveMember||"",get:r.getMember||""};currentStatus=r.status||"仮約束";
- ["give","get"].forEach(side=>document.querySelectorAll('#'+side+'Members button').forEach(b=>b.classList.toggle("on",b.textContent===selected[side])));
+ ["give","get"].forEach(side=>{document.querySelectorAll('#'+side+'Members button').forEach(b=>b.classList.toggle("on",b.textContent===selected[side]));$("#"+side+"OtherWrap").hidden=selected[side]!=="その他"});
  $("#del").hidden=false;syncTradeTypeUI();syncDateLabels();openDialog();
 }
 function submitForm(e){
  e.preventDefault();const id=$("#editId").value;
- const obj={id:id||("x"+Date.now()+Math.random().toString(36).slice(2)),tradeType:currentTradeType,name:$("#name").value.trim(),handle:$("#handle").value.trim(),giveMember:currentTradeType==="交換"?selected.give:"",giveType:currentTradeType==="交換"?$("#giveType").value:"",giveSeries:currentTradeType==="交換"?$("#giveSeries").value:"",giveDetail:currentTradeType==="交換"?$("#giveDetail").value.trim():"",getMember:selected.get,getType:$("#getType").value,getSeries:$("#getSeries").value,getDetail:$("#getDetail").value.trim(),price:currentTradeType==="買取"?$("#price").value.trim():"",method:$("#method").value,promiseDate:$("#promiseDate").value,dueDate:$("#dueDate").value,event:$("#event").value.trim(),memo:$("#memo").value.trim(),status:currentStatus,created:new Date().toISOString()};
+ const obj={id:id||("x"+Date.now()+Math.random().toString(36).slice(2)),tradeType:currentTradeType,name:$("#name").value.trim(),handle:$("#handle").value.trim(),giveMember:currentTradeType==="交換"?selected.give:"",giveOther:currentTradeType==="交換"&&selected.give==="その他"?$("#giveOther").value.trim():"",giveType:currentTradeType==="交換"?$("#giveType").value:"",giveSeries:currentTradeType==="交換"?$("#giveSeries").value:"",giveDetail:currentTradeType==="交換"?$("#giveDetail").value.trim():"",getMember:selected.get,getOther:selected.get==="その他"?$("#getOther").value.trim():"",getType:$("#getType").value,getSeries:$("#getSeries").value,getDetail:$("#getDetail").value.trim(),price:currentTradeType==="買取"?$("#price").value.trim():"",method:$("#method").value,promiseDate:$("#promiseDate").value,dueDate:$("#dueDate").value,event:$("#event").value.trim(),memo:$("#memo").value.trim(),status:currentStatus,created:new Date().toISOString()};
  if(id){const old=rows.find(x=>x.id===id);if(old)obj.created=old.created;rows=rows.map(x=>x.id===id?obj:x)}else{rows.push(obj)}
  persist();closeDialog();
 }
