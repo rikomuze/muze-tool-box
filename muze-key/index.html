@@ -13,6 +13,58 @@
 :root{--desk:#f1ebe1;--paper:#fffdf9;--ink:#40382f;--muted:#8f8577;--line:rgba(64,56,47,.2);--berry:#e27a94;--mint:#a4c5af;--lav:#b9a6d8;--hand:"Klee One","Yu Gothic",cursive;--gothic:"Zen Kaku Gothic New","Hiragino Sans",sans-serif;--shadow:0 10px 24px rgba(64,56,47,.13)}
 *{box-sizing:border-box}html,body{width:100%;max-width:100%;overflow-x:hidden}body{margin:0;color:var(--ink);font-family:var(--gothic);background:radial-gradient(rgba(64,56,47,.045) 1px,transparent 1px) 0 0/22px 22px,var(--desk)}
 a{color:inherit}.app{width:100%;max-width:720px;margin:auto;min-height:100vh;padding-bottom:48px}
+/* ---------- MUZE TOOL BOX 共通ヘッダー ---------- */
+.tool-nav{
+  max-width:720px;
+  margin:0 auto;
+  padding:14px 16px 0;
+  position:relative;
+  z-index:30;
+}
+.tool-nav-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  background:rgba(255,255,255,.74);
+  border:1px solid rgba(64,56,47,.14);
+  padding:8px 10px;
+  transform:rotate(-.3deg);
+}
+.tool-nav-brand{
+  font-family:var(--hand);
+  font-size:14px;
+  font-weight:600;
+  color:var(--ink);
+  white-space:nowrap;
+  text-decoration:none;
+}
+.tool-nav-links{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.tool-nav-links::-webkit-scrollbar{display:none}
+.tool-nav-links a{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.06em;
+  color:var(--muted);
+  white-space:nowrap;
+  border-bottom:1px dashed rgba(64,56,47,.28);
+  line-height:1.6;
+  text-decoration:none;
+}
+.tool-nav-links a:hover,.tool-nav-links a:active{color:var(--ink);border-bottom-color:var(--ink)}
+@media(max-width:520px){
+  .tool-nav{padding-top:10px}
+  .tool-nav-inner{align-items:flex-start;flex-direction:column;gap:6px}
+  .tool-nav-links{width:100%;padding-bottom:2px}
+}
+
 header{padding:14px 16px 6px}.brand{font-family:var(--hand);font-size:13px;font-weight:600;margin-bottom:5px}.head{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#ffffffbd;border:1px solid var(--line);padding:9px 11px;transform:rotate(-.25deg)}.head h1{font-family:var(--hand);font-size:17px;margin:0}.back{font-size:11px;color:var(--muted);text-decoration:none;border-bottom:1px dashed var(--line)}
 main{padding:18px 14px}.hero,.paper{position:relative;background:var(--paper);border:1px solid rgba(64,56,47,.1);box-shadow:var(--shadow)}.hero{padding:24px 20px 20px;transform:rotate(.15deg)}.hero:before{content:"";position:absolute;width:64px;height:17px;background:#b9a6d899;top:-8px;left:calc(50% - 32px);transform:rotate(-2deg)}.eyebrow{font-size:10px;letter-spacing:.08em;color:var(--muted);margin:0 0 8px}.hero h2{font-family:var(--hand);font-size:23px;line-height:1.45;margin:0 0 10px}.hero p{font-size:13px;line-height:1.9;margin:0;color:#62594f}.keydemo{margin:18px 0 4px;border:1px dashed var(--line);background:#fff;padding:13px;text-align:center;font-family:var(--hand);font-weight:600;letter-spacing:.08em;font-size:15px}
 .sectionTitle{font-family:var(--hand);font-size:15px;margin:26px 4px 10px}.paper{padding:18px 17px;margin-bottom:12px}.paper:nth-of-type(even){transform:rotate(-.12deg)}.paper h3{font-family:var(--hand);font-size:15px;margin:0 0 8px}.paper p{font-size:12px;line-height:1.85;margin:0;color:#62594f}.num{display:inline-grid;place-items:center;width:25px;height:25px;margin-right:7px;border:1px solid var(--line);font-family:var(--hand);font-size:12px;background:#fff}
@@ -25,9 +77,22 @@ main{padding:18px 14px}.hero,.paper{position:relative;background:var(--paper);bo
 </style>
 </head>
 <body>
+
+<nav class="tool-nav" aria-label="共通ナビゲーション">
+  <div class="tool-nav-inner">
+    <a class="tool-nav-brand" href="https://rikomuze.github.io/muze-tool-box/">Muze Tool Box</a>
+    <div class="tool-nav-links">
+      <a href="https://rikomuze.github.io/muze-tool-box/">MUZE TOOL BOXのトップ</a>
+      <a href="https://rikomuze.github.io/mazzel-best-visual/">アー写編９マス</a>
+      <a href="https://rikomuze.github.io/mazzel-best-visual-performance/">パフォ衣装編９マス</a>
+      <a href="https://rikomuze.github.io/oshi-visual-6/">推しビジュ6選</a>
+      <a href="https://rikomuze.github.io/otaku-numa-shindan/">オタクタイプ診断</a>
+      <a href="https://rikomuze.github.io/mazzel-touch-campaign/">新曲キャンペーン</a>
+    </div>
+  </div>
+</nav>
 <div class="app">
 <header>
-  <div class="brand">MUZE TOOL BOX</div>
   <div class="head"><h1>MUZE KEYについて</h1><a class="back" href="../exchange-log/">交換ログへ</a></div>
 </header>
 <main>
