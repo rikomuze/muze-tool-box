@@ -400,12 +400,12 @@ button.cloudstat{background:none;border:0;padding:4px 0;font-size:11.5px;color:v
   </div>
 </nav>
 <main class="wrap" id="app" aria-live="polite"></main>
-<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">ver 2026.09.30-11</span><br>MUZE DAY はテスト版です。予定はこの端末に保存され、MUZE KEYを入れると暗号化してクラウドにも保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
+<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">ver 2026.09.30-12</span><br>MUZE DAY はテスト版です。予定はこの端末に保存され、MUZE KEYを入れると暗号化してクラウドにも保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
 <div id="dock"></div>
 <div id="sheet" class="sheet hidden" role="dialog" aria-modal="true"></div>
 <div id="toast" class="toast hidden" role="status"></div>
 
-<script src="./events.js?v=2026.09.30-11"></script>
+<script src="./events.js?v=2026.09.30-12"></script>
 <script>
 (function () {
 "use strict";
@@ -669,7 +669,8 @@ function renderStart() {
     '<div class="howto"><i class="tape t-berry"></i><p class="lead">ライブやイベントの日の<b>「もう決まっている予定」</b>を、1枚のしおりにまとめるツールです。</p><ol class="steps">' +
     '<li><span class="num">1</span><span><b>行く日をえらぶ</b><small>下のプルダウンから公演をえらぶと、日付・会場・時間が入るよ</small></span></li>' +
     '<li><span class="num">2</span><span><b>決まっている予定をいれる</b><small>会場入り・ランチ・交換・会う人。未定のものは入れなくてOK</small></span></li>' +
-    '<li><span class="num">3</span><span><b>しおりを保存する</b><small>当日はその画像を見るだけ。電波が悪くても安心</small></span></li></ol></div>' + savedDays() +
+    '<li><span class="num">3</span><span><b>しおりを保存する</b><small>当日はその画像を見るだけ。電波が悪くても安心</small></span></li></ol>' +
+    '<p class="hint" style="margin:10px 0 0;padding-top:10px;border-top:1.5px dashed rgba(168,68,95,.25)">☁ 交換約束ログと同じ <b>MUZE KEY</b> で、予定を暗号化してクラウド保存。機種変更や別の端末でも復元できるよ。</p></div>' + savedDays() +
     '<h1>' + (db.days.length ? "新しい日を<span>つくる</span>" : "どの日に<span>行く？</span>") + '</h1>' +
     '<div class="dd"><div class="lbl" id="ddl" style="margin-bottom:8px;font-size:16px">どの予定？</div>' + ddButton(p) + (ui.dd ? ddList() : "") +
     '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px"><span class="hint">MAZZELのこれからの予定 ' + presets().length + '件</span><button type="button" class="link" data-act="custom">自分で入力する</button></div></div>';

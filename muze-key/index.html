@@ -103,6 +103,12 @@ main{padding:18px 14px}.hero,.paper{position:relative;background:var(--paper);bo
     <div class="keydemo">MUZE-XXXX-XXXX-XXXX</div>
   </section>
 
+  <h2 class="sectionTitle">対応しているツール</h2>
+  <section class="paper">
+    <div class="faq"><b>交換約束ログ</b><p>交換相手・グッズ・日程などを、KEYで暗号化してクラウドに保存。別の端末でも復元できます。</p></div>
+    <div class="faq"><b>MUZE DAY</b><p>ライブの日の予定（会場入り・ランチ・交換・ミーグリ・持ち物）を、同じKEYで暗号化してクラウドに保存。別の端末で同じKEYを入れると復元できます。交換約束ログの交換も、このKEYで読み込めます。</p></div>
+  </section>
+
   <h2 class="sectionTitle">どう使うの？</h2>
   <section class="paper">
     <h3><span class="num">1</span>最初の端末でKEYを発行</h3>
@@ -110,36 +116,37 @@ main{padding:18px 14px}.hero,.paper{position:relative;background:var(--paper);bo
   </section>
   <section class="paper">
     <h3><span class="num">2</span>同じKEYを別の端末で入力</h3>
-    <p>スマホ・PC・別ブラウザでも、同じMUZE KEYを入力すればクラウドに保存した交換ログを復元できます。</p>
+    <p>スマホ・PC・別ブラウザでも、同じMUZE KEYを入力すればクラウドに保存した交換ログやMUZE DAYの予定を復元できます。</p>
   </section>
 
-  <h2 class="sectionTitle">交換ログはどう保存される？</h2>
+  <h2 class="sectionTitle">データはどう保存される？</h2>
   <section class="paper">
-    <h3>交換内容はブラウザ内で暗号化</h3>
-    <p>交換相手・グッズ・日程・メモなどは、端末のブラウザ内で暗号化してからクラウドへ送信します。MUZE KEYそのものもクラウドへ送信しません。</p>
+    <h3>ブラウザ内で暗号化してから保存</h3>
+    <p>交換ログの内容も、MUZE DAYの予定も、端末のブラウザ内で暗号化してからクラウドへ送信します。MUZE KEYそのものもクラウドへ送信しません。交換ログとMUZE DAYは別々の場所に保存されます。</p>
     <div class="flow">
-      <div class="flowBox">交換ログ<br>＋ MUZE KEY</div>
+      <div class="flowBox">交換ログ・予定<br>＋ MUZE KEY</div>
       <div class="arrow">→</div>
       <div class="flowBox">ブラウザ内で<br>暗号化</div>
       <div class="arrow">→</div>
       <div class="flowBox">暗号文だけ<br>クラウド保存</div>
     </div>
-    <div class="notice"><b>運営側から交換内容を読むことはできません。</b><p>現在の交換ログでは、Cloudflare上に保存されるのは暗号化されたデータです。</p></div>
+    <div class="notice"><b>運営側から内容を読むことはできません。</b><p>交換ログ・MUZE DAYとも、Cloudflare上に保存されるのは暗号化されたデータです。</p></div>
   </section>
 
   <h2 class="sectionTitle">大切なこと</h2>
   <section class="paper">
     <div class="faq"><b>Q. MUZE KEYをなくしたら？</b><p>復元できません。運営側でも再発行やデータの復号はできないため、必ず自分で保管してください。</p></div>
-    <div class="faq"><b>Q. KEYを人に教えてもいい？</b><p>おすすめしません。同じKEYを知っている人は、そのKEYに保存された交換ログを復元できます。</p></div>
+    <div class="faq"><b>Q. KEYを人に教えてもいい？</b><p>おすすめしません。同じKEYを知っている人は、そのKEYに保存された交換ログやMUZE DAYの予定を復元できます。</p></div>
     <div class="faq"><b>Q. 本名やパスワードと同じもの？</b><p>違います。MUZE KEYはこのツール専用のランダムな文字列です。普段使っているパスワードを入力する必要はありません。</p></div>
-    <div class="faq"><b>Q. 端末内にもデータは残る？</b><p>はい。使いやすさとオフライン時の保護のため、交換ログは利用中のブラウザにも保存されます。共有端末での利用には注意してください。</p></div>
+    <div class="faq"><b>Q. 端末内にもデータは残る？</b><p>はい。使いやすさとオフライン時の保護のため、交換ログやMUZE DAYの予定は利用中のブラウザにも保存されます。共有端末での利用には注意してください。</p></div>
   </section>
 
   <div class="actions">
-    <a class="button" href="../exchange-log/">交換約束ログへ戻る</a>
+    <a class="button" href="../exchange-log/">交換約束ログへ</a>
+    <a class="button sub" href="../muze-day/">MUZE DAYへ</a>
     <a class="button sub" href="../">MUZE TOOL BOXへ</a>
   </div>
-  <p class="small">MUZE KEYは、対応ツールごとに保存方式が異なる場合があります。このページの暗号化に関する説明は、現在の「交換約束ログ」の仕様について記載しています。</p>
+  <p class="small">MUZE KEYは、対応ツールごとに保存方式が異なる場合があります。このページの暗号化に関する説明は、現在の「交換約束ログ」「MUZE DAY」の仕様について記載しています。</p>
 </main>
 </div>
 </body>
