@@ -1,6 +1,6 @@
 /* MUZE DAY プリセット（公式発表をもとに手で更新する）
-   kind: "LIVE"（ファンミ・単独）| "FES"（複数アーティスト）
-   official: 公式の時間（開場・開演・終演）。
+   kind: "LIVE"（ファンミ・単独）| "OTHER"（フェスなど、その他のイベント）
+   official: 公式の時間（開場・開演）。今後は自動取得にしたい。
    終わった公演は自動でかくれる。時間や会場は必ず公式サイトでも確認すること。
    最終更新: 2026-09-30 */
 window.MUZE_DAY_EVENTS = (function () {
@@ -16,10 +16,10 @@ window.MUZE_DAY_EVENTS = (function () {
   }
   function bmsg(id, date, day, note) {
     return {
-      id: id, date: date, kind: "FES", tag: "FES",
+      id: id, date: date, kind: "OTHER", tag: "その他",
       name: "BMSG FES'26 " + day, title: "BMSG FES'26 " + day,
       venue: "お台場 BMSG FES 特設会場",
-      official: [{ label: "開場", time: "13:00" }, { label: "開演", time: "15:00" }, { label: "終演", time: "20:00" }],
+      official: [{ label: "開場", time: "13:00" }, { label: "開演", time: "15:00" }],
       note: note || ""
     };
   }
@@ -31,7 +31,7 @@ window.MUZE_DAY_EVENTS = (function () {
     fm("fm2-sapporo", "2026-10-24", "札幌", "カナモトホール", "17:00", "18:00"),
     fm("fm2-hakodate", "2026-10-25", "函館", "函館（会場は公式で確認）", "16:00", "17:00"),
     {
-      id: "vmaj26", date: "2026-10-29", kind: "FES", tag: "FES", name: "MTV VMAJ 2026", title: "MTV VMAJ 2026",
+      id: "vmaj26", date: "2026-10-29", kind: "OTHER", tag: "その他", name: "MTV VMAJ 2026", title: "MTV VMAJ 2026",
       venue: "東京ドーム", official: []
     },
     fm("fm2-fukushima", "2026-11-02", "福島", "とうほう・みんなの文化センター", "17:00", "18:00"),
@@ -41,7 +41,7 @@ window.MUZE_DAY_EVENTS = (function () {
     fm("fm2-okayama", "2026-11-17", "岡山", "倉敷市民会館", "17:00", "18:00"),
     fm("fm2-hiroshima", "2026-11-18", "広島", "広島文化学園HBGホール", "17:00", "18:00"),
     {
-      id: "dreamfes26", date: "2026-11-23", kind: "FES", tag: "FES", name: "テレビ朝日ドリームフェスティバル2026",
+      id: "dreamfes26", date: "2026-11-23", kind: "OTHER", tag: "その他", name: "テレビ朝日ドリームフェスティバル2026",
       title: "15th Anniversary テレビ朝日ドリームフェスティバル2026", venue: "Kアリーナ横浜", official: [],
       note: "この日のトリ"
     },
