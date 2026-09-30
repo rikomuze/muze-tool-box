@@ -362,6 +362,16 @@ a{color:inherit}
 .mrow input[type=time].empty{border-style:dashed;color:var(--muted)}
 .keyacts{display:flex;gap:8px;width:100%;margin-top:4px}
 .keyacts button{flex:1;min-height:40px;background:var(--paper);border:1.5px solid var(--lav-ink);color:var(--lav-ink);font-family:var(--hand);font-weight:600;font-size:13px}
+.bandpills{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.bandpills .bl{font-family:var(--hand);font-weight:600;font-size:12.5px;color:var(--faded);margin-right:2px}
+.bandpills button{min-height:36px;padding:4px 12px;border:1.5px solid var(--ink);background:var(--paper);border-radius:999px;font-family:var(--hand);font-weight:600;font-size:12.5px;color:var(--ink)}
+.bandpills button[aria-pressed="true"]{background:var(--ink);color:var(--desk)}
+.placebtn{display:flex;align-items:center;gap:6px;width:100%;min-height:40px;padding:6px 0 0;background:none;border:0;text-align:left;font-size:13px;color:var(--ink)}
+.placebtn .bl{font-family:var(--hand);font-weight:600;font-size:12.5px;color:var(--faded);white-space:nowrap}
+.placebtn .v{flex:1;min-width:0}
+.placebtn .v.ph{color:var(--muted)}
+details.more{border-top:var(--dash);padding-top:10px}
+details.more summary{font-family:var(--hand);font-weight:600;font-size:13px;color:var(--faded);min-height:36px;cursor:pointer}
 .autonote{margin:8px 0 0;font-size:10.5px;color:var(--muted);line-height:1.6}
 .linkbar{margin:0 16px 12px;display:flex;flex-wrap:wrap;align-items:flex-start;gap:4px 8px;padding:10px 12px 6px;background:rgba(239,229,255,.7);font-size:12px}
 .linkbar>button:nth-of-type(1){flex:1 1 calc(100% - 30px)!important}
@@ -386,12 +396,12 @@ a{color:inherit}
   </div>
 </nav>
 <main class="wrap" id="app" aria-live="polite"></main>
-<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">ver 2026.09.30-8</span><br>MUZE DAY はテスト版です。予定はこの端末（ブラウザ）に保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
+<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">ver 2026.09.30-9</span><br>MUZE DAY はテスト版です。予定はこの端末（ブラウザ）に保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
 <div id="dock"></div>
 <div id="sheet" class="sheet hidden" role="dialog" aria-modal="true"></div>
 <div id="toast" class="toast hidden" role="status"></div>
 
-<script src="./events.js?v=2026.09.30-8"></script>
+<script src="./events.js?v=2026.09.30-9"></script>
 <script>
 (function () {
 "use strict";
@@ -760,7 +770,7 @@ function meetView(d) {
     return a.priority === b.priority ? 0 : a.priority === "must" ? -1 : 1;
   });
   var done = d.trades.filter(function (t) { return t.done; });
-  var html = secHead("01", "交換", "この日に手渡しする交換。交換約束ログから入れるか、自分で書こう") + linkBar();
+  var html = secHead("01", "交換", "この日に手渡しする交換。「いつごろ」と「だいたいの場所」だけ入れておけばOK") + linkBar();
   if (!open.length) html += '<div class="empty">この日の交換はまだないよ。</div>';
   html += open.map(tradeCard).join("");
   html += '<div class="inlinerow">' + (linkedLabel() ? '<button type="button" class="inlineadd lav" data-act="pick-log">' + keyIcon(16) + ' ログからえらぶ</button>' : "") + '<button type="button" class="inlineadd" data-act="add-direct" data-v="trade">＋ 交換を書く</button></div>';
@@ -768,18 +778,18 @@ function meetView(d) {
 
   var fixed = d.meets.filter(function (m) { return m.time && !m.done; }).sort(function (a, b) { return toMin(a.time) - toMin(b.time); });
   var loose = d.meets.filter(function (m) { return !m.time && !m.done; });
-  html += secHead("02", "ミーグリ", "会いたい人の名前と時間帯だけでOK。会う時間が決まったら右の時間に入れてね");
+  html += secHead("02", "ミーグリ", "名前と「いつごろ」だけでOK。時間と場所は当日決まることが多いから、だいたいで大丈夫");
   if (!fixed.length && !loose.length) html += '<div class="empty">会いたい人はまだいないよ。</div>';
   function mrow(m) {
-    return '<div class="mrow"><button type="button" class="body" data-act="edit-meet" data-id="' + m.id + '"><span class="nm">' + esc(m.who) + '</span><span class="memo">' + esc([m.place, m.mark ? "目印：" + m.mark : "", m.memo].filter(Boolean).join(" ・ ") || "タップで場所・目印をいれる") + '</span></button>' +
-      '<input type="time" aria-label="' + esc(m.who) + 'と会う時間" class="' + (m.time ? "" : "empty") + '" value="' + esc(m.time || "") + '" data-settime="meet" data-id="' + m.id + '"><button type="button" class="xbtn" data-act="del-quick" data-k="meet" data-id="' + m.id + '" aria-label="' + esc(m.who) + 'を消す">✕</button></div>';
+    return '<div class="mrow"><button type="button" class="body" data-act="edit-meet" data-id="' + m.id + '"><span class="nm">' + esc(m.who) + '</span><span class="memo">' + esc([m.time ? m.time : "", m.place ? "だいたい " + m.place : "", m.mark ? "目印：" + m.mark : "", m.memo].filter(Boolean).join(" ・ ") || "タップで だいたいの場所・目印をいれる") + '</span></button>' +
+      '<button type="button" class="xbtn" data-act="del-quick" data-k="meet" data-id="' + m.id + '" aria-label="' + esc(m.who) + 'を消す">✕</button></div>';
   }
-  if (fixed.length) html += '<div class="bands"><div class="bandh"><b>会う時間が決まった</b></div>' + fixed.map(mrow).join("") + '</div>';
+  if (fixed.length) html += '<div class="bands"><div class="bandh"><b>時間が決まっている</b></div>' + fixed.map(mrow).join("") + '</div>';
   if (loose.length) {
     html += '<div class="bands">';
     bands(d).forEach(function (b) {
       var ms = loose.filter(function (m) { return (m.band || "any") === b.id; }); if (!ms.length) return;
-      html += '<div class="bandh"><b>' + esc(b.label) + '</b><span>時間は未定</span></div>' + ms.map(mrow).join("");
+      html += '<div class="bandh"><b>' + esc(b.label) + '</b></div>' + ms.map(mrow).join("");
     });
     html += '</div>';
   }
@@ -800,7 +810,9 @@ function linkBar() {
   return '<div class="linkbar">' + keyIcon(14) + '<button type="button" style="flex:1;min-width:0;background:none;border:0;padding:0;text-align:left" data-act="key"><b class="hand">交換約束ログ</b> <span class="en" style="font-size:10.5px">…' + esc(k4) + '</span>' + stat + '</button><div class="keyacts">' + (link.key ? '<button type="button" data-act="relink">↻ 再同期</button>' : "") + '<button type="button" data-act="key">KEYを' + (link.key ? "変更" : "入れる") + '</button></div></div>';
 }
 function tradeCard(t) {
-  var status = '<div class="tin"><label for="tt-' + t.id + '">時間</label><input id="tt-' + t.id + '" type="time" class="' + (t.time ? "" : "empty") + '" value="' + esc(t.time || "") + '" data-settime="trade" data-id="' + t.id + '"><button type="button" class="pl" style="background:none;border:0;padding:0;text-align:left" data-act="edit-trade" data-id="' + t.id + '">' + (t.place ? esc(t.place) : "場所をいれる ›") + '</button></div>';
+  var d = day(), cur = t.band || "any";
+  var status = '<div style="flex:1;min-width:0"><div class="bandpills"><span class="bl">いつごろ</span>' + bands(d).map(function (b) { return '<button type="button" aria-pressed="' + (!t.time && cur === b.id) + '" data-act="set-band" data-k="trade" data-id="' + t.id + '" data-v="' + b.id + '">' + esc(b.label) + '</button>'; }).join("") + (t.time ? '<button type="button" aria-pressed="true" data-act="edit-trade" data-id="' + t.id + '">' + esc(t.time) + '</button>' : "") + '</div>' +
+    '<button type="button" class="placebtn" data-act="edit-trade" data-id="' + t.id + '"><span class="bl">だいたいの場所</span><span class="v' + (t.place ? "" : " ph") + '">' + esc(t.place || "タップして入れる（あとでOK）") + '</span>›</button></div>';
   return '<div class="paper trade"><i class="tape t-mint"></i><div class="top"><button type="button" class="who" data-act="edit-trade" data-id="' + t.id + '">' + esc(t.who || "（名前）") + '</button><span class="prio ' + t.priority + '">' + (t.priority === "must" ? "かならず" : "できれば") + '</span><button type="button" class="xbtn" data-act="del-quick" data-k="trade" data-id="' + t.id + '" aria-label="' + esc(t.who) + 'との交換を消す">✕</button></div>' +
     '<div class="swap"><div><div class="k">わたしが渡す</div><div class="v">' + esc(t.give || "—") + '</div></div><div style="text-align:center;color:var(--mint-ink)">⇄</div><div><div class="k">もらう</div><div class="v">' + esc(t.get || "—") + '</div></div></div>' +
     '<div class="status">' + status + '</div>' +
@@ -851,7 +863,9 @@ function sheetTrade(t, pre) {
     (t.logId ? '<div class="preview">' + keyIcon(14) + ' 交換約束ログの交換だよ。相手と中身はログで編集してね。<br><b class="hand">' + esc(t.who) + '</b>　' + esc(t.give) + ' ⇄ ' + esc(t.get) + '</div>'
       : fld("t-who", "だれと？", t.who, "ニックネーム") + '<div class="row2">' + fld("t-give", "わたしが渡す", t.give, "アクスタ NAOYA") + fld("t-get", "もらう", t.get, "トレカ RAN") + '</div>') +
     '<div><div class="lbl" style="margin-bottom:8px">どのくらい大事？</div>' + chipGroup("prio", [{ id: "must", label: "かならず" }, { id: "maybe", label: "できれば" }], t.priority) + '</div>' +
-    '<div class="row2">' + fld("t-time", "時間（決まったら）", t.time, "", "time") + fld("t-place", "どこで？", t.place, "南口あたり") + '</div></div>';
+    '<div><div class="lbl" style="margin-bottom:8px">いつごろ？</div>' + chipGroup("tband", bands(day()), t.band || "any") + '</div>' +
+    fld("t-place", "だいたいの場所", t.place, "南口あたり・会場の近く など") +
+    '<details class="more"' + (t.time ? " open" : "") + '><summary>時間がぴったり決まっていれば</summary>' + fld("t-time", "時間", t.time, "", "time") + '</details></div>';
   var foot = '<button type="button" class="btn dark full" data-act="save-trade">' + (t.id ? "保存する" : "交換をいれる") + '</button>' + (t.id ? '<button type="button" class="btn del full" data-act="del" data-k="trade" data-id="' + t.id + '">この交換を消す</button>' : "");
   openSheet(t.id ? "交換" : "交換をいれる", body, foot);
 }
@@ -868,8 +882,9 @@ function sheetMeet(m, pre) {
   var d = day(); m = m || { who: "", band: bands(d)[0].id, mark: "", memo: "" };
   ui.sheet = { type: "meet", id: m.id || null };
   var body = (pre || "") + '<div class="form">' + fld("m-who", "だれと？", m.who, "ニックネーム") +
-    '<div><div class="lbl" style="margin-bottom:8px">会えたらいいな、の時間帯</div>' + chipGroup("band", bands(d), m.band || "any") + '</div>' +
-    '<div class="row2">' + fld("m-time", "会う時間（決まったら）", m.time, "", "time") + fld("m-place", "どこで？", m.place, "南口 など") + '</div>' +
+    '<div><div class="lbl" style="margin-bottom:8px">いつごろ？</div>' + chipGroup("band", bands(d), m.band || "any") + '</div>' +
+    fld("m-place", "だいたいの場所", m.place, "南口あたり・会場の近く など") +
+    '<details class="more"' + (m.time ? " open" : "") + '><summary>時間がぴったり決まっていれば</summary>' + fld("m-time", "時間", m.time, "", "time") + '</details>' +
     fld("m-mark", "相手の目印（わかれば）", m.mark, "ラベンダーのトート") + fld("m-memo", "メモ", m.memo, "DMで当日連絡") + '</div>';
   var foot = '<button type="button" class="btn dark full" data-act="save-meet">' + (m.id ? "保存する" : "ミーグリにいれる") + '</button>' + (m.id ? '<div style="display:flex;justify-content:space-between">' + "<span></span>" + '<button type="button" class="btn del" style="min-height:40px" data-act="del" data-k="meet" data-id="' + m.id + '">この人を消す</button></div>' : "");
   openSheet(m.id ? "ミーグリ" : "会いたい人をいれる", body, foot);
@@ -962,9 +977,9 @@ function drawShiori(d) {
       head("交換");
       trades.forEach(function (t) {
         text(t.who, L, y, "600 30px " + HAND);
-        x.font = "700 26px " + (t.time ? EN : HAND); var r = t.time ? t.time : "時間未定"; text(r, R - x.measureText(r).width, y, x.font, t.time ? INK : FADED);
+        x.font = "700 26px " + (t.time ? EN : HAND); var r = t.time ? t.time : bandLabel(d, t.band || "any"); text(r, R - x.measureText(r).width, y, x.font, t.time ? INK : FADED);
         y += 42; x.font = "500 24px " + GOTH; text(clip(t.give + " ⇄ " + t.get, R - L, x), L, y, "500 24px " + GOTH, FADED);
-        if (t.place) { y += 36; text(clip("場所：" + t.place, R - L, x), L, y, "500 24px " + GOTH, FADED); }
+        if (t.place) { y += 36; text(clip("だいたい：" + t.place, R - L, x), L, y, "500 24px " + GOTH, FADED); }
         y += 56;
       });
     }
@@ -974,7 +989,7 @@ function drawShiori(d) {
       bands(d).forEach(function (b) {
         var ms = loose.filter(function (m) { return (m.band || "any") === b.id; }); if (!ms.length) return;
         text(b.label, L, y, "600 26px " + HAND, FADED);
-        var lines = wrap(ms.map(function (m) { return m.who; }).join("・"), L + 200, y, R - L - 200, 44, "600 28px " + HAND);
+        var lines = wrap(ms.map(function (m) { return m.who + (m.place ? "（" + m.place + "）" : ""); }).join("・"), L + 200, y, R - L - 200, 44, "600 28px " + HAND);
         y += 44 * lines + 12;
       });
     }
@@ -1053,6 +1068,7 @@ document.addEventListener("click", function (e) {
     case "connect": connectKey(); break;
     case "unlink": link = {}; saveLink(); closeSheet(); render(); toast("つなぐのをやめたよ"); break;
     case "relink": refreshLink(false); break;
+    case "set-band": var sb = findItem(k, id); if (sb) { sb.band = v; sb.time = ""; save(); renderDay(d); } break;
     case "relink-close": closeSheet(); refreshLink(false); break;
     case "pick-log": closeSheet(); sheetPickLog(); break;
     case "save-pick":
@@ -1133,7 +1149,7 @@ function saveTrade() {
   var d = day(), s = ui.sheet, t = s.id ? findItem("trade", s.id) : null;
   if (!t) { if (!val("t-who")) { toast("だれと交換するか入れてね"); return; } t = { id: uid(), done: false }; d.trades.push(t); }
   if (!t.logId) { t.who = val("t-who") || t.who; t.give = val("t-give"); t.get = val("t-get"); }
-  t.priority = chipVal("prio") || "must"; t.time = val("t-time"); t.place = val("t-place");
+  t.priority = chipVal("prio") || "must"; t.band = chipVal("tband") || "any"; t.time = val("t-time"); t.place = val("t-place");
   save(); closeSheet(); d.view = "meet"; render(); toast("交換をいれたよ");
 }
 function saveMeet() {
