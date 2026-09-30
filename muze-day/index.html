@@ -450,7 +450,7 @@ function nowInfo(d) {
 }
 
 /* ========== 状態 ========== */
-var ui = { dd: false, ddFilter: "all", sheet: null };
+var ui = { dd: false, ddFilter: "all", sheet: null, home: false };
 var draft = null;
 function newDraft() {
   return { presetId: null, kind: "LIVE", date: "", title: "", venue: "", official: [{ label: "物販", time: "" }, { label: "開場", time: "" }, { label: "開演", time: "" }, { label: "終演", time: "" }], lineup: [], wants: {}, imports: {}, custom: false };
@@ -459,7 +459,7 @@ function newDraft() {
 /* ========== 描画 ========== */
 function render() {
   var d = day();
-  if (!d) { if (!draft) draft = newDraft(); renderStart(); return; }
+  if (!d || ui.home) { if (!draft) draft = newDraft(); renderStart(); return; }
   refreshFromLog(d);
   renderDay(d);
 }
@@ -477,14 +477,23 @@ function presetSub(e) {
 function renderStart() {
   var p = draft.presetId ? presetById(draft.presetId) : null;
   var html = '<div class="start"><div class="sticker"><i class="tape t-berry"></i>MUZE <span>DAY</span></div>' +
-    '<h1>きょうは、<span>どんな日？</span></h1><p class="hint">プルダウンで予定をえらぶと、日付・会場・時間が入るよ。</p>' +
-    (db.days.length ? '<button type="button" class="link" data-act="back-to-day">← つくった日にもどる</button>' : "") +
+    savedDays() +
+    '<h1>' + (db.days.length ? "新しい日を<span>つくる</span>" : "きょうは、<span>どんな日？</span>") + '</h1><p class="hint">プルダウンで予定をえらぶと、日付・会場・時間が入るよ。</p>' +
     '<div class="dd"><div class="lbl" id="ddl" style="margin-bottom:8px;font-size:16px">どの予定？</div>' + ddButton(p) + (ui.dd ? ddList() : "") +
     '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px"><span class="hint">MAZZELのこれからの予定 ' + presets().length + '件</span><button type="button" class="link" data-act="custom">自分で入力する</button></div></div>';
   if (p || draft.custom) html += startForm();
   html += '</div>';
   $("#app").innerHTML = html;
   $("#dock").innerHTML = (p || draft.custom) ? '<div class="startfoot"><button type="button" class="btn dark full" data-act="create">この日をつくる</button></div>' : "";
+}
+function savedDays() {
+  if (!db.days.length) return "";
+  var list = db.days.slice().sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
+  return '<div style="margin-top:22px"><div class="lbl" style="font-size:16px;margin-bottom:6px">つくった日</div>' +
+    list.map(function (d) {
+      var n = daysUntil(d.date), when = n > 0 ? "あと" + n + "日" : n === 0 ? "きょう" : "おわった日";
+      return '<button type="button" class="mini" style="margin:6px 0;width:100%;min-height:56px" data-act="open-day" data-id="' + d.id + '"><span class="en" style="width:auto;min-width:48px">' + md(d.date) + '</span><span style="flex:1;min-width:0"><span class="hand" style="display:block;font-size:14px;line-height:1.35">' + esc(d.title) + '</span><span class="hint">' + d.kind + ' ・ ' + esc(d.venue || "") + '</span></span><span class="hint" style="white-space:nowrap">' + when + ' →</span></button>';
+    }).join("") + '</div>';
 }
 function ddButton(p) {
   if (!p) return '<button type="button" class="dd-btn" data-act="dd" aria-expanded="' + ui.dd + '" aria-labelledby="ddl"><span class="hand" style="flex:1;font-size:15px;color:var(--faded)">' + (draft.custom ? "自分で入力中" : "えらんでね") + '</span>' + chev(ui.dd) + '</button>';
@@ -570,7 +579,7 @@ function createDay() {
     if (draft.imports[r.id] === false) return;
     d.trades.push({ id: uid(), logId: r.id, who: r.name || "", give: itemsText(r.giveItems), get: itemsText(r.getItems), priority: r.status === "約束済" ? "must" : "maybe", due: d.kind === "FES" ? "day" : "open", place: "", time: "", dur: 10, travel: 0, done: false, logStatus: r.status });
   });
-  db.days.unshift(d); db.days = db.days.slice(0, 4); db.current = d.id; draft = null; save(); render(); window.scrollTo(0, 0);
+  db.days.unshift(d); db.days = db.days.slice(0, 10); draft = null; openDay(d.id);
   toast("この日をつくったよ");
 }
 function defaultChecklist() {
@@ -582,7 +591,8 @@ function renderDay(d) {
   var tradesOpen = d.trades.filter(function (t) { return !t.done; }).length;
   var meetsOpen = d.meets.filter(function (m) { return !m.done; }).length;
   var evSub = d.kind === "FES" ? "見たい " + d.acts.filter(function (a) { return a.want; }).length + "組" : ((d.official || []).filter(function (o) { return o.label === "開場" || o.label === "開演"; }).map(function (o) { return o.label + o.time; }).join("・") || "公式の時間");
-  var html = '<div class="dayhead"><div class="sticker"><i class="tape t-berry"></i>MUZE <span>DAY</span></div><div class="right"><span class="kindtag ' + (d.kind === "FES" ? "c-mint" : "c-lav") + '">' + d.kind + ' DAY</span><div class="bigdate">' + md(d.date) + '<small>' + dow(d.date) + '</small></div></div></div>' +
+  var html = '<div style="padding:10px 16px 0"><button type="button" class="link" style="padding:6px 0;font-size:13px" data-act="home">← 最初の画面（ほかの日・新しい日）</button></div>' +
+    '<div class="dayhead"><button type="button" class="sticker" style="border:0;cursor:pointer" data-act="home" aria-label="最初の画面へ"><i class="tape t-berry"></i>MUZE <span>DAY</span></button><div class="right"><span class="kindtag ' + (d.kind === "FES" ? "c-mint" : "c-lav") + '">' + d.kind + ' DAY</span><div class="bigdate">' + md(d.date) + '<small>' + dow(d.date) + '</small></div></div></div>' +
     '<div class="daytitle"><button type="button" data-act="daymenu"><div class="t">' + esc(d.title) + '</div><div class="hint">' + esc(d.venue || "") + ' ・ 編集</div></button></div>' +
     '<div class="vtabs" role="tablist"><button type="button" role="tab" class="vtab ' + (d.kind === "FES" ? "fes" : "ev") + '" data-act="view" data-v="event" aria-selected="' + (d.view === "event") + '"><span class="l en" style="letter-spacing:.1em">' + d.kind + 'の予定</span><span class="s">' + esc(evSub) + '</span></button>' +
     '<button type="button" role="tab" class="vtab mt" data-act="view" data-v="meet" aria-selected="' + (d.view === "meet") + '"><span class="l hand">ミーグリの予定</span><span class="s">交換' + tradesOpen + '・会えたら' + meetsOpen + '</span></button></div><div class="swipehint">左右にスワイプでも切りかえ</div>';
@@ -951,7 +961,8 @@ document.addEventListener("click", function (e) {
     case "off-del": draft.official.splice(+el.getAttribute("data-i"), 1); renderStart(); break;
     case "want": draft.wants[v] = !draft.wants[v]; el.setAttribute("aria-pressed", String(!!draft.wants[v])); break;
     case "create": createDay(); break;
-    case "back-to-day": db.current = db.current || (db.days[0] && db.days[0].id); draft = null; render(); break;
+    case "home": goHome(); break;
+    case "open-day": openDay(id); break;
     case "view": d.view = v; save(); renderDay(d); break;
     case "add": sheetAdd("trade"); break;
     case "add-kind": sheetAdd(v); break;
@@ -986,9 +997,9 @@ document.addEventListener("click", function (e) {
     case "save-act": saveAct(); break;
     case "save-fix": saveFix(); break;
     case "save-daymenu": d.title = val("dm-title") || d.title; d.venue = val("dm-venue"); d.date = val("dm-date") || d.date; d.myMark = val("dm-mark"); save(); closeSheet(); render(); break;
-    case "switch-day": db.current = id; save(); closeSheet(); render(); window.scrollTo(0, 0); break;
-    case "new-day": closeSheet(); db.current = null; draft = newDraft(); save(); render(); window.scrollTo(0, 0); break;
-    case "del-day": if (!confirm("この日をまるごと消していい？（交換約束ログは消えないよ）")) return; db.days = db.days.filter(function (x) { return x.id !== d.id; }); db.current = db.days[0] ? db.days[0].id : null; save(); closeSheet(); render(); break;
+    case "switch-day": closeSheet(); openDay(id); break;
+    case "new-day": closeSheet(); goHome(); break;
+    case "del-day": if (!confirm("この日をまるごと消していい？（交換約束ログは消えないよ）")) return; db.days = db.days.filter(function (x) { return x.id !== d.id; }); db.current = db.days[0] ? db.days[0].id : null; save(); goHome(); break;
     case "ck-add": var inp = $("#ck-new"); if (inp && inp.value.trim()) { d.checklist.push({ id: uid(), text: inp.value.trim(), done: false }); save(); renderDay(d); } break;
     case "ck-del": e.preventDefault(); d.checklist = d.checklist.filter(function (c) { return c.id !== id; }); save(); renderDay(d); break;
   }
@@ -1040,6 +1051,19 @@ function saveFix() {
   save(); closeSheet(); var d = day(); d.view = "meet"; render(); toast("流れにはったよ");
 }
 
+/* 画面の行き来（ブラウザの「戻る」でも最初の画面へ） */
+function openDay(id) {
+  db.current = id; ui.home = false; draft = null; save(); render(); window.scrollTo(0, 0);
+  try { history.pushState({ muzeDay: "day" }, ""); } catch (e) {}
+}
+function goHome() {
+  ui.home = true; ui.dd = false; draft = newDraft(); closeSheet(); render(); window.scrollTo(0, 0);
+}
+window.addEventListener("popstate", function () {
+  if (!$("#sheet").classList.contains("hidden")) { closeSheet(); return; }
+  if (day() && !ui.home) goHome();
+});
+
 /* スワイプで切りかえ */
 var sx = null, sy = null;
 $("#app").addEventListener("touchstart", function (e) { var t = e.touches[0]; sx = t.clientX; sy = t.clientY; }, { passive: true });
@@ -1053,6 +1077,7 @@ $("#app").addEventListener("touchend", function (e) {
 /* 1分ごとに NOW と締切を更新 */
 setInterval(function () { if (day() && $("#sheet").classList.contains("hidden")) renderDay(day()); }, 60000);
 
+if (day()) { try { history.replaceState({ muzeDay: "home" }, ""); history.pushState({ muzeDay: "day" }, ""); } catch (e) {} }
 render();
 })();
 </script>
