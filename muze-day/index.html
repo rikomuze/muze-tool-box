@@ -28,7 +28,7 @@
 *{box-sizing:border-box}
 html,body{max-width:100%;overflow-x:hidden}
 body{margin:0;color:var(--ink);font-family:var(--gothic);line-height:1.6;-webkit-text-size-adjust:100%;
-  background:radial-gradient(rgba(64,56,47,.06) 1px,transparent 1px) 0 0/22px 22px,var(--desk);padding-bottom:170px}
+  background:radial-gradient(rgba(64,56,47,.06) 1px,transparent 1px) 0 0/22px 22px,var(--desk);padding-bottom:110px}
 button,input,select,textarea{font-family:inherit;color:inherit;font-size:16px}
 button{cursor:pointer}
 a{color:inherit}
@@ -296,24 +296,35 @@ a{color:inherit}
 .myrow .pl{flex:1;min-width:0;font-size:12.5px;color:var(--faded);line-height:1.4}
 .mini.my{background:rgba(240,212,150,.3);box-shadow:none}
 .mini.faint{opacity:.75}
-.howto{margin-top:18px;padding:16px 16px 12px;background:var(--paper);box-shadow:var(--shadow-s);position:relative}
+.howto{margin-top:18px;padding:16px 16px 12px;background:#fbeef1;box-shadow:var(--shadow-s);position:relative}
 .howto .tape{top:-7px;left:20px}
 .howto .lead{margin:0 0 10px;font-size:13px;line-height:1.7}
 .steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0}
-.steps li{display:flex;gap:12px;align-items:flex-start;padding:9px 0;border-top:var(--dash)}
+.steps li{display:flex;gap:12px;align-items:flex-start;padding:9px 0;border-top:1.5px dashed rgba(168,68,95,.25)}
 .steps li:first-child{border-top:0}
-.steps .num{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--desk);display:grid;place-items:center;font-family:var(--en);font-weight:700;font-size:13px}
+.steps .num{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--berry-ink);color:var(--desk);display:grid;place-items:center;font-family:var(--en);font-weight:700;font-size:13px}
 .steps b{display:block;font-family:var(--hand);font-weight:600;font-size:15px;line-height:1.4}
 .steps small{display:block;font-size:12px;color:var(--faded);line-height:1.5}
-.guide{margin:14px 16px 0;padding:12px 14px 8px;background:rgba(255,255,255,.7);border:var(--dash)}
-.guide .gh{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.guide .gh b{font-family:var(--hand);font-weight:600;font-size:14px}
-.guide .steps li{padding:7px 0}
-.guide .steps b{font-size:14px}
-.guideopen{margin:10px 16px 0;display:flex;justify-content:flex-end}
+.guide{position:relative;margin:18px 16px 0;padding:16px 14px 8px;background:#fbeef1;box-shadow:var(--shadow-s)}
+.guide .tape{top:-7px;left:18px}
+.guide .gh{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px}
+.guide .gh b{font-family:var(--hand);font-weight:600;font-size:16px}
+.guide .gh .en{font-size:13px;color:var(--berry-ink);margin-left:4px}
+.guide .steps li{padding:0;border-top:1.5px dashed rgba(168,68,95,.25)}
+.guide .steps li button{display:flex;align-items:center;gap:12px;width:100%;min-height:54px;padding:8px 0;background:none;border:0;text-align:left;color:var(--ink)}
+.guide .steps .num{background:var(--paper);color:var(--berry-ink);border:1.5px solid var(--berry-ink)}
+.guide .steps li.cur .num{background:var(--berry-ink);color:#fff}
+.guide .steps li.cur b{color:var(--berry-ink)}
+.guide .steps li.done .num{background:var(--mint-ink);border-color:var(--mint-ink);color:#fff}
+.guide .steps li.done b,.guide .steps li.done small{color:var(--faded)}
+.guide .steps .tx{flex:1;min-width:0}
+.guide .steps b{font-size:14.5px}
+.guide .steps .ar{font-size:20px;color:var(--muted)}
+.guideopen{margin:14px 16px 0}
+.pill-open{width:100%;min-height:44px;background:#fbeef1;border:0;font-family:var(--hand);font-weight:600;font-size:14px;color:var(--berry-ink)}
 .sec h2 .no{font-family:var(--en);font-weight:700;font-size:12px;letter-spacing:.12em;color:var(--berry-ink);padding:2px 7px;border:1.5px solid var(--berry-ink);border-radius:999px;align-self:center}
-.inlineadd{margin:4px 16px 0;width:calc(100% - 32px);min-height:48px;display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,.6);border:1.5px dashed var(--ink);font-family:var(--hand);font-weight:600;font-size:15px}
-.inlinerow{display:flex;gap:8px;margin:4px 16px 0}
+.inlineadd{margin:14px 16px 0;width:calc(100% - 32px);min-height:48px;display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,.6);border:1.5px dashed var(--ink);font-family:var(--hand);font-weight:600;font-size:15px}
+.inlinerow{display:flex;gap:10px;margin:14px 16px 0}
 .inlinerow .inlineadd{margin:0;flex:1;width:auto}
 .nextcard{margin:26px 16px 0;width:calc(100% - 32px);display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--ink);color:var(--desk);border:0;text-align:left}
 .nextcard .nx{font-family:var(--en);font-weight:700;font-size:10.5px;letter-spacing:.18em;padding:2px 7px;border:1.5px solid var(--desk);flex-shrink:0}
@@ -339,8 +350,9 @@ a{color:inherit}
 .linkbar .link{margin-left:auto}
 .linkbar .link+.link{margin-left:0}
 .mini.isdone{opacity:.55}
-.dock .addbtn{transform:none;box-shadow:none;min-height:46px}
-.toast{bottom:150px}
+.dock .dadd{flex:1 1 0;min-width:0;min-height:52px;padding:0 6px;background:var(--paper);border:1.5px solid var(--ink);font-family:var(--hand);font-weight:600;font-size:14px;white-space:nowrap}
+.dock .main{flex:1.25 1 0;min-width:0;font-size:14px;padding:0 6px}
+.toast{bottom:96px}
 </style>
 </head>
 <body>
@@ -356,12 +368,12 @@ a{color:inherit}
   </div>
 </nav>
 <main class="wrap" id="app" aria-live="polite"></main>
-<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">ver 2026.09.30-5</span><br>MUZE DAY はテスト版です。予定はこの端末（ブラウザ）に保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
+<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">ver 2026.09.30-6</span><br>MUZE DAY はテスト版です。予定はこの端末（ブラウザ）に保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
 <div id="dock"></div>
 <div id="sheet" class="sheet hidden" role="dialog" aria-modal="true"></div>
 <div id="toast" class="toast hidden" role="status"></div>
 
-<script src="./events.js?v=2026.09.30-5"></script>
+<script src="./events.js?v=2026.09.30-6"></script>
 <script>
 (function () {
 "use strict";
@@ -645,22 +657,31 @@ function renderDay(d) {
   html += d.view === "meet" ? meetView(d) : eventView(d);
   html += '<div class="dayend"><p><b>この日を丸ごと消す</b>予定・持ち物・交換・ミーグリがすべて消えるよ（交換約束ログは消えないよ）</p><button type="button" class="btn del" style="min-height:44px;white-space:nowrap" data-act="del-day">消す</button></div>';
   $("#app").innerHTML = html;
-  $("#dock").innerHTML = '<div class="dock"><div class="dock-inner" style="flex-direction:column;align-items:stretch;gap:8px"><button type="button" class="addbtn" data-act="add">＋ 予定をいれる</button><button type="button" class="main" data-act="share">しおりを保存する</button></div></div>';
+  var addBtns = d.view === "meet"
+    ? '<button type="button" class="dadd" data-act="add-direct" data-v="trade">＋ 交換</button><button type="button" class="dadd" data-act="add-direct" data-v="meet">＋ 会いたい人</button>'
+    : '<button type="button" class="dadd" data-act="add-direct" data-v="my">＋ わたしの予定</button>';
+  $("#dock").innerHTML = '<div class="dock"><div class="dock-inner">' + addBtns + '<button type="button" class="main" data-act="share">しおりを保存</button></div></div>';
 }
 
-function guideBox(d) {
-  if (db.hideGuide) return '<div class="guideopen"><button type="button" class="link" style="min-height:36px;padding:0" data-act="guide-show">？ 使い方</button></div>';
-  var steps = d.view === "meet" ? [
-    ["交換を入れる", "交換約束ログから入れるか、自分で書く。時間が決まったら「時間が決まった」"],
-    ["会いたい人を入れる", "時間帯だけでOK。会う時間が決まったら「決まった」"],
-    ["しおりを保存する", "消したいときは右の ✕。入れおわったら、いちばん下から保存"]
-  ] : [
-    ["公式の時間を確認", "開場・開演は入っているよ。ちがったらタップして直してね"],
-    ["わたしの予定を入れる", "会場入り・ランチなど、決まっている時間と場所だけ"],
-    ["つぎは「ミーグリの予定」へ", "交換や会いたい人はそっちで入れるよ。消したいときは右の ✕"]
+function progress(d) {
+  var off = d.official.some(function (o) { return o.label === "開場" || o.label === "開演"; });
+  return [
+    { t: "公式の時間を確認", sub: "開場・開演が合っているか見てね", done: off, act: "go-event", to: ".liveticket" },
+    { t: "わたしの予定を入れる", sub: "会場入り・ランチなど、決まっている時間と場所", done: d.myplans.some(function (p) { return !!p.time; }), act: "go-event", to: ".myplans" },
+    { t: "交換・ミーグリを入れる", sub: "「ミーグリの予定」タブで入れるよ", done: d.trades.length + d.meets.length > 0, act: "go-meet" },
+    { t: "しおりを保存する", sub: "当日はその画像を見るだけ", done: !!d.savedAt, act: "share" }
   ];
-  return '<div class="guide"><div class="gh"><b>この画面の使い方</b><button type="button" class="link" style="min-height:32px;padding:0" data-act="guide-hide">とじる</button></div><ol class="steps">' +
-    steps.map(function (x, i) { return '<li><span class="num">' + (i + 1) + '</span><span><b>' + x[0] + '</b><small>' + x[1] + '</small></span></li>'; }).join("") + '</ol></div>';
+}
+function guideBox(d) {
+  var st = progress(d), cur = -1;
+  st.forEach(function (x, i) { if (cur < 0 && !x.done) cur = i; });
+  var doneN = st.filter(function (x) { return x.done; }).length;
+  if (db.hideGuide) return '<div class="guideopen"><button type="button" class="pill-open" data-act="guide-show">しおりづくり ' + doneN + ' / 4 ・ ひらく</button></div>';
+  return '<div class="guide"><i class="tape t-berry"></i><div class="gh"><b>しおりができるまで <span class="en">' + doneN + ' / 4</span></b><button type="button" class="link" style="min-height:32px;padding:0" data-act="guide-hide">とじる</button></div><ol class="steps">' +
+    st.map(function (x, i) {
+      var cls = x.done ? "done" : i === cur ? "cur" : "";
+      return '<li class="' + cls + '"><button type="button" data-act="' + x.act + '" data-v="' + (x.to || "") + '"><span class="num">' + (x.done ? "✓" : i + 1) + '</span><span class="tx"><b>' + x.t + '</b><small>' + (i === cur ? "いまここ ・ " : "") + x.sub + '</small></span><span class="ar">›</span></button></li>';
+    }).join("") + '</ol></div>';
 }
 function secHead(no, title, hint) { return '<div class="sec"><h2><span class="no">' + no + '</span>' + title + '</h2>' + (hint ? '<p>' + hint + '</p>' : "") + '</div>'; }
 
@@ -671,8 +692,7 @@ function eventView(d) {
   var html = secHead("01", "公式の時間", "タップで直せるよ") + '<button type="button" class="paper liveticket" style="display:block;width:calc(100% - 32px);border:0;text-align:left;margin-top:0" data-act="daymenu"><i class="tape t-lav"></i><div class="cap">' + (d.kind === "LIVE" ? "LIVE TICKET" : "EVENT") + '</div><div class="lt-grid">' +
     cols.map(function (x) { return '<div><div class="hand">' + x[0] + '</div><div class="en">' + (x[1] ? esc(x[1].time) : "—") + '</div></div>'; }).join("") + '</div>' +
     '<div style="border-top:var(--dash);margin-top:12px;padding-top:8px;font-size:13px"><b>' + esc(d.venue || "") + '</b></div><p class="autonote" style="margin:6px 0 0">開場・開演などの時間は、今後自動で入るようにする予定です</p></button>';
-  html += secHead("02", "わたしの予定", "決まっている時間と場所をタップして入れよう。未定はそのままでOK") + myPlansCard(d);
-  html += '<button type="button" class="inlineadd" data-act="add-direct" data-v="my">＋ ほかの予定をいれる</button>';
+  html += secHead("02", "わたしの予定", "行をタップして時間と場所を入れよう。未定はそのままでOK。ほかの予定は下の「＋ わたしの予定」から") + myPlansCard(d);
   html += nextCard(d);
   html += secHead("03", "当日の流れ", "01・02と、交換・ミーグリの時間が自動で並ぶよ（ここで入力はいらないよ）") + flow(d);
   html += checklist(d);
@@ -779,7 +799,7 @@ function openSheet(title, body, foot) {
   s.innerHTML = '<div class="sheet-inner"><div class="sheet-head"><h2>' + title + '</h2><button type="button" class="close" data-act="close" aria-label="とじる">✕</button></div>' + body + (foot ? '<div class="sheet-foot">' + foot + '</div>' : "") + '</div>';
   s.classList.remove("hidden"); document.body.style.overflow = "hidden";
 }
-function closeSheet() { $("#sheet").classList.add("hidden"); $("#sheet").innerHTML = ""; document.body.style.overflow = ""; ui.sheet = null; }
+function closeSheet() { var was = ui.sheet && ui.sheet.type; $("#sheet").classList.add("hidden"); $("#sheet").innerHTML = ""; document.body.style.overflow = ""; ui.sheet = null; if (was === "share" && day() && !ui.home) renderDay(day()); }
 function chipGroup(name, opts, cur) {
   return '<div class="chips" data-group="' + name + '">' + opts.map(function (o) { var v = typeof o === "string" ? o : o.id, l = typeof o === "string" ? o : o.label; return '<button type="button" class="chip" data-chip="' + name + '" data-v="' + esc(v) + '" aria-pressed="' + (String(cur) === String(v)) + '">' + esc(l) + '</button>'; }).join("") + '</div>';
 }
@@ -789,12 +809,10 @@ function val(id) { var e = document.getElementById(id); return e ? e.value.trim(
 
 function sheetAdd(kind) {
   ui.sheet = { type: "add", kind: kind };
-  var d = day(), segs = d.view === "meet" ? [["trade", "交換"], ["meet", "ミーグリ"]] : [["my", "わたしの予定"], ["off", "公式の時間"]];
-  var pre = '<div class="chips" style="margin-bottom:18px">' + segs.map(function (s) { return '<button type="button" class="chip" data-act="add-kind" data-v="' + s[0] + '" aria-pressed="' + (kind === s[0]) + '">' + s[1] + '</button>'; }).join("") + '</div>';
-  if (kind === "trade") return sheetTrade(null, pre);
-  if (kind === "meet") return sheetMeet(null, pre);
-  if (kind === "off") return sheetOff(null, pre);
-  return sheetMy(null, pre);
+  if (kind === "trade") return sheetTrade(null);
+  if (kind === "meet") return sheetMeet(null);
+  if (kind === "off") return sheetOff(null);
+  return sheetMy(null);
 }
 function sheetMy(p, pre) {
   p = p || { kind: "会場入り", name: "", time: "", place: "", memo: "" };
@@ -803,7 +821,7 @@ function sheetMy(p, pre) {
     '<div id="my-name-wrap"' + (p.kind === "その他" ? "" : ' class="hidden"') + '>' + fld("p-name", "予定の名前", p.name, "グッズ受け取り など") + '</div>' +
     fld("p-time", "何時？", p.time, "", "time") + fld("p-place", "どこで？", p.place, "場所・お店の名前") + fld("p-memo", "メモ", p.memo, "予約あり・〇〇ちゃんと など") + '</div>';
   var foot = '<button type="button" class="btn dark full" data-act="save-my">' + (p.id ? "保存する" : "予定にいれる") + '</button>' + (p.id ? '<button type="button" class="btn del full" data-act="del" data-k="my" data-id="' + p.id + '">この予定を消す</button>' : "");
-  openSheet(p.id ? esc(myLabel(p)) : "予定をいれる", body, foot);
+  openSheet(p.id ? esc(myLabel(p)) : "わたしの予定をいれる", body, foot);
 }
 function sheetTrade(t, pre) {
   t = t || { who: "", give: "", get: "", priority: "must", place: "", time: "" };
@@ -815,7 +833,7 @@ function sheetTrade(t, pre) {
     '<div><div class="lbl" style="margin-bottom:8px">どのくらい大事？</div>' + chipGroup("prio", [{ id: "must", label: "かならず" }, { id: "maybe", label: "できれば" }], t.priority) + '</div>' +
     '<div class="row2">' + fld("t-time", "何時？（決まっていれば）", t.time, "", "time") + fld("t-place", "どこで？", t.place, "南口あたり") + '</div></div>';
   var foot = '<button type="button" class="btn dark full" data-act="save-trade">' + (t.id ? "保存する" : "交換をいれる") + '</button>' + (t.id ? '<button type="button" class="btn del full" data-act="del" data-k="trade" data-id="' + t.id + '">この交換を消す</button>' : "");
-  openSheet(t.id ? "交換" : "予定をいれる", body, foot);
+  openSheet(t.id ? "交換" : "交換をいれる", body, foot);
 }
 function sheetPickLog() {
   var d = day(), have = {}; d.trades.forEach(function (t) { if (t.logId) have[t.logId] = 1; });
@@ -833,13 +851,13 @@ function sheetMeet(m, pre) {
     '<div><div class="lbl" style="margin-bottom:8px">会えたらいいな、の時間帯</div>' + chipGroup("band", bands(d), m.band || "any") + '</div>' +
     fld("m-mark", "相手の目印（わかれば）", m.mark, "ラベンダーのトート") + fld("m-memo", "メモ", m.memo, "DMで当日連絡") + '</div>';
   var foot = '<button type="button" class="btn dark full" data-act="save-meet">' + (m.id ? "保存する" : "ミーグリにいれる") + '</button>' + (m.id ? '<div style="display:flex;justify-content:space-between">' + (m.time ? '<button type="button" class="link" data-act="unfix" data-k="meet" data-id="' + m.id + '">時間を未定にもどす</button>' : "<span></span>") + '<button type="button" class="btn del" style="min-height:40px" data-act="del" data-k="meet" data-id="' + m.id + '">この人を消す</button></div>' : "");
-  openSheet(m.id ? "ミーグリ" : "予定をいれる", body, foot);
+  openSheet(m.id ? "ミーグリ" : "会いたい人をいれる", body, foot);
 }
 function sheetOff(o, pre) {
   ui.sheet = { type: "off", id: o ? o.id : null }; o = o || { label: "", time: "" };
   var std = ["物販", "開場", "開演"];
   var body = (pre || "") + '<div class="form"><div><div class="lbl" style="margin-bottom:8px">なに？</div>' + chipGroup("offl", std, o.label) + '</div>' + fld("o-label", "ほかの名前", std.indexOf(o.label) < 0 ? o.label : "", "特典会 など") + fld("o-time", "時刻", o.time, "", "time") + '<p class="autonote" style="margin:0">開場・開演などの時間は、今後自動で入るようにする予定です</p></div>';
-  openSheet(o.id ? "公式の時間" : "予定をいれる", body, '<button type="button" class="btn dark full" data-act="save-off">保存する</button>' + (o.id ? '<button type="button" class="btn del full" data-act="del" data-k="off" data-id="' + o.id + '">この時間を消す</button>' : ""));
+  openSheet(o.id ? "公式の時間" : "公式の時間をいれる", body, '<button type="button" class="btn dark full" data-act="save-off">保存する</button>' + (o.id ? '<button type="button" class="btn del full" data-act="del" data-k="off" data-id="' + o.id + '">この時間を消す</button>' : ""));
 }
 function findItem(k, id) { var d = day(), list = k === "trade" ? d.trades : k === "meet" ? d.meets : d.myplans; return list.filter(function (x) { return x.id === id; })[0]; }
 function sheetFix(k, id) {
@@ -884,6 +902,7 @@ function sheetDayMenu() {
 /* ========== しおり（自分で保存する用） ========== */
 function sheetShare() {
   ui.sheet = { type: "share" };
+  var dd = day(); if (dd && !dd.savedAt) { dd.savedAt = Date.now(); save(); }
   openSheet("しおりを保存", '<p class="hint" style="margin:0 0 10px">当日の流れ・交換・ミーグリ・持ち物を1枚にまとめたよ。スマホに保存しておけば、当日電波が悪くても見られるよ。</p><img id="share-img" class="shareimg" alt="しおりのプレビュー">',
     '<button type="button" class="btn dark full" data-act="save-img">画像を保存する</button><p class="hint" style="text-align:center;margin:0">保存できないときは、画像を<b>長押し</b>して「写真に保存」してね</p>');
   drawShiori(day()).then(function (url) { var i = $("#share-img"); if (i) i.src = url; });
@@ -992,7 +1011,8 @@ document.addEventListener("click", function (e) {
     case "home": goHome(); break;
     case "open-day": openDay(id); break;
     case "view": d.view = v; save(); renderDay(d); window.scrollTo(0, 0); break;
-    case "add": sheetAdd(d.view === "meet" ? "trade" : "my"); break;
+    case "go-event": if (d.view !== "event") { d.view = "event"; save(); renderDay(d); } var sec = v && $(v); if (sec) window.scrollTo({ top: sec.getBoundingClientRect().top + window.scrollY - 90, behavior: "smooth" }); break;
+    case "go-meet": d.view = "meet"; save(); renderDay(d); window.scrollTo(0, 0); break;
     case "add-kind": sheetAdd(v); break;
     case "add-direct": d.view = v === "trade" || v === "meet" ? "meet" : "event"; save(); sheetAdd(v); break;
     case "del-quick":
