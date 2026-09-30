@@ -225,7 +225,7 @@ a{color:inherit}
 .sheet-head h2{margin:0;font-family:var(--hand);font-weight:600;font-size:19px}
 .close{width:44px;height:44px;border:1.5px solid var(--ink);border-radius:50%;background:transparent;font-size:17px;font-weight:700;transform:rotate(3deg)}
 .form{display:flex;flex-direction:column;gap:16px}
-.sheet-foot{position:sticky;bottom:calc(-20px - env(safe-area-inset-bottom));margin:18px -18px calc(-20px - env(safe-area-inset-bottom));padding:12px 18px calc(16px + env(safe-area-inset-bottom));background:var(--paper);border-top:var(--dash);display:flex;flex-direction:column;gap:8px}
+.sheet-foot{position:sticky;bottom:calc(-20px - env(safe-area-inset-bottom));margin:18px -18px calc(-20px - env(safe-area-inset-bottom));padding:12px 18px calc(16px + env(safe-area-inset-bottom));background:var(--paper);box-shadow:0 -8px 12px -8px rgba(64,56,47,.15);display:flex;flex-direction:column;gap:8px}
 .preview{padding:12px;border:var(--dash);background:rgba(255,255,255,.5);font-size:12.5px;line-height:1.7}
 .preview .warnline{color:var(--red);font-family:var(--hand);font-weight:600}
 
@@ -349,6 +349,19 @@ a{color:inherit}
 .dayrow{display:flex;align-items:stretch;gap:6px;margin:6px 0}
 .dayrow .mini{margin:0!important;flex:1}
 .dayrow .xbtn{width:44px;height:auto;background:rgba(255,255,255,.6);border:1.5px dashed rgba(192,71,47,.45);color:var(--red)}
+.tin{display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.tin label{font-family:var(--hand);font-weight:600;font-size:13px;color:var(--faded);white-space:nowrap}
+.tin input[type=time]{min-width:0;width:136px;min-height:42px;padding:4px 8px;border:1.5px solid var(--ink);background:var(--paper);font-family:var(--en);font-weight:700;font-size:16px;color:var(--ink);border-radius:0}
+.tin input[type=time].empty{border-style:dashed;color:var(--muted)}
+.tin .pl{flex:1;min-width:0;font-size:12.5px;color:var(--faded);line-height:1.4;overflow:hidden;text-overflow:ellipsis}
+.mrow{display:flex;align-items:center;gap:8px;padding:10px 4px 10px 12px;margin-bottom:8px;background:var(--paper);box-shadow:var(--shadow-s)}
+.mrow .body{flex:1;min-width:0;background:none;border:0;padding:0;text-align:left}
+.mrow .nm{font-family:var(--hand);font-weight:600;font-size:16px}
+.mrow .memo{display:block;font-size:11.5px;color:var(--faded);line-height:1.45}
+.mrow input[type=time]{width:124px;min-height:40px;padding:2px 6px;border:1.5px solid var(--ink);background:var(--paper);font-family:var(--en);font-weight:700;font-size:15px;color:var(--ink);border-radius:0;flex-shrink:0}
+.mrow input[type=time].empty{border-style:dashed;color:var(--muted)}
+.keyacts{display:flex;gap:8px;width:100%;margin-top:4px}
+.keyacts button{flex:1;min-height:40px;background:var(--paper);border:1.5px solid var(--lav-ink);color:var(--lav-ink);font-family:var(--hand);font-weight:600;font-size:13px}
 .autonote{margin:8px 0 0;font-size:10.5px;color:var(--muted);line-height:1.6}
 .linkbar{margin:0 16px 12px;display:flex;flex-wrap:wrap;align-items:flex-start;gap:4px 8px;padding:10px 12px 6px;background:rgba(239,229,255,.7);font-size:12px}
 .linkbar>button:nth-of-type(1){flex:1 1 calc(100% - 30px)!important}
@@ -373,12 +386,12 @@ a{color:inherit}
   </div>
 </nav>
 <main class="wrap" id="app" aria-live="polite"></main>
-<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">ver 2026.09.30-7</span><br>MUZE DAY はテスト版です。予定はこの端末（ブラウザ）に保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
+<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">ver 2026.09.30-8</span><br>MUZE DAY はテスト版です。予定はこの端末（ブラウザ）に保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
 <div id="dock"></div>
 <div id="sheet" class="sheet hidden" role="dialog" aria-modal="true"></div>
 <div id="toast" class="toast hidden" role="status"></div>
 
-<script src="./events.js?v=2026.09.30-7"></script>
+<script src="./events.js?v=2026.09.30-8"></script>
 <script>
 (function () {
 "use strict";
@@ -755,15 +768,18 @@ function meetView(d) {
 
   var fixed = d.meets.filter(function (m) { return m.time && !m.done; }).sort(function (a, b) { return toMin(a.time) - toMin(b.time); });
   var loose = d.meets.filter(function (m) { return !m.time && !m.done; });
-  html += secHead("02", "ミーグリ", "会いたい人の名前と時間帯だけでOK。会う時間が決まったら「決まった」");
+  html += secHead("02", "ミーグリ", "会いたい人の名前と時間帯だけでOK。会う時間が決まったら右の時間に入れてね");
   if (!fixed.length && !loose.length) html += '<div class="empty">会いたい人はまだいないよ。</div>';
-  if (fixed.length) html += '<div class="bands"><div class="bandh"><b>時間が決まった</b></div>' + fixed.map(function (m) { return '<div class="loose" style="border-style:solid;background:var(--paper)"><button type="button" class="body" data-act="detail" data-k="meet" data-id="' + m.id + '"><span class="en" style="font-size:16px;margin-right:8px">' + esc(m.time) + '</span><span class="nm">' + esc(m.who) + '</span><span class="memo">' + esc(m.place || "場所未定") + (m.mark ? " ・ 目印：" + esc(m.mark) : "") + '</span></button><button type="button" class="xbtn" data-act="del-quick" data-k="meet" data-id="' + m.id + '" aria-label="' + esc(m.who) + 'を消す">✕</button></div>'; }).join("") + '</div>';
+  function mrow(m) {
+    return '<div class="mrow"><button type="button" class="body" data-act="edit-meet" data-id="' + m.id + '"><span class="nm">' + esc(m.who) + '</span><span class="memo">' + esc([m.place, m.mark ? "目印：" + m.mark : "", m.memo].filter(Boolean).join(" ・ ") || "タップで場所・目印をいれる") + '</span></button>' +
+      '<input type="time" aria-label="' + esc(m.who) + 'と会う時間" class="' + (m.time ? "" : "empty") + '" value="' + esc(m.time || "") + '" data-settime="meet" data-id="' + m.id + '"><button type="button" class="xbtn" data-act="del-quick" data-k="meet" data-id="' + m.id + '" aria-label="' + esc(m.who) + 'を消す">✕</button></div>';
+  }
+  if (fixed.length) html += '<div class="bands"><div class="bandh"><b>会う時間が決まった</b></div>' + fixed.map(mrow).join("") + '</div>';
   if (loose.length) {
     html += '<div class="bands">';
     bands(d).forEach(function (b) {
       var ms = loose.filter(function (m) { return (m.band || "any") === b.id; }); if (!ms.length) return;
-      html += '<div class="bandh"><b>' + esc(b.label) + '</b></div>' +
-        ms.map(function (m) { return '<div class="loose"><button type="button" class="body" data-act="edit-meet" data-id="' + m.id + '"><span class="nm">' + esc(m.who) + '</span><span class="memo">' + esc([m.mark ? "目印：" + m.mark : "", m.memo].filter(Boolean).join(" ・ ") || "タップで編集") + '</span></button><button type="button" class="go" data-act="fix" data-k="meet" data-id="' + m.id + '">決まった</button><button type="button" class="xbtn" data-act="del-quick" data-k="meet" data-id="' + m.id + '" aria-label="' + esc(m.who) + 'を消す">✕</button></div>'; }).join("");
+      html += '<div class="bandh"><b>' + esc(b.label) + '</b><span>時間は未定</span></div>' + ms.map(mrow).join("");
     });
     html += '</div>';
   }
@@ -778,14 +794,13 @@ function linkBar() {
   if (!lab) return '<button type="button" class="summary" style="margin:0 16px 12px;background:rgba(239,229,255,.7);box-shadow:none;transform:none" data-act="key">' + keyIcon(14) + '<span><b class="hand">交換約束ログ</b>から読み込む</span><span class="go">MUZE KEYを入れる →</span></button>';
   var k4 = (link.key || deviceKey() || "").split("-")[3] || "", d = day(), rows = openLogRows();
   var mine = rows.filter(function (r) { return logDate(r) === d.date; }).length, nodate = rows.filter(function (r) { return !r.dueDate; }).length;
-  var stat = link.err === "notfound" ? '<span class="logstat err">このKEYのクラウド保存が見つからないよ。交換約束ログを開いて同期してから「読み直す」を押してね</span>'
-    : link.err === "network" ? '<span class="logstat err">読み込めなかったよ。電波のいいところで「読み直す」を押してね</span>'
+  var stat = link.err === "notfound" ? '<span class="logstat err">このKEYのクラウド保存が見つからないよ。交換約束ログを開いて同期してから「再同期」を押してね</span>'
+    : link.err === "network" ? '<span class="logstat err">読み込めなかったよ。電波のいいところで「再同期」を押してね</span>'
     : '<span class="logstat">' + (link.at ? hhmm(link.at) + " に読み込み ・ " : "この端末のログ ・ ") + 'まだの手渡し交換 ' + rows.length + '件（' + md(d.date) + ' の予定 ' + mine + '件' + (nodate ? '・予定日なし ' + nodate + '件' : "") + '）</span>';
-  return '<div class="linkbar">' + keyIcon(14) + '<button type="button" style="flex:1;min-width:0;background:none;border:0;padding:0;text-align:left" data-act="key"><b class="hand">交換約束ログ</b> <span class="en" style="font-size:10.5px">…' + esc(k4) + '</span>' + stat + '</button>' + (link.key ? '<button type="button" class="link" style="min-height:40px;padding:0 6px;white-space:nowrap" data-act="relink">読み直す</button>' : "") + '<button type="button" class="link" style="min-height:40px;padding:0 6px;white-space:nowrap" data-act="pick-log">ログからえらぶ</button></div>';
+  return '<div class="linkbar">' + keyIcon(14) + '<button type="button" style="flex:1;min-width:0;background:none;border:0;padding:0;text-align:left" data-act="key"><b class="hand">交換約束ログ</b> <span class="en" style="font-size:10.5px">…' + esc(k4) + '</span>' + stat + '</button><div class="keyacts">' + (link.key ? '<button type="button" data-act="relink">↻ 再同期</button>' : "") + '<button type="button" data-act="key">KEYを' + (link.key ? "変更" : "入れる") + '</button></div></div>';
 }
 function tradeCard(t) {
-  var status = t.time ? '<div class="fixed"><span aria-hidden="true">✓</span><span class="en">' + esc(t.time) + '</span><b>' + esc(t.place || "") + '</b></div><button type="button" class="link" style="min-height:40px" data-act="fix" data-k="trade" data-id="' + t.id + '">なおす</button>'
-    : '<div class="undecided"><span class="hand faded">時間 未定</span>' + (t.place ? " ・ " + esc(t.place) : "") + '</div><button type="button" class="btn oval" style="min-height:44px;padding:0 13px;font-size:13px;white-space:nowrap" data-act="fix" data-k="trade" data-id="' + t.id + '">時間が決まった</button>';
+  var status = '<div class="tin"><label for="tt-' + t.id + '">時間</label><input id="tt-' + t.id + '" type="time" class="' + (t.time ? "" : "empty") + '" value="' + esc(t.time || "") + '" data-settime="trade" data-id="' + t.id + '"><button type="button" class="pl" style="background:none;border:0;padding:0;text-align:left" data-act="edit-trade" data-id="' + t.id + '">' + (t.place ? esc(t.place) : "場所をいれる ›") + '</button></div>';
   return '<div class="paper trade"><i class="tape t-mint"></i><div class="top"><button type="button" class="who" data-act="edit-trade" data-id="' + t.id + '">' + esc(t.who || "（名前）") + '</button><span class="prio ' + t.priority + '">' + (t.priority === "must" ? "かならず" : "できれば") + '</span><button type="button" class="xbtn" data-act="del-quick" data-k="trade" data-id="' + t.id + '" aria-label="' + esc(t.who) + 'との交換を消す">✕</button></div>' +
     '<div class="swap"><div><div class="k">わたしが渡す</div><div class="v">' + esc(t.give || "—") + '</div></div><div style="text-align:center;color:var(--mint-ink)">⇄</div><div><div class="k">もらう</div><div class="v">' + esc(t.get || "—") + '</div></div></div>' +
     '<div class="status">' + status + '</div>' +
@@ -836,7 +851,7 @@ function sheetTrade(t, pre) {
     (t.logId ? '<div class="preview">' + keyIcon(14) + ' 交換約束ログの交換だよ。相手と中身はログで編集してね。<br><b class="hand">' + esc(t.who) + '</b>　' + esc(t.give) + ' ⇄ ' + esc(t.get) + '</div>'
       : fld("t-who", "だれと？", t.who, "ニックネーム") + '<div class="row2">' + fld("t-give", "わたしが渡す", t.give, "アクスタ NAOYA") + fld("t-get", "もらう", t.get, "トレカ RAN") + '</div>') +
     '<div><div class="lbl" style="margin-bottom:8px">どのくらい大事？</div>' + chipGroup("prio", [{ id: "must", label: "かならず" }, { id: "maybe", label: "できれば" }], t.priority) + '</div>' +
-    '<div class="row2">' + fld("t-time", "何時？（決まっていれば）", t.time, "", "time") + fld("t-place", "どこで？", t.place, "南口あたり") + '</div></div>';
+    '<div class="row2">' + fld("t-time", "時間（決まったら）", t.time, "", "time") + fld("t-place", "どこで？", t.place, "南口あたり") + '</div></div>';
   var foot = '<button type="button" class="btn dark full" data-act="save-trade">' + (t.id ? "保存する" : "交換をいれる") + '</button>' + (t.id ? '<button type="button" class="btn del full" data-act="del" data-k="trade" data-id="' + t.id + '">この交換を消す</button>' : "");
   openSheet(t.id ? "交換" : "交換をいれる", body, foot);
 }
@@ -854,8 +869,9 @@ function sheetMeet(m, pre) {
   ui.sheet = { type: "meet", id: m.id || null };
   var body = (pre || "") + '<div class="form">' + fld("m-who", "だれと？", m.who, "ニックネーム") +
     '<div><div class="lbl" style="margin-bottom:8px">会えたらいいな、の時間帯</div>' + chipGroup("band", bands(d), m.band || "any") + '</div>' +
+    '<div class="row2">' + fld("m-time", "会う時間（決まったら）", m.time, "", "time") + fld("m-place", "どこで？", m.place, "南口 など") + '</div>' +
     fld("m-mark", "相手の目印（わかれば）", m.mark, "ラベンダーのトート") + fld("m-memo", "メモ", m.memo, "DMで当日連絡") + '</div>';
-  var foot = '<button type="button" class="btn dark full" data-act="save-meet">' + (m.id ? "保存する" : "ミーグリにいれる") + '</button>' + (m.id ? '<div style="display:flex;justify-content:space-between">' + (m.time ? '<button type="button" class="link" data-act="unfix" data-k="meet" data-id="' + m.id + '">時間を未定にもどす</button>' : "<span></span>") + '<button type="button" class="btn del" style="min-height:40px" data-act="del" data-k="meet" data-id="' + m.id + '">この人を消す</button></div>' : "");
+  var foot = '<button type="button" class="btn dark full" data-act="save-meet">' + (m.id ? "保存する" : "ミーグリにいれる") + '</button>' + (m.id ? '<div style="display:flex;justify-content:space-between">' + "<span></span>" + '<button type="button" class="btn del" style="min-height:40px" data-act="del" data-k="meet" data-id="' + m.id + '">この人を消す</button></div>' : "");
   openSheet(m.id ? "ミーグリ" : "会いたい人をいれる", body, foot);
 }
 function sheetOff(o, pre) {
@@ -883,19 +899,19 @@ function sheetDetail(k, id) {
     (x.memo ? '<div class="k">メモ</div><div>' + esc(x.memo) + '</div>' : "") + '</div>';
   var foot = '<button type="button" class="btn dark full" data-act="dm" data-k="' + k + '" data-id="' + id + '">場所と目印をDM用にコピー</button>' +
     '<button type="button" class="btn oval full" data-act="' + (k === "trade" ? "trade-done" : "meet-done") + '" data-id="' + id + '">' + (x.done ? "まだにもどす" : (k === "trade" ? "交換できた！" : "会えた！")) + '</button>' +
-    '<div style="display:flex;justify-content:space-between"><button type="button" class="link" data-act="fix" data-k="' + k + '" data-id="' + id + '">時間や場所をなおす</button><button type="button" class="link" style="color:var(--red)" data-act="del-quick" data-k="' + k + '" data-id="' + id + '">消す</button></div>';
+    '<div style="display:flex;justify-content:space-between"><button type="button" class="link" data-act="' + (k === "trade" ? "edit-trade" : "edit-meet") + '" data-id="' + id + '">時間や場所をなおす</button><button type="button" class="link" style="color:var(--red)" data-act="del-quick" data-k="' + k + '" data-id="' + id + '">消す</button></div>';
   openSheet("会う直前カード", body, foot);
 }
 function dmText(k, id) { var x = findItem(k, id), d = day(); return (x.time ? x.time + " " : "") + (x.place || "") + "で待ってます！" + (d.myMark ? d.myMark + "が目印です" : "") + (k === "trade" && x.give ? "（" + x.give + " 持っていきます）" : ""); }
 function sheetKey() {
   ui.sheet = { type: "key" };
   var dk = deviceKey();
-  var body = '<p class="hint" style="margin:0 0 12px">交換約束ログの「KEY」画面に出ている MUZE KEY を入れてね。ログのクラウド保存（暗号化）から、交換を読み込むよ。MUZE DAY から交換約束ログを書きかえることはないよ。</p>' +
+  var body = '<p class="hint" style="margin:0 0 12px">' + (link.key ? "KEYを変えるときは、新しいKEYを入れて「このKEYで読み込む」。同じKEYで最新にしたいときは「再同期」。<br>" : "") + '交換約束ログの「KEY」画面に出ている MUZE KEY を入れてね。ログのクラウド保存（暗号化）から、交換を読み込むよ。MUZE DAY から交換約束ログを書きかえることはないよ。</p>' +
     '<div class="field"><label for="k-in">MUZE KEY</label><input id="k-in" type="text" inputmode="text" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="MUZE-XXXX-XXXX-XXXX" value="' + esc(link.key || "") + '" style="font-family:var(--en);font-weight:700;letter-spacing:.06em"></div>' +
     (dk && dk !== link.key ? '<button type="button" class="link" data-act="use-device-key" style="margin-top:6px">この端末の交換約束ログのKEY（' + esc(maskKey(dk)) + '）を使う</button>' : "") +
     (link.key ? '<div class="preview" style="margin-top:14px">いまつながっているKEY：<b class="en">' + esc(maskKey(link.key)) + '</b><br>' + (link.at ? hhmm(link.at) + ' に読み込み ・ まだ終わっていない手渡し交換 ' + openLogRows().length + '件' : "") + '</div>' : "") +
     '<p style="margin-top:14px;padding:12px 14px;background:rgba(226,122,148,.12);font-size:12px;line-height:1.7"><b class="hand">KEYは人に教えないでね。</b><br>読み込んだ交換は、この端末の MUZE DAY の中だけに保存されるよ。しおりにKEYは入らないよ。</p>';
-  openSheet("MUZE KEYでつなぐ", body, '<button type="button" class="btn dark full" data-act="connect">読み込む</button>' + (link.key ? '<button type="button" class="link" data-act="unlink">つなぐのをやめる</button>' : '') + '<a class="link" style="text-align:center" href="../muze-key/">MUZE KEYについて</a>');
+  openSheet(link.key ? "MUZE KEYの再同期・変更" : "MUZE KEYでつなぐ", body, '<button type="button" class="btn dark full" data-act="connect">' + (link.key ? "このKEYで読み込む" : "読み込む") + '</button>' + (link.key ? '<button type="button" class="btn full" data-act="relink-close">↻ いまのKEYで再同期</button><button type="button" class="link" data-act="unlink">つなぐのをやめる</button>' : '') + '<a class="link" style="text-align:center" href="../muze-key/">MUZE KEYについて</a>');
 }
 function sheetDayMenu() {
   var d = day(); ui.sheet = { type: "daymenu" };
@@ -1028,7 +1044,7 @@ document.addEventListener("click", function (e) {
     case "close": closeSheet(); break;
     case "edit-my": sheetMy(findItem("my", id)); break;
     case "edit-trade": closeSheet(); sheetTrade(findItem("trade", id)); break;
-    case "edit-meet": sheetMeet(findItem("meet", id)); break;
+    case "edit-meet": closeSheet(); sheetMeet(findItem("meet", id)); break;
     case "edit-off": closeSheet(); sheetOff(d.official.filter(function (o) { return o.id === id; })[0]); break;
     case "fix": closeSheet(); sheetFix(k, id); break;
     case "detail": sheetDetail(k, id); break;
@@ -1037,6 +1053,7 @@ document.addEventListener("click", function (e) {
     case "connect": connectKey(); break;
     case "unlink": link = {}; saveLink(); closeSheet(); render(); toast("つなぐのをやめたよ"); break;
     case "relink": refreshLink(false); break;
+    case "relink-close": closeSheet(); refreshLink(false); break;
     case "pick-log": closeSheet(); sheetPickLog(); break;
     case "save-pick":
       var map = {}; openLogRows().forEach(function (r) { map[r.id] = r; }); var n = 0;
@@ -1076,6 +1093,7 @@ document.addEventListener("change", function (e) {
   if (t.hasAttribute("data-off-time")) { draft.official[+t.getAttribute("data-off-time")].time = t.value; return; }
   if (t.hasAttribute("data-imp")) { draft.imports[t.getAttribute("data-imp")] = t.checked; return; }
   if (t.id === "ck-new") { addCheck(); return; }
+  if (t.hasAttribute("data-settime")) { var it = findItem(t.getAttribute("data-settime"), t.getAttribute("data-id")); if (it) { it.time = t.value; save(); renderDay(d); toast(t.value ? "時間を入れたよ" : "時間を未定にしたよ"); } return; }
   if (t.hasAttribute("data-ck")) { var c = d.checklist.filter(function (x) { return x.id === t.getAttribute("data-ck"); })[0]; c.done = t.checked; save(); renderDay(d); return; }
   if (t.hasAttribute("data-pack")) { var p = findItem("trade", t.getAttribute("data-pack")); p.packed = t.checked; save(); renderDay(d); return; }
 });
@@ -1121,7 +1139,7 @@ function saveTrade() {
 function saveMeet() {
   var d = day(), s = ui.sheet, m = s.id ? findItem("meet", s.id) : null;
   if (!m) { if (!val("m-who")) { toast("だれに会いたいか入れてね"); return; } m = { id: uid(), time: "", place: "", done: false }; d.meets.push(m); }
-  m.who = val("m-who") || m.who; m.band = chipVal("band") || "any"; m.mark = val("m-mark"); m.memo = val("m-memo");
+  m.who = val("m-who") || m.who; m.band = chipVal("band") || "any"; m.time = val("m-time"); m.place = val("m-place"); m.mark = val("m-mark"); m.memo = val("m-memo");
   save(); closeSheet(); d.view = "meet"; render(); toast("ミーグリにいれたよ");
 }
 function saveOff() {
