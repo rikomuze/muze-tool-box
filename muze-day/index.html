@@ -372,6 +372,10 @@ a{color:inherit}
 .placebtn .v.ph{color:var(--muted)}
 details.more{padding-top:2px}
 details.more summary{font-family:var(--hand);font-weight:600;font-size:13px;color:var(--faded);min-height:36px;cursor:pointer}
+.cloudbox{margin-top:16px;display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(239,229,255,.7);font-size:12px;line-height:1.5}
+.cloudbox span{flex:1}
+button.cloudstat{background:none;border:0;padding:4px 0;font-size:11.5px;color:var(--lav-ink);text-align:right;min-height:36px}
+.cloudstat.err{color:var(--red)}
 .autonote{margin:8px 0 0;font-size:10.5px;color:var(--muted);line-height:1.6}
 .linkbar{margin:0 16px 12px;display:flex;flex-wrap:wrap;align-items:flex-start;gap:4px 8px;padding:10px 12px 6px;background:rgba(239,229,255,.7);font-size:12px}
 .linkbar>button:nth-of-type(1){flex:1 1 calc(100% - 30px)!important}
@@ -396,12 +400,12 @@ details.more summary{font-family:var(--hand);font-weight:600;font-size:13px;colo
   </div>
 </nav>
 <main class="wrap" id="app" aria-live="polite"></main>
-<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">ver 2026.09.30-10</span><br>MUZE DAY はテスト版です。予定はこの端末（ブラウザ）に保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
+<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">ver 2026.09.30-11</span><br>MUZE DAY はテスト版です。予定はこの端末に保存され、MUZE KEYを入れると暗号化してクラウドにも保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
 <div id="dock"></div>
 <div id="sheet" class="sheet hidden" role="dialog" aria-modal="true"></div>
 <div id="toast" class="toast hidden" role="status"></div>
 
-<script src="./events.js?v=2026.09.30-10"></script>
+<script src="./events.js?v=2026.09.30-11"></script>
 <script>
 (function () {
 "use strict";
@@ -458,7 +462,8 @@ function migrate(d) {
   delete d.acts;
   if (d.view !== "meet") d.view = "event";
 }
-function save() { try { localStorage.setItem(STORE, JSON.stringify(db)); } catch (e) { toast("保存できなかったよ（容量やプライベートモードを確認してね）"); } }
+function save(quiet) { if (!quiet) { var now = Date.now(); db.updatedAt = now; var cd = day(); if (cd) cd.updatedAt = now; queuePush(); } saveLocalOnly(); }
+function saveLocalOnly() { try { localStorage.setItem(STORE, JSON.stringify(db)); } catch (e) { toast("保存できなかったよ（容量やプライベートモードを確認してね）"); } }
 function day() { return db.days.filter(function (d) { return d.id === db.current; })[0] || null; }
 
 /* ========== 交換約束ログ（MUZE KEY で読み込む・読み取りだけ） ========== */
@@ -514,6 +519,76 @@ function refreshFromLog(d) {
     if (r.status === "交換完了") t.done = true;
   });
 }
+/* ========== MUZE DAY のクラウド保存（MUZE KEY・暗号化） ==========
+   交換約束ログと同じAPIに、別のID（DAY用の接頭辞）で保存する。中身はブラウザ内で暗号化。 */
+var cloud = { state: "off", at: 0, ready: false, timer: null, aes: null };
+function cloudKey() { return link.key || deviceKey() || ""; }
+function b64e(bytes) { var s = ""; for (var i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000)); return btoa(s); }
+function dayId(k) { return sha256Hex("MUZE-TOOL-BOX:DAY:ID:V1:" + k); }
+function aesFor(k, saltB64, iter) {
+  if (cloud.aes && cloud.aes.k === k && cloud.aes.salt === saltB64) return Promise.resolve(cloud.aes.key);
+  return crypto.subtle.importKey("raw", new TextEncoder().encode(k), "PBKDF2", false, ["deriveKey"]).then(function (mat) {
+    return crypto.subtle.deriveKey({ name: "PBKDF2", salt: b64(saltB64), iterations: iter || 180000, hash: "SHA-256" }, mat, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]);
+  }).then(function (key) { cloud.aes = { k: k, salt: saltB64, key: key }; return key; });
+}
+function cloudStatusText() {
+  var k = cloudKey();
+  if (!k) return "";
+  var k4 = "…" + (k.split("-")[3] || "");
+  if (cloud.state === "saving") return "☁ クラウドに保存中… " + k4;
+  if (cloud.state === "err") return "☁ クラウドに保存できなかったよ（この端末には保存済み） " + k4;
+  if (cloud.state === "ok") return "☁ " + hhmm(cloud.at) + " クラウド保存済み " + k4;
+  return "☁ クラウド保存 " + k4;
+}
+function paintCloud() { $$(".cloudstat").forEach(function (e) { e.textContent = cloudStatusText(); e.classList.toggle("err", cloud.state === "err"); }); }
+function queuePush() {
+  if (!cloud.ready || !cloudKey()) return;
+  clearTimeout(cloud.timer); cloud.timer = setTimeout(pushCloud, 1500);
+}
+function pushCloud() {
+  var k = cloudKey(); if (!k) return Promise.resolve();
+  cloud.state = "saving"; paintCloud();
+  var saltB64 = cloud.aes && cloud.aes.k === k ? cloud.aes.salt : b64e(crypto.getRandomValues(new Uint8Array(16)));
+  var iv = crypto.getRandomValues(new Uint8Array(12));
+  var payload = { updatedAt: db.updatedAt || Date.now(), days: db.days, deleted: db.deleted || {} };
+  return Promise.all([aesFor(k, saltB64, 180000), dayId(k)]).then(function (r) {
+    return crypto.subtle.encrypt({ name: "AES-GCM", iv: iv }, r[0], new TextEncoder().encode(JSON.stringify(payload))).then(function (ct) {
+      return fetch(API, { method: "PUT", headers: { "Content-Type": "application/json", "X-MUZE-ID": r[1] }, body: JSON.stringify({ envelope: { v: 2, alg: "AES-GCM", kdf: "PBKDF2-SHA256", iter: 180000, salt: saltB64, iv: b64e(iv), ct: b64e(new Uint8Array(ct)) } }) });
+    });
+  }).then(function (res) { if (!res.ok) throw new Error("http " + res.status); cloud.state = "ok"; cloud.at = Date.now(); paintCloud(); })
+    .catch(function () { cloud.state = "err"; paintCloud(); });
+}
+/* クラウドの方が新しければ取りこむ。この端末の方が新しければ送る */
+function pullCloud(silent) {
+  var k = cloudKey(); if (!k) { cloud.ready = true; return Promise.resolve(); }
+  return dayId(k).then(function (id) { return fetch(API, { method: "GET", headers: { "X-MUZE-ID": id } }); })
+    .then(function (res) { if (!res.ok) throw new Error("http " + res.status); return res.json(); })
+    .then(function (data) {
+      cloud.ready = true;
+      if (!data || !data.found || !data.envelope) { if (db.days.length) return pushCloud(); cloud.state = "ok"; cloud.at = Date.now(); paintCloud(); return; }
+      var e = data.envelope;
+      return aesFor(k, e.salt, e.iter).then(function (aes) { return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(e.iv) }, aes, b64(e.ct)); }).then(function (plain) {
+        var c = JSON.parse(new TextDecoder().decode(plain));
+        if (!c || !Array.isArray(c.days)) throw new Error("bad");
+        /* 日ごとに新しいほうを残して合体する（消した日は消したまま） */
+        var del = {}, map = {}, before = JSON.stringify(db.days.map(function (x) { return [x.id, x.updatedAt || 0]; }));
+        [db.deleted || {}, c.deleted || {}].forEach(function (o) { Object.keys(o).forEach(function (id) { del[id] = Math.max(del[id] || 0, o[id]); }); });
+        (c.days || []).forEach(function (x) { migrate(x); map[x.id] = x; });
+        db.days.forEach(function (x) { var o = map[x.id]; if (!o || (x.updatedAt || 0) >= (o.updatedAt || 0)) map[x.id] = x; });
+        var merged = Object.keys(map).map(function (id) { return map[id]; }).filter(function (x) { return !(del[x.id] && del[x.id] >= (x.updatedAt || 0)); });
+        merged.sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
+        var changedLocal = JSON.stringify(merged.map(function (x) { return [x.id, x.updatedAt || 0]; })) !== before;
+        var cloudSame = JSON.stringify(merged.map(function (x) { return [x.id, x.updatedAt || 0]; })) === JSON.stringify((c.days || []).filter(function (x) { return true; }).sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; }).map(function (x) { return [x.id, x.updatedAt || 0]; }));
+        db.days = merged; db.deleted = del; db.updatedAt = Math.max(db.updatedAt || 0, c.updatedAt || 0);
+        if (!db.days.some(function (x) { return x.id === db.current; })) db.current = db.days[0] ? db.days[0].id : null;
+        saveLocalOnly();
+        if (changedLocal) { render(); if (!silent) toast("クラウドの予定と合わせたよ（" + db.days.length + "日）"); }
+        if (!cloudSame) return pushCloud();
+        cloud.state = "ok"; cloud.at = Date.now(); paintCloud();
+      });
+    }).catch(function () { cloud.ready = true; cloud.state = "err"; paintCloud(); });
+}
+
 /* 受け渡し予定日がこの日の交換は、自動で入れる（消したものは入れ直さない） */
 function autoAdd(d) {
   d = d || day(); if (!d) return 0;
@@ -575,6 +650,10 @@ function presets() {
 }
 function presetById(id) { return (window.MUZE_DAY_EVENTS || []).filter(function (e) { return e.id === id; })[0]; }
 function presetSub(e) { var o = (e.official || []).map(function (x) { return x.label + x.time; }).join(" "); return e.venue + (o ? " ・ " + o : " ・ 時間は発表待ち"); }
+function homeCloud() {
+  if (cloudKey()) return '<div class="cloudbox"><span class="cloudstat">' + esc(cloudStatusText()) + '</span><button type="button" class="link" style="min-height:36px;padding:0 4px" data-act="key">KEY</button></div>';
+  return '<div class="cloudbox"><span>☁ MUZE KEYを入れると、予定をクラウドに保存・別の端末で復元できるよ</span><button type="button" class="link" style="min-height:36px;padding:0 4px;white-space:nowrap" data-act="key">KEYを入れる</button></div>';
+}
 function savedDays() {
   if (!db.days.length) return "";
   var list = db.days.slice().sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
@@ -586,7 +665,7 @@ function savedDays() {
 }
 function renderStart() {
   var p = draft.presetId ? presetById(draft.presetId) : null;
-  var html = '<div class="start"><div class="sticker"><i class="tape t-berry"></i>MUZE <span>DAY</span></div>' +
+  var html = '<div class="start"><div class="sticker"><i class="tape t-berry"></i>MUZE <span>DAY</span></div>' + homeCloud() +
     '<div class="howto"><i class="tape t-berry"></i><p class="lead">ライブやイベントの日の<b>「もう決まっている予定」</b>を、1枚のしおりにまとめるツールです。</p><ol class="steps">' +
     '<li><span class="num">1</span><span><b>行く日をえらぶ</b><small>下のプルダウンから公演をえらぶと、日付・会場・時間が入るよ</small></span></li>' +
     '<li><span class="num">2</span><span><b>決まっている予定をいれる</b><small>会場入り・ランチ・交換・会う人。未定のものは入れなくてOK</small></span></li>' +
@@ -676,7 +755,7 @@ function renderDay(d) {
   var tradesOpen = d.trades.filter(function (t) { return !t.done; }).length, meetsOpen = d.meets.filter(function (m) { return !m.done; }).length;
   var n = daysUntil(d.date), when = n > 0 ? "当日まで あと " + n + " 日" : n === 0 ? "当日！" : "おわった日";
   var evSub = d.official.filter(function (o) { return o.label === "開場" || o.label === "開演"; }).map(function (o) { return o.label + o.time; }).join("・") || "公式の時間・わたしの予定";
-  var html = '<div style="padding:10px 16px 0"><button type="button" class="link" style="padding:6px 0;font-size:13px" data-act="home">← 最初の画面（ほかの日・新しい日）</button></div>' +
+  var html = '<div style="padding:10px 16px 0;display:flex;align-items:center;justify-content:space-between;gap:8px"><button type="button" class="link" style="padding:6px 0;font-size:13px" data-act="home">← 最初の画面</button><button type="button" class="cloudstat" data-act="key">' + esc(cloudStatusText() || "☁ クラウド保存はKEYから") + '</button></div>' +
     '<div class="dayhead"><button type="button" class="sticker" style="border:0;cursor:pointer" data-act="home" aria-label="最初の画面へ"><i class="tape t-berry"></i>MUZE <span>DAY</span></button><div class="right"><span class="kindtag ' + (d.kind === "LIVE" ? "c-lav" : "c-mint") + '">' + (d.kind === "LIVE" ? "LIVE" : "その他") + '</span><div class="bigdate">' + md(d.date) + '<small>' + dow(d.date) + '</small></div></div></div>' +
     '<div class="daytitle"><button type="button" data-act="daymenu"><div class="t">' + esc(d.title) + '</div><div class="hint">' + esc(d.venue || "") + ' ・ ' + when + ' ・ 編集</div></button></div>' +
     '<div class="vtabs" role="tablist"><button type="button" role="tab" class="vtab ' + (d.kind === "LIVE" ? "ev" : "fes") + '" data-act="view" data-v="event" aria-selected="' + (d.view === "event") + '"><span class="l hand">' + (d.kind === "LIVE" ? '<span class="en" style="letter-spacing:.1em">LIVE</span>の予定' : "当日の予定") + '</span><span class="s">' + esc(evSub) + '</span></button>' +
@@ -921,11 +1000,11 @@ function dmText(k, id) { var x = findItem(k, id), d = day(); return (x.time ? x.
 function sheetKey() {
   ui.sheet = { type: "key" };
   var dk = deviceKey();
-  var body = '<p class="hint" style="margin:0 0 12px">' + (link.key ? "KEYを変えるときは、新しいKEYを入れて「このKEYで読み込む」。同じKEYで最新にしたいときは「再同期」。<br>" : "") + '交換約束ログの「KEY」画面に出ている MUZE KEY を入れてね。ログのクラウド保存（暗号化）から、交換を読み込むよ。MUZE DAY から交換約束ログを書きかえることはないよ。</p>' +
+  var body = '<p class="hint" style="margin:0 0 12px">' + (link.key ? "KEYを変えるときは、新しいKEYを入れて「このKEYで読み込む」。同じKEYで最新にしたいときは「再同期」。<br>" : "") + '交換約束ログの「KEY」画面に出ている MUZE KEY を入れてね。<br>・交換約束ログから交換を読み込むよ（ログを書きかえることはないよ）<br>・MUZE DAY の予定も、このKEYで暗号化してクラウドに保存するよ。別の端末で同じKEYを入れると復元できるよ</p>' +
     '<div class="field"><label for="k-in">MUZE KEY</label><input id="k-in" type="text" inputmode="text" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="MUZE-XXXX-XXXX-XXXX" value="' + esc(link.key || "") + '" style="font-family:var(--en);font-weight:700;letter-spacing:.06em"></div>' +
     (dk && dk !== link.key ? '<button type="button" class="link" data-act="use-device-key" style="margin-top:6px">この端末の交換約束ログのKEY（' + esc(maskKey(dk)) + '）を使う</button>' : "") +
     (link.key ? '<div class="preview" style="margin-top:14px">いまつながっているKEY：<b class="en">' + esc(maskKey(link.key)) + '</b><br>' + (link.at ? hhmm(link.at) + ' に読み込み ・ まだ終わっていない手渡し交換 ' + openLogRows().length + '件' : "") + '</div>' : "") +
-    '<p style="margin-top:14px;padding:12px 14px;background:rgba(226,122,148,.12);font-size:12px;line-height:1.7"><b class="hand">KEYは人に教えないでね。</b><br>読み込んだ交換は、この端末の MUZE DAY の中だけに保存されるよ。しおりにKEYは入らないよ。</p>';
+    '<p style="margin-top:14px;padding:12px 14px;background:rgba(226,122,148,.12);font-size:12px;line-height:1.7"><b class="hand">KEYは人に教えないでね。</b><br>同じKEYを知っている人は、予定と交換ログを見られてしまうよ。予定はブラウザの中で暗号化してから送るので、運営側からは読めないよ。しおりにKEYは入らないよ。</p>' + (cloudKey() ? '<p class="hint cloudstat" style="margin-top:10px">' + esc(cloudStatusText()) + '</p>' : "");
   openSheet(link.key ? "MUZE KEYの再同期・変更" : "MUZE KEYでつなぐ", body, '<button type="button" class="btn dark full" data-act="connect">' + (link.key ? "このKEYで読み込む" : "読み込む") + '</button>' + (link.key ? '<button type="button" class="btn full" data-act="relink-close">↻ いまのKEYで再同期</button><button type="button" class="link" data-act="unlink">つなぐのをやめる</button>' : '') + '<a class="link" style="text-align:center" href="../muze-key/">MUZE KEYについて</a>');
 }
 function sheetDayMenu() {
@@ -1066,8 +1145,8 @@ document.addEventListener("click", function (e) {
     case "key": closeSheet(); sheetKey(); break;
     case "use-device-key": $("#k-in").value = deviceKey(); break;
     case "connect": connectKey(); break;
-    case "unlink": link = {}; saveLink(); closeSheet(); render(); toast("つなぐのをやめたよ"); break;
-    case "relink": refreshLink(false); break;
+    case "unlink": link = {}; saveLink(); cloud.aes = null; cloud.state = "off"; closeSheet(); render(); toast("つなぐのをやめたよ（この端末の予定は残るよ）"); break;
+    case "relink": refreshLink(false); pullCloud(true); break;
     case "set-band": var sb = findItem(k, id); if (sb) { sb.band = v; sb.time = ""; save(); renderDay(d); } break;
     case "relink-close": closeSheet(); refreshLink(false); break;
     case "pick-log": closeSheet(); sheetPickLog(); break;
@@ -1095,6 +1174,7 @@ document.addEventListener("click", function (e) {
       var target = id ? db.days.filter(function (x) { return x.id === id; })[0] : d; if (!target) return;
       if (!confirm("「" + md(target.date) + " " + target.title + "」を丸ごと消していい？\n予定・持ち物・交換・ミーグリがすべて消えるよ（交換約束ログは消えないよ）")) return;
       db.days = db.days.filter(function (x) { return x.id !== target.id; });
+      db.deleted = db.deleted || {}; db.deleted[target.id] = Date.now();
       if (db.current === target.id) db.current = db.days[0] ? db.days[0].id : null;
       save(); goHome(); toast("消したよ"); break;
     case "guide-hide": db.hideGuide = true; save(); renderDay(d); break;
@@ -1133,8 +1213,8 @@ function connectKey() {
   if (!k) { toast("MUZE-XXXX-XXXX-XXXX の形で入れてね"); return; }
   var btn = $('#sheet [data-act="connect"]'); if (btn) { btn.disabled = true; btn.textContent = "読み込み中…"; }
   fetchLog(k).then(function (rows) {
-    if (!rows) { link = { key: k, rows: [], at: Date.now(), err: "notfound" }; saveLink(); closeSheet(); render(); toast("このKEYのクラウド保存が見つからなかったよ"); return; }
-    link = { key: k, rows: rows, at: Date.now(), err: "" }; saveLink(); var n = autoAdd(); closeSheet(); render();
+    if (!rows) { link = { key: k, rows: [], at: Date.now(), err: "notfound" }; saveLink(); cloud.aes = null; closeSheet(); render(); pullCloud(false); toast("交換約束ログは見つからなかったけど、予定はこのKEYで保存するよ"); return; }
+    link = { key: k, rows: rows, at: Date.now(), err: "" }; saveLink(); cloud.aes = null; var n = autoAdd(); closeSheet(); render(); pullCloud(false);
     toast("つながったよ。" + (n ? "この日の交換を " + n + "件 入れたよ" : "「ログからえらぶ」で交換を入れてね"));
   }).catch(function () { if (btn) { btn.disabled = false; btn.textContent = "読み込む"; } toast("読み込めなかったよ。KEYと電波を確認してね"); });
 }
@@ -1194,7 +1274,8 @@ $("#app").addEventListener("touchend", function (e) {
   d.view = dx < 0 ? "meet" : "event"; save(); renderDay(d);
 }, { passive: true });
 
-save();
+saveLocalOnly();
+pullCloud(true);
 if (day()) { try { history.replaceState({ muzeDay: "home" }, ""); history.pushState({ muzeDay: "day" }, ""); } catch (e) {} refreshLink(true); }
 render();
 })();
