@@ -355,6 +355,7 @@ var KIND_LABEL = { LIVE: "LIVE", OTHER: "その他" };
 function kindOf(d) { return d.kind === "LIVE" ? "LIVE" : "OTHER"; }
 
 /* ========== 保存（MUZE DAY 自身の予定はこの端末だけ） ========== */
+var MYKINDS = ["家を出る", "ランチ", "物販", "会場入り", "その他"];
 var STORE = "muze_day_v2";
 var db = load();
 function load() {
@@ -367,7 +368,7 @@ function load() {
     }
   }
   if (!d || !d.days) d = { days: [], current: null };
-  d.days.forEach(migrate);
+  d.days = d.days.filter(function (x) { try { migrate(x); return true; } catch (e) { return false; } });
   return d;
 }
 function migrate(d) {
@@ -440,7 +441,6 @@ function refreshFromLog(d) {
 function tradeFromLog(r) { return { id: uid(), logId: r.id, who: r.name || "", give: itemsText(r.giveItems), get: itemsText(r.getItems), priority: r.status === "約束済" ? "must" : "maybe", place: "", time: "", done: false, logStatus: r.status }; }
 
 /* ========== 日の構造 ========== */
-var MYKINDS = ["家を出る", "ランチ", "物販", "会場入り", "その他"];
 function offTime(d, label) { var o = d.official.filter(function (x) { return x.label === label; })[0]; return o ? toMin(o.time) : null; }
 function bands(d) {
   var r = [];
