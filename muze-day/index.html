@@ -24,6 +24,7 @@
   --serif:"DM Serif Display",Georgia,serif;
   --shadow:0 10px 24px rgba(64,56,47,.18);--shadow-s:0 4px 12px rgba(64,56,47,.14);
   --dash:1.5px dashed rgba(64,56,47,.35);
+  --green:#2f5d4a;--green-d:#244a3a;
 }
 *{box-sizing:border-box}
 html,body{max-width:100%;overflow-x:hidden}
@@ -186,7 +187,7 @@ a{color:inherit}
 .zone b{font-family:var(--hand);font-weight:600;font-size:14px;white-space:nowrap}
 .zone .nowtag{font-family:var(--en);font-weight:700;font-size:10px;letter-spacing:.16em;padding:1px 7px;background:var(--ink);color:var(--desk)}
 .zonesub{padding:0 16px 4px 38px;font-size:11.5px;color:var(--faded)}
-.empty{margin:0 16px;padding:14px;border:var(--dash);background:rgba(255,255,255,.45);font-size:12.5px;color:var(--faded);line-height:1.7}
+.empty{margin:0 16px;padding:2px 2px 0;font-size:12.5px;color:var(--faded);line-height:1.7}
 
 /* LIVE */
 .liveticket{margin:18px 16px 0;padding:16px 16px 14px;box-shadow:var(--shadow)}
@@ -215,7 +216,7 @@ a{color:inherit}
 .dock{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--paper);border-top:var(--dash);padding:10px 14px calc(12px + env(safe-area-inset-bottom))}
 .dock-inner{max-width:560px;margin:0 auto;display:flex;gap:10px;align-items:center}
 .dock .add{display:flex;align-items:center;gap:4px;min-height:48px;padding:0 16px;background:transparent;border:1.5px solid var(--ink);border-radius:50%;font-family:var(--hand);font-weight:600;font-size:14px;transform:rotate(-2deg);white-space:nowrap}
-.dock .main{flex:1;min-height:52px;background:var(--ink);color:var(--desk);border:0;font-weight:700;font-size:14.5px;letter-spacing:.04em}
+.dock .main{flex:1;min-height:52px;background:var(--green);color:#fff;border:0;font-weight:700;font-size:14.5px;letter-spacing:.04em}
 
 /* シート */
 .sheet{position:fixed;inset:0;z-index:100;background:rgba(64,56,47,.45);display:flex;align-items:flex-end;justify-content:center}
@@ -323,7 +324,9 @@ a{color:inherit}
 .guideopen{margin:14px 16px 0}
 .pill-open{width:100%;min-height:44px;background:#fbeef1;border:0;font-family:var(--hand);font-weight:600;font-size:14px;color:var(--berry-ink)}
 .sec h2 .no{font-family:var(--en);font-weight:700;font-size:12px;letter-spacing:.12em;color:var(--berry-ink);padding:2px 7px;border:1.5px solid var(--berry-ink);border-radius:999px;align-self:center}
-.inlineadd{margin:14px 16px 0;width:calc(100% - 32px);min-height:48px;display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,.6);border:1.5px dashed var(--ink);font-family:var(--hand);font-weight:600;font-size:15px}
+.inlineadd{margin:14px 16px 0;width:calc(100% - 32px);min-height:52px;display:flex;align-items:center;justify-content:center;gap:6px;background:var(--paper);border:2px solid var(--ink);box-shadow:0 3px 0 var(--ink);font-family:var(--hand);font-weight:600;font-size:15px;color:var(--ink)}
+.inlineadd:active{transform:translateY(2px);box-shadow:0 1px 0 var(--ink)}
+.inlineadd.lav{background:var(--lav-pale);border-color:var(--lav-ink);box-shadow:0 3px 0 var(--lav-ink);color:var(--lav-ink)}
 .inlinerow{display:flex;gap:10px;margin:14px 16px 0}
 .inlinerow .inlineadd{margin:0;flex:1;width:auto}
 .nextcard{margin:26px 16px 0;width:calc(100% - 32px);display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--ink);color:var(--desk);border:0;text-align:left}
@@ -331,6 +334,8 @@ a{color:inherit}
 .nextcard b{display:block;font-family:var(--hand);font-weight:600;font-size:16px}
 .nextcard small{display:block;font-size:12px;opacity:.85;line-height:1.5}
 .nextcard .ar{margin-left:auto;font-size:20px}
+.nextcard.save{background:var(--green)}
+.btn.green{background:var(--green);color:#fff;border-color:var(--green)}
 .xbtn{flex-shrink:0;width:40px;height:40px;border:0;background:none;color:var(--muted);font-size:16px;display:grid;place-items:center}
 .myrowwrap{display:flex;align-items:center;border-bottom:var(--dash)}
 .myrowwrap .myrow{border-bottom:0;flex:1;min-width:0}
@@ -368,12 +373,12 @@ a{color:inherit}
   </div>
 </nav>
 <main class="wrap" id="app" aria-live="polite"></main>
-<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">ver 2026.09.30-6</span><br>MUZE DAY はテスト版です。予定はこの端末（ブラウザ）に保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
+<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">ver 2026.09.30-7</span><br>MUZE DAY はテスト版です。予定はこの端末（ブラウザ）に保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
 <div id="dock"></div>
 <div id="sheet" class="sheet hidden" role="dialog" aria-modal="true"></div>
 <div id="toast" class="toast hidden" role="status"></div>
 
-<script src="./events.js?v=2026.09.30-6"></script>
+<script src="./events.js?v=2026.09.30-7"></script>
 <script>
 (function () {
 "use strict";
@@ -693,9 +698,9 @@ function eventView(d) {
     cols.map(function (x) { return '<div><div class="hand">' + x[0] + '</div><div class="en">' + (x[1] ? esc(x[1].time) : "—") + '</div></div>'; }).join("") + '</div>' +
     '<div style="border-top:var(--dash);margin-top:12px;padding-top:8px;font-size:13px"><b>' + esc(d.venue || "") + '</b></div><p class="autonote" style="margin:6px 0 0">開場・開演などの時間は、今後自動で入るようにする予定です</p></button>';
   html += secHead("02", "わたしの予定", "行をタップして時間と場所を入れよう。未定はそのままでOK。ほかの予定は下の「＋ わたしの予定」から") + myPlansCard(d);
-  html += nextCard(d);
   html += secHead("03", "当日の流れ", "01・02と、交換・ミーグリの時間が自動で並ぶよ（ここで入力はいらないよ）") + flow(d);
   html += checklist(d);
+  html += nextCard(d);
   return html + '<div style="height:10px"></div>';
 }
 function myPlansCard(d) {
@@ -745,7 +750,7 @@ function meetView(d) {
   var html = secHead("01", "交換", "この日に手渡しする交換。交換約束ログから入れるか、自分で書こう") + linkBar();
   if (!open.length) html += '<div class="empty">この日の交換はまだないよ。</div>';
   html += open.map(tradeCard).join("");
-  html += '<div class="inlinerow">' + (linkedLabel() ? '<button type="button" class="inlineadd" data-act="pick-log">' + keyIcon(16) + ' ログからえらぶ</button>' : "") + '<button type="button" class="inlineadd" data-act="add-direct" data-v="trade">＋ 交換を書く</button></div>';
+  html += '<div class="inlinerow">' + (linkedLabel() ? '<button type="button" class="inlineadd lav" data-act="pick-log">' + keyIcon(16) + ' ログからえらぶ</button>' : "") + '<button type="button" class="inlineadd" data-act="add-direct" data-v="trade">＋ 交換を書く</button></div>';
   if (done.length) html += '<div class="donebar">交換できた：' + done.map(function (t) { return '<button type="button" class="link" style="min-height:32px;padding:0 4px" data-act="trade-done" data-id="' + t.id + '">' + esc(t.who) + '</button>'; }).join("") + '</div>';
 
   var fixed = d.meets.filter(function (m) { return m.time && !m.done; }).sort(function (a, b) { return toMin(a.time) - toMin(b.time); });
@@ -765,7 +770,7 @@ function meetView(d) {
   var met = d.meets.filter(function (m) { return m.done; });
   if (met.length) html += '<div class="donebar" style="margin-top:6px">会えた：' + met.map(function (m) { return '<button type="button" class="link" style="min-height:32px;padding:0 4px" data-act="meet-done" data-id="' + m.id + '">' + esc(m.who) + '</button>'; }).join("") + '</div>';
   html += '<button type="button" class="inlineadd" data-act="add-direct" data-v="meet">＋ 会いたい人をいれる</button>';
-  html += '<button type="button" class="nextcard" data-act="share"><span class="nx">LAST</span><span><b>入れおわったら、しおりを保存</b><small>当日はその画像を見るだけでOK</small></span><span class="ar">→</span></button>';
+  html += '<button type="button" class="nextcard save" data-act="share"><span class="nx">LAST</span><span><b>入れおわったら、しおりを保存</b><small>当日はその画像を見るだけでOK</small></span><span class="ar">→</span></button>';
   return html + '<div style="height:10px"></div>';
 }
 function linkBar() {
@@ -904,7 +909,7 @@ function sheetShare() {
   ui.sheet = { type: "share" };
   var dd = day(); if (dd && !dd.savedAt) { dd.savedAt = Date.now(); save(); }
   openSheet("しおりを保存", '<p class="hint" style="margin:0 0 10px">当日の流れ・交換・ミーグリ・持ち物を1枚にまとめたよ。スマホに保存しておけば、当日電波が悪くても見られるよ。</p><img id="share-img" class="shareimg" alt="しおりのプレビュー">',
-    '<button type="button" class="btn dark full" data-act="save-img">画像を保存する</button><p class="hint" style="text-align:center;margin:0">保存できないときは、画像を<b>長押し</b>して「写真に保存」してね</p>');
+    '<button type="button" class="btn green full" data-act="save-img">画像を保存する</button><p class="hint" style="text-align:center;margin:0">保存できないときは、画像を<b>長押し</b>して「写真に保存」してね</p>');
   drawShiori(day()).then(function (url) { var i = $("#share-img"); if (i) i.src = url; });
 }
 function drawShiori(d) {
