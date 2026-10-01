@@ -2,7 +2,7 @@
    kind: "LIVE"（ファンミ・単独）| "OTHER"（フェスなど、その他のイベント）
    official: 公式の時間（開場・開演）。今後は自動取得にしたい。
    終わった公演は自動でかくれる。時間や会場は必ず公式サイトでも確認すること。
-   最終更新: 2026-09-30 */
+   最終更新: 2026-10-01 */
 window.MUZE_DAY_EVENTS = (function () {
   var FM = "MAZZEL 2nd Fan Meeting -Play at the MUZEUM Vol.2-";
   function fm(id, date, city, venue, open, start, part) {
@@ -24,6 +24,13 @@ window.MUZE_DAY_EVENTS = (function () {
     };
   }
   return [
+    {
+      id: "magurock26-1", date: "2026-10-03", kind: "OTHER", tag: "その他",
+      name: "マグロック＆ポップ 2026 DAY1", title: "マグロック＆ポップ 2026 DAY1",
+      venue: "清水マリンパーク（静岡）",
+      official: [{ label: "開場", time: "10:00" }, { label: "開演", time: "11:00" }],
+      note: "MAZZEL出演日"
+    },
     bmsg("bmsg26-1", "2026-10-10", "DAY1", "トリ STARGLOW"),
     bmsg("bmsg26-2", "2026-10-11", "DAY2", "MAZZELがトリ"),
     bmsg("bmsg26-3", "2026-10-12", "DAY3", "トリ BE:FIRST"),
