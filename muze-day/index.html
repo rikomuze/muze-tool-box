@@ -454,12 +454,12 @@ button.cloudstat{background:none;border:0;padding:4px 0;font-size:11.5px;color:v
   </div>
 </nav>
 <main class="wrap" id="app" aria-live="polite"></main>
-<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">ver 2026.10.02-5</span><br>MUZE DAY はテスト版です。予定はこの端末に保存され、MUZE KEYを入れると暗号化してクラウドにも保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
+<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">ver 2026.10.02-6</span><br>MUZE DAY はテスト版です。予定はこの端末に保存され、MUZE KEYを入れると暗号化してクラウドにも保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
 <div id="dock"></div>
 <div id="sheet" class="sheet hidden" role="dialog" aria-modal="true"></div>
 <div id="toast" class="toast hidden" role="status"></div>
 
-<script src="./events.js?v=2026.10.02-5"></script>
+<script src="./events.js?v=2026.10.02-6"></script>
 <script>
 (function () {
 "use strict";
@@ -659,7 +659,7 @@ function offTime(d, label) { var o = d.official.filter(function (x) { return x.l
 function bands(d) {
   var r = [];
   if (offTime(d, "物販") != null) r.push({ id: "goods", label: "物販前" });
-  r.push({ id: "open", label: "開場前" });
+  r.push({ id: "open", label: "開演前" });
   r.push({ id: "after", label: "終演後" });
   r.push({ id: "any", label: "どこかで" });
   return r;
