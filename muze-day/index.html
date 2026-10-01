@@ -29,7 +29,7 @@
 *{box-sizing:border-box}
 html,body{max-width:100%;overflow-x:hidden}
 body{margin:0;color:var(--ink);font-family:var(--gothic);line-height:1.6;-webkit-text-size-adjust:100%;
-  background:radial-gradient(rgba(64,56,47,.06) 1px,transparent 1px) 0 0/22px 22px,var(--desk);padding-bottom:110px}
+  background:radial-gradient(rgba(64,56,47,.06) 1px,transparent 1px) 0 0/22px 22px,var(--desk);padding-bottom:40px}
 button,input,select,textarea{font-family:inherit;color:inherit;font-size:16px}
 button{cursor:pointer}
 a{color:inherit}
@@ -213,10 +213,6 @@ a{color:inherit}
 
 
 /* ドック */
-.dock{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--paper);border-top:var(--dash);padding:10px 14px calc(12px + env(safe-area-inset-bottom))}
-.dock-inner{max-width:560px;margin:0 auto;display:flex;gap:10px;align-items:center}
-.dock .add{display:flex;align-items:center;gap:4px;min-height:48px;padding:0 16px;background:transparent;border:1.5px solid var(--ink);border-radius:50%;font-family:var(--hand);font-weight:600;font-size:14px;transform:rotate(-2deg);white-space:nowrap}
-.dock .main{flex:1;min-height:52px;background:var(--green);color:#fff;border:0;font-weight:700;font-size:14.5px;letter-spacing:.04em}
 
 /* シート */
 .sheet{position:fixed;inset:0;z-index:100;background:rgba(64,56,47,.45);display:flex;align-items:flex-end;justify-content:center}
@@ -270,8 +266,6 @@ a{color:inherit}
 .logrow{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:var(--dash)}
 .logrow input{width:22px;height:22px;accent-color:var(--berry-ink);flex-shrink:0}
 .logrow .st{font-size:11px;padding:1px 7px;border:1px solid rgba(64,56,47,.3);white-space:nowrap}
-.startfoot{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--paper);border-top:var(--dash);padding:10px 16px calc(14px + env(safe-area-inset-bottom))}
-.startfoot .btn{max-width:528px;margin:0 auto;display:block}
 
 /* 会う直前カード */
 .meetcard{position:relative;padding:26px 20px 20px;margin:10px 0 0;box-shadow:var(--shadow)}
@@ -386,13 +380,11 @@ button.cloudstat{background:none;border:0;padding:4px 0;font-size:11.5px;color:v
 .linkbar .link{margin-left:auto}
 .linkbar .link+.link{margin-left:0}
 .mini.isdone{opacity:.55}
-.dock .dadd{flex:1 1 0;min-width:0;min-height:52px;padding:0 6px;background:var(--paper);border:1.5px solid var(--ink);font-family:var(--hand);font-weight:600;font-size:14px;white-space:nowrap}
-.dock .main{flex:1.25 1 0;min-width:0;font-size:14px;padding:0 6px}
-.toast{bottom:96px}
+.toast{bottom:28px}
 
 /* ===== すっきり版（装飾を減らす） ===== */
 .paper .tape,.trade .tape,.ticket .tape,.check .tape,.box .tape,.myplans .tape,.dd-btn .tape,.liveticket .tape,.guide .tape,.meetcard .tape{display:none}
-.chip,.chip:nth-child(2n),.chip:nth-child(3n),.btn.oval,.prio.must,.prio.maybe,.stamp,.loose .go,.close,.dock .add{transform:none!important}
+.chip,.chip:nth-child(2n),.chip:nth-child(3n),.btn.oval,.prio.must,.prio.maybe,.stamp,.loose .go,.close{transform:none!important}
 .chip{border-radius:999px;min-height:42px;padding:8px 16px;font-family:var(--gothic);font-weight:700;font-size:13.5px;border-width:1.5px}
 .btn.oval{border-radius:999px}
 .close{border-radius:50%}
@@ -462,12 +454,12 @@ button.cloudstat{background:none;border:0;padding:4px 0;font-size:11.5px;color:v
   </div>
 </nav>
 <main class="wrap" id="app" aria-live="polite"></main>
-<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">ver 2026.10.02-3</span><br>MUZE DAY はテスト版です。予定はこの端末に保存され、MUZE KEYを入れると暗号化してクラウドにも保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
+<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">ver 2026.10.02-4</span><br>MUZE DAY はテスト版です。予定はこの端末に保存され、MUZE KEYを入れると暗号化してクラウドにも保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
 <div id="dock"></div>
 <div id="sheet" class="sheet hidden" role="dialog" aria-modal="true"></div>
 <div id="toast" class="toast hidden" role="status"></div>
 
-<script src="./events.js?v=2026.10.02-3"></script>
+<script src="./events.js?v=2026.10.02-4"></script>
 <script>
 (function () {
 "use strict";
@@ -739,7 +731,7 @@ function renderStart() {
   if (p || draft.custom) html += startForm();
   html += '</div>';
   $("#app").innerHTML = html;
-  $("#dock").innerHTML = (p || draft.custom) ? '<div class="startfoot"><button type="button" class="btn dark full" data-act="create">この日をつくる</button></div>' : "";
+  $("#dock").innerHTML = "";
 }
 function ddButton(p) {
   if (!p) return '<button type="button" class="dd-btn" data-act="dd" aria-expanded="' + ui.dd + '" aria-labelledby="ddl"><span class="hand" style="flex:1;font-size:15px;color:var(--faded)">' + (draft.custom ? "自分で入力中" : "えらんでね") + '</span>' + chev(ui.dd) + '</button>';
@@ -775,7 +767,7 @@ function startForm() {
     draft.official.map(function (o, i) { return '<div class="trow"><input type="text" value="' + esc(o.label) + '" data-off-label="' + i + '" aria-label="名前"><input type="time" value="' + esc(o.time) + '" data-off-time="' + i + '" aria-label="' + esc(o.label) + 'の時刻"><button type="button" class="x" data-act="off-del" data-i="' + i + '" aria-label="この行を消す">✕</button></div>'; }).join("") +
     '<button type="button" class="link" data-act="off-add">＋ 行を足す</button><p class="autonote">開場・開演などの時間は、今後自動で入るようにする予定です</p></div>';
   html += importBox();
-  return html + '<div style="height:30px"></div>';
+  return html + '<button type="button" class="btn dark full" style="margin-top:26px;min-height:54px;font-size:15px" data-act="create">この日のしおりを作る</button>';
 }
 function importBox() {
   var html = '<div class="paper box" style="box-shadow:var(--shadow)"><i class="tape t-lav" style="left:auto;right:24px;width:60px;height:17px;transform:rotate(6deg)"></i><h3>' + keyIcon(18) + '交換約束ログから入れる</h3>';
@@ -826,10 +818,7 @@ function renderDay(d) {
   html += d.view === "meet" ? meetView(d) : eventView(d);
   html += '<div class="dayend"><button type="button" class="link" style="color:var(--red)" data-act="del-day">この日のしおりを丸ごと消す</button></div>';
   $("#app").innerHTML = html;
-  var addBtns = d.view === "meet"
-    ? '<button type="button" class="dadd" data-act="add-direct" data-v="trade">＋ 交換</button><button type="button" class="dadd" data-act="add-direct" data-v="meet">＋ 会いたい人</button>'
-    : '<button type="button" class="dadd" data-act="add-direct" data-v="my">＋ わたしの予定</button>';
-  $("#dock").innerHTML = '<div class="dock"><div class="dock-inner">' + addBtns + '<button type="button" class="main" data-act="share">しおりを保存</button></div></div>';
+  $("#dock").innerHTML = "";
 }
 
 function progress(d) {
@@ -858,7 +847,7 @@ function eventView(d) {
   var html = secHead("01", "公式の時間", "") + '<button type="button" class="offrow" data-act="daymenu">' +
     cols.map(function (x) { return '<span><small>' + x[0] + '</small><b class="en">' + (x[1] ? esc(x[1].time) : "—") + '</b></span>'; }).join("") + '<span class="ed">直す</span></button>' +
     '<p class="autonote" style="margin:6px 16px 0">開場・開演などの時間は、今後自動で入るようにする予定です</p>';
-  html += secHead("02", "わたしの予定", "行をタップして時間と場所を入力") + myPlansCard(d);
+  html += secHead("02", "わたしの予定", "行をタップして時間と場所を入力") + myPlansCard(d) + '<button type="button" class="inlineadd" data-act="add-direct" data-v="my">＋ 予定をいれる</button>';
   html += secHead("03", "当日の流れ", "時間の入った予定が自動で並ぶよ") + flow(d);
   html += checklist(d);
   html += nextCard(d);
