@@ -462,12 +462,12 @@ button.cloudstat{background:none;border:0;padding:4px 0;font-size:11.5px;color:v
   </div>
 </nav>
 <main class="wrap" id="app" aria-live="polite"></main>
-<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">ver 2026.10.02-2</span><br>MUZE DAY はテスト版です。予定はこの端末に保存され、MUZE KEYを入れると暗号化してクラウドにも保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
+<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">ver 2026.10.02-3</span><br>MUZE DAY はテスト版です。予定はこの端末に保存され、MUZE KEYを入れると暗号化してクラウドにも保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
 <div id="dock"></div>
 <div id="sheet" class="sheet hidden" role="dialog" aria-modal="true"></div>
 <div id="toast" class="toast hidden" role="status"></div>
 
-<script src="./events.js?v=2026.10.02-2"></script>
+<script src="./events.js?v=2026.10.02-3"></script>
 <script>
 (function () {
 "use strict";
@@ -1080,7 +1080,7 @@ function sheetShare() {
   ui.sheet = { type: "share" };
   var dd = day(); if (dd && !dd.savedAt) { dd.savedAt = Date.now(); save(); }
   openSheet("しおりを保存", '<p class="hint" style="margin:0 0 10px">当日の流れ・交換・ミーグリ・持ち物を1枚にまとめたよ。スマホに保存しておけば、当日電波が悪くても見られるよ。</p><img id="share-img" class="shareimg" alt="しおりのプレビュー">',
-    '<button type="button" class="btn green full" data-act="save-img">画像を保存する</button><p class="hint" style="text-align:center;margin:0">保存できないときは、画像を<b>長押し</b>して「写真に保存」してね</p>');
+    '<button type="button" class="btn green full" data-act="save-img">画像を保存・共有する</button><p class="hint" style="text-align:center;margin:0">共有シートの「画像を保存」で写真に入るよ。開かないときは画像を<b>長押し</b>して「写真に保存」してね</p>');
   drawShiori(day()).then(function (url) { var i = $("#share-img"); if (i) i.src = url; });
 }
 function drawShiori(d) {
@@ -1159,8 +1159,15 @@ function drawShiori(d) {
 function clip(t, w, x) { t = String(t || ""); if (x.measureText(t).width <= w) return t; while (t.length && x.measureText(t + "…").width > w) t = t.slice(0, -1); return t + "…"; }
 function saveImg() {
   var img = $("#share-img"); if (!img || !img.src) return;
-  var a = document.createElement("a"); a.href = img.src; a.download = "muze-day-" + (day().date || "") + ".png";
-  document.body.appendChild(a); a.click(); a.remove(); toast("保存できないときは画像を長押ししてね");
+  var name = "muze-day-" + (day().date || "") + ".png";
+  function download() { var a = document.createElement("a"); a.href = img.src; a.download = name; document.body.appendChild(a); a.click(); a.remove(); toast("保存できないときは画像を長押ししてね"); }
+  fetch(img.src).then(function (r) { return r.blob(); }).then(function (blob) {
+    var file = new File([blob], name, { type: "image/png" });
+    if (navigator.share && (!navigator.canShare || navigator.canShare({ files: [file] }))) {
+      return navigator.share({ files: [file], title: "MUZE DAY しおり" }).catch(function (e) { if (e && e.name === "AbortError") return; download(); });
+    }
+    download();
+  }).catch(download);
 }
 
 /* ========== 操作 ========== */
