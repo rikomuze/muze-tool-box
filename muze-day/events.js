@@ -49,7 +49,7 @@ window.MUZE_DAY_EVENTS = (function () {
     fm("fm2-hiroshima", "2026-11-18", "広島", "広島文化学園HBGホール", "17:00", "18:00"),
     {
       id: "dreamfes26", date: "2026-11-23", kind: "OTHER", tag: "その他", name: "テレビ朝日ドリームフェスティバル2026",
-      title: "15th Anniversary テレビ朝日ドリームフェスティバル2026", venue: "Kアリーナ横浜", official: [],
+      title: "15th Anniversary テレビ朝日ドリームフェスティバル2026", venue: "Kアリーナ横浜", official: [{ label: "開場", time: "13:30" }, { label: "開演", time: "15:00" }],
       note: "この日のトリ"
     },
     fm("fm2-kobe-1", "2026-11-25", "神戸", "神戸国際会館", "14:00", "15:00", "1部"),
