@@ -454,12 +454,12 @@ button.cloudstat{background:none;border:0;padding:4px 0;font-size:11.5px;color:v
   </div>
 </nav>
 <main class="wrap" id="app" aria-live="polite"></main>
-<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">ver 2026.10.02-4</span><br>MUZE DAY はテスト版です。予定はこの端末に保存され、MUZE KEYを入れると暗号化してクラウドにも保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
+<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">ver 2026.10.02-5</span><br>MUZE DAY はテスト版です。予定はこの端末に保存され、MUZE KEYを入れると暗号化してクラウドにも保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
 <div id="dock"></div>
 <div id="sheet" class="sheet hidden" role="dialog" aria-modal="true"></div>
 <div id="toast" class="toast hidden" role="status"></div>
 
-<script src="./events.js?v=2026.10.02-4"></script>
+<script src="./events.js?v=2026.10.02-5"></script>
 <script>
 (function () {
 "use strict";
@@ -816,6 +816,7 @@ function renderDay(d) {
     '<button type="button" role="tab" class="vtab" data-act="view" data-v="meet" aria-selected="' + (d.view === "meet") + '"><span class="l">ミーグリの予定</span><span class="s">交換' + tradesOpen + '・ミーグリ' + meetsOpen + '</span></button></div>';
   html += guideBox(d);
   html += d.view === "meet" ? meetView(d) : eventView(d);
+  html += '<button type="button" class="inlineadd" style="margin-top:18px" data-act="home">‹ トップ（しおり一覧）にもどる</button>';
   html += '<div class="dayend"><button type="button" class="link" style="color:var(--red)" data-act="del-day">この日のしおりを丸ごと消す</button></div>';
   $("#app").innerHTML = html;
   $("#dock").innerHTML = "";
