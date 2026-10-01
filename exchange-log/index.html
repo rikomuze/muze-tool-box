@@ -671,7 +671,31 @@ init();
 refreshKeyChip();
 $("#keyOpen").addEventListener("click",openKeyDialog);
 $("#keyClose").addEventListener("click",()=>closeSpecificDialog($("#keyDlg")));
-$("#keyCopy").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(MUZEKey.get())}catch(e){$("#keyValue").select();document.execCommand("copy")}});
+function copyKeyFallback(text){
+  const input=$("#keyValue");
+  const ro=input.readOnly;
+  input.readOnly=true;               // iOSでキーボードを出さない
+  input.focus();
+  input.setSelectionRange(0,text.length); // iOSは select() だけでは選択されない
+  let ok=false;
+  try{ok=document.execCommand("copy")}catch(e){ok=false}
+  input.readOnly=ro;
+  return ok;
+}
+let keyCopyTimer=null;
+$("#keyCopy").addEventListener("click",async()=>{
+  const btn=$("#keyCopy");
+  const text=($("#keyValue").value||MUZEKey.get()).trim();
+  let ok=false;
+  try{
+    if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(text);ok=true}
+  }catch(e){ok=false}
+  if(!ok)ok=copyKeyFallback(text);
+  if(!ok){$("#keyValue").focus();$("#keyValue").setSelectionRange(0,text.length)}
+  btn.textContent=ok?"コピーしました":"選択済み・長押しでコピー";
+  clearTimeout(keyCopyTimer);
+  keyCopyTimer=setTimeout(()=>{btn.textContent="コピー"},ok?1800:3500);
+});
 $("#keyUse").addEventListener("click",()=>switchKey($("#keyValue").value));
 $("#keyNew").addEventListener("click",()=>{if(confirm("新しいMUZE KEYへ切り替えますか？ 現在のKEYの記録は削除されません。"))switchKey(MUZEKey.generate())});
 $("#syncNow").addEventListener("click",syncFromCloud);
