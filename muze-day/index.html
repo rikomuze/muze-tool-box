@@ -376,6 +376,10 @@ details.more summary{font-family:var(--hand);font-weight:600;font-size:13px;colo
 .cloudbox span{flex:1}
 button.cloudstat{background:none;border:0;padding:4px 0;font-size:11.5px;color:var(--lav-ink);text-align:right;min-height:36px}
 .cloudstat.err{color:var(--red)}
+.newkey{margin-top:16px;padding:14px;background:var(--lav-pale);display:flex;flex-direction:column;gap:8px}
+.newkey b{font-size:14px}
+.newkey span{font-size:12px;color:var(--faded);line-height:1.6}
+.keyshow{padding:16px;border:2px solid var(--ink);background:var(--paper);font-size:22px;letter-spacing:.08em;text-align:center;word-break:break-all;user-select:all}
 .autonote{margin:8px 0 0;font-size:10.5px;color:var(--muted);line-height:1.6}
 .linkbar{margin:0 16px 12px;display:flex;flex-wrap:wrap;align-items:flex-start;gap:4px 8px;padding:10px 12px 6px;background:rgba(239,229,255,.7);font-size:12px}
 .linkbar>button:nth-of-type(1){flex:1 1 calc(100% - 30px)!important}
@@ -458,12 +462,12 @@ button.cloudstat{background:none;border:0;padding:4px 0;font-size:11.5px;color:v
   </div>
 </nav>
 <main class="wrap" id="app" aria-live="polite"></main>
-<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">ver 2026.10.02-1</span><br>MUZE DAY はテスト版です。予定はこの端末に保存され、MUZE KEYを入れると暗号化してクラウドにも保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
+<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">ver 2026.10.02-2</span><br>MUZE DAY はテスト版です。予定はこの端末に保存され、MUZE KEYを入れると暗号化してクラウドにも保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
 <div id="dock"></div>
 <div id="sheet" class="sheet hidden" role="dialog" aria-modal="true"></div>
 <div id="toast" class="toast hidden" role="status"></div>
 
-<script src="./events.js?v=2026.10.02-1"></script>
+<script src="./events.js?v=2026.10.02-2"></script>
 <script>
 (function () {
 "use strict";
@@ -710,7 +714,7 @@ function presetById(id) { return (window.MUZE_DAY_EVENTS || []).filter(function 
 function presetSub(e) { var o = (e.official || []).map(function (x) { return x.label + x.time; }).join(" "); return e.venue + (o ? " ・ " + o : " ・ 時間は発表待ち"); }
 function homeCloud() {
   if (cloudKey()) return '<div class="cloudbox"><span class="cloudstat">' + esc(cloudStatusText()) + '</span><button type="button" class="link" style="min-height:36px;padding:0 4px" data-act="key">KEY</button></div>';
-  return '<div class="cloudbox"><span>☁ 交換約束ログと同じ MUZE KEY で、予定を暗号化してクラウド保存。別の端末でも復元できるよ</span><button type="button" class="link" style="min-height:36px;padding:0 4px;white-space:nowrap" data-act="key">KEYを入れる</button></div>';
+  return '<div class="cloudbox"><span>☁ MUZE KEY で予定を暗号化してクラウド保存。別の端末でも復元できるよ（交換約束ログを使っていなくてもOK）</span><button type="button" class="link" style="min-height:36px;padding:0 4px;white-space:nowrap" data-act="key">KEYを入れる</button></div>';
 }
 function savedDays() {
   if (!db.days.length) return "";
@@ -938,7 +942,7 @@ function linkBar() {
   if (!lab) return '<button type="button" class="summary" style="margin:0 16px 12px;background:rgba(239,229,255,.7);box-shadow:none;transform:none" data-act="key">' + keyIcon(14) + '<span><b class="hand">交換約束ログ</b>から読み込む</span><span class="go">MUZE KEYを入れる →</span></button>';
   var k4 = (link.key || deviceKey() || "").split("-")[3] || "", d = day(), rows = openLogRows();
   var mine = rows.filter(function (r) { return logDate(r) === d.date; }).length, nodate = rows.filter(function (r) { return !r.dueDate; }).length;
-  var stat = link.err === "notfound" ? '<span class="logstat err">このKEYのクラウド保存が見つからないよ。交換約束ログを開いて同期してから「再同期」を押してね</span>'
+  var stat = link.err === "notfound" ? '<span class="logstat">このKEYの交換約束ログはまだないみたい（MUZE DAYの予定はこのKEYで保存されるよ）。ログを使っているなら、ログを開いて同期してから「再同期」を押してね</span>'
     : link.err === "network" ? '<span class="logstat err">読み込めなかったよ。電波のいいところで「再同期」を押してね</span>'
     : '<span class="logstat">' + (link.at ? hhmm(link.at) + " に読み込み ・ " : "この端末のログ ・ ") + 'まだの手渡し交換 ' + rows.length + '件（' + md(d.date) + ' の予定 ' + mine + '件' + (nodate ? '・予定日なし ' + nodate + '件' : "") + '）</span>';
   return '<div class="linkbar">' + keyIcon(14) + '<button type="button" style="flex:1;min-width:0;background:none;border:0;padding:0;text-align:left" data-act="key"><b class="hand">交換約束ログ</b> <span class="en" style="font-size:10.5px">…' + esc(k4) + '</span>' + stat + '</button><div class="keyacts">' + (link.key ? '<button type="button" data-act="relink">↻ 再同期</button>' : "") + '<button type="button" data-act="key">KEYを' + (link.key ? "変更" : "入れる") + '</button></div></div>';
@@ -1055,9 +1059,11 @@ function dmText(k, id) { var x = findItem(k, id), d = day(); return (x.time ? x.
 function sheetKey() {
   ui.sheet = { type: "key" };
   var dk = deviceKey();
-  var body = '<p class="hint" style="margin:0 0 12px">' + (link.key ? "KEYを変えるときは、新しいKEYを入れて「このKEYで読み込む」。同じKEYで最新にしたいときは「再同期」。<br>" : "") + '交換約束ログの「KEY」画面に出ている MUZE KEY を入れてね。<br>・交換約束ログから交換を読み込むよ（ログを書きかえることはないよ）<br>・MUZE DAY の予定も、このKEYで暗号化してクラウドに保存するよ。別の端末で同じKEYを入れると復元できるよ</p>' +
+  var body = '<p class="hint" style="margin:0 0 12px">' + (link.key ? "KEYを変えるときは、新しいKEYを入れて「このKEYで読み込む」。同じKEYで最新にしたいときは「再同期」。<br>" : "") + '交換約束ログを使っている人は、ログの「KEY」画面に出ている MUZE KEY を入れてね。使っていない人は、下の「新しくMUZE KEYを作る」でOK。<br>・交換約束ログから交換を読み込むよ（ログを書きかえることはないよ）<br>・MUZE DAY の予定も、このKEYで暗号化してクラウドに保存するよ。別の端末で同じKEYを入れると復元できるよ</p>' +
     '<div class="field"><label for="k-in">MUZE KEY</label><input id="k-in" type="text" inputmode="text" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="MUZE-XXXX-XXXX-XXXX" value="' + esc(link.key || "") + '" style="font-family:var(--en);font-weight:700;letter-spacing:.06em"></div>' +
     (dk && dk !== link.key ? '<button type="button" class="link" data-act="use-device-key" style="margin-top:6px">この端末の交換約束ログのKEY（' + esc(maskKey(dk)) + '）を使う</button>' : "") +
+    (link.key ? '<button type="button" class="btn full" style="margin-top:10px" data-act="copy-key">いまのKEYをコピー（スクショ・メモで保管）</button>'
+      : '<div class="newkey"><b>KEYを持っていない？</b><span>交換約束ログを使っていなくても大丈夫。ここで新しいMUZE KEYを作れるよ</span><button type="button" class="btn full" data-act="new-key">新しくMUZE KEYを作る</button></div>') +
     (link.key ? '<div class="preview" style="margin-top:14px">いまつながっているKEY：<b class="en">' + esc(maskKey(link.key)) + '</b><br>' + (link.at ? hhmm(link.at) + ' に読み込み ・ まだ終わっていない手渡し交換 ' + openLogRows().length + '件' : "") + '</div>' : "") +
     '<p style="margin-top:14px;padding:12px 14px;background:rgba(226,122,148,.12);font-size:12px;line-height:1.7"><b class="hand">KEYは人に教えないでね。</b><br>同じKEYを知っている人は、予定と交換ログを見られてしまうよ。予定はブラウザの中で暗号化してから送るので、運営側からは読めないよ。しおりにKEYは入らないよ。</p>' + (cloudKey() ? '<p class="hint cloudstat" style="margin-top:10px">' + esc(cloudStatusText()) + '</p>' : "");
   openSheet(link.key ? "MUZE KEYの再同期・変更" : "MUZE KEYでつなぐ", body, '<button type="button" class="btn dark full" data-act="connect">' + (link.key ? "このKEYで読み込む" : "読み込む") + '</button>' + (link.key ? '<button type="button" class="btn full" data-act="relink-close">↻ いまのKEYで再同期</button><button type="button" class="link" data-act="unlink">つなぐのをやめる</button>' : '') + '<a class="link" style="text-align:center" href="../muze-key/">MUZE KEYについて</a>');
@@ -1199,6 +1205,8 @@ document.addEventListener("click", function (e) {
     case "detail": sheetDetail(k, id); break;
     case "key": closeSheet(); sheetKey(); break;
     case "use-device-key": $("#k-in").value = deviceKey(); break;
+    case "new-key": newKey(); break;
+    case "copy-key": copyText(link.key || ""); break;
     case "connect": connectKey(); break;
     case "unlink": link = {}; saveLink(); cloud.aes = null; cloud.state = "off"; closeSheet(); render(); toast("つなぐのをやめたよ（この端末の予定は残るよ）"); break;
     case "relink": refreshLink(false); pullCloud(true); break;
@@ -1262,6 +1270,23 @@ function addCheck() {
   var d = day(), inp = $("#ck-new"); if (!d || !inp || !inp.value.trim()) return;
   d.checklist.push({ id: uid(), text: inp.value.trim(), done: false, keep: true }); inp.value = ""; save(); renderDay(d);
   var n = $("#ck-new"); if (n) n.focus();
+}
+function genKey() {
+  var a = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789", r = new Uint32Array(12), out = "";
+  crypto.getRandomValues(r);
+  for (var i = 0; i < 12; i++) { out += a[r[i] % a.length]; if (i === 3 || i === 7) out += "-"; }
+  return "MUZE-" + out;
+}
+function newKey() {
+  var k = genKey();
+  link = { key: k, rows: [], at: Date.now(), err: "" }; saveLink(); cloud.aes = null;
+  try { if (!deviceKey()) localStorage.setItem("muze_tool_box_key_v1", k); } catch (e) {}
+  closeSheet(); render(); pullCloud(true);
+  ui.sheet = { type: "newkey" };
+  openSheet("MUZE KEYを作ったよ", '<p class="hint" style="margin:0 0 12px">このKEYで、予定を暗号化してクラウドに保存するよ。<b>機種変更や別の端末で復元するときに必要</b>なので、スクショかメモで必ず保管してね。</p>' +
+    '<div class="keyshow en">' + esc(k) + '</div>' +
+    '<p style="margin-top:14px;padding:12px 14px;background:rgba(226,122,148,.12);font-size:12px;line-height:1.7"><b>なくすと復元できないよ。</b>運営側でも再発行はできません。人には教えないでね。<br>あとから交換約束ログを使うときも、同じKEYを入れればつながるよ。</p>',
+    '<button type="button" class="btn dark full" data-act="copy-key">KEYをコピー</button><button type="button" class="link" style="text-align:center" data-act="close">保管したので閉じる</button>');
 }
 function connectKey() {
   var k = normKey(val("k-in"));
