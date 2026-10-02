@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#f1ebe1">
 <meta name="robots" content="noindex">
 <meta http-equiv="Cache-Control" content="no-cache">
-<title>MUZE DAY デザインテスト | MUZE TOOL BOX</title>
+<title>MUZE DAY UIテスト | MUZE TOOL BOX</title>
 <meta name="description" content="ライブ・フェスの日の、会場入り・ランチ・交換・ミーグリをまとめる当日しおり。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -441,104 +441,47 @@ button.cloudstat{background:none;border:0;padding:4px 0;font-size:11.5px;color:v
 .foot{font-size:10.5px}
 </style>
 <style>
-/* DESIGN TEST 01 — a continuous concert journal */
-:root{--desk:#fffafb;--paper:#fff;--ink:#3c3140;--faded:#746977;--muted:#8d7f90;--berry:#e685a1;--berry-ink:#a84065;--mint-ink:#477564;--lav-ink:#6c598e;--shadow:none;--shadow-s:none;--dash:1px solid #ebdfe7;--hand:"Zen Kaku Gothic New","Hiragino Sans",sans-serif}
-body{background:var(--desk);font-size:16px;padding-bottom:28px}
-.wrap,.tool-nav{max-width:640px}
-.tool-nav{padding:18px 24px 0}
-.tool-nav-inner{padding:0 0 14px;background:none;border:0;border-bottom:1px solid #ebdfe7;align-items:flex-start}
-.tool-nav-brand{font-family:var(--en);font-size:13px}
-.tool-nav-links{gap:16px;max-width:64%}
-.tool-nav-links a{font-size:12px;border:0;letter-spacing:0}
-.start{padding:28px 24px 8px}
-.journal-kicker{font-family:var(--en);font-size:11px;font-weight:600;letter-spacing:.16em;color:var(--berry-ink);display:flex;align-items:center;gap:10px}
-.journal-kicker span{font-size:10px;letter-spacing:.08em;background:#f5e3eb;padding:2px 6px;border-radius:4px}
-.journal-title{display:flex;align-items:center;gap:12px;margin:8px 0 0;font-family:var(--en);font-weight:700;font-size:clamp(34px,8vw,50px);letter-spacing:-.055em;line-height:1.2}
-.journal-title em{font-family:var(--serif);font-weight:400;color:var(--berry-ink);letter-spacing:-.02em}
-.journal-star{font-size:34px;color:var(--berry);margin-left:auto}
-.journal-head p{margin:12px 0 24px;font-size:16px;color:var(--faded)}
-.start-steps{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--faded);border-top:1px solid #ebdfe7;padding-top:14px}
-.start-steps .active{font-weight:700;color:var(--berry-ink)}
-.start h1{margin:30px 0 4px;font-size:25px;letter-spacing:.02em}
-.start-note{margin:0 0 18px;color:var(--faded);font-size:14px}
-.lbl,.field label{font-size:14px}
-.dd>.lbl{font-size:13px;margin-bottom:8px;color:var(--faded)}
-.dd-btn{border:1px solid #d9c5d0;border-radius:14px;background:#fff;box-shadow:none;padding:16px;min-height:64px}
-.dd-btn:focus-visible{outline-color:var(--berry-ink)}
-.dd-date{border:0;color:var(--berry-ink)}
-.dd-name{font-size:16px;line-height:1.45}
-.select-foot{display:flex;align-items:center;justify-content:space-between;margin-top:6px;gap:8px}
-.hint{font-size:13px}
-.link{font-size:14px;min-height:44px;text-decoration:underline;text-decoration-color:#d1b8c7}
-.dd-list{border:1px solid #e4d3de;box-shadow:0 12px 30px #56364812;border-radius:14px;overflow:hidden}
-.dd-row{border-bottom:1px solid #eee3ea;padding:16px 12px;background:#fff}
-.dd-row:hover{background:#fff4f8}
-.dd-row .sub{font-size:13px}
-.dd-month{background:#fff6f9}
-.chip{border:1px solid #dacbd6;font-size:14px}
-.chip[aria-pressed=true]{background:var(--berry-ink);border-color:var(--berry-ink);color:#fff}
-.usage{margin-top:30px;border-top:1px solid #ebdfe7;padding-top:14px;color:var(--faded);font-size:14px}
-.usage summary{cursor:pointer;min-height:40px;padding-top:8px}
-.usage p{line-height:1.8;margin:6px 0 0}
-.cloudbox{margin-top:14px;padding:0;background:none;font-size:13px;gap:14px}
-.paper,.box,.howto,.myplans,.check,.offrow,.mrow,.dhead,.mini,.summary{box-shadow:none!important;background:transparent}
-.box{padding:22px 0 0;margin:26px 0 0;border-top:1px solid #ebdfe7}
-.box h3{font-size:16px}
-.form{gap:18px}
-.field input,.field textarea,.field select{font-family:var(--gothic);border-bottom:1px solid #d7c8d2;min-height:46px;padding:8px 0}
-.btn{border-radius:999px;border:1px solid #d1bac9;font-size:15px;min-height:48px}
-.btn.dark,.btn.green{background:var(--berry-ink);border-color:var(--berry-ink);color:#fff}
-.kind{box-shadow:none;border:1px solid #d9c5d0;border-radius:12px}
-.kind[aria-pressed=true]{background:#fae6ef;color:var(--berry-ink)}
-.autonote{font-size:12px;color:var(--faded)}
-.day-journal{padding:0 8px}
-.dtop{padding-top:14px}
-.dtop .back{font-size:13px;color:var(--faded);font-weight:500}
-button.cloudstat{font-size:12px;max-width:58%;line-height:1.6}
-.dhead{padding:16px 0 24px;margin-top:8px;gap:18px;align-items:flex-start;border-bottom:1px solid #ebdfe7}
-.dhead .dd2{padding:8px 14px;border:0;border-radius:50%;background:#f8e1ec;color:var(--berry-ink);min-width:78px;min-height:78px;display:flex;flex-direction:column;justify-content:center;gap:6px}
-.dhead .dd2 .en{font-size:25px;letter-spacing:-.04em}
-.dhead .dt{gap:5px;padding-top:3px}
-.dhead .dt b{font-size:20px;line-height:1.45;overflow-wrap:anywhere}
-.dhead .kind{border:0;padding:0;font-size:11px;color:var(--berry-ink)!important}
-.dhead .ed{padding-top:8px;font-size:13px}
-.dhead .hint{font-size:13px}
-.vtabs{margin-top:12px;padding:0;background:var(--desk);border-radius:0;border-bottom:1px solid #e4d7e1;gap:22px;top:0}
-.vtab,.vtab:first-child,.vtab:last-child{min-height:65px;border-radius:0;padding:8px 0;align-items:flex-start;flex:1}
-.vtab[aria-selected=true]{background:none;border:0;border-bottom:3px solid var(--berry-ink);color:var(--berry-ink);box-shadow:none}
-.vtab .l{font-size:16px}.vtab .s{font-size:12px;margin-top:3px;line-height:1.5}
-.journal-progress{display:flex;gap:8px;margin:16px 16px 4px;justify-content:space-between}
-.journal-step{border:0;background:none;padding:4px 0;display:flex;flex-direction:column;align-items:flex-start;gap:3px;font-size:12px;color:var(--faded);min-height:44px}
-.journal-step>span{font-family:var(--en);font-size:11px;color:#a393a2}
-.journal-step.current{color:var(--berry-ink);font-weight:700}.journal-step.current>span{color:var(--berry-ink)}
-.journal-step.done>span{color:var(--mint-ink)}
-.sec{padding-top:30px;padding-bottom:12px}.sec h2{font-size:19px;letter-spacing:.02em}.sec p{font-size:13px;margin-top:4px}
-.offrow{padding:0 0 16px;border-bottom:1px solid #ebdfe7;gap:12px}.offrow small{font-size:13px;font-weight:500;margin-bottom:5px}.offrow b{font-size:23px}
-.myplans{padding:0;margin-top:0}.myrowwrap{border-bottom:1px solid #ebdfe7}.myrow{padding:14px 0;gap:10px;min-height:70px;flex-wrap:wrap}
-.myrow .k{width:76px;font-size:15px}.myrow .en{font-size:17px}.myrow .undecided{border:0;color:#9b8997;font-size:13px;width:52px;background:none}.myrow .pl{font-size:13px;flex-basis:100%;padding-left:86px;color:var(--faded)}
-.inlineadd,.inlineadd.lav{border:0;border-radius:0;background:none;color:var(--berry-ink);justify-content:flex-start;padding:4px 0;min-height:44px;margin-top:8px;font-size:15px;font-weight:700;box-shadow:none}
-.nextcard{background:none;color:var(--berry-ink);padding:18px 0;border-top:1px solid #ebdfe7}.nextcard small{color:var(--faded);font-size:13px}
-.journal-timeline{margin:0 16px;border-left:1px solid #dcbfcc;padding-left:18px}
-.journal-timeline .off,.journal-timeline .mini{position:relative;background:none;border:0;border-bottom:1px solid #eee3ea;margin:0;width:100%;padding:16px 0;box-shadow:none;min-height:54px}
-.journal-timeline button:before{content:"";position:absolute;width:7px;height:7px;border-radius:50%;left:-22px;top:24px;background:#c77c9b}
-.journal-timeline .en{color:var(--berry-ink);min-width:62px;font-size:16px}.journal-timeline .hand{font-size:15px}
-.check{padding:0;margin-top:0}.check h3{margin:0 0 8px}.ck{border:0;min-height:48px;font-size:15px;padding:8px 0}.ck input{accent-color:var(--berry-ink);width:19px;height:19px}.addck input{font-size:14px;border-color:#d7c8d2}
-.trade{margin-bottom:18px;padding:0 0 22px;background:none;border-bottom:1px solid #e6d8e2;box-shadow:none!important;gap:12px}
-.trade .who{font-size:19px}.trade .prio{border:0;border-radius:999px;padding:4px 9px;height:auto;font-size:12px}.prio.must{background:#fae1eb;color:var(--berry-ink)}.prio.maybe{background:#f1ebf1;color:var(--faded)}
-.swap{background:none;padding:0;gap:14px}.swap .k{font-size:12px;margin-bottom:4px}.swap .v{font-size:15px;line-height:1.6}
-.bandpills .bl,.placebtn .bl{font-size:13px}.bandpills button{min-height:40px;font-size:13px;border:1px solid #ded0da;background:transparent;color:var(--faded)}
-.bandpills button[aria-pressed=true]{background:#f7e4ee;border-color:#f7e4ee;color:var(--berry-ink)}
-.placebtn{font-size:14px;gap:12px;flex-wrap:wrap}.logfoot{font-size:12px;line-height:1.6}
-.mrow{background:none;padding:12px 0;margin-bottom:0;border-bottom:1px solid #ebdfe7;min-height:64px}.mrow .memo{font-size:13px;margin-top:4px;line-height:1.65}.bandh{margin-top:18px}.bandh b{font-size:13px;color:var(--berry-ink)}
-.summary,.linkbar{background:none!important;padding:4px 0;box-shadow:none;border:0;font-size:13px}.summary{flex-wrap:wrap;gap:8px}.summary .go{font-size:13px}.keyacts button{border:0;background:none;font-size:13px;color:var(--lav-ink)}
-.empty{background:none;border:0;padding:8px 0;font-size:14px;color:var(--faded);text-align:left}.save-area{margin:30px 16px 0;padding-top:22px;border-top:1px solid #ebdfe7}.save-area .btn{min-height:54px;font-size:16px}.save-area p{text-align:center;margin:8px 0 0}
-.dayend{margin-top:14px}.dayend .link{font-size:12px}.dayrow{border-bottom:1px solid #ebdfe7}.dayrow .xbtn{background:none;border:0;color:var(--muted)}
-.sheet-inner{border-radius:24px 24px 0 0;background:#fffafb}.sheet-head{align-items:flex-start;gap:18px}.sheet-head h2{font-size:20px;line-height:1.5}.close{border:0;background:#f7e4ee;min-width:44px;min-height:44px;font-size:16px}.sheet-head .close{position:static;flex-shrink:0}.sheet .hint{font-size:13px}.sheet-foot{gap:12px}.sheet .form{font-size:16px}
-.foot{max-width:592px;margin:28px auto 0;padding:18px 24px;border-top:1px solid #ebdfe7;font-size:12px;line-height:1.8;color:var(--faded)}
-.toast{font-size:14px;border-radius:999px}
-button:hover{filter:brightness(.98)}button:active{filter:brightness(.95)}
-@media(max-width:380px){.start{padding-inline:20px}.tool-nav{padding-inline:20px}.day-journal{padding-inline:4px}.dhead{gap:12px}.dhead .dt b{font-size:18px}.dhead .dd2{min-width:68px;min-height:68px;padding:8px}.journal-step{font-size:11px}.vtab .l{font-size:15px}.vtabs{gap:12px}.start-steps{font-size:11px}}
-@media(min-width:720px){.wrap{margin-top:10px}.start{padding-top:32px}.journal-title{font-size:54px}.start h1{margin-top:36px}.day-journal{padding-top:8px}.dhead .dt b{font-size:24px}}
+/* UI TEST 02: keep the original scrapbook, reduce competing containers. */
+.howto{background:transparent;box-shadow:none;padding:0;margin-top:22px}
+.howto .lead{font-size:14px;margin-bottom:8px}
+.steps li{padding:8px 0;border-top:0}
+.cloudbox{background:none;padding:14px 0 0;margin-top:26px;border-top:var(--dash);font-size:12px;align-items:center}
+.cloudbox .link{min-height:44px!important}
+/* The event header and paper list stay as the main visual anchors. */
+.prog{background:none;box-shadow:none;padding:6px 0;margin-top:18px}
+.pstep{min-height:44px}
+.pnext{margin-top:6px;font-size:13px}
+.sec{padding-top:28px;padding-bottom:10px}
+.sec h2{font-size:18px}
+.sec p{font-size:12.5px}
+.offrow{background:none;box-shadow:none;padding:6px 0 14px;border-bottom:var(--dash)}
+.offrow small{font-size:12px;margin-bottom:4px}
+.myplans{padding:2px 14px}
+.myrow{min-height:62px}
+.myrow .pl{font-size:13px;line-height:1.6}
+.myrow .undecided{border:0;background:none}
+/* Secondary additions are text actions; save keeps the original green. */
+.inlineadd,.inlineadd.lav{background:none;border:0;box-shadow:none;justify-content:flex-start;padding:4px 0;min-height:44px;font-size:14px}
+.inlineadd:active{transform:none}
+.inlineadd[data-act="home"]{justify-content:center;font-weight:400;color:var(--faded);font-size:13px}
+.nextcard:not(.save){background:none;color:var(--ink);padding:12px 0;border-top:var(--dash)}
+.nextcard:not(.save) b{font-size:14px;font-weight:500}
+.nextcard:not(.save) small{color:var(--faded)}
+.nextcard.save{margin-top:24px;min-height:62px}
+.check{background:none;box-shadow:none;padding:4px 0}
+.ck{min-height:44px}
+.mrow{background:none;box-shadow:none;padding-left:0;padding-right:0;border-bottom:var(--dash);margin-bottom:0;min-height:60px}
+.mrow .memo{font-size:12.5px;line-height:1.6}
+/* Keep exchange paper cards; remove the redundant inner panel. */
+.trade .swap{background:none;padding:4px 0}
+.linkbar{background:none;padding:4px 0 10px;border-bottom:var(--dash)}
+.summary[data-act="key"]{background:none!important;padding:4px 0 10px;box-shadow:none;border-bottom:var(--dash);flex-wrap:wrap}
+.keyacts button{border:0;background:none;font-size:13px}
+.start .box{background:none!important;box-shadow:none!important;padding:16px 0 0;border-top:var(--dash)}
+.sheet-head{gap:12px;align-items:flex-start}
+.sheet-head h2{flex:1;min-width:0;line-height:1.5}
+.sheet-head .close{flex-shrink:0}
+@media(max-width:380px){.myrow{gap:8px;flex-wrap:wrap;padding:12px 0}.myrow .pl{flex-basis:100%;padding-left:84px}.pstep{min-width:52px}.pstep .pl{font-size:10px}}
 </style>
 </head>
 <body>
@@ -554,7 +497,7 @@ button:hover{filter:brightness(.98)}button:active{filter:brightness(.95)}
   </div>
 </nav>
 <main class="wrap" id="app" aria-live="polite"></main>
-<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">DESIGN TEST 01</span><br>デザインテスト版。ここで作った予定は元のMUZE DAYとは別に保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
+<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">UI TEST 02</span><br>UIテスト版です。ここで作った予定は、元のMUZE DAYとは別に保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
 <div id="dock"></div>
 <div id="sheet" class="sheet hidden" role="dialog" aria-modal="true"></div>
 <div id="toast" class="toast hidden" role="status"></div>
@@ -800,7 +743,7 @@ function presetById(id) { return (window.MUZE_DAY_EVENTS || []).filter(function 
 function presetSub(e) { var o = (e.official || []).map(function (x) { return x.label + x.time; }).join(" "); return e.venue + (o ? " ・ " + o : " ・ 時間は発表待ち"); }
 function homeCloud() {
   if (cloudKey()) return '<div class="cloudbox"><span class="cloudstat">' + esc(cloudStatusText()) + '</span><button type="button" class="link" style="min-height:36px;padding:0 4px" data-act="key">KEY</button></div>';
-  return '<div class="cloudbox"><span>☁ 別の端末でも使うなら MUZE KEY</span><button type="button" class="link" style="min-height:36px;padding:0 4px;white-space:nowrap" data-act="key">KEYを入れる</button></div>';
+  return '<div class="cloudbox"><span>☁ MUZE KEYでクラウド保存。別の端末でも復元できるよ</span><button type="button" class="link" style="min-height:36px;padding:0 4px;white-space:nowrap" data-act="key">KEYを入れる</button></div>';
 }
 function savedDays() {
   if (!db.days.length) return "";
@@ -813,17 +756,20 @@ function savedDays() {
 }
 function renderStart() {
   var p = draft.presetId ? presetById(draft.presetId) : null;
-  var html = '<div class="start"><header class="journal-head"><div class="journal-kicker">MY CONCERT JOURNAL <span>TEST</span></div><div class="journal-title">MUZE <em>DAY</em><span class="journal-star" aria-hidden="true">✳</span></div><p>ライブの日の予定を、1枚のしおりに。</p></header>' +
-    '<div class="start-steps" aria-label="しおり作成の流れ"><span class="active">01 公演をえらぶ</span><span>02 予定をいれる</span><span>03 保存する</span></div>' +
-    '<h1>どの日に行く？</h1><p class="start-note">日付・会場・時間が自動で入るよ。</p>' +
-    '<div class="dd"><div class="lbl" id="ddl">公演・イベント</div>' + ddButton(p) + (ui.dd ? ddList() : '') +
-    '<div class="select-foot"><span class="hint">これからの予定 ' + presets().length + '件</span><button type="button" class="link" data-act="custom">自分で入力する</button></div></div>';
+  var html = '<div class="start"><div class="sticker"><i class="tape t-berry"></i>MUZE <span>DAY</span></div>' +
+    '<div class="howto"><i class="tape t-berry"></i><p class="lead">ライブやイベントの日の<b>予定</b>を、1枚のしおりにまとめるツールです。</p><ol class="steps">' +
+    '<li><span class="num">1</span><span><b>行く日をえらぶ</b><small>下のプルダウンから公演をえらぶと、日付・会場・時間が入るよ</small></span></li>' +
+    '<li><span class="num">2</span><span><b>予定をいれる</b><small>会場入り・ランチ・交換・会いたい人。未定のものは入れなくてOK</small></span></li>' +
+    '<li><span class="num">3</span><span><b>しおりを保存する</b><small>当日はその画像を見るだけ。電波が悪くても安心</small></span></li></ol>' +
+    '</div>' + savedDays() +
+    '<h1>' + "どの日のしおりを<span>作る？</span>" + '</h1>' +
+    '<div class="dd"><div class="lbl" id="ddl" style="margin-bottom:8px;font-size:16px">どの予定？</div>' + ddButton(p) + (ui.dd ? ddList() : "") +
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px"><span class="hint">MAZZELのこれからの予定 ' + presets().length + '件</span><button type="button" class="link" data-act="custom">自分で入力する</button></div></div>';
   if (p || draft.custom) html += startForm();
-  html += savedDays() + '<details class="usage"><summary>使い方</summary><p>会場入り・ランチ・交換・会いたい人を入れて、しおりを画像で保存。当日は電波が悪くても見られるよ。未定の予定は、あとからでOK。</p></details>' + homeCloud() + '</div>';
-  $('#app').innerHTML = html;
-  $('#dock').innerHTML = '';
+  html += homeCloud() + '</div>';
+  $("#app").innerHTML = html;
+  $("#dock").innerHTML = "";
 }
-
 function ddButton(p) {
   if (!p) return '<button type="button" class="dd-btn" data-act="dd" aria-expanded="' + ui.dd + '" aria-labelledby="ddl"><span class="hand" style="flex:1;font-size:15px;color:var(--faded)">' + (draft.custom ? "自分で入力中" : "えらんでね") + '</span>' + chev(ui.dd) + '</button>';
   return '<button type="button" class="dd-btn" data-act="dd" aria-expanded="' + ui.dd + '" aria-labelledby="ddl"><i class="tape t-berry"></i>' +
@@ -856,7 +802,7 @@ function startForm() {
     '<div class="field"><label for="f-venue">会場</label><input id="f-venue" type="text" value="' + esc(draft.venue) + '" data-draft="venue" placeholder="会場名"></div></div>';
   html += '<div class="paper box"><i class="tape t-lav" style="width:54px;height:16px"></i><h3>公式の時間</h3><p class="hint" style="margin:2px 0 4px">わからないところは空欄でOK。</p>' +
     draft.official.map(function (o, i) { return '<div class="trow"><input type="text" value="' + esc(o.label) + '" data-off-label="' + i + '" aria-label="名前"><input type="time" value="' + esc(o.time) + '" data-off-time="' + i + '" aria-label="' + esc(o.label) + 'の時刻"><button type="button" class="x" data-act="off-del" data-i="' + i + '" aria-label="この行を消す">✕</button></div>'; }).join("") +
-    '<button type="button" class="link" data-act="off-add">＋ 行を足す</button><p class="autonote">時間は公式情報も確認してね</p></div>';
+    '<button type="button" class="link" data-act="off-add">＋ 行を足す</button><p class="autonote">時間は公式サイトでも確認してね</p></div>';
   html += importBox();
   return html + '<button type="button" class="btn dark full" style="margin-top:26px;min-height:54px;font-size:15px" data-act="create">この日のしおりを作る</button>';
 }
@@ -904,20 +850,20 @@ function renderDay(d) {
   var html = '<div class="dtop"><button type="button" class="back" data-act="home">‹ しおり一覧</button><button type="button" class="cloudstat" data-act="key">' + esc(cloudStatusText() || "☁ クラウド保存はKEYから") + '</button></div>' +
     '<button type="button" class="dhead" data-act="daymenu"><span class="dd2"><span class="en">' + md(d.date) + '</span><small>' + dow(d.date) + '</small></span><span class="dt"><span class="kind ' + d.kind + '">' + (d.kind === "LIVE" ? "LIVE" : "その他") + '</span><b>' + esc(d.title) + '</b><span class="hint">' + esc(d.venue || "") + ' ・ ' + when + '</span></span><span class="ed">編集</span></button>' +
     '<div class="vtabs" role="tablist"><button type="button" role="tab" class="vtab" data-act="view" data-v="event" aria-selected="' + (d.view === "event") + '"><span class="l">' + (d.kind === "LIVE" ? "LIVEの予定" : "当日の予定") + '</span><span class="s">' + esc(evSub) + '</span></button>' +
-    '<button type="button" role="tab" class="vtab" data-act="view" data-v="meet" aria-selected="' + (d.view === "meet") + '"><span class="l">交換・ミーグリ</span><span class="s">交換' + tradesOpen + '・ミーグリ' + meetsOpen + '</span></button></div>';
-  html = '<div class="day-journal">' + html;
+    '<button type="button" role="tab" class="vtab" data-act="view" data-v="meet" aria-selected="' + (d.view === "meet") + '"><span class="l">ミーグリの予定</span><span class="s">交換' + tradesOpen + '・ミーグリ' + meetsOpen + '</span></button></div>';
   html += guideBox(d);
   html += d.view === "meet" ? meetView(d) : eventView(d);
-  html += '<div class="save-area"><button type="button" class="btn dark full" data-act="share">しおりを保存する</button><p class="hint">当日は保存した画像を見るだけでOK</p></div>';
+  html += '<button type="button" class="nextcard save" data-act="share"><span><b>しおりを保存する</b><small>当日はその画像を見るだけでOK</small></span><span class="ar">→</span></button>';
+  html += '<button type="button" class="inlineadd" style="margin-top:18px" data-act="home">‹ トップ（しおり一覧）にもどる</button>';
   html += '<div class="dayend"><button type="button" class="link" style="color:var(--red)" data-act="del-day">この日のしおりを丸ごと消す</button></div>';
-  $("#app").innerHTML = html + '</div>';
+  $("#app").innerHTML = html;
   $("#dock").innerHTML = "";
 }
 
 function progress(d) {
   var off = d.official.some(function (o) { return o.label === "開場" || o.label === "開演"; });
   return [
-    { t: "公式の時間を確認", sub: "開場・開演が合っているか見てね", done: off, act: "go-event", to: ".liveticket" },
+    { t: "公式の時間を確認", sub: "開場・開演が合っているか見てね", done: off, act: "go-event", to: ".offrow" },
     { t: "わたしの予定を入れる", sub: "会場入り・ランチなど、決まっている時間と場所", done: d.myplans.some(function (p) { return !!p.time; }), act: "go-event", to: ".myplans" },
     { t: "交換・ミーグリを入れる", sub: "「ミーグリの予定」タブで入れるよ", done: d.trades.length + d.meets.length > 0, act: "go-meet" },
     { t: "しおりを保存する", sub: "当日はその画像を見るだけ", done: !!d.savedAt, act: "share" }
@@ -925,13 +871,12 @@ function progress(d) {
 }
 function guideBox(d) {
   var st = progress(d), cur = -1;
-  st.forEach(function(x,i){ if(cur < 0 && !x.done) cur=i; });
-  var short=['時間を確認','予定をいれる','交換・ミーグリ','しおり保存'];
-  return '<div class="journal-progress" aria-label="しおり作成の流れ">' + st.map(function(x,i){
-    return '<button type="button" class="journal-step' + (x.done ? ' done' : '') + (i===cur ? ' current' : '') + '" data-act="' + x.act + '" data-v="' + (i===0 ? '.offrow' : x.to || '') + '"><span>' + (x.done ? '✓' : '0'+(i+1)) + '</span>' + short[i] + '</button>';
-  }).join('') + '</div>';
+  st.forEach(function (x, i) { if (cur < 0 && !x.done) cur = i; });
+  var short = ["公式の時間", "わたしの予定", "交換・ミーグリ", "しおり保存"];
+  return '<div class="prog">' + st.map(function (x, i) {
+    return '<button type="button" class="pstep' + (x.done ? " done" : "") + (i === cur ? " cur" : "") + '" data-act="' + x.act + '" data-v="' + (x.to || "") + '"><span class="pn">' + (x.done ? "✓" : i + 1) + '</span><span class="pl">' + short[i] + '</span></button>';
+  }).join('<span class="pline"></span>') + '</div>' + (cur >= 0 ? '<p class="pnext">つぎは <b>' + st[cur].t + '</b>　' + st[cur].sub + '</p>' : '<p class="pnext">ぜんぶできたよ。当日はしおりを見てね</p>');
 }
-
 function secHead(no, title, hint) { return '<div class="sec"><h2>' + title + '</h2>' + (hint ? '<p>' + hint + '</p>' : "") + '</div>'; }
 
 /* LIVE（当日）の予定 */
@@ -940,9 +885,9 @@ function eventView(d) {
   var cols = [["物販", get("物販")], ["開場", get("開場")], ["開演", get("開演")]];
   var html = secHead("01", "公式の時間", "") + '<button type="button" class="offrow" data-act="daymenu">' +
     cols.map(function (x) { return '<span><small>' + x[0] + '</small><b class="en">' + (x[1] ? esc(x[1].time) : "—") + '</b></span>'; }).join("") + '<span class="ed">直す</span></button>' +
-    '<p class="autonote" style="margin:6px 16px 0">時間は公式情報も確認してね</p>';
+    '<p class="autonote" style="margin:6px 16px 0">時間は公式サイトでも確認してね</p>';
   html += secHead("02", "わたしの予定", "行をタップして時間と場所を入力") + myPlansCard(d) + '<button type="button" class="inlineadd" data-act="add-direct" data-v="my">＋ 予定をいれる</button>';
-  html += secHead("03", "当日の流れ", "時間の入った予定が自動で並ぶよ") + '<div class="journal-timeline">' + flow(d) + '</div>';
+  html += secHead("03", "当日の流れ", "時間の入った予定が自動で並ぶよ") + flow(d);
   html += checklist(d);
   html += nextCard(d);
   return html + '<div style="height:10px"></div>';
@@ -957,7 +902,7 @@ function myPlansCard(d) {
 }
 function nextCard(d) {
   var open = d.trades.filter(function (t) { return !t.done; }).length, meets = d.meets.filter(function (m) { return !m.done; }).length;
-  return '<button type="button" class="nextcard" data-act="view" data-v="meet"><span><b>交換・ミーグリも入れておく？</b><small>交換' + open + '・ミーグリ' + meets + '</small></span></button>';
+  return '<button type="button" class="nextcard" data-act="view" data-v="meet"><span><b>つぎは「ミーグリの予定」へ</b><small>交換' + open + '・ミーグリ' + meets + '</small></span><span class="ar">→</span></button>';
 }
 function summaryLine(d) {
   var open = d.trades.filter(function (t) { return !t.done; }), un = open.filter(function (t) { return !t.time; }).length;
@@ -1112,7 +1057,7 @@ function sheetMeet(m, pre) {
 function sheetOff(o, pre) {
   ui.sheet = { type: "off", id: o ? o.id : null }; o = o || { label: "", time: "" };
   var std = ["物販", "開場", "開演"];
-  var body = (pre || "") + '<div class="form"><div><div class="lbl" style="margin-bottom:8px">なに？</div>' + chipGroup("offl", std, o.label) + '</div>' + fld("o-label", "ほかの名前", std.indexOf(o.label) < 0 ? o.label : "", "特典会 など") + fld("o-time", "時刻", o.time, "", "time") + '<p class="autonote" style="margin:0">時間は公式情報も確認してね</p></div>';
+  var body = (pre || "") + '<div class="form"><div><div class="lbl" style="margin-bottom:8px">なに？</div>' + chipGroup("offl", std, o.label) + '</div>' + fld("o-label", "ほかの名前", std.indexOf(o.label) < 0 ? o.label : "", "特典会 など") + fld("o-time", "時刻", o.time, "", "time") + '<p class="autonote" style="margin:0">時間は公式サイトでも確認してね</p></div>';
   openSheet(o.id ? "公式の時間" : "公式の時間をいれる", body, '<button type="button" class="btn dark full" data-act="save-off">保存する</button>' + (o.id ? '<button type="button" class="btn del full" data-act="del" data-k="off" data-id="' + o.id + '">この時間を消す</button>' : ""));
 }
 function findItem(k, id) { var d = day(), list = k === "trade" ? d.trades : k === "meet" ? d.meets : d.myplans; return list.filter(function (x) { return x.id === id; })[0]; }
@@ -1153,7 +1098,7 @@ function sheetKey() {
 function sheetDayMenu() {
   var d = day(); ui.sheet = { type: "daymenu" };
   var body = '<div class="form">' + fld("dm-title", "名前", d.title) + fld("dm-venue", "会場", d.venue) + fld("dm-date", "日付", d.date, "", "date") + fld("dm-mark", "わたしの目印（DMの文に入るよ）", d.myMark, "白いキャップ") +
-    '<div><div class="lbl" style="margin-bottom:6px">公式の時間</div>' + d.official.map(function (o) { return '<button type="button" class="off" style="margin:4px 0;width:100%" data-act="edit-off" data-id="' + o.id + '"><span class="en">' + esc(o.time) + '</span><span class="hand">' + esc(o.label) + '</span><span class="sub">編集</span></button>'; }).join("") + '<button type="button" class="link" data-act="add-off">＋ 公式の時間を足す</button><p class="autonote" style="margin:4px 0 0">時間は公式情報も確認してね</p></div></div>';
+    '<div><div class="lbl" style="margin-bottom:6px">公式の時間</div>' + d.official.map(function (o) { return '<button type="button" class="off" style="margin:4px 0;width:100%" data-act="edit-off" data-id="' + o.id + '"><span class="en">' + esc(o.time) + '</span><span class="hand">' + esc(o.label) + '</span><span class="sub">編集</span></button>'; }).join("") + '<button type="button" class="link" data-act="add-off">＋ 公式の時間を足す</button><p class="autonote" style="margin:4px 0 0">時間は公式サイトでも確認してね</p></div></div>';
   openSheet("この日のこと", body, '<button type="button" class="btn dark full" data-act="save-daymenu">保存する</button><button type="button" class="btn del full" data-act="del-day">この日を丸ごと消す</button>');
 }
 
