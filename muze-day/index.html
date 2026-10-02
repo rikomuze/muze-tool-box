@@ -426,7 +426,6 @@ button.cloudstat{background:none;border:0;padding:4px 0;font-size:11.5px;color:v
 .myplans,.trade,.check,.mrow,.offrow{box-shadow:0 1px 3px rgba(64,56,47,.12)}
 .trade{margin-bottom:12px}
 .inlineadd,.inlineadd.lav{box-shadow:none;border-width:1.5px;min-height:48px;font-family:var(--gothic);font-weight:700;font-size:14px}
-.inlineadd:active{transform:none}
 .nextcard{padding:12px 16px;margin-top:22px}
 .nextcard b{font-family:var(--gothic);font-weight:700;font-size:15px}
 .dayend{margin:30px 16px 0;padding:0;border:0;background:none;justify-content:center}
@@ -450,25 +449,24 @@ button.cloudstat{background:none;border:0;padding:4px 0;font-size:11.5px;color:v
 .dc-acts{display:flex;align-items:center;gap:8px;padding:0 14px 12px 76px}
 .seebtn{min-height:38px;padding:0 14px;background:var(--green);border:0;color:#fff;font-weight:700;font-size:13px}
 .dc-del{margin-left:auto;min-height:38px;background:none;border:0;color:var(--red);font-size:12.5px;padding:0 4px}
-.linkbar .keyacts{width:100%;justify-content:flex-start;gap:18px;display:flex}
-.daystat{margin-top:8px}
 .daystat{text-align:center;margin-top:18px}
 .daystat .cloudstat{text-align:center}
-.linkbar{background:none;padding:2px 0 10px;border-bottom:var(--dash);border-radius:0}
-.keyacts button{flex:0 0 auto!important;border:0!important;background:none!important;font-size:13px;font-weight:700;color:var(--lav-ink);padding:6px 4px;min-height:36px}
-.summary[data-act="key"]{background:none!important;padding:2px 0 10px!important;border-bottom:var(--dash);border-radius:0}
-.trade .swap{background:none;padding:2px 0}
-.inlinerow{margin:4px 16px 0;gap:18px;justify-content:flex-start}
-.inlineadd,.inlineadd.lav{background:none!important;border:0!important;box-shadow:none!important;min-height:44px;padding:4px 0;width:auto;justify-content:flex-start;font-size:14.5px}
-.inlinerow .inlineadd{flex:0 0 auto}
-.inlineadd.lav{color:var(--lav-ink)}
-.inlineadd:active{transform:none}
 .bands{margin:0 16px;padding:2px 14px;background:var(--paper);box-shadow:var(--shadow-s)}
 .bands+.bands{margin-top:10px}
 .bandh{margin:12px 0 0}
 .mrow{background:none;box-shadow:none;margin:0;padding:8px 0 10px;border-bottom:var(--dash)}
 .mrow:last-child{border-bottom:0}
 .homelink{display:block;margin:26px auto 0;background:none;border:0;font-size:14px;font-weight:700;color:var(--ink);min-height:44px;padding:0 10px}
+/* つぎにやること（いつも1つだけ囲む） */
+.nextbox{position:relative;margin:26px 10px 0;padding:20px 0 14px;border:3px solid var(--berry-ink,#a8445f);background:rgba(255,255,255,.55)}
+.nextbox>.nexttag{position:absolute;top:-14px;left:14px;background:var(--berry-ink,#a8445f);color:#fff;font-weight:700;font-size:12.5px;letter-spacing:.06em;padding:3px 12px}
+.nextbox>.nexthint{display:block;margin:0 16px 10px;font-size:13px;font-weight:700;color:var(--berry-ink,#a8445f)}
+.nextbox .nextcard,.nextbox .inlinerow,.nextbox .inlineadd{margin-top:0}
+.nextbox .paper,.nextbox .offrow{margin-top:0}
+.nextcard.plain{background:var(--paper);color:var(--ink);border:1.5px solid var(--ink)}
+.nextcard.plain small{opacity:.7}
+.nextcard.save.plain{background:var(--paper);color:var(--green);border:1.5px solid var(--green)}
+.dtop .seeshiori{background:var(--paper);color:var(--green);border:1.5px solid var(--green)}
 </style>
 </head>
 <body>
@@ -484,12 +482,12 @@ button.cloudstat{background:none;border:0;padding:4px 0;font-size:11.5px;color:v
   </div>
 </nav>
 <main class="wrap" id="app" aria-live="polite"></main>
-<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">ver 2026.10.02-7</span><br>MUZE DAY はテスト版です。予定はこの端末に保存され、MUZE KEYを入れると暗号化してクラウドにも保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
+<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">ver 2026.10.02-8</span><br>MUZE DAY はテスト版です。予定はこの端末に保存され、MUZE KEYを入れると暗号化してクラウドにも保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
 <div id="dock"></div>
 <div id="sheet" class="sheet hidden" role="dialog" aria-modal="true"></div>
 <div id="toast" class="toast hidden" role="status"></div>
 
-<script src="./events.js?v=2026.10.02-7"></script>
+<script src="./events.js?v=2026.10.02-8"></script>
 <script>
 (function () {
 "use strict";
@@ -854,6 +852,9 @@ function renderDay(d) {
   $("#dock").innerHTML = "";
 }
 
+function curStep(d) { var st = progress(d); for (var i = 0; i < st.length; i++) if (!st[i].done) return i; return -1; }
+function nb(html, on, hint) { return on ? '<div class="nextbox"><span class="nexttag">つぎはここ</span>' + (hint ? '<span class="nexthint">' + hint + '</span>' : "") + html + '</div>' : html; }
+function saveCard(plain) { return '<button type="button" class="nextcard save' + (plain ? " plain" : "") + '" data-act="share"><span><b>しおりを保存する</b><small>当日はその画像を見るだけでOK</small></span><span class="ar">→</span></button>'; }
 function progress(d) {
   var off = d.official.some(function (o) { return o.label === "開場" || o.label === "開演"; });
   return [
@@ -877,13 +878,15 @@ function secHead(no, title, hint) { return '<div class="sec"><h2>' + title + '</
 function eventView(d) {
   var get = function (l) { return d.official.filter(function (o) { return o.label === l; })[0]; };
   var cols = [["物販", get("物販")], ["開場", get("開場")], ["開演", get("開演")]];
-  var html = secHead("01", "公式の時間", "") + '<button type="button" class="offrow" data-act="daymenu">' +
-    cols.map(function (x) { return '<span><small>' + x[0] + '</small><b class="en">' + (x[1] ? esc(x[1].time) : "—") + '</b></span>'; }).join("") + '<span class="ed">直す</span></button>' +
+  var cur = curStep(d);
+  var html = secHead("01", "公式の時間", "") + nb('<button type="button" class="offrow" data-act="daymenu">' +
+    cols.map(function (x) { return '<span><small>' + x[0] + '</small><b class="en">' + (x[1] ? esc(x[1].time) : "—") + '</b></span>'; }).join("") + '<span class="ed">直す</span></button>', cur === 0, "開場・開演の時間を入れてね") +
     '<p class="autonote" style="margin:6px 16px 0">開場・開演などの時間は、今後自動で入るようにする予定です</p>';
-  html += secHead("02", "わたしの予定", "行をタップして時間と場所を入力") + myPlansCard(d) + '<button type="button" class="inlineadd" data-act="add-direct" data-v="my">＋ 予定をいれる</button>';
+  html += secHead("02", "わたしの予定", "行をタップして時間と場所を入力") + nb(myPlansCard(d) + '<button type="button" class="inlineadd" data-act="add-direct" data-v="my">＋ 予定をいれる</button>', cur === 1, "会場入りかランチの行をタップして、時間を入れてね");
   html += secHead("03", "当日の流れ", "時間の入った予定が自動で並ぶよ") + flow(d);
   html += checklist(d);
-  html += nextCard(d);
+  if (cur === 3) html += nb(saveCard(), true, "ここまでできたら、しおりを保存");
+  else html += nb(nextCard(d, cur !== 2), cur === 2, "つぎは交換・ミーグリ");
   return html + '<div style="height:10px"></div>';
 }
 function myPlansCard(d) {
@@ -894,9 +897,9 @@ function myPlansCard(d) {
       '<span class="pl">' + esc(p.place || (p.time ? p.memo || "" : "タップして時間と場所をいれる")) + '</span></button><button type="button" class="xbtn" data-act="del-quick" data-k="my" data-id="' + p.id + '" aria-label="' + esc(myLabel(p)) + 'を消す">✕</button></div>';
   }).join("") + '</div>';
 }
-function nextCard(d) {
+function nextCard(d, plain) {
   var open = d.trades.filter(function (t) { return !t.done; }).length, meets = d.meets.filter(function (m) { return !m.done; }).length;
-  return '<button type="button" class="nextcard" data-act="view" data-v="meet"><span><b>つぎは「ミーグリの予定」へ</b><small>交換' + open + '・ミーグリ' + meets + '</small></span><span class="ar">→</span></button>';
+  return '<button type="button" class="nextcard' + (plain ? " plain" : "") + '" data-act="view" data-v="meet"><span><b>「ミーグリの予定」へ</b><small>交換' + open + '・ミーグリ' + meets + '</small></span><span class="ar">→</span></button>';
 }
 function summaryLine(d) {
   var open = d.trades.filter(function (t) { return !t.done; }), un = open.filter(function (t) { return !t.time; }).length;
@@ -930,10 +933,11 @@ function meetView(d) {
     return a.priority === b.priority ? 0 : a.priority === "must" ? -1 : 1;
   });
   var done = d.trades.filter(function (t) { return t.done; });
+  var cur = curStep(d);
   var html = secHead("01", "交換", "「いつごろ」と「だいたいの場所」だけでOK") + linkBar();
   if (!open.length) html += '<div class="empty">この日の交換はまだないよ。</div>';
   html += open.map(tradeCard).join("");
-  html += '<div class="inlinerow">' + (linkedLabel() ? '<button type="button" class="inlineadd lav" data-act="pick-log">' + keyIcon(16) + ' ログからえらぶ</button>' : "") + '<button type="button" class="inlineadd" data-act="add-direct" data-v="trade">＋ 交換を書く</button></div>';
+  html += nb('<div class="inlinerow">' + (linkedLabel() ? '<button type="button" class="inlineadd lav" data-act="pick-log">' + keyIcon(16) + ' ログからえらぶ</button>' : "") + '<button type="button" class="inlineadd" data-act="add-direct" data-v="trade">＋ 交換を書く</button></div>', cur === 2, "交換を入れてみよう（会いたい人だけでもOK）");
   if (done.length) html += '<div class="donebar">交換できた：' + done.map(function (t) { return '<button type="button" class="link" style="min-height:32px;padding:0 4px" data-act="trade-done" data-id="' + t.id + '">' + esc(t.who) + '</button>'; }).join("") + '</div>';
 
   var fixed = d.meets.filter(function (m) { return m.time && !m.done; }).sort(function (a, b) { return toMin(a.time) - toMin(b.time); });
@@ -956,7 +960,7 @@ function meetView(d) {
   var met = d.meets.filter(function (m) { return m.done; });
   if (met.length) html += '<div class="donebar" style="margin-top:6px">会えた：' + met.map(function (m) { return '<button type="button" class="link" style="min-height:32px;padding:0 4px" data-act="meet-done" data-id="' + m.id + '">' + esc(m.who) + '</button>'; }).join("") + '</div>';
   html += '<button type="button" class="inlineadd" data-act="add-direct" data-v="meet">＋ 会いたい人をいれる</button>';
-  html += '<button type="button" class="nextcard save" data-act="share"><span><b>しおりを保存する</b><small>当日はその画像を見るだけでOK</small></span><span class="ar">→</span></button>';
+  html += nb(saveCard(cur === 0 || cur === 1 || cur === 2), cur === 3, "入れおわったら、しおりを保存");
   return html + '<div style="height:10px"></div>';
 }
 function linkBar() {
