@@ -2,9 +2,10 @@
 'use strict';
 const MEMBERS=['KAIRYU','NAOYA','RAN','SEITO','RYUKI','TAKUTO','HAYATO','EIKI'];
 const PRESETS={
- safety:{no:'01',name:'治安 MAP',top:'治安良',bottom:'治安悪',left:'クール',right:'色気'},
- distance:{no:'02',name:'距離感 MAP',top:'彼氏感',bottom:'神々しい',left:'メロい',right:'かわいい'},
- world:{no:'03',name:'世界観 MAP',top:'天使',bottom:'ヴィラン',left:'儚い',right:'強い'},
+ // corners: [左上, 右上, 左下, 右下]。2軸が別方向を測るよう、四隅すべてが想像できる組み合わせにしている
+ type:{no:'01',name:'推しタイプ MAP',top:'近い',bottom:'遠い',left:'大人っぽい',right:'あどけない',corners:['彼氏','弟','国宝','天使']},
+ reaction:{no:'02',name:'リアクション MAP',top:'静',bottom:'動',left:'癒される',right:'心乱される',corners:['守りたい','しんどい','供給ありがとう','ギャップ沼']},
+ numa:{no:'03',name:'沼 / 尊い MAP',top:'熱い',bottom:'穏やか',left:'近づきたい',right:'拝んでいたい',corners:['沼','致死量','沼未満','尊い']},
  custom:{no:'04',name:'CUSTOM',top:'',bottom:'',left:'',right:''}
 };
 const CATALOG='https://rikomuze.github.io/oshi-visual-6/images/';
@@ -46,7 +47,7 @@ function initMembers(){
 }
 $('#toMap').onclick=()=>{if(state.member)show('screen-map');};
 function currentAxes(){
- if(state.preset!=='custom')return PRESETS[state.preset]||PRESETS.safety;
+ if(state.preset!=='custom')return PRESETS[state.preset]||PRESETS.type;
  const a={name:'CUSTOM'};['Top','Bottom','Left','Right'].forEach(k=>a[k.toLowerCase()]=$('#custom'+k).value.trim());return a;
 }
 function validPreset(){return !!state.preset&&(state.preset!=='custom'||['top','bottom','left','right'].every(k=>currentAxes()[k]));}
@@ -61,7 +62,7 @@ function initPresets(){
   b.innerHTML='<span class="preset-no">'+p.no+' / 04</span><span class="preset-title">'+p.name+'</span>';
   card.onclick=()=>{state.preset=key;syncPresets();};card.appendChild(b);
   const spec=document.createElement('div');spec.className='axis-spec';
-  spec.innerHTML=key==='custom'?'<span>上下左右の言葉を自由に入力</span>':'<span><b>縦軸</b>　'+p.top+' / '+p.bottom+'</span><span><b>横軸</b>　'+p.left+' / '+p.right+'</span>';
+  spec.innerHTML=key==='custom'?'<span>上下左右の言葉を自由に入力</span>':'<span><b>縦軸</b>　'+p.top+' / '+p.bottom+'</span><span><b>横軸</b>　'+p.left+' / '+p.right+'</span><span><b>四隅</b>　'+p.corners.join(' / ')+'</span>';
   card.appendChild(spec);
   if(key==='custom'){
    const fields=document.createElement('div');fields.className='custom-fields';
@@ -143,7 +144,10 @@ function renderPhotoList(){
  const b=document.createElement('button');b.type='button';b.textContent='×';b.setAttribute('aria-label','写真 '+(i+1)+'を外す');b.onclick=()=>removePhoto(p.id);d.appendChild(b);list.appendChild(d);});
  $('#photoCount').textContent=state.photos.length+' / 9';$('#toEditor').disabled=state.photos.length===0||pending.size>0;$('#toPreview').disabled=state.photos.length===0;
 }
-function applyAxes(){const a=currentAxes();['Top','Bottom','Left','Right'].forEach(k=>$('#axis'+k).textContent=a[k.toLowerCase()]);}
+function applyAxes(){
+ const a=currentAxes();['Top','Bottom','Left','Right'].forEach(k=>$('#axis'+k).textContent=a[k.toLowerCase()]);
+ ['Tl','Tr','Bl','Br'].forEach((k,i)=>{const el=$('#corner'+k);el.textContent=a.corners?a.corners[i]:'';el.hidden=!a.corners;});
+}
 function layoutInitial(){const cols=Math.min(3,state.photos.length),rows=Math.ceil(state.photos.length/cols);state.photos.forEach((p,i)=>{if(p._placed)return;p.x=(i%cols+1)/(cols+1);p.y=(Math.floor(i/cols)+1)/(rows+1);p._placed=true;});}
 function enterEditor(){
  if(!state.photos.length||pending.size)return;
@@ -201,6 +205,12 @@ async function drawResult(){
  ctx.textAlign='right';ctx.font='700 20px "Zen Kaku Gothic New",sans-serif';ctx.fillText(a.name,1018,102);
  ctx.fillStyle='#282536';ctx.fillRect(mx+5,my+6,mw,mh);ctx.fillStyle='#fff';ctx.fillRect(mx,my,mw,mh);ctx.strokeStyle='#282536';ctx.lineWidth=2;ctx.strokeRect(mx,my,mw,mh);
  ctx.strokeStyle='#b9b2c8';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(cx,my);ctx.lineTo(cx,my+mh);ctx.moveTo(mx,cy);ctx.lineTo(mx+mw,cy);ctx.stroke();
+ if(a.corners){
+  ctx.save();ctx.globalAlpha=.55;ctx.fillStyle='#8051bd';ctx.font='900 36px "Zen Kaku Gothic New",sans-serif';const pad=22;
+  ctx.textAlign='left';ctx.fillText(a.corners[0],mx+pad,my+pad+30);ctx.fillText(a.corners[2],mx+pad,my+mh-pad);
+  ctx.textAlign='right';ctx.fillText(a.corners[1],mx+mw-pad,my+pad+30);ctx.fillText(a.corners[3],mx+mw-pad,my+mh-pad);
+  ctx.restore();
+ }
  ctx.fillStyle='#282536';ctx.font='700 21px "Zen Kaku Gothic New",sans-serif';ctx.textAlign='center';ctx.fillText(a.top,cx,my-12);ctx.fillText(a.bottom,cx,my+mh+29);
  ctx.save();ctx.translate(mx-31,cy);ctx.rotate(-Math.PI/2);ctx.fillText(a.left,0,0);ctx.restore();ctx.save();ctx.translate(mx+mw+31,cy);ctx.rotate(Math.PI/2);ctx.fillText(a.right,0,0);ctx.restore();
  state.photos.forEach((p,i)=>{const size=p.size/400*mw,frame=3/400*mw,x=mx+p.x*mw-size/2,y=my+p.y*mh-size/2;
