@@ -59,7 +59,7 @@ function initPresets(){
   const card=document.createElement('div');card.className='preset-card';card.dataset.key=key;
   const b=document.createElement('button');b.type='button';b.className='preset-select';b.setAttribute('aria-pressed','false');
   b.innerHTML='<span class="preset-no">'+p.no+' / 04</span><span class="preset-title">'+p.name+'</span>';
-  b.onclick=()=>{state.preset=key;syncPresets();};card.appendChild(b);
+  card.onclick=()=>{state.preset=key;syncPresets();};card.appendChild(b);
   const spec=document.createElement('div');spec.className='axis-spec';
   spec.innerHTML=key==='custom'?'<span>上下左右の言葉を自由に入力</span>':'<span><b>縦軸</b>　'+p.top+' / '+p.bottom+'</span><span><b>横軸</b>　'+p.left+' / '+p.right+'</span>';
   card.appendChild(spec);
