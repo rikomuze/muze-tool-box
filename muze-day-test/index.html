@@ -1,0 +1,1454 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f1ebe1">
+<meta name="robots" content="noindex">
+<meta http-equiv="Cache-Control" content="no-cache">
+<title>MUZE DAY デザインテスト | MUZE TOOL BOX</title>
+<meta name="description" content="ライブ・フェスの日の、会場入り・ランチ・交換・ミーグリをまとめる当日しおり。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Klee+One:wght@400;600&family=Montserrat:wght@500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+:root{
+  --desk:#f1ebe1;--paper:#fff;--ink:#40382f;--faded:#6f6456;--muted:#8f8577;--red:#c0472f;
+  --berry:#e27a94;--berry-t:rgba(226,122,148,.85);--berry-ink:#a8445f;
+  --mint:#a4c5af;--mint-t:rgba(164,197,175,.85);--mint-ink:#4a7556;
+  --lav:#bfaee3;--lav-t:rgba(190,172,226,.85);--lav-pale:#efe5ff;--lav-ink:#65559a;
+  --butter-t:rgba(240,212,150,.85);--butter-ink:#7a5f22;
+  --hand:"Klee One","Zen Kaku Gothic New",sans-serif;
+  --gothic:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
+  --en:"Montserrat","Helvetica Neue",Arial,sans-serif;
+  --serif:"DM Serif Display",Georgia,serif;
+  --shadow:0 10px 24px rgba(64,56,47,.18);--shadow-s:0 4px 12px rgba(64,56,47,.14);
+  --dash:1.5px dashed rgba(64,56,47,.35);
+  --green:#2f5d4a;--green-d:#244a3a;
+}
+*{box-sizing:border-box}
+html,body{max-width:100%;overflow-x:hidden}
+body{margin:0;color:var(--ink);font-family:var(--gothic);line-height:1.6;-webkit-text-size-adjust:100%;
+  background:radial-gradient(rgba(64,56,47,.06) 1px,transparent 1px) 0 0/22px 22px,var(--desk);padding-bottom:40px}
+button,input,select,textarea{font-family:inherit;color:inherit;font-size:16px}
+button{cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:2.5px solid var(--berry);outline-offset:3px}
+.hidden{display:none!important}
+.wrap{max-width:560px;margin:0 auto}
+
+/* 共通ナビ（muze-key と同じ形） */
+.tool-nav{max-width:560px;margin:0 auto;padding:12px 16px 0}
+.tool-nav-inner{display:flex;align-items:center;justify-content:space-between;gap:12px;background:rgba(255,255,255,.74);border:1px solid rgba(64,56,47,.14);padding:8px 10px}
+.tool-nav-brand{font-family:var(--hand);font-size:14px;font-weight:600;white-space:nowrap;text-decoration:none}
+.tool-nav-links{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none}
+.tool-nav-links::-webkit-scrollbar{display:none}
+.tool-nav-links a{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--muted);white-space:nowrap;border-bottom:1px dashed rgba(64,56,47,.28);text-decoration:none}
+
+/* 部品 */
+.tape{position:absolute;height:14px;width:44px;transform:rotate(-7deg);z-index:2;pointer-events:none}
+.t-berry{background:var(--berry-t)}.t-mint{background:var(--mint-t)}.t-lav{background:var(--lav-t)}.t-butter{background:var(--butter-t)}
+.sticker{position:relative;display:inline-block;background:var(--paper);padding:6px 14px 7px;transform:rotate(-2deg);box-shadow:var(--shadow);font-family:var(--hand);font-weight:600;font-size:15px;white-space:nowrap}
+.sticker .tape{top:-6px;left:-10px;width:40px;height:13px;transform:rotate(-12deg)}
+.sticker span{color:var(--berry-ink)}
+.hand{font-family:var(--hand);font-weight:600}
+.en{font-family:var(--en);font-weight:700}
+.faded{color:var(--faded)}
+.small{font-size:12px}
+.stamp{display:inline-flex;align-items:center;height:22px;padding:0 9px;border:1.5px solid currentColor;border-radius:999px;font-family:var(--hand);font-weight:600;font-size:11.5px;transform:rotate(-3deg);white-space:nowrap;background:var(--paper)}
+.c-berry{color:var(--berry-ink)}.c-mint{color:var(--mint-ink)}.c-lav{color:var(--lav-ink)}.c-butter{color:var(--butter-ink)}
+.prio{display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:50%;font-family:var(--hand);font-weight:600;font-size:11.5px;white-space:nowrap}
+.prio.must{border:1.5px solid var(--red);color:var(--red);transform:rotate(-4deg)}
+.prio.maybe{border:1.5px dashed rgba(64,56,47,.45);color:var(--faded);transform:rotate(3deg)}
+.chip{min-height:44px;min-width:44px;padding:8px 15px;font-family:var(--hand);font-weight:600;font-size:13.5px;border:1.5px solid var(--ink);border-radius:50%;background:transparent;transform:rotate(2deg)}
+.chip:nth-child(2n){transform:rotate(-2deg)}
+.chip:nth-child(3n){transform:rotate(1.2deg)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--desk)}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.btn{min-height:48px;padding:10px 16px;border:1.5px solid var(--ink);background:var(--paper);font-weight:700;font-size:14px}
+.btn.dark{background:var(--ink);color:var(--desk)}
+.btn.oval{border-radius:50%;background:transparent;font-family:var(--hand);font-weight:600;transform:rotate(-1.5deg)}
+.btn.full{width:100%}
+.link{background:none;border:0;padding:8px 4px;font-size:12.5px;color:var(--faded);text-decoration:underline dashed rgba(64,56,47,.4);text-underline-offset:4px;min-height:40px}
+.field{display:flex;flex-direction:column}
+.field label,.lbl{font-family:var(--hand);font-weight:600;font-size:13px}
+.field input,.field select,.field textarea{font-family:var(--hand);font-weight:600;background:transparent;border:0;border-bottom:var(--dash);padding:7px 2px;outline:none;border-radius:0}
+.field input::placeholder{color:rgba(64,56,47,.35)}
+.hint{font-size:11.5px;color:var(--faded);line-height:1.6}
+.row2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.paper{position:relative;background:var(--paper);box-shadow:var(--shadow-s)}
+
+/* 日のヘッダー */
+.dayhead{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 4px;gap:10px}
+.dayhead .right{display:flex;align-items:center;gap:10px}
+.kindtag{padding:3px 9px;border:1.5px solid;font-family:var(--en);font-weight:700;font-size:11px;letter-spacing:.18em;background:var(--paper)}
+.bigdate{font-family:var(--en);font-weight:700;font-size:26px;line-height:1.2}
+.bigdate small{font-size:11px;letter-spacing:.16em;margin-left:5px;color:var(--faded)}
+.daytitle{padding:6px 16px 12px}
+.daytitle button{background:none;border:0;padding:0;text-align:left}
+.daytitle .t{font-family:var(--hand);font-weight:600;font-size:15px;line-height:1.45}
+
+/* ビュー切替タブ */
+.vtabs{display:flex;gap:10px;padding:0 16px}
+.vtab{position:relative;flex:1;min-height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 4px;background:rgba(255,255,255,.5);border:1.5px dashed rgba(64,56,47,.32);color:var(--faded)}
+.vtab .l{font-size:15px}
+.vtab .s{font-size:11px;color:var(--faded)}
+.vtab[aria-selected="true"]{background:var(--paper);border:1.5px solid var(--ink);box-shadow:var(--shadow-s);color:var(--ink)}
+.vtab[aria-selected="true"]::before{content:"";position:absolute;top:-6px;left:50%;width:40px;height:12px;margin-left:-20px;transform:rotate(-4deg)}
+.vtab.ev[aria-selected="true"]::before{background:var(--lav-t)}
+.vtab.fes[aria-selected="true"]::before{background:var(--mint-t)}
+.vtab.mt[aria-selected="true"]::before{background:var(--berry-t)}
+.swipehint{text-align:center;font-size:10.5px;color:var(--faded);margin-top:6px}
+
+/* NOW */
+.now{margin:14px 16px 0;display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(255,255,255,.6);border:var(--dash);font-size:12px}
+.now .tag{font-family:var(--en);font-weight:700;font-size:10px;letter-spacing:.16em;padding:1px 7px;background:var(--ink);color:var(--desk)}
+.now .b{font-family:var(--hand);font-weight:600;font-size:14px}
+.now .r{margin-left:auto;text-align:right}
+
+.sec{padding:24px 16px 10px}
+.sec h2{margin:0;font-family:var(--hand);font-weight:600;font-size:18px;display:flex;align-items:baseline;gap:8px}
+.sec h2 .n{font-family:var(--en);font-size:14px;color:var(--faded)}
+.sec p{margin:0;font-size:11.5px;color:var(--faded)}
+
+/* 交換カード */
+.trade{margin:0 16px 16px;padding:14px 14px 12px;display:flex;flex-direction:column;gap:8px;box-shadow:var(--shadow)}
+.trade .tape{top:-7px;right:22px;transform:rotate(5deg)}
+.trade .top{display:flex;align-items:center;gap:8px}
+.trade .who{font-family:var(--hand);font-weight:600;font-size:19px;line-height:1.3;background:none;border:0;padding:0;text-align:left}
+.trade .due{margin-left:auto;text-align:right;line-height:1.25}
+.trade .due b{font-family:var(--hand);font-weight:600;font-size:13.5px;display:block}
+.trade .due span{font-size:11px;color:var(--faded)}
+.swap{display:grid;grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr);align-items:center;gap:6px;padding:8px 10px;background:var(--desk)}
+.swap .k{font-family:var(--hand);font-weight:600;font-size:10.5px;color:var(--faded)}
+.swap .v{font-size:13.5px;font-weight:700;line-height:1.35;word-break:break-word}
+.status{display:flex;align-items:center;gap:8px}
+.status .undecided{flex:1;padding:7px 10px;border:var(--dash);font-size:12.5px;line-height:1.45}
+.status .fixed{flex:1;display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(164,197,175,.22);font-size:12.5px}
+.status .fixed .en{font-size:16px}
+.nudge{padding:9px 11px;background:var(--desk);font-family:var(--hand);font-weight:600;font-size:13.5px;line-height:1.5}
+.nudge .chips{margin-top:8px}
+.logfoot{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--faded)}
+.logfoot a{margin-left:auto;text-decoration:underline dashed rgba(64,56,47,.4);text-underline-offset:3px}
+.trade.done{opacity:.6}
+.donebar{margin:0 16px;font-size:12px;color:var(--faded)}
+
+/* 会えたら */
+.bands{padding:0 16px}
+.bandh{display:flex;align-items:baseline;gap:8px;margin:8px 0}
+.bandh b{font-family:var(--hand);font-weight:600;font-size:14px;padding:0 6px;background:linear-gradient(transparent 60%,rgba(190,172,226,.45) 60%)}
+.bandh span{font-size:11px;color:var(--faded)}
+.loose{display:flex;align-items:center;gap:10px;padding:9px 10px 9px 12px;margin-bottom:8px;background:rgba(255,255,255,.72);border:1.5px dashed rgba(64,56,47,.35)}
+.loose .body{flex:1;min-width:0;background:none;border:0;padding:0;text-align:left}
+.loose .nm{font-family:var(--hand);font-weight:600;font-size:16px;margin-right:6px}
+.loose .memo{display:block;font-size:11.5px;color:var(--faded);line-height:1.45}
+.loose .go{flex-shrink:0;min-height:40px;padding:0 11px;border:1.5px solid var(--ink);border-radius:50%;background:transparent;font-family:var(--hand);font-weight:600;font-size:12px;transform:rotate(2deg)}
+.loose.done{opacity:.55}
+
+/* 流れ */
+.flowhead{display:flex;align-items:baseline;justify-content:space-between;padding:24px 16px 6px}
+.flowhead b{font-family:var(--hand);font-weight:600;font-size:18px}
+.flowhead span{font-size:11.5px;color:var(--faded)}
+.off{margin:4px 16px;display:flex;align-items:center;gap:10px;padding:7px 12px;background:var(--lav-pale);width:calc(100% - 32px);border:0;text-align:left}
+.off.faint{opacity:.75}
+.off .en{font-size:14px;width:48px}
+.off .hand{font-size:14px}
+.off .sub{margin-left:auto;font-size:11.5px;color:var(--faded)}
+.off.act{background:rgba(164,197,175,.25)}
+.ticket{position:relative;margin:6px 16px;display:flex;background:var(--paper);box-shadow:var(--shadow-s);width:calc(100% - 32px);border:0;padding:0;text-align:left}
+.ticket .tape{top:-7px;right:26px;transform:rotate(6deg)}
+.ticket .stub{width:74px;flex-shrink:0;padding:14px 0 12px;text-align:center;border-right:2px dashed rgba(64,56,47,.28);position:relative}
+.ticket .stub::before,.ticket .stub::after{content:"";position:absolute;right:-8px;width:14px;height:14px;border-radius:50%;background:var(--desk)}
+.ticket .stub::before{top:-7px}.ticket .stub::after{bottom:-7px}
+.ticket .stub .en{font-size:20px;line-height:1.1}
+.ticket .stub .e{font-family:var(--en);font-weight:600;font-size:11px;color:var(--faded)}
+.ticket .main{flex:1;min-width:0;padding:12px 14px;display:flex;flex-direction:column;gap:3px}
+.ticket .nm{font-family:var(--hand);font-weight:600;font-size:18px;line-height:1.3;margin-right:6px}
+.ticket .pl{font-size:13px;font-weight:700;line-height:1.45}
+.ticket .mk{font-size:12.5px;line-height:1.45}
+.ticket.done{opacity:.6}
+.ticket .donestamp{position:absolute;right:12px;bottom:10px;font-family:var(--hand);font-weight:600;font-size:12px;color:var(--mint-ink);border:1.5px solid var(--mint-ink);border-radius:50%;padding:0 8px;transform:rotate(-8deg)}
+.mini{margin:4px 16px;display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--paper);box-shadow:var(--shadow-s);width:calc(100% - 32px);border:0;text-align:left}
+.mini .en{font-size:14px;width:48px}
+.gap{display:flex;padding:4px 16px 4px 52px;align-items:flex-start;gap:0}
+.gap .line{border-left:2px dashed rgba(64,56,47,.3);min-height:30px;margin-right:16px;align-self:stretch}
+.gap .pill{display:inline-flex;align-items:center;padding:3px 11px;border-radius:999px;font-family:var(--hand);font-weight:600;font-size:12.5px;background:rgba(255,255,255,.7)}
+.gap .pill.calm{background:rgba(164,197,175,.3);color:var(--mint-ink)}
+.gap .pill.tight{background:rgba(240,212,150,.45);color:#6b521a}
+.gap .pill.short{background:var(--paper);color:var(--red);border:1.5px solid var(--red)}
+.gap .sub{font-size:11.5px;color:var(--faded);line-height:1.5;margin-top:3px}
+.flag{position:relative;margin:6px 16px 6px 64px;padding:7px 10px;border:1.5px dashed var(--mint-ink);background:rgba(255,255,255,.6)}
+.flag::before{content:"";position:absolute;left:-14px;top:50%;width:12px;border-top:1.5px dashed var(--mint-ink)}
+.flag b{font-family:var(--hand);font-weight:600;font-size:12.5px;color:var(--mint-ink);display:block}
+.flag span{font-size:11px;color:var(--faded)}
+.zone{display:flex;align-items:center;gap:8px;padding:14px 16px 4px}
+.zone::before{content:"";flex:0 0 14px;border-top:var(--dash)}
+.zone::after{content:"";flex:1;border-top:var(--dash)}
+.zone b{font-family:var(--hand);font-weight:600;font-size:14px;white-space:nowrap}
+.zone .nowtag{font-family:var(--en);font-weight:700;font-size:10px;letter-spacing:.16em;padding:1px 7px;background:var(--ink);color:var(--desk)}
+.zonesub{padding:0 16px 4px 38px;font-size:11.5px;color:var(--faded)}
+.empty{margin:0 16px;padding:2px 2px 0;font-size:12.5px;color:var(--faded);line-height:1.7}
+
+/* LIVE */
+.liveticket{margin:18px 16px 0;padding:16px 16px 14px;box-shadow:var(--shadow)}
+.liveticket .tape{top:-8px;left:20px;width:60px;height:17px;transform:rotate(-6deg)}
+.liveticket .cap{font-family:var(--en);font-weight:700;font-size:11px;letter-spacing:.2em;color:var(--lav-ink)}
+.lt-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:8px;text-align:center}
+.lt-grid>div+div{border-left:var(--dash)}
+.lt-grid .hand{font-size:12px;color:var(--faded)}
+.lt-grid .en{font-size:22px}
+.summary{margin:16px 16px 0;display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--paper);box-shadow:var(--shadow-s);border:0;width:calc(100% - 32px);text-align:left;font-size:12px}
+.summary .hand{font-size:14px;white-space:nowrap}
+.summary .go{margin-left:auto;font-size:11.5px;color:var(--faded);white-space:nowrap}
+.check{margin:22px 16px 0;padding:14px 16px 10px}
+.check .tape{top:-7px;right:24px;transform:rotate(5deg)}
+.check h3{margin:0;font-family:var(--hand);font-weight:600;font-size:16px;display:flex;justify-content:space-between}
+.ck{display:flex;align-items:center;gap:8px;min-height:40px;font-size:14px}
+.ck input{width:20px;height:20px;accent-color:var(--berry-ink);flex-shrink:0}
+.ck.done span{text-decoration:line-through;color:var(--faded)}
+.ck .x{margin-left:auto;background:none;border:0;color:var(--muted);font-size:14px;min-width:36px;min-height:36px}
+.ckgroup{font-family:var(--hand);font-weight:600;font-size:12px;color:var(--lav-ink);margin-top:6px}
+.addck{display:flex;gap:8px;margin-top:6px}
+.addck input{flex:1;border:0;border-bottom:var(--dash);background:transparent;padding:6px 2px;font-family:var(--hand);font-weight:600;outline:none}
+
+
+/* ドック */
+
+/* シート */
+.sheet{position:fixed;inset:0;z-index:100;background:rgba(64,56,47,.45);display:flex;align-items:flex-end;justify-content:center}
+.sheet-inner{width:100%;max-width:560px;max-height:90vh;overflow:auto;background:var(--paper);box-shadow:0 -12px 30px rgba(64,56,47,.25);padding:16px 18px calc(20px + env(safe-area-inset-bottom))}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;padding-bottom:12px;margin-bottom:14px;border-bottom:var(--dash)}
+.sheet-head h2{margin:0;font-family:var(--hand);font-weight:600;font-size:19px}
+.close{width:44px;height:44px;border:1.5px solid var(--ink);border-radius:50%;background:transparent;font-size:17px;font-weight:700;transform:rotate(3deg)}
+.form{display:flex;flex-direction:column;gap:16px}
+.sheet-foot{position:sticky;bottom:calc(-20px - env(safe-area-inset-bottom));margin:18px -18px calc(-20px - env(safe-area-inset-bottom));padding:12px 18px calc(16px + env(safe-area-inset-bottom));background:var(--paper);box-shadow:0 -8px 12px -8px rgba(64,56,47,.15);display:flex;flex-direction:column;gap:8px}
+.preview{padding:12px;border:var(--dash);background:rgba(255,255,255,.5);font-size:12.5px;line-height:1.7}
+.preview .warnline{color:var(--red);font-family:var(--hand);font-weight:600}
+
+/* 日づくり */
+.start{padding:18px 16px 0}
+.start h1{font-family:var(--hand);font-weight:600;font-size:30px;line-height:1.35;margin:18px 0 0}
+.start h1 span{border-bottom:3px solid var(--berry-t)}
+.dd{margin-top:20px}
+.dd-btn{position:relative;display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;background:var(--paper);border:2px solid var(--ink);box-shadow:var(--shadow-s);text-align:left}
+.dd-btn .tape{top:-7px;right:40px;transform:rotate(6deg)}
+.dd-date{width:50px;flex-shrink:0;text-align:center;line-height:1.15;border-right:2px dashed rgba(64,56,47,.25);padding-right:10px}
+.dd-date .en{font-size:17px}
+.dd-date small{display:block;font-family:var(--en);font-weight:600;font-size:10px;letter-spacing:.14em;color:var(--faded)}
+.dd-body{flex:1;min-width:0}
+.dd-name{font-family:var(--hand);font-weight:600;font-size:15px;line-height:1.35;margin-top:3px}
+.badge{display:inline-block;padding:1px 7px;border:1.5px solid;font-family:var(--en);font-weight:700;font-size:9.5px;letter-spacing:.14em;background:var(--paper);white-space:nowrap}
+.badge.LIVE{color:var(--lav-ink)}.badge.OTHER{color:var(--mint-ink);font-family:var(--hand);letter-spacing:.04em;font-size:10.5px}
+.dd-list{background:var(--paper);border:2px solid var(--ink);border-top:0;box-shadow:var(--shadow);max-height:62vh;overflow:auto}
+.dd-filter{display:flex;gap:8px;padding:10px 12px;border-bottom:var(--dash);position:sticky;top:0;background:var(--paper);z-index:2}
+.dd-month{display:flex;align-items:baseline;gap:8px;padding:12px 12px 4px;background:var(--desk)}
+.dd-month b{font-family:var(--hand);font-weight:600;font-size:16px}
+.dd-row{display:flex;align-items:center;gap:10px;width:100%;min-height:54px;padding:7px 12px;border:0;border-bottom:1px dashed rgba(64,56,47,.2);background:transparent;text-align:left}
+.dd-row[aria-selected="true"]{background:rgba(226,122,148,.12);box-shadow:inset 3px 0 0 var(--berry)}
+.dd-row .d{width:42px;flex-shrink:0;line-height:1.15}
+.dd-row .d .en{font-size:15px}
+.dd-row .d small{display:block;font-family:var(--en);font-weight:600;font-size:9.5px;letter-spacing:.12em;color:var(--faded)}
+.dd-row .nm{font-family:var(--hand);font-weight:600;font-size:14px;line-height:1.35}
+.dd-row .sub{font-size:11px;color:var(--faded);line-height:1.3}
+.dd-note{font-family:var(--hand);font-weight:600;font-size:11px;color:var(--berry-ink);margin-left:6px}
+.kinds{display:flex;gap:12px}
+.kind{position:relative;flex:1;text-align:left;padding:16px 14px 12px;background:rgba(255,255,255,.55);border:1.5px dashed rgba(64,56,47,.35)}
+.kind[aria-pressed="true"]{background:var(--paper);border:2px solid var(--ink);box-shadow:var(--shadow)}
+.kind .en{font-size:24px;letter-spacing:.12em;display:block}
+.kind small{font-size:11.5px;color:var(--faded);line-height:1.6;display:block}
+.box{margin-top:24px;padding:16px 16px 12px}
+.box .tape{top:-8px;left:22px;transform:rotate(-5deg)}
+.box h3{margin:0;font-family:var(--hand);font-weight:600;font-size:16px;display:flex;align-items:center;gap:7px}
+.trow{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:var(--dash)}
+.trow input[type=text]{width:64px;font-family:var(--hand);font-weight:600;font-size:15px;border:0;background:transparent;outline:none}
+.trow input[type=time]{flex:1;font-family:var(--en);font-weight:700;font-size:18px;border:0;background:transparent;outline:none}
+.trow .x{background:none;border:0;color:var(--muted);min-width:36px;min-height:36px}
+.logrow{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:var(--dash)}
+.logrow input{width:22px;height:22px;accent-color:var(--berry-ink);flex-shrink:0}
+.logrow .st{font-size:11px;padding:1px 7px;border:1px solid rgba(64,56,47,.3);white-space:nowrap}
+
+/* 会う直前カード */
+.meetcard{position:relative;padding:26px 20px 20px;margin:10px 0 0;box-shadow:var(--shadow)}
+.meetcard .tape{top:-10px;left:24px;width:72px;height:20px;transform:rotate(-8deg)}
+.meetcard .big{font-family:var(--hand);font-weight:600;font-size:36px;line-height:1.2;margin-top:4px;word-break:break-word}
+.meetcard .k{font-family:var(--hand);font-weight:600;font-size:13px;color:var(--faded);margin-top:14px}
+.meetcard .v{font-weight:700;font-size:20px;line-height:1.45}
+.meetcard .mark{font-weight:700;font-size:17px;line-height:1.5;background:linear-gradient(transparent 62%,rgba(226,122,148,.28) 62%);display:inline}
+
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--ink);color:var(--desk);padding:10px 16px;font-size:13px;z-index:200;max-width:90vw;text-align:center}
+.foot{margin:40px auto 0;max-width:520px;padding:0 16px;font-size:11px;color:var(--faded);line-height:1.9;text-align:center}
+.shareimg{width:100%;height:auto;box-shadow:var(--shadow-s);border:1px solid rgba(64,56,47,.15)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* 予定をいれる・わたしの予定 */
+.addbtn{width:100%;min-height:52px;display:flex;align-items:center;justify-content:center;gap:6px;background:var(--paper);border:2px solid var(--ink);box-shadow:var(--shadow-s);font-family:var(--hand);font-weight:600;font-size:16px}
+.myplans{margin:0 16px;padding:8px 14px 8px}
+.myplans .tape{top:-7px;left:22px;transform:rotate(-5deg)}
+.myrow{display:flex;align-items:center;gap:12px;width:100%;min-height:52px;padding:6px 0;border:0;border-bottom:var(--dash);background:transparent;text-align:left}
+.myrow .k{width:76px;flex-shrink:0;font-size:15px}
+.myrow .en{font-size:17px;width:52px;flex-shrink:0}
+.myrow .undecided{width:52px;flex-shrink:0;font-size:13px;color:var(--faded);border:1.5px dashed rgba(64,56,47,.35);text-align:center;border-radius:999px}
+.myrow .pl{flex:1;min-width:0;font-size:12.5px;color:var(--faded);line-height:1.4}
+.mini.my{background:rgba(240,212,150,.3);box-shadow:none}
+.mini.faint{opacity:.75}
+.howto{margin-top:18px;padding:16px 16px 12px;background:#fbeef1;box-shadow:var(--shadow-s);position:relative}
+.howto .tape{top:-7px;left:20px}
+.howto .lead{margin:0 0 10px;font-size:13px;line-height:1.7}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0}
+.steps li{display:flex;gap:12px;align-items:flex-start;padding:9px 0;border-top:1.5px dashed rgba(168,68,95,.25)}
+.steps li:first-child{border-top:0}
+.steps .num{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--berry-ink);color:var(--desk);display:grid;place-items:center;font-family:var(--en);font-weight:700;font-size:13px}
+.steps b{display:block;font-family:var(--hand);font-weight:600;font-size:15px;line-height:1.4}
+.steps small{display:block;font-size:12px;color:var(--faded);line-height:1.5}
+.guide{position:relative;margin:18px 16px 0;padding:16px 14px 8px;background:#fbeef1;box-shadow:var(--shadow-s)}
+.guide .tape{top:-7px;left:18px}
+.guide .gh{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px}
+.guide .gh b{font-family:var(--hand);font-weight:600;font-size:16px}
+.guide .gh .en{font-size:13px;color:var(--berry-ink);margin-left:4px}
+.guide .steps li{padding:0;border-top:1.5px dashed rgba(168,68,95,.25)}
+.guide .steps li button{display:flex;align-items:center;gap:12px;width:100%;min-height:54px;padding:8px 0;background:none;border:0;text-align:left;color:var(--ink)}
+.guide .steps .num{background:var(--paper);color:var(--berry-ink);border:1.5px solid var(--berry-ink)}
+.guide .steps li.cur .num{background:var(--berry-ink);color:#fff}
+.guide .steps li.cur b{color:var(--berry-ink)}
+.guide .steps li.done .num{background:var(--mint-ink);border-color:var(--mint-ink);color:#fff}
+.guide .steps li.done b,.guide .steps li.done small{color:var(--faded)}
+.guide .steps .tx{flex:1;min-width:0}
+.guide .steps b{font-size:14.5px}
+.guide .steps .ar{font-size:20px;color:var(--muted)}
+.guideopen{margin:14px 16px 0}
+.pill-open{width:100%;min-height:44px;background:#fbeef1;border:0;font-family:var(--hand);font-weight:600;font-size:14px;color:var(--berry-ink)}
+.sec h2 .no{font-family:var(--en);font-weight:700;font-size:12px;letter-spacing:.12em;color:var(--berry-ink);padding:2px 7px;border:1.5px solid var(--berry-ink);border-radius:999px;align-self:center}
+.inlineadd{margin:14px 16px 0;width:calc(100% - 32px);min-height:52px;display:flex;align-items:center;justify-content:center;gap:6px;background:var(--paper);border:2px solid var(--ink);box-shadow:0 3px 0 var(--ink);font-family:var(--hand);font-weight:600;font-size:15px;color:var(--ink)}
+.inlineadd:active{transform:translateY(2px);box-shadow:0 1px 0 var(--ink)}
+.inlineadd.lav{background:var(--lav-pale);border-color:var(--lav-ink);box-shadow:0 3px 0 var(--lav-ink);color:var(--lav-ink)}
+.inlinerow{display:flex;gap:10px;margin:14px 16px 0}
+.inlinerow .inlineadd{margin:0;flex:1;width:auto}
+.nextcard{margin:26px 16px 0;width:calc(100% - 32px);display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--ink);color:var(--desk);border:0;text-align:left}
+.nextcard .nx{font-family:var(--en);font-weight:700;font-size:10.5px;letter-spacing:.18em;padding:2px 7px;border:1.5px solid var(--desk);flex-shrink:0}
+.nextcard b{display:block;font-family:var(--hand);font-weight:600;font-size:16px}
+.nextcard small{display:block;font-size:12px;opacity:.85;line-height:1.5}
+.nextcard .ar{margin-left:auto;font-size:20px}
+.nextcard.save{background:var(--green)}
+.btn.green{background:var(--green);color:#fff;border-color:var(--green)}
+.xbtn{flex-shrink:0;width:40px;height:40px;border:0;background:none;color:var(--muted);font-size:16px;display:grid;place-items:center}
+.myrowwrap{display:flex;align-items:center;border-bottom:var(--dash)}
+.myrowwrap .myrow{border-bottom:0;flex:1;min-width:0}
+.trade .top .xbtn{margin-left:auto}
+.btn.del{color:var(--red);border-color:var(--red);background:transparent}
+.logstat{display:block;font-size:11px;color:var(--faded);line-height:1.5}
+.logstat.err{color:var(--red)}
+.dayend{margin:34px 16px 0;padding:14px 16px;border:1.5px dashed rgba(192,71,47,.45);background:rgba(255,255,255,.5);display:flex;align-items:center;gap:12px}
+.dayend p{margin:0;flex:1;font-size:12px;color:var(--faded);line-height:1.6}
+.dayend p b{display:block;font-family:var(--hand);font-weight:600;font-size:14px;color:var(--ink)}
+.dayrow{display:flex;align-items:stretch;gap:6px;margin:6px 0}
+.dayrow .mini{margin:0!important;flex:1}
+.dayrow .xbtn{width:44px;height:auto;background:rgba(255,255,255,.6);border:1.5px dashed rgba(192,71,47,.45);color:var(--red)}
+.tin{display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.tin label{font-family:var(--hand);font-weight:600;font-size:13px;color:var(--faded);white-space:nowrap}
+.tin input[type=time]{min-width:0;width:136px;min-height:42px;padding:4px 8px;border:1.5px solid var(--ink);background:var(--paper);font-family:var(--en);font-weight:700;font-size:16px;color:var(--ink);border-radius:0}
+.tin input[type=time].empty{border-style:dashed;color:var(--muted)}
+.tin .pl{flex:1;min-width:0;font-size:12.5px;color:var(--faded);line-height:1.4;overflow:hidden;text-overflow:ellipsis}
+.mrow{display:flex;align-items:center;gap:8px;padding:10px 4px 10px 12px;margin-bottom:8px;background:var(--paper);box-shadow:var(--shadow-s)}
+.mrow .body{flex:1;min-width:0;background:none;border:0;padding:0;text-align:left}
+.mrow .nm{font-family:var(--hand);font-weight:600;font-size:16px}
+.mrow .memo{display:block;font-size:11.5px;color:var(--faded);line-height:1.45}
+.mrow input[type=time]{width:124px;min-height:40px;padding:2px 6px;border:1.5px solid var(--ink);background:var(--paper);font-family:var(--en);font-weight:700;font-size:15px;color:var(--ink);border-radius:0;flex-shrink:0}
+.mrow input[type=time].empty{border-style:dashed;color:var(--muted)}
+.keyacts{display:flex;gap:8px;width:100%;margin-top:4px}
+.keyacts button{flex:1;min-height:40px;background:var(--paper);border:1.5px solid var(--lav-ink);color:var(--lav-ink);font-family:var(--hand);font-weight:600;font-size:13px}
+.bandpills{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.bandpills .bl{font-family:var(--hand);font-weight:600;font-size:12.5px;color:var(--faded);margin-right:2px}
+.bandpills button{min-height:36px;padding:4px 12px;border:1.5px solid var(--ink);background:var(--paper);border-radius:999px;font-family:var(--hand);font-weight:600;font-size:12.5px;color:var(--ink)}
+.bandpills button[aria-pressed="true"]{background:var(--ink);color:var(--desk)}
+.placebtn{display:flex;align-items:center;gap:6px;width:100%;min-height:40px;padding:6px 0 0;background:none;border:0;text-align:left;font-size:13px;color:var(--ink)}
+.placebtn .bl{font-family:var(--hand);font-weight:600;font-size:12.5px;color:var(--faded);white-space:nowrap}
+.placebtn .v{flex:1;min-width:0}
+.placebtn .v.ph{color:var(--muted)}
+details.more{padding-top:2px}
+details.more summary{font-family:var(--hand);font-weight:600;font-size:13px;color:var(--faded);min-height:36px;cursor:pointer}
+.cloudbox{margin-top:16px;display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(239,229,255,.7);font-size:12px;line-height:1.5}
+.cloudbox span{flex:1}
+button.cloudstat{background:none;border:0;padding:4px 0;font-size:11.5px;color:var(--lav-ink);text-align:right;min-height:36px}
+.cloudstat.err{color:var(--red)}
+.newkey{margin-top:16px;padding:14px;background:var(--lav-pale);display:flex;flex-direction:column;gap:8px}
+.newkey b{font-size:14px}
+.newkey span{font-size:12px;color:var(--faded);line-height:1.6}
+.keyshow{padding:16px;border:2px solid var(--ink);background:var(--paper);font-size:22px;letter-spacing:.08em;text-align:center;word-break:break-all;user-select:all}
+.autonote{margin:8px 0 0;font-size:10.5px;color:var(--muted);line-height:1.6}
+.linkbar{margin:0 16px 12px;display:flex;flex-wrap:wrap;align-items:flex-start;gap:4px 8px;padding:10px 12px 6px;background:rgba(239,229,255,.7);font-size:12px}
+.linkbar>button:nth-of-type(1){flex:1 1 calc(100% - 30px)!important}
+.linkbar .link{margin-left:auto}
+.linkbar .link+.link{margin-left:0}
+.mini.isdone{opacity:.55}
+.toast{bottom:28px}
+
+/* ===== すっきり版（装飾を減らす） ===== */
+.paper .tape,.trade .tape,.ticket .tape,.check .tape,.box .tape,.myplans .tape,.dd-btn .tape,.liveticket .tape,.guide .tape,.meetcard .tape{display:none}
+.chip,.chip:nth-child(2n),.chip:nth-child(3n),.btn.oval,.prio.must,.prio.maybe,.stamp,.loose .go,.close{transform:none!important}
+.chip{border-radius:999px;min-height:42px;padding:8px 16px;font-family:var(--gothic);font-weight:700;font-size:13.5px;border-width:1.5px}
+.btn.oval{border-radius:999px}
+.close{border-radius:50%}
+.sticker{transform:rotate(-1.5deg)}
+.dtop{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 16px 0}
+.dtop .back{background:none;border:0;padding:8px 0;font-size:14px;font-weight:700;color:var(--ink);min-height:40px}
+.dhead{display:flex;align-items:center;gap:14px;width:calc(100% - 32px);margin:6px 16px 0;padding:12px 14px;background:var(--paper);border:0;text-align:left;box-shadow:var(--shadow-s)}
+.dhead .dd2{flex-shrink:0;text-align:center;line-height:1.1;padding-right:14px;border-right:1.5px solid rgba(64,56,47,.15)}
+.dhead .dd2 .en{font-size:24px;display:block}
+.dhead .dd2 small{font-family:var(--en);font-weight:600;font-size:10px;letter-spacing:.14em;color:var(--faded)}
+.dhead .dt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.dhead .dt b{font-size:14.5px;line-height:1.4;font-weight:700}
+.dhead .kind{align-self:flex-start;font-family:var(--en);font-weight:700;font-size:10px;letter-spacing:.14em;padding:1px 7px;border:1.5px solid}
+.dhead .kind.LIVE{color:var(--lav-ink)}.dhead .kind.OTHER{color:var(--mint-ink);font-family:var(--gothic);letter-spacing:.04em}
+.dhead .ed,.offrow .ed{flex-shrink:0;font-size:12px;color:var(--faded);text-decoration:underline;text-underline-offset:3px}
+.vtabs{position:sticky;top:0;z-index:30;gap:0;margin:14px 16px 0;padding:4px;background:#e7ded1;border-radius:12px}
+.vtab,.vtab:first-child,.vtab:last-child{transform:none;border:0;background:transparent;min-height:54px;border-radius:9px;color:var(--faded)}
+.vtab::before{display:none!important}
+.vtab .l{font-family:var(--gothic);font-weight:700;font-size:15px;letter-spacing:0}
+.vtab[aria-selected="true"]{background:var(--paper);color:var(--ink);box-shadow:0 2px 6px rgba(64,56,47,.15);border:0}
+.swipehint{display:none}
+.prog{display:flex;align-items:center;margin:16px 16px 0;padding:12px 10px;background:var(--paper);box-shadow:var(--shadow-s)}
+.pstep{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;padding:0;min-width:58px}
+.pstep .pn{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-family:var(--en);font-weight:700;font-size:13px;border:1.5px solid rgba(64,56,47,.3);color:var(--faded);background:var(--paper)}
+.pstep .pl{font-size:10.5px;color:var(--faded);font-weight:700;white-space:nowrap}
+.pstep.done .pn{background:var(--mint-ink);border-color:var(--mint-ink);color:#fff}
+.pstep.cur .pn{background:var(--berry-ink);border-color:var(--berry-ink);color:#fff}
+.pstep.cur .pl{color:var(--berry-ink)}
+.pline{flex:1;height:1.5px;background:rgba(64,56,47,.18);margin:0 2px 18px}
+.pnext{margin:8px 18px 0;font-size:12px;color:var(--faded);line-height:1.6}
+.pnext b{color:var(--ink)}
+.sec{padding:26px 16px 8px}
+.sec h2{font-family:var(--gothic);font-weight:700;font-size:17px}
+.sec p{margin-top:2px}
+.offrow{display:flex;align-items:center;gap:6px;width:calc(100% - 32px);margin:0 16px;padding:12px 14px;background:var(--paper);border:0;box-shadow:var(--shadow-s);text-align:left}
+.offrow>span:not(.ed){flex:1;display:flex;flex-direction:column;line-height:1.2}
+.offrow small{font-size:11px;color:var(--faded);font-weight:700}
+.offrow b{font-size:19px}
+.myplans,.trade,.check,.mrow,.offrow{box-shadow:0 1px 3px rgba(64,56,47,.12)}
+.trade{margin-bottom:12px}
+.inlineadd,.inlineadd.lav{box-shadow:none;border-width:1.5px;min-height:48px;font-family:var(--gothic);font-weight:700;font-size:14px}
+.inlineadd:active{transform:none}
+.nextcard{padding:12px 16px;margin-top:22px}
+.nextcard b{font-family:var(--gothic);font-weight:700;font-size:15px}
+.dayend{margin:30px 16px 0;padding:0;border:0;background:none;justify-content:center}
+.bandh b{font-family:var(--gothic);font-weight:700;font-size:13px;background:none;padding:0;color:var(--faded)}
+.mrow .nm,.trade .who,.myrow .k{font-family:var(--gothic);font-weight:700}
+.howto{transform:none}
+.howto .tape{display:none}
+.start h1{font-family:var(--gothic);font-weight:700;font-size:26px}
+.start h1 span{border-bottom-width:2px}
+.dd-btn{border-width:1.5px}
+.dd-list{border-width:1.5px}
+.foot{font-size:10.5px}
+</style>
+<style>
+/* DESIGN TEST 01 — a continuous concert journal */
+:root{--desk:#fffafb;--paper:#fff;--ink:#3c3140;--faded:#746977;--muted:#8d7f90;--berry:#e685a1;--berry-ink:#a84065;--mint-ink:#477564;--lav-ink:#6c598e;--shadow:none;--shadow-s:none;--dash:1px solid #ebdfe7;--hand:"Zen Kaku Gothic New","Hiragino Sans",sans-serif}
+body{background:var(--desk);font-size:16px;padding-bottom:28px}
+.wrap,.tool-nav{max-width:640px}
+.tool-nav{padding:18px 24px 0}
+.tool-nav-inner{padding:0 0 14px;background:none;border:0;border-bottom:1px solid #ebdfe7;align-items:flex-start}
+.tool-nav-brand{font-family:var(--en);font-size:13px}
+.tool-nav-links{gap:16px;max-width:64%}
+.tool-nav-links a{font-size:12px;border:0;letter-spacing:0}
+.start{padding:28px 24px 8px}
+.journal-kicker{font-family:var(--en);font-size:11px;font-weight:600;letter-spacing:.16em;color:var(--berry-ink);display:flex;align-items:center;gap:10px}
+.journal-kicker span{font-size:10px;letter-spacing:.08em;background:#f5e3eb;padding:2px 6px;border-radius:4px}
+.journal-title{display:flex;align-items:center;gap:12px;margin:8px 0 0;font-family:var(--en);font-weight:700;font-size:clamp(34px,8vw,50px);letter-spacing:-.055em;line-height:1.2}
+.journal-title em{font-family:var(--serif);font-weight:400;color:var(--berry-ink);letter-spacing:-.02em}
+.journal-star{font-size:34px;color:var(--berry);margin-left:auto}
+.journal-head p{margin:12px 0 24px;font-size:16px;color:var(--faded)}
+.start-steps{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--faded);border-top:1px solid #ebdfe7;padding-top:14px}
+.start-steps .active{font-weight:700;color:var(--berry-ink)}
+.start h1{margin:30px 0 4px;font-size:25px;letter-spacing:.02em}
+.start-note{margin:0 0 18px;color:var(--faded);font-size:14px}
+.lbl,.field label{font-size:14px}
+.dd>.lbl{font-size:13px;margin-bottom:8px;color:var(--faded)}
+.dd-btn{border:1px solid #d9c5d0;border-radius:14px;background:#fff;box-shadow:none;padding:16px;min-height:64px}
+.dd-btn:focus-visible{outline-color:var(--berry-ink)}
+.dd-date{border:0;color:var(--berry-ink)}
+.dd-name{font-size:16px;line-height:1.45}
+.select-foot{display:flex;align-items:center;justify-content:space-between;margin-top:6px;gap:8px}
+.hint{font-size:13px}
+.link{font-size:14px;min-height:44px;text-decoration:underline;text-decoration-color:#d1b8c7}
+.dd-list{border:1px solid #e4d3de;box-shadow:0 12px 30px #56364812;border-radius:14px;overflow:hidden}
+.dd-row{border-bottom:1px solid #eee3ea;padding:16px 12px;background:#fff}
+.dd-row:hover{background:#fff4f8}
+.dd-row .sub{font-size:13px}
+.dd-month{background:#fff6f9}
+.chip{border:1px solid #dacbd6;font-size:14px}
+.chip[aria-pressed=true]{background:var(--berry-ink);border-color:var(--berry-ink);color:#fff}
+.usage{margin-top:30px;border-top:1px solid #ebdfe7;padding-top:14px;color:var(--faded);font-size:14px}
+.usage summary{cursor:pointer;min-height:40px;padding-top:8px}
+.usage p{line-height:1.8;margin:6px 0 0}
+.cloudbox{margin-top:14px;padding:0;background:none;font-size:13px;gap:14px}
+.paper,.box,.howto,.myplans,.check,.offrow,.mrow,.dhead,.mini,.summary{box-shadow:none!important;background:transparent}
+.box{padding:22px 0 0;margin:26px 0 0;border-top:1px solid #ebdfe7}
+.box h3{font-size:16px}
+.form{gap:18px}
+.field input,.field textarea,.field select{font-family:var(--gothic);border-bottom:1px solid #d7c8d2;min-height:46px;padding:8px 0}
+.btn{border-radius:999px;border:1px solid #d1bac9;font-size:15px;min-height:48px}
+.btn.dark,.btn.green{background:var(--berry-ink);border-color:var(--berry-ink);color:#fff}
+.kind{box-shadow:none;border:1px solid #d9c5d0;border-radius:12px}
+.kind[aria-pressed=true]{background:#fae6ef;color:var(--berry-ink)}
+.autonote{font-size:12px;color:var(--faded)}
+.day-journal{padding:0 8px}
+.dtop{padding-top:14px}
+.dtop .back{font-size:13px;color:var(--faded);font-weight:500}
+button.cloudstat{font-size:12px;max-width:58%;line-height:1.6}
+.dhead{padding:16px 0 24px;margin-top:8px;gap:18px;align-items:flex-start;border-bottom:1px solid #ebdfe7}
+.dhead .dd2{padding:8px 14px;border:0;border-radius:50%;background:#f8e1ec;color:var(--berry-ink);min-width:78px;min-height:78px;display:flex;flex-direction:column;justify-content:center;gap:6px}
+.dhead .dd2 .en{font-size:25px;letter-spacing:-.04em}
+.dhead .dt{gap:5px;padding-top:3px}
+.dhead .dt b{font-size:20px;line-height:1.45;overflow-wrap:anywhere}
+.dhead .kind{border:0;padding:0;font-size:11px;color:var(--berry-ink)!important}
+.dhead .ed{padding-top:8px;font-size:13px}
+.dhead .hint{font-size:13px}
+.vtabs{margin-top:12px;padding:0;background:var(--desk);border-radius:0;border-bottom:1px solid #e4d7e1;gap:22px;top:0}
+.vtab,.vtab:first-child,.vtab:last-child{min-height:65px;border-radius:0;padding:8px 0;align-items:flex-start;flex:1}
+.vtab[aria-selected=true]{background:none;border:0;border-bottom:3px solid var(--berry-ink);color:var(--berry-ink);box-shadow:none}
+.vtab .l{font-size:16px}.vtab .s{font-size:12px;margin-top:3px;line-height:1.5}
+.journal-progress{display:flex;gap:8px;margin:16px 16px 4px;justify-content:space-between}
+.journal-step{border:0;background:none;padding:4px 0;display:flex;flex-direction:column;align-items:flex-start;gap:3px;font-size:12px;color:var(--faded);min-height:44px}
+.journal-step>span{font-family:var(--en);font-size:11px;color:#a393a2}
+.journal-step.current{color:var(--berry-ink);font-weight:700}.journal-step.current>span{color:var(--berry-ink)}
+.journal-step.done>span{color:var(--mint-ink)}
+.sec{padding-top:30px;padding-bottom:12px}.sec h2{font-size:19px;letter-spacing:.02em}.sec p{font-size:13px;margin-top:4px}
+.offrow{padding:0 0 16px;border-bottom:1px solid #ebdfe7;gap:12px}.offrow small{font-size:13px;font-weight:500;margin-bottom:5px}.offrow b{font-size:23px}
+.myplans{padding:0;margin-top:0}.myrowwrap{border-bottom:1px solid #ebdfe7}.myrow{padding:14px 0;gap:10px;min-height:70px;flex-wrap:wrap}
+.myrow .k{width:76px;font-size:15px}.myrow .en{font-size:17px}.myrow .undecided{border:0;color:#9b8997;font-size:13px;width:52px;background:none}.myrow .pl{font-size:13px;flex-basis:100%;padding-left:86px;color:var(--faded)}
+.inlineadd,.inlineadd.lav{border:0;border-radius:0;background:none;color:var(--berry-ink);justify-content:flex-start;padding:4px 0;min-height:44px;margin-top:8px;font-size:15px;font-weight:700;box-shadow:none}
+.nextcard{background:none;color:var(--berry-ink);padding:18px 0;border-top:1px solid #ebdfe7}.nextcard small{color:var(--faded);font-size:13px}
+.journal-timeline{margin:0 16px;border-left:1px solid #dcbfcc;padding-left:18px}
+.journal-timeline .off,.journal-timeline .mini{position:relative;background:none;border:0;border-bottom:1px solid #eee3ea;margin:0;width:100%;padding:16px 0;box-shadow:none;min-height:54px}
+.journal-timeline button:before{content:"";position:absolute;width:7px;height:7px;border-radius:50%;left:-22px;top:24px;background:#c77c9b}
+.journal-timeline .en{color:var(--berry-ink);min-width:62px;font-size:16px}.journal-timeline .hand{font-size:15px}
+.check{padding:0;margin-top:0}.check h3{margin:0 0 8px}.ck{border:0;min-height:48px;font-size:15px;padding:8px 0}.ck input{accent-color:var(--berry-ink);width:19px;height:19px}.addck input{font-size:14px;border-color:#d7c8d2}
+.trade{margin-bottom:18px;padding:0 0 22px;background:none;border-bottom:1px solid #e6d8e2;box-shadow:none!important;gap:12px}
+.trade .who{font-size:19px}.trade .prio{border:0;border-radius:999px;padding:4px 9px;height:auto;font-size:12px}.prio.must{background:#fae1eb;color:var(--berry-ink)}.prio.maybe{background:#f1ebf1;color:var(--faded)}
+.swap{background:none;padding:0;gap:14px}.swap .k{font-size:12px;margin-bottom:4px}.swap .v{font-size:15px;line-height:1.6}
+.bandpills .bl,.placebtn .bl{font-size:13px}.bandpills button{min-height:40px;font-size:13px;border:1px solid #ded0da;background:transparent;color:var(--faded)}
+.bandpills button[aria-pressed=true]{background:#f7e4ee;border-color:#f7e4ee;color:var(--berry-ink)}
+.placebtn{font-size:14px;gap:12px;flex-wrap:wrap}.logfoot{font-size:12px;line-height:1.6}
+.mrow{background:none;padding:12px 0;margin-bottom:0;border-bottom:1px solid #ebdfe7;min-height:64px}.mrow .memo{font-size:13px;margin-top:4px;line-height:1.65}.bandh{margin-top:18px}.bandh b{font-size:13px;color:var(--berry-ink)}
+.summary,.linkbar{background:none!important;padding:4px 0;box-shadow:none;border:0;font-size:13px}.summary{flex-wrap:wrap;gap:8px}.summary .go{font-size:13px}.keyacts button{border:0;background:none;font-size:13px;color:var(--lav-ink)}
+.empty{background:none;border:0;padding:8px 0;font-size:14px;color:var(--faded);text-align:left}.save-area{margin:30px 16px 0;padding-top:22px;border-top:1px solid #ebdfe7}.save-area .btn{min-height:54px;font-size:16px}.save-area p{text-align:center;margin:8px 0 0}
+.dayend{margin-top:14px}.dayend .link{font-size:12px}.dayrow{border-bottom:1px solid #ebdfe7}.dayrow .xbtn{background:none;border:0;color:var(--muted)}
+.sheet-inner{border-radius:24px 24px 0 0;background:#fffafb}.sheet-head{align-items:flex-start;gap:18px}.sheet-head h2{font-size:20px;line-height:1.5}.close{border:0;background:#f7e4ee;min-width:44px;min-height:44px;font-size:16px}.sheet-head .close{position:static;flex-shrink:0}.sheet .hint{font-size:13px}.sheet-foot{gap:12px}.sheet .form{font-size:16px}
+.foot{max-width:592px;margin:28px auto 0;padding:18px 24px;border-top:1px solid #ebdfe7;font-size:12px;line-height:1.8;color:var(--faded)}
+.toast{font-size:14px;border-radius:999px}
+button:hover{filter:brightness(.98)}button:active{filter:brightness(.95)}
+@media(max-width:380px){.start{padding-inline:20px}.tool-nav{padding-inline:20px}.day-journal{padding-inline:4px}.dhead{gap:12px}.dhead .dt b{font-size:18px}.dhead .dd2{min-width:68px;min-height:68px;padding:8px}.journal-step{font-size:11px}.vtab .l{font-size:15px}.vtabs{gap:12px}.start-steps{font-size:11px}}
+@media(min-width:720px){.wrap{margin-top:10px}.start{padding-top:32px}.journal-title{font-size:54px}.start h1{margin-top:36px}.day-journal{padding-top:8px}.dhead .dt b{font-size:24px}}
+</style>
+</head>
+<body>
+<nav class="tool-nav" aria-label="共通ナビゲーション">
+  <div class="tool-nav-inner">
+    <a class="tool-nav-brand" href="https://rikomuze.github.io/muze-tool-box/">Muze Tool Box</a>
+    <div class="tool-nav-links">
+      <a href="https://rikomuze.github.io/muze-tool-box/">MUZE TOOL BOXのトップ</a>
+      <a href="../exchange-log/">交換約束ログ</a>
+      <a href="https://rikomuze.github.io/oshi-visual-6/">推しビジュ6選</a>
+      <a href="../muze-key/">MUZE KEYについて</a>
+    </div>
+  </div>
+</nav>
+<main class="wrap" id="app" aria-live="polite"></main>
+<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">DESIGN TEST 01</span><br>デザインテスト版。ここで作った予定は元のMUZE DAYとは別に保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
+<div id="dock"></div>
+<div id="sheet" class="sheet hidden" role="dialog" aria-modal="true"></div>
+<div id="toast" class="toast hidden" role="status"></div>
+
+<script src="../muze-day/events.js?v=2026.10.02-6"></script>
+<script>
+(function () {
+"use strict";
+
+/* ========== 基本 ========== */
+var $ = function (s, r) { return (r || document).querySelector(s); };
+var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (m) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]; }); }
+function uid() { return "d" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+function toMin(t) { if (!t || !/^\d{1,2}:\d{2}$/.test(t)) return null; var p = t.split(":"); return (+p[0]) * 60 + (+p[1]); }
+function fmt(m) { if (m == null) return ""; m = ((m % 1440) + 1440) % 1440; return Math.floor(m / 60) + ":" + ("0" + (m % 60)).slice(-2); }
+function todayISO() { var d = new Date(); return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
+var DOW = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+function md(iso) { if (!iso) return ""; var p = iso.split("-"); return (+p[1]) + "/" + (+p[2]); }
+function dow(iso) { return iso ? DOW[new Date(iso + "T00:00:00").getDay()] : ""; }
+function daysUntil(iso) { var a = new Date(iso + "T00:00:00"), b = new Date(todayISO() + "T00:00:00"); return Math.round((a - b) / 86400000); }
+function hhmm(ts) { var d = new Date(ts); return (d.getMonth() + 1) + "/" + d.getDate() + " " + d.getHours() + ":" + ("0" + d.getMinutes()).slice(-2); }
+function toast(msg) { var t = $("#toast"); t.textContent = msg; t.classList.remove("hidden"); clearTimeout(toast._t); toast._t = setTimeout(function () { t.classList.add("hidden"); }, 2600); }
+function copyText(s) {
+  if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(s).then(function () { toast("コピーしたよ"); }, function () { prompt("コピーしてね", s); }); }
+  else prompt("コピーしてね", s);
+}
+var PIN = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:3px" aria-hidden="true"><path d="M12 21s-6.5-6.2-6.5-11A6.5 6.5 0 0 1 18.5 10c0 4.8-6.5 11-6.5 11z"></path><circle cx="12" cy="10" r="2.3"></circle></svg>';
+function keyIcon(s) { return '<svg width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" stroke="var(--lav-ink)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0" aria-hidden="true"><circle cx="8" cy="15" r="4"></circle><path d="M11 12l8-8M16 7l2.5 2.5M14 9l2 2"></path></svg>'; }
+function chev(up) { return '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0;' + (up ? "transform:rotate(180deg)" : "") + '"><path d="M6 9l6 6 6-6"></path></svg>'; }
+var KIND_LABEL = { LIVE: "LIVE", OTHER: "その他" };
+function kindOf(d) { return d.kind === "LIVE" ? "LIVE" : "OTHER"; }
+
+/* ========== 保存（MUZE DAY 自身の予定はこの端末だけ） ========== */
+var MYKINDS = ["家を出る", "ランチ", "物販", "会場入り", "その他"];
+var STORE = "muze_day_design_test_v1";
+var db = load();
+function load() {
+  var d = null;
+  try { d = JSON.parse(localStorage.getItem(STORE) || "null"); } catch (e) {}
+  if (!d || !d.days) d = { days: [], current: null };
+  d.days = d.days.filter(function (x) { try { migrate(x); return true; } catch (e) { return false; } });
+  return d;
+}
+function migrate(d) {
+  d.kind = kindOf(d);
+  d.official = (d.official || []).filter(function (o) { return o.label !== "終演"; });
+  d.trades = d.trades || []; d.meets = d.meets || []; d.checklist = d.checklist || [];
+  if (!d.myplans) d.myplans = defaultMyPlans();
+  d.myplans.forEach(function (p) { if (MYKINDS.indexOf(p.kind) < 0) { p.name = p.name || p.kind; p.kind = "その他"; } });
+  d.checklist.forEach(function (c) { if (/うちわ|ペンライト/.test(c.text)) c.text = "ライトバンド"; });
+  if (d.kind === "OTHER") d.checklist = d.checklist.filter(function (c) { return c.text !== "ライトバンド" || c.keep; });
+  delete d.acts;
+  if (d.view !== "meet") d.view = "event";
+}
+function save(quiet) { if (!quiet) { var now = Date.now(); db.updatedAt = now; var cd = day(); if (cd) cd.updatedAt = now; queuePush(); } saveLocalOnly(); }
+function saveLocalOnly() { try { localStorage.setItem(STORE, JSON.stringify(db)); } catch (e) { toast("保存できなかったよ（容量やプライベートモードを確認してね）"); } }
+function day() { return db.days.filter(function (d) { return d.id === db.current; })[0] || null; }
+
+/* ========== 交換約束ログ（MUZE KEY で読み込む・読み取りだけ） ========== */
+var LINK = "muze_day_design_test_link_v1";
+var API = "https://muze-toolbox-api.logical-bear-ishi.workers.dev/api/exchange-v2";
+var link = (function () { try { return JSON.parse(localStorage.getItem(LINK) || "null") || {}; } catch (e) { return {}; } })();
+function saveLink() { try { localStorage.setItem(LINK, JSON.stringify(link)); } catch (e) {} }
+function normKey(v) {
+  var s = String(v || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+  if (/^MUZE[A-Z2-9]{12}$/.test(s)) s = "MUZE-" + s.slice(4, 8) + "-" + s.slice(8, 12) + "-" + s.slice(12, 16);
+  return /^MUZE-[A-Z2-9]{4}-[A-Z2-9]{4}-[A-Z2-9]{4}$/.test(s) ? s : "";
+}
+function maskKey(k) { var p = String(k || "").split("-"); return p.length === 4 ? "MUZE-••••-••••-" + p[3] : ""; }
+function deviceKey() { return normKey(localStorage.getItem("muze_day_design_test_key_v1")); }
+function b64(s) { var bin = atob(s), out = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i); return out; }
+function sha256Hex(v) { return crypto.subtle.digest("SHA-256", new TextEncoder().encode(v)).then(function (d) { return Array.prototype.map.call(new Uint8Array(d), function (b) { return ("0" + b.toString(16)).slice(-2); }).join(""); }); }
+function fetchLog(k) {
+  return sha256Hex("MUZE-TOOL-BOX:EXCHANGE:ID:V2:" + k).then(function (id) {
+    return fetch(API, { method: "GET", headers: { "X-MUZE-ID": id } });
+  }).then(function (res) { if (!res.ok) throw new Error("http " + res.status); return res.json(); }).then(function (data) {
+    if (!data || !data.found || !data.envelope) return null;
+    var e = data.envelope;
+    return crypto.subtle.importKey("raw", new TextEncoder().encode(k), "PBKDF2", false, ["deriveKey"]).then(function (mat) {
+      return crypto.subtle.deriveKey({ name: "PBKDF2", salt: b64(e.salt), iterations: e.iter || 180000, hash: "SHA-256" }, mat, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+    }).then(function (aes) { return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(e.iv) }, aes, b64(e.ct)); })
+      .then(function (plain) { var rows = JSON.parse(new TextDecoder().decode(plain)); if (!Array.isArray(rows)) throw new Error("rows"); return rows; });
+  });
+}
+/* KEYで読み込んだログがあればそれを、なければこの端末の交換約束ログを使う */
+function logRows() {
+  if (link.key && Array.isArray(link.rows) && link.rows.length) return link.rows;
+  var k = deviceKey(); if (!k) return [];
+  try { var r = JSON.parse(localStorage.getItem("muze_exchange_log_v1:" + k) || "[]"); return Array.isArray(r) ? r : []; } catch (e) { return []; }
+}
+function linkedLabel() { return link.key ? maskKey(link.key) : deviceKey() && logRows().length ? maskKey(deviceKey()) + "（この端末）" : ""; }
+function refreshLink(silent) {
+  if (!link.key) return Promise.resolve();
+  return fetchLog(link.key).then(function (rows) {
+    if (rows) { link.rows = rows; link.at = Date.now(); link.err = ""; saveLink(); var n = autoAdd(); if (!silent) toast("交換約束ログを読み込んだよ" + (n ? "（この日の交換を " + n + "件 入れたよ）" : "")); render(); }
+    else { link.err = "notfound"; saveLink(); if (!silent) toast("このKEYのクラウド保存が見つからなかったよ"); render(); }
+  }).catch(function () { link.err = "network"; saveLink(); if (!silent) toast("読み込めなかったよ。電波のいいところでもう一度ためしてね"); render(); });
+}
+function itemsText(items) {
+  return (items || []).map(function (i) { var who = i.member || i.other || ""; return (who + (i.type ? " " + i.type : "")).trim() || i.detail || ""; }).filter(Boolean).join("・");
+}
+function logDate(r) { return r.dueDate || r.promiseDate || ""; }
+function openLogRows() { return logRows().filter(function (r) { return r.tradeType !== "買取" && r.status !== "交換完了" && r.status !== "受取完了" && r.method !== "郵送"; }); }
+function refreshFromLog(d) {
+  var map = {}; logRows().forEach(function (r) { map[r.id] = r; });
+  d.trades.forEach(function (t) {
+    var r = t.logId && map[t.logId]; if (!r) return;
+    t.who = r.name || t.who; t.give = itemsText(r.giveItems) || t.give; t.get = itemsText(r.getItems) || t.get; t.logStatus = r.status;
+    if (r.status === "交換完了") t.done = true;
+  });
+}
+/* ========== MUZE DAY のクラウド保存（MUZE KEY・暗号化） ==========
+   交換約束ログと同じAPIに、別のID（DAY用の接頭辞）で保存する。中身はブラウザ内で暗号化。 */
+var cloud = { state: "off", at: 0, ready: false, timer: null, aes: null };
+function cloudKey() { return link.key || deviceKey() || ""; }
+function b64e(bytes) { var s = ""; for (var i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000)); return btoa(s); }
+function dayId(k) { return sha256Hex("MUZE-TOOL-BOX:DAY:DESIGN-TEST:ID:V1:" + k); }
+function aesFor(k, saltB64, iter) {
+  if (cloud.aes && cloud.aes.k === k && cloud.aes.salt === saltB64) return Promise.resolve(cloud.aes.key);
+  return crypto.subtle.importKey("raw", new TextEncoder().encode(k), "PBKDF2", false, ["deriveKey"]).then(function (mat) {
+    return crypto.subtle.deriveKey({ name: "PBKDF2", salt: b64(saltB64), iterations: iter || 180000, hash: "SHA-256" }, mat, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]);
+  }).then(function (key) { cloud.aes = { k: k, salt: saltB64, key: key }; return key; });
+}
+function cloudStatusText() {
+  var k = cloudKey();
+  if (!k) return "";
+  var k4 = "…" + (k.split("-")[3] || "");
+  if (cloud.state === "saving") return "☁ クラウドに保存中… " + k4;
+  if (cloud.state === "err") return "☁ クラウドに保存できなかったよ（この端末には保存済み） " + k4;
+  if (cloud.state === "ok") return "☁ " + hhmm(cloud.at) + " クラウド保存済み " + k4;
+  return "☁ クラウド保存 " + k4;
+}
+function paintCloud() { $$(".cloudstat").forEach(function (e) { e.textContent = cloudStatusText(); e.classList.toggle("err", cloud.state === "err"); }); }
+function queuePush() {
+  if (!cloud.ready || !cloudKey()) return;
+  clearTimeout(cloud.timer); cloud.timer = setTimeout(pushCloud, 1500);
+}
+function pushCloud() {
+  var k = cloudKey(); if (!k) return Promise.resolve();
+  cloud.state = "saving"; paintCloud();
+  var saltB64 = cloud.aes && cloud.aes.k === k ? cloud.aes.salt : b64e(crypto.getRandomValues(new Uint8Array(16)));
+  var iv = crypto.getRandomValues(new Uint8Array(12));
+  var payload = { updatedAt: db.updatedAt || Date.now(), days: db.days, deleted: db.deleted || {} };
+  return Promise.all([aesFor(k, saltB64, 180000), dayId(k)]).then(function (r) {
+    return crypto.subtle.encrypt({ name: "AES-GCM", iv: iv }, r[0], new TextEncoder().encode(JSON.stringify(payload))).then(function (ct) {
+      return fetch(API, { method: "PUT", headers: { "Content-Type": "application/json", "X-MUZE-ID": r[1] }, body: JSON.stringify({ envelope: { v: 2, alg: "AES-GCM", kdf: "PBKDF2-SHA256", iter: 180000, salt: saltB64, iv: b64e(iv), ct: b64e(new Uint8Array(ct)) } }) });
+    });
+  }).then(function (res) { if (!res.ok) throw new Error("http " + res.status); cloud.state = "ok"; cloud.at = Date.now(); paintCloud(); })
+    .catch(function () { cloud.state = "err"; paintCloud(); });
+}
+/* クラウドの方が新しければ取りこむ。この端末の方が新しければ送る */
+function pullCloud(silent) {
+  var k = cloudKey(); if (!k) { cloud.ready = true; return Promise.resolve(); }
+  return dayId(k).then(function (id) { return fetch(API, { method: "GET", headers: { "X-MUZE-ID": id } }); })
+    .then(function (res) { if (!res.ok) throw new Error("http " + res.status); return res.json(); })
+    .then(function (data) {
+      cloud.ready = true;
+      if (!data || !data.found || !data.envelope) { if (db.days.length) return pushCloud(); cloud.state = "ok"; cloud.at = Date.now(); paintCloud(); return; }
+      var e = data.envelope;
+      return aesFor(k, e.salt, e.iter).then(function (aes) { return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(e.iv) }, aes, b64(e.ct)); }).then(function (plain) {
+        var c = JSON.parse(new TextDecoder().decode(plain));
+        if (!c || !Array.isArray(c.days)) throw new Error("bad");
+        /* 日ごとに新しいほうを残して合体する（消した日は消したまま） */
+        var del = {}, map = {}, before = JSON.stringify(db.days.map(function (x) { return [x.id, x.updatedAt || 0]; }));
+        [db.deleted || {}, c.deleted || {}].forEach(function (o) { Object.keys(o).forEach(function (id) { del[id] = Math.max(del[id] || 0, o[id]); }); });
+        (c.days || []).forEach(function (x) { migrate(x); map[x.id] = x; });
+        db.days.forEach(function (x) { var o = map[x.id]; if (!o || (x.updatedAt || 0) >= (o.updatedAt || 0)) map[x.id] = x; });
+        var merged = Object.keys(map).map(function (id) { return map[id]; }).filter(function (x) { return !(del[x.id] && del[x.id] >= (x.updatedAt || 0)); });
+        merged.sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
+        var changedLocal = JSON.stringify(merged.map(function (x) { return [x.id, x.updatedAt || 0]; })) !== before;
+        var cloudSame = JSON.stringify(merged.map(function (x) { return [x.id, x.updatedAt || 0]; })) === JSON.stringify((c.days || []).filter(function (x) { return true; }).sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; }).map(function (x) { return [x.id, x.updatedAt || 0]; }));
+        db.days = merged; db.deleted = del; db.updatedAt = Math.max(db.updatedAt || 0, c.updatedAt || 0);
+        if (!db.days.some(function (x) { return x.id === db.current; })) db.current = db.days[0] ? db.days[0].id : null;
+        saveLocalOnly();
+        if (changedLocal) { render(); if (!silent) toast("クラウドの予定と合わせたよ（" + db.days.length + "日）"); }
+        if (!cloudSame) return pushCloud();
+        cloud.state = "ok"; cloud.at = Date.now(); paintCloud();
+      });
+    }).catch(function () { cloud.ready = true; cloud.state = "err"; paintCloud(); });
+}
+
+/* 受け渡し予定日がこの日の交換は、自動で入れる（消したものは入れ直さない） */
+function autoAdd(d) {
+  d = d || day(); if (!d) return 0;
+  var have = {}, skip = d.skipLog || {}, n = 0;
+  d.trades.forEach(function (t) { if (t.logId) have[t.logId] = 1; });
+  openLogRows().forEach(function (r) { if (logDate(r) === d.date && !have[r.id] && !skip[r.id]) { d.trades.push(tradeFromLog(r)); n++; } });
+  if (n) save();
+  return n;
+}
+function tradeFromLog(r) { return { id: uid(), logId: r.id, who: r.name || "", give: itemsText(r.giveItems), get: itemsText(r.getItems), priority: r.status === "約束済" ? "must" : "maybe", place: "", time: "", done: false, logStatus: r.status }; }
+
+/* ========== 日の構造 ========== */
+function offTime(d, label) { var o = d.official.filter(function (x) { return x.label === label; })[0]; return o ? toMin(o.time) : null; }
+function bands(d) {
+  var r = [];
+  if (offTime(d, "物販") != null) r.push({ id: "goods", label: "物販前" });
+  r.push({ id: "open", label: "開演前" });
+  r.push({ id: "after", label: "終演後" });
+  r.push({ id: "any", label: "どこかで" });
+  return r;
+}
+function bandLabel(d, id) { var b = bands(d).filter(function (x) { return x.id === id; })[0]; return b ? b.label : "どこかで"; }
+function myLabel(p) { return p.kind === "その他" ? (p.name || "予定") : p.kind; }
+function itemName(i) { return i.type === "off" ? i.x.label : i.type === "my" ? myLabel(i.x) : i.x.who; }
+function timedItems(d) {
+  var items = [];
+  d.official.forEach(function (o) { var m = toMin(o.time); if (m != null) items.push({ type: "off", t: m, x: o }); });
+  d.myplans.forEach(function (p) { if (toMin(p.time) != null) items.push({ type: "my", t: toMin(p.time), x: p }); });
+  d.trades.forEach(function (x) { if (toMin(x.time) != null) items.push({ type: "trade", t: toMin(x.time), x: x }); });
+  d.meets.forEach(function (x) { if (toMin(x.time) != null) items.push({ type: "meet", t: toMin(x.time), x: x }); });
+  items.sort(function (a, b) { return a.t - b.t || (a.type === "off" ? -1 : 1); });
+  return items;
+}
+function defaultMyPlans() { return [{ id: uid(), kind: "会場入り", time: "", place: "", memo: "" }, { id: uid(), kind: "ランチ", time: "", place: "", memo: "" }]; }
+function defaultChecklist(kind) {
+  var list = ["電子チケット（スクショも）", "本人確認書類", "ライトバンド", "モバイルバッテリー", "小銭・交通系IC"];
+  if (kind === "OTHER") list = list.filter(function (t) { return t !== "ライトバンド"; });
+  return list.map(function (t) { return { id: uid(), text: t, done: false }; });
+}
+
+/* ========== 状態 ========== */
+var ui = { dd: false, ddFilter: "all", sheet: null, home: false };
+var draft = null;
+function newDraft() { return { presetId: null, kind: "LIVE", date: "", title: "", venue: "", official: [{ label: "物販", time: "" }, { label: "開場", time: "" }, { label: "開演", time: "" }], imports: {}, custom: false }; }
+
+/* ========== 描画 ========== */
+function render() {
+  var d = day();
+  if (!d || ui.home) { if (!draft) draft = newDraft(); renderStart(); return; }
+  refreshFromLog(d);
+  autoAdd(d);
+  renderDay(d);
+}
+
+/* ----- 最初の画面 ----- */
+function presets() {
+  var t = todayISO();
+  return (window.MUZE_DAY_EVENTS || []).filter(function (e) { return e.date >= t; }).sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
+}
+function presetById(id) { return (window.MUZE_DAY_EVENTS || []).filter(function (e) { return e.id === id; })[0]; }
+function presetSub(e) { var o = (e.official || []).map(function (x) { return x.label + x.time; }).join(" "); return e.venue + (o ? " ・ " + o : " ・ 時間は発表待ち"); }
+function homeCloud() {
+  if (cloudKey()) return '<div class="cloudbox"><span class="cloudstat">' + esc(cloudStatusText()) + '</span><button type="button" class="link" style="min-height:36px;padding:0 4px" data-act="key">KEY</button></div>';
+  return '<div class="cloudbox"><span>☁ 別の端末でも使うなら MUZE KEY</span><button type="button" class="link" style="min-height:36px;padding:0 4px;white-space:nowrap" data-act="key">KEYを入れる</button></div>';
+}
+function savedDays() {
+  if (!db.days.length) return "";
+  var list = db.days.slice().sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
+  return '<div style="margin-top:22px"><div class="lbl" style="font-size:16px;margin-bottom:6px">つくった日</div>' +
+    list.map(function (d) {
+      var n = daysUntil(d.date), when = n > 0 ? "あと" + n + "日" : n === 0 ? "当日" : "おわった日";
+      return '<div class="dayrow"><button type="button" class="mini" style="width:100%;min-height:56px" data-act="open-day" data-id="' + d.id + '"><span class="en" style="width:auto;min-width:48px">' + md(d.date) + '</span><span style="flex:1;min-width:0"><span class="hand" style="display:block;font-size:14px;line-height:1.35">' + esc(d.title) + '</span><span class="hint">' + KIND_LABEL[d.kind] + ' ・ ' + esc(d.venue || "") + '</span></span><span class="hint" style="white-space:nowrap">' + when + ' →</span></button><button type="button" class="xbtn" data-act="del-day" data-id="' + d.id + '" aria-label="' + esc(d.title) + 'を消す">✕</button></div>';
+    }).join("") + '<p class="hint" style="margin:4px 0 0">いらなくなった日は右の ✕ で消せるよ</p></div>';
+}
+function renderStart() {
+  var p = draft.presetId ? presetById(draft.presetId) : null;
+  var html = '<div class="start"><header class="journal-head"><div class="journal-kicker">MY CONCERT JOURNAL <span>TEST</span></div><div class="journal-title">MUZE <em>DAY</em><span class="journal-star" aria-hidden="true">✳</span></div><p>ライブの日の予定を、1枚のしおりに。</p></header>' +
+    '<div class="start-steps" aria-label="しおり作成の流れ"><span class="active">01 公演をえらぶ</span><span>02 予定をいれる</span><span>03 保存する</span></div>' +
+    '<h1>どの日に行く？</h1><p class="start-note">日付・会場・時間が自動で入るよ。</p>' +
+    '<div class="dd"><div class="lbl" id="ddl">公演・イベント</div>' + ddButton(p) + (ui.dd ? ddList() : '') +
+    '<div class="select-foot"><span class="hint">これからの予定 ' + presets().length + '件</span><button type="button" class="link" data-act="custom">自分で入力する</button></div></div>';
+  if (p || draft.custom) html += startForm();
+  html += savedDays() + '<details class="usage"><summary>使い方</summary><p>会場入り・ランチ・交換・会いたい人を入れて、しおりを画像で保存。当日は電波が悪くても見られるよ。未定の予定は、あとからでOK。</p></details>' + homeCloud() + '</div>';
+  $('#app').innerHTML = html;
+  $('#dock').innerHTML = '';
+}
+
+function ddButton(p) {
+  if (!p) return '<button type="button" class="dd-btn" data-act="dd" aria-expanded="' + ui.dd + '" aria-labelledby="ddl"><span class="hand" style="flex:1;font-size:15px;color:var(--faded)">' + (draft.custom ? "自分で入力中" : "えらんでね") + '</span>' + chev(ui.dd) + '</button>';
+  return '<button type="button" class="dd-btn" data-act="dd" aria-expanded="' + ui.dd + '" aria-labelledby="ddl"><i class="tape t-berry"></i>' +
+    '<div class="dd-date"><div class="en">' + md(p.date) + '</div><small>' + dow(p.date) + '</small></div>' +
+    '<div class="dd-body"><span class="badge ' + p.kind + '">' + esc(p.tag) + '</span><div class="dd-name">' + esc(p.name) + '</div><div class="hint">' + esc(presetSub(p)) + '</div></div>' + chev(ui.dd) + '</button>';
+}
+function ddList() {
+  var list = presets().filter(function (e) { return ui.ddFilter === "all" || (ui.ddFilter === "fm" ? e.kind === "LIVE" : e.kind === "OTHER"); });
+  var html = '<div class="dd-list" role="listbox" aria-labelledby="ddl"><div class="dd-filter">' +
+    [["all", "ぜんぶ"], ["fm", "ファンミ"], ["other", "その他"]].map(function (f) { return '<button type="button" class="chip" data-act="ddf" data-v="' + f[0] + '" aria-pressed="' + (ui.ddFilter === f[0]) + '">' + f[1] + '</button>'; }).join("") + '</div>';
+  var month = null;
+  list.forEach(function (e) {
+    var m = +e.date.split("-")[1];
+    if (m !== month) { month = m; var n = list.filter(function (x) { return +x.date.split("-")[1] === m; }).length; html += '<div class="dd-month"><b>' + m + '月</b><span class="hint">' + n + '件</span></div>'; }
+    html += '<button type="button" class="dd-row" role="option" data-act="pick" data-id="' + e.id + '" aria-selected="' + (draft.presetId === e.id) + '">' +
+      '<div class="d"><div class="en">' + md(e.date) + '</div><small>' + dow(e.date) + '</small></div>' +
+      '<div style="flex:1;min-width:0"><div><span class="badge ' + e.kind + '">' + esc(e.tag) + '</span>' + (e.note ? '<span class="dd-note">' + esc(e.note) + '</span>' : "") + '</div><div class="nm">' + esc(e.name) + '</div><div class="sub">' + esc(presetSub(e)) + '</div></div></button>';
+  });
+  if (!list.length) html += '<div class="empty" style="margin:12px">これからの予定はないみたい。「自分で入力する」から作ってね。</div>';
+  return html + '</div>';
+}
+function startForm() {
+  var p = draft.presetId ? presetById(draft.presetId) : null;
+  var html = '<div class="form" style="margin-top:24px">';
+  if (!p) html += '<div class="lbl">LIVE と その他、どっち？</div><div class="kinds">' +
+      '<button type="button" class="kind" data-act="kind" data-v="LIVE" aria-pressed="' + (draft.kind === "LIVE") + '"><span class="en">LIVE</span><small>ファンミ・単独公演</small></button>' +
+      '<button type="button" class="kind" data-act="kind" data-v="OTHER" aria-pressed="' + (draft.kind === "OTHER") + '"><span class="hand" style="font-size:22px;display:block">その他</span><small>フェス・イベントなど</small></button></div>';
+  html += '<div class="field"><label for="f-date">日付</label><input id="f-date" type="date" value="' + esc(draft.date) + '" data-draft="date"></div>' +
+    '<div class="field"><label for="f-title">名前</label><input id="f-title" type="text" value="' + esc(draft.title) + '" data-draft="title" placeholder="〇〇 LIVE 東京公演"></div>' +
+    '<div class="field"><label for="f-venue">会場</label><input id="f-venue" type="text" value="' + esc(draft.venue) + '" data-draft="venue" placeholder="会場名"></div></div>';
+  html += '<div class="paper box"><i class="tape t-lav" style="width:54px;height:16px"></i><h3>公式の時間</h3><p class="hint" style="margin:2px 0 4px">わからないところは空欄でOK。</p>' +
+    draft.official.map(function (o, i) { return '<div class="trow"><input type="text" value="' + esc(o.label) + '" data-off-label="' + i + '" aria-label="名前"><input type="time" value="' + esc(o.time) + '" data-off-time="' + i + '" aria-label="' + esc(o.label) + 'の時刻"><button type="button" class="x" data-act="off-del" data-i="' + i + '" aria-label="この行を消す">✕</button></div>'; }).join("") +
+    '<button type="button" class="link" data-act="off-add">＋ 行を足す</button><p class="autonote">時間は公式情報も確認してね</p></div>';
+  html += importBox();
+  return html + '<button type="button" class="btn dark full" style="margin-top:26px;min-height:54px;font-size:15px" data-act="create">この日のしおりを作る</button>';
+}
+function importBox() {
+  var html = '<div class="paper box" style="box-shadow:var(--shadow)"><i class="tape t-lav" style="left:auto;right:24px;width:60px;height:17px;transform:rotate(6deg)"></i><h3>' + keyIcon(18) + '交換約束ログから入れる</h3>';
+  var rows = openLogRows();
+  if (!linkedLabel()) return html + '<p class="hint" style="margin:4px 0 8px">MUZE KEYを入れると、交換約束ログの手渡し交換を読み込めるよ。あとからでもOK。</p><button type="button" class="btn full" data-act="key">MUZE KEYを入れる</button></div>';
+  if (!rows.length) return html + '<p class="hint" style="margin-top:4px">' + esc(linkedLabel()) + ' の交換約束ログに、まだ終わっていない手渡し交換は見つからなかったよ。</p></div>';
+  var sorted = rows.slice().sort(function (a, b) { var am = logDate(a) === draft.date ? 0 : 1, bm = logDate(b) === draft.date ? 0 : 1; return am - bm || (logDate(a) < logDate(b) ? -1 : 1); });
+  html += '<p class="hint" style="margin:2px 0 6px">' + esc(linkedLabel()) + ' ・ この日に持っていく交換にチェックしてね' + (draft.date ? '（' + md(draft.date) + ' の交換は最初からチェック済み）' : "") + '</p>' +
+    sorted.map(function (r) {
+      var on = draft.imports[r.id] != null ? draft.imports[r.id] : (!!draft.date && logDate(r) === draft.date);
+      return '<label class="logrow"><input type="checkbox" data-imp="' + esc(r.id) + '"' + (on ? " checked" : "") + '><span style="flex:1;min-width:0"><span class="hand" style="font-size:15px">' + esc(r.name || "（名前なし）") + '</span><span class="hint" style="display:block">' + esc(itemsText(r.giveItems) || "—") + ' ⇄ ' + esc(itemsText(r.getItems) || "—") + '</span><span class="hint" style="display:block">' + esc([logDate(r) ? md(logDate(r)) : "日付なし", r.event].filter(Boolean).join(" ・ ")) + '</span></span><span class="st">' + esc(r.status || "") + '</span></label>';
+    }).join("");
+  return html + '</div>';
+}
+function pickPreset(id) {
+  var e = presetById(id); if (!e) return;
+  draft = newDraft();
+  draft.presetId = id; draft.kind = e.kind; draft.date = e.date; draft.title = e.title; draft.venue = e.venue;
+  var base = [{ label: "物販", time: "" }].concat((e.official || []).map(function (o) { return { label: o.label, time: o.time }; }));
+  ["開場", "開演"].forEach(function (l) { if (!base.some(function (o) { return o.label === l; })) base.push({ label: l, time: "" }); });
+  draft.official = base; ui.dd = false;
+}
+function createDay() {
+  if (!draft.date) { toast("日付を入れてね"); return; }
+  var d = {
+    id: uid(), presetId: draft.presetId, kind: draft.kind, date: draft.date, title: draft.title || (KIND_LABEL[draft.kind] + " DAY"), venue: draft.venue,
+    official: draft.official.filter(function (o) { return o.label && o.time; }).map(function (o) { return { id: uid(), label: o.label, time: o.time }; }),
+    myplans: defaultMyPlans(), trades: [], meets: [], checklist: defaultChecklist(draft.kind), view: "event", myMark: ""
+  };
+  openLogRows().forEach(function (r) {
+    var on = draft.imports[r.id] != null ? draft.imports[r.id] : logDate(r) === d.date;
+    if (on) d.trades.push(tradeFromLog(r));
+  });
+  db.days.unshift(d); db.days = db.days.slice(0, 10); draft = null; openDay(d.id);
+  toast("この日をつくったよ");
+}
+
+/* ----- 日のページ ----- */
+function renderDay(d) {
+  var tradesOpen = d.trades.filter(function (t) { return !t.done; }).length, meetsOpen = d.meets.filter(function (m) { return !m.done; }).length;
+  var n = daysUntil(d.date), when = n > 0 ? "当日まで あと " + n + " 日" : n === 0 ? "当日！" : "おわった日";
+  var evSub = d.official.filter(function (o) { return o.label === "開場" || o.label === "開演"; }).map(function (o) { return o.label + o.time; }).join("・") || "公式の時間・わたしの予定";
+  var html = '<div class="dtop"><button type="button" class="back" data-act="home">‹ しおり一覧</button><button type="button" class="cloudstat" data-act="key">' + esc(cloudStatusText() || "☁ クラウド保存はKEYから") + '</button></div>' +
+    '<button type="button" class="dhead" data-act="daymenu"><span class="dd2"><span class="en">' + md(d.date) + '</span><small>' + dow(d.date) + '</small></span><span class="dt"><span class="kind ' + d.kind + '">' + (d.kind === "LIVE" ? "LIVE" : "その他") + '</span><b>' + esc(d.title) + '</b><span class="hint">' + esc(d.venue || "") + ' ・ ' + when + '</span></span><span class="ed">編集</span></button>' +
+    '<div class="vtabs" role="tablist"><button type="button" role="tab" class="vtab" data-act="view" data-v="event" aria-selected="' + (d.view === "event") + '"><span class="l">' + (d.kind === "LIVE" ? "LIVEの予定" : "当日の予定") + '</span><span class="s">' + esc(evSub) + '</span></button>' +
+    '<button type="button" role="tab" class="vtab" data-act="view" data-v="meet" aria-selected="' + (d.view === "meet") + '"><span class="l">交換・ミーグリ</span><span class="s">交換' + tradesOpen + '・ミーグリ' + meetsOpen + '</span></button></div>';
+  html = '<div class="day-journal">' + html;
+  html += guideBox(d);
+  html += d.view === "meet" ? meetView(d) : eventView(d);
+  html += '<div class="save-area"><button type="button" class="btn dark full" data-act="share">しおりを保存する</button><p class="hint">当日は保存した画像を見るだけでOK</p></div>';
+  html += '<div class="dayend"><button type="button" class="link" style="color:var(--red)" data-act="del-day">この日のしおりを丸ごと消す</button></div>';
+  $("#app").innerHTML = html + '</div>';
+  $("#dock").innerHTML = "";
+}
+
+function progress(d) {
+  var off = d.official.some(function (o) { return o.label === "開場" || o.label === "開演"; });
+  return [
+    { t: "公式の時間を確認", sub: "開場・開演が合っているか見てね", done: off, act: "go-event", to: ".liveticket" },
+    { t: "わたしの予定を入れる", sub: "会場入り・ランチなど、決まっている時間と場所", done: d.myplans.some(function (p) { return !!p.time; }), act: "go-event", to: ".myplans" },
+    { t: "交換・ミーグリを入れる", sub: "「ミーグリの予定」タブで入れるよ", done: d.trades.length + d.meets.length > 0, act: "go-meet" },
+    { t: "しおりを保存する", sub: "当日はその画像を見るだけ", done: !!d.savedAt, act: "share" }
+  ];
+}
+function guideBox(d) {
+  var st = progress(d), cur = -1;
+  st.forEach(function(x,i){ if(cur < 0 && !x.done) cur=i; });
+  var short=['時間を確認','予定をいれる','交換・ミーグリ','しおり保存'];
+  return '<div class="journal-progress" aria-label="しおり作成の流れ">' + st.map(function(x,i){
+    return '<button type="button" class="journal-step' + (x.done ? ' done' : '') + (i===cur ? ' current' : '') + '" data-act="' + x.act + '" data-v="' + (i===0 ? '.offrow' : x.to || '') + '"><span>' + (x.done ? '✓' : '0'+(i+1)) + '</span>' + short[i] + '</button>';
+  }).join('') + '</div>';
+}
+
+function secHead(no, title, hint) { return '<div class="sec"><h2>' + title + '</h2>' + (hint ? '<p>' + hint + '</p>' : "") + '</div>'; }
+
+/* LIVE（当日）の予定 */
+function eventView(d) {
+  var get = function (l) { return d.official.filter(function (o) { return o.label === l; })[0]; };
+  var cols = [["物販", get("物販")], ["開場", get("開場")], ["開演", get("開演")]];
+  var html = secHead("01", "公式の時間", "") + '<button type="button" class="offrow" data-act="daymenu">' +
+    cols.map(function (x) { return '<span><small>' + x[0] + '</small><b class="en">' + (x[1] ? esc(x[1].time) : "—") + '</b></span>'; }).join("") + '<span class="ed">直す</span></button>' +
+    '<p class="autonote" style="margin:6px 16px 0">時間は公式情報も確認してね</p>';
+  html += secHead("02", "わたしの予定", "行をタップして時間と場所を入力") + myPlansCard(d) + '<button type="button" class="inlineadd" data-act="add-direct" data-v="my">＋ 予定をいれる</button>';
+  html += secHead("03", "当日の流れ", "時間の入った予定が自動で並ぶよ") + '<div class="journal-timeline">' + flow(d) + '</div>';
+  html += checklist(d);
+  html += nextCard(d);
+  return html + '<div style="height:10px"></div>';
+}
+function myPlansCard(d) {
+  var sorted = d.myplans.slice().sort(function (a, b) { return (toMin(a.time) == null ? 9999 : toMin(a.time)) - (toMin(b.time) == null ? 9999 : toMin(b.time)); });
+  return '<div class="paper myplans"><i class="tape t-butter"></i>' + sorted.map(function (p) {
+    return '<div class="myrowwrap"><button type="button" class="myrow" data-act="edit-my" data-id="' + p.id + '"><span class="k hand">' + esc(myLabel(p)) + '</span>' +
+      (p.time ? '<span class="en">' + esc(p.time) + '</span>' : '<span class="undecided hand">未定</span>') +
+      '<span class="pl">' + esc(p.place || (p.time ? p.memo || "" : "タップして時間と場所をいれる")) + '</span></button><button type="button" class="xbtn" data-act="del-quick" data-k="my" data-id="' + p.id + '" aria-label="' + esc(myLabel(p)) + 'を消す">✕</button></div>';
+  }).join("") + '</div>';
+}
+function nextCard(d) {
+  var open = d.trades.filter(function (t) { return !t.done; }).length, meets = d.meets.filter(function (m) { return !m.done; }).length;
+  return '<button type="button" class="nextcard" data-act="view" data-v="meet"><span><b>交換・ミーグリも入れておく？</b><small>交換' + open + '・ミーグリ' + meets + '</small></span></button>';
+}
+function summaryLine(d) {
+  var open = d.trades.filter(function (t) { return !t.done; }), un = open.filter(function (t) { return !t.time; }).length;
+  var meets = d.meets.filter(function (m) { return !m.done; }).length;
+  return '<button type="button" class="summary" data-act="view" data-v="meet"><span style="color:var(--mint-ink)">⇄</span><span class="hand">交換 ' + open.length + '</span><span>' + (un ? "時間未定 " + un + " ・ " : "") + 'ミーグリ ' + meets + '</span><span class="go">ミーグリへ →</span></button>';
+}
+function flow(d) {
+  var items = timedItems(d);
+  if (!items.length) return '<div class="empty">時間の入った予定が、ここに時間順で並ぶよ。</div>';
+  return items.map(function (i) {
+    if (i.type === "off") return '<button type="button" class="off" data-act="edit-off" data-id="' + i.x.id + '"><span class="en">' + esc(i.x.time) + '</span><span class="hand">' + esc(i.x.label) + '</span></button>';
+    if (i.type === "my") return '<button type="button" class="mini my" data-act="edit-my" data-id="' + i.x.id + '"><span class="en">' + esc(i.x.time) + '</span><span class="hand">' + esc(myLabel(i.x)) + '</span><span class="hint" style="margin-left:auto;text-align:right">' + esc(i.x.place || "") + '</span></button>';
+    return '<button type="button" class="mini' + (i.x.done ? " isdone" : "") + '" data-act="detail" data-k="' + i.type + '" data-id="' + i.x.id + '"><span class="en">' + esc(i.x.time) + '</span><span class="hand">' + esc(i.x.who) + '</span><span class="stamp ' + (i.type === "trade" ? "c-mint" : "c-berry") + '">' + (i.type === "trade" ? "交換" : "ミーグリ") + '</span><span class="hint" style="margin-left:auto;text-align:right">' + esc(i.x.place || "") + '</span></button>';
+  }).join("");
+}
+function checklist(d) {
+  var tradeItems = d.trades.filter(function (t) { return !t.done && t.give; });
+  var all = d.checklist.length + tradeItems.length, doneN = d.checklist.filter(function (c) { return c.done; }).length + tradeItems.filter(function (t) { return t.packed; }).length;
+  var html = secHead("04", "持ち物", "") + '<div class="paper check" style="margin-top:0"><i class="tape t-mint"></i><h3><span class="hint" style="font-family:var(--gothic)">準備できた</span> <span class="en" style="font-size:13px">' + doneN + ' / ' + all + '</span></h3>' +
+    d.checklist.map(function (c) { return '<label class="ck' + (c.done ? " done" : "") + '"><input type="checkbox" data-ck="' + c.id + '"' + (c.done ? " checked" : "") + '><span>' + esc(c.text) + '</span><button type="button" class="x" data-act="ck-del" data-id="' + c.id + '" aria-label="消す">✕</button></label>'; }).join("");
+  if (tradeItems.length) html += '<div class="ckgroup">交換するもの</div>' + tradeItems.map(function (t) { return '<label class="ck' + (t.packed ? " done" : "") + '"><input type="checkbox" data-pack="' + t.id + '"' + (t.packed ? " checked" : "") + '><span>' + esc(t.give) + '（' + esc(t.who) + '）</span></label>'; }).join("");
+  return html + '<div class="addck"><input type="text" id="ck-new" placeholder="＋ 持ち物を足す（入力して改行）" aria-label="持ち物を足す" enterkeyhint="done"></div></div>';
+}
+
+/* ミーグリの予定（交換とミーグリだけ） */
+function meetView(d) {
+  var open = d.trades.filter(function (t) { return !t.done; }).sort(function (a, b) {
+    var ta = toMin(a.time), tb = toMin(b.time);
+    if ((ta == null) !== (tb == null)) return ta == null ? 1 : -1;
+    if (ta != null) return ta - tb;
+    return a.priority === b.priority ? 0 : a.priority === "must" ? -1 : 1;
+  });
+  var done = d.trades.filter(function (t) { return t.done; });
+  var html = secHead("01", "交換", "「いつごろ」と「だいたいの場所」だけでOK") + linkBar();
+  if (!open.length) html += '<div class="empty">この日の交換はまだないよ。</div>';
+  html += open.map(tradeCard).join("");
+  html += '<div class="inlinerow">' + (linkedLabel() ? '<button type="button" class="inlineadd lav" data-act="pick-log">' + keyIcon(16) + ' ログからえらぶ</button>' : "") + '<button type="button" class="inlineadd" data-act="add-direct" data-v="trade">＋ 交換を書く</button></div>';
+  if (done.length) html += '<div class="donebar">交換できた：' + done.map(function (t) { return '<button type="button" class="link" style="min-height:32px;padding:0 4px" data-act="trade-done" data-id="' + t.id + '">' + esc(t.who) + '</button>'; }).join("") + '</div>';
+
+  var fixed = d.meets.filter(function (m) { return m.time && !m.done; }).sort(function (a, b) { return toMin(a.time) - toMin(b.time); });
+  var loose = d.meets.filter(function (m) { return !m.time && !m.done; });
+  html += secHead("02", "ミーグリ", "名前と「いつごろ」だけでOK");
+  if (!fixed.length && !loose.length) html += '<div class="empty">会いたい人はまだいないよ。</div>';
+  function mrow(m) {
+    return '<div class="mrow"><button type="button" class="body" data-act="edit-meet" data-id="' + m.id + '"><span class="nm">' + esc(m.who) + '</span><span class="memo">' + esc([m.time ? m.time : "", m.place ? "だいたい " + m.place : "", m.mark ? "目印：" + m.mark : "", m.memo].filter(Boolean).join(" ・ ") || "タップで だいたいの場所・目印をいれる") + '</span></button>' +
+      '<button type="button" class="xbtn" data-act="del-quick" data-k="meet" data-id="' + m.id + '" aria-label="' + esc(m.who) + 'を消す">✕</button></div>';
+  }
+  if (fixed.length) html += '<div class="bands"><div class="bandh"><b>時間が決まっている</b></div>' + fixed.map(mrow).join("") + '</div>';
+  if (loose.length) {
+    html += '<div class="bands">';
+    bands(d).forEach(function (b) {
+      var ms = loose.filter(function (m) { return (m.band || "any") === b.id; }); if (!ms.length) return;
+      html += '<div class="bandh"><b>' + esc(b.label) + '</b></div>' + ms.map(mrow).join("");
+    });
+    html += '</div>';
+  }
+  var met = d.meets.filter(function (m) { return m.done; });
+  if (met.length) html += '<div class="donebar" style="margin-top:6px">会えた：' + met.map(function (m) { return '<button type="button" class="link" style="min-height:32px;padding:0 4px" data-act="meet-done" data-id="' + m.id + '">' + esc(m.who) + '</button>'; }).join("") + '</div>';
+  html += '<button type="button" class="inlineadd" data-act="add-direct" data-v="meet">＋ 会いたい人をいれる</button>';
+  return html + '<div style="height:10px"></div>';
+}
+function linkBar() {
+  var lab = linkedLabel();
+  if (!lab) return '<button type="button" class="summary" style="margin:0 16px 12px;background:rgba(239,229,255,.7);box-shadow:none;transform:none" data-act="key">' + keyIcon(14) + '<span><b class="hand">交換約束ログ</b>から読み込む</span><span class="go">MUZE KEYを入れる →</span></button>';
+  var k4 = (link.key || deviceKey() || "").split("-")[3] || "", d = day(), rows = openLogRows();
+  var mine = rows.filter(function (r) { return logDate(r) === d.date; }).length, nodate = rows.filter(function (r) { return !r.dueDate; }).length;
+  var stat = link.err === "notfound" ? '<span class="logstat">このKEYの交換約束ログはまだないみたい（MUZE DAYの予定はこのKEYで保存されるよ）。ログを使っているなら、ログを開いて同期してから「再同期」を押してね</span>'
+    : link.err === "network" ? '<span class="logstat err">読み込めなかったよ。電波のいいところで「再同期」を押してね</span>'
+    : '<span class="logstat">' + (link.at ? hhmm(link.at) + " に読み込み ・ " : "この端末のログ ・ ") + 'まだの手渡し交換 ' + rows.length + '件（' + md(d.date) + ' の予定 ' + mine + '件' + (nodate ? '・予定日なし ' + nodate + '件' : "") + '）</span>';
+  return '<div class="linkbar">' + keyIcon(14) + '<button type="button" style="flex:1;min-width:0;background:none;border:0;padding:0;text-align:left" data-act="key"><b class="hand">交換約束ログ</b> <span class="en" style="font-size:10.5px">…' + esc(k4) + '</span>' + stat + '</button><div class="keyacts">' + (link.key ? '<button type="button" data-act="relink">↻ 再同期</button>' : "") + '<button type="button" data-act="key">KEYを' + (link.key ? "変更" : "入れる") + '</button></div></div>';
+}
+function tradeCard(t) {
+  var d = day(), cur = t.band || "any";
+  var status = '<div style="flex:1;min-width:0"><div class="bandpills"><span class="bl">いつごろ</span>' + bands(d).map(function (b) { return '<button type="button" aria-pressed="' + (!t.time && cur === b.id) + '" data-act="set-band" data-k="trade" data-id="' + t.id + '" data-v="' + b.id + '">' + esc(b.label) + '</button>'; }).join("") + (t.time ? '<button type="button" aria-pressed="true" data-act="edit-trade" data-id="' + t.id + '">' + esc(t.time) + '</button>' : "") + '</div>' +
+    '<button type="button" class="placebtn" data-act="edit-trade" data-id="' + t.id + '"><span class="bl">だいたいの場所</span><span class="v' + (t.place ? "" : " ph") + '">' + esc(t.place || "タップして入れる（あとでOK）") + '</span>›</button></div>';
+  return '<div class="paper trade"><i class="tape t-mint"></i><div class="top"><button type="button" class="who" data-act="edit-trade" data-id="' + t.id + '">' + esc(t.who || "（名前）") + '</button><span class="prio ' + t.priority + '">' + (t.priority === "must" ? "かならず" : "できれば") + '</span><button type="button" class="xbtn" data-act="del-quick" data-k="trade" data-id="' + t.id + '" aria-label="' + esc(t.who) + 'との交換を消す">✕</button></div>' +
+    '<div class="swap"><div><div class="k">わたしが渡す</div><div class="v">' + esc(t.give || "—") + '</div></div><div style="text-align:center;color:var(--mint-ink)">⇄</div><div><div class="k">もらう</div><div class="v">' + esc(t.get || "—") + '</div></div></div>' +
+    '<div class="status">' + status + '</div>' +
+    '<div class="logfoot">' + (t.logId ? keyIcon(12) + '<span>交換約束ログ ・ ' + esc(t.logStatus || "") + '</span>' : '<span>MUZE DAYだけの交換</span>') + '<button type="button" class="link" style="margin-left:' + (t.logId ? "8px" : "auto") + ';min-height:32px;padding:0" data-act="trade-done" data-id="' + t.id + '">交換できた！</button></div></div>';
+}
+function ticketHtml(i) {
+  var x = i.x, isT = i.type === "trade";
+  return '<button type="button" class="ticket" data-act="detail" data-k="' + i.type + '" data-id="' + x.id + '"><i class="tape ' + (isT ? "t-mint" : "t-berry") + '"></i><div class="stub"><div class="en">' + esc(x.time) + '</div></div>' +
+    '<div class="main"><div><span class="nm">' + esc(x.who) + '</span></div>' +
+    '<div class="pl" style="display:flex;gap:5px;align-items:flex-start">' + PIN + '<span>' + esc(x.place || "場所未定") + '</span></div>' + (x.mark ? '<div class="mk">目印：' + esc(x.mark) + '</div>' : "") + '</div></button>';
+}
+
+/* ========== シート ========== */
+function openSheet(title, body, foot) {
+  var s = $("#sheet");
+  s.innerHTML = '<div class="sheet-inner"><div class="sheet-head"><h2>' + title + '</h2><button type="button" class="close" data-act="close" aria-label="とじる">✕</button></div>' + body + (foot ? '<div class="sheet-foot">' + foot + '</div>' : "") + '</div>';
+  s.classList.remove("hidden"); document.body.style.overflow = "hidden";
+}
+function closeSheet() { var was = ui.sheet && ui.sheet.type; $("#sheet").classList.add("hidden"); $("#sheet").innerHTML = ""; document.body.style.overflow = ""; ui.sheet = null; if (was === "share" && day() && !ui.home) renderDay(day()); }
+function chipGroup(name, opts, cur) {
+  return '<div class="chips" data-group="' + name + '">' + opts.map(function (o) { var v = typeof o === "string" ? o : o.id, l = typeof o === "string" ? o : o.label; return '<button type="button" class="chip" data-chip="' + name + '" data-v="' + esc(v) + '" aria-pressed="' + (String(cur) === String(v)) + '">' + esc(l) + '</button>'; }).join("") + '</div>';
+}
+function chipVal(name) { var b = $('#sheet [data-chip="' + name + '"][aria-pressed="true"]'); return b ? b.getAttribute("data-v") : ""; }
+function fld(id, label, val, ph, type) { return '<div class="field"><label for="' + id + '">' + label + '</label><input id="' + id + '" type="' + (type || "text") + '" value="' + esc(val == null ? "" : val) + '" placeholder="' + esc(ph || "") + '"' + (type === "text" || !type ? ' autocomplete="off"' : "") + '></div>'; }
+function val(id) { var e = document.getElementById(id); return e ? e.value.trim() : ""; }
+
+function sheetAdd(kind) {
+  ui.sheet = { type: "add", kind: kind };
+  if (kind === "trade") return sheetTrade(null);
+  if (kind === "meet") return sheetMeet(null);
+  if (kind === "off") return sheetOff(null);
+  return sheetMy(null);
+}
+function sheetMy(p, pre) {
+  p = p || { kind: "会場入り", name: "", time: "", place: "", memo: "" };
+  ui.sheet = { type: "my", id: p.id || null };
+  var body = (pre || "") + '<div class="form"><div><div class="lbl" style="margin-bottom:8px">なんの予定？</div>' + chipGroup("mykind", MYKINDS, p.kind) + '</div>' +
+    '<div id="my-name-wrap"' + (p.kind === "その他" ? "" : ' class="hidden"') + '>' + fld("p-name", "予定の名前", p.name, "グッズ受け取り など") + '</div>' +
+    fld("p-time", "何時？", p.time, "", "time") + fld("p-place", "どこで？", p.place, "場所・お店の名前") + fld("p-memo", "メモ", p.memo, "予約あり・〇〇ちゃんと など") + '</div>';
+  var foot = '<button type="button" class="btn dark full" data-act="save-my">' + (p.id ? "保存する" : "予定にいれる") + '</button>' + (p.id ? '<button type="button" class="btn del full" data-act="del" data-k="my" data-id="' + p.id + '">この予定を消す</button>' : "");
+  openSheet(p.id ? esc(myLabel(p)) : "わたしの予定をいれる", body, foot);
+}
+function sheetTrade(t, pre) {
+  t = t || { who: "", give: "", get: "", priority: "must", place: "", time: "" };
+  ui.sheet = { type: "trade", id: t.id || null };
+  var fromLog = !t.id && linkedLabel() ? '<button type="button" class="btn full" style="margin-bottom:14px" data-act="pick-log">' + keyIcon(16) + ' 交換約束ログからえらぶ</button><div class="lbl" style="margin-bottom:6px">または自分で書く</div>' : "";
+  var body = (pre || "") + fromLog + '<div class="form">' +
+    (t.logId ? '<div class="preview">' + keyIcon(14) + ' 交換約束ログの交換だよ。相手と中身はログで編集してね。<br><b class="hand">' + esc(t.who) + '</b>　' + esc(t.give) + ' ⇄ ' + esc(t.get) + '</div>'
+      : fld("t-who", "だれと？", t.who, "ニックネーム") + '<div class="row2">' + fld("t-give", "わたしが渡す", t.give, "アクスタ NAOYA") + fld("t-get", "もらう", t.get, "トレカ RAN") + '</div>') +
+    '<div><div class="lbl" style="margin-bottom:8px">どのくらい大事？</div>' + chipGroup("prio", [{ id: "must", label: "かならず" }, { id: "maybe", label: "できれば" }], t.priority) + '</div>' +
+    '<div><div class="lbl" style="margin-bottom:8px">いつごろ？</div>' + chipGroup("tband", bands(day()), t.band || "any") + '</div>' +
+    fld("t-place", "だいたいの場所", t.place, "南口あたり・会場の近く など") +
+    '<details class="more"' + (t.time ? " open" : "") + '><summary>時間がぴったり決まっていれば</summary>' + fld("t-time", "時間", t.time, "", "time") + '</details></div>';
+  var foot = '<button type="button" class="btn dark full" data-act="save-trade">' + (t.id ? "保存する" : "交換をいれる") + '</button>' + (t.id ? '<button type="button" class="btn del full" data-act="del" data-k="trade" data-id="' + t.id + '">この交換を消す</button>' : "");
+  openSheet(t.id ? "交換" : "交換をいれる", body, foot);
+}
+function sheetPickLog() {
+  var d = day(), have = {}; d.trades.forEach(function (t) { if (t.logId) have[t.logId] = 1; });
+  var rows = openLogRows().filter(function (r) { return !have[r.id]; }).sort(function (a, b) { var am = logDate(a) === d.date ? 0 : 1, bm = logDate(b) === d.date ? 0 : 1; return am - bm || (logDate(a) < logDate(b) ? -1 : 1); });
+  ui.sheet = { type: "picklog" };
+  var body = rows.length ? '<p class="hint" style="margin:0 0 8px">まだ終わっていない手渡し交換だよ。この日に持っていくものにチェックしてね。</p>' + rows.map(function (r) {
+    return '<label class="logrow"><input type="checkbox" data-pick="' + esc(r.id) + '"' + (logDate(r) === d.date ? " checked" : "") + '><span style="flex:1;min-width:0"><span class="hand" style="font-size:15px">' + esc(r.name || "（名前なし）") + '</span><span class="hint" style="display:block">' + esc(itemsText(r.giveItems) || "—") + ' ⇄ ' + esc(itemsText(r.getItems) || "—") + '</span><span class="hint" style="display:block">' + esc([logDate(r) ? md(logDate(r)) : "日付なし", r.event].filter(Boolean).join(" ・ ")) + '</span></span><span class="st">' + esc(r.status || "") + '</span></label>';
+  }).join("") : '<div class="empty" style="margin:0">入れられる交換は見つからなかったよ（入れ済み・完了・郵送は出ないよ）。</div>';
+  openSheet("交換約束ログからえらぶ", body, rows.length ? '<button type="button" class="btn dark full" data-act="save-pick">この日の交換にいれる</button>' : "");
+}
+function sheetMeet(m, pre) {
+  var d = day(); m = m || { who: "", band: bands(d)[0].id, mark: "", memo: "" };
+  ui.sheet = { type: "meet", id: m.id || null };
+  var body = (pre || "") + '<div class="form">' + fld("m-who", "だれと？", m.who, "ニックネーム") +
+    '<div><div class="lbl" style="margin-bottom:8px">いつごろ？</div>' + chipGroup("band", bands(d), m.band || "any") + '</div>' +
+    fld("m-place", "だいたいの場所", m.place, "南口あたり・会場の近く など") +
+    '<details class="more"' + (m.time ? " open" : "") + '><summary>時間がぴったり決まっていれば</summary>' + fld("m-time", "時間", m.time, "", "time") + '</details>' +
+    fld("m-mark", "相手の目印（わかれば）", m.mark, "ラベンダーのトート") + fld("m-memo", "メモ", m.memo, "DMで当日連絡") + '</div>';
+  var foot = '<button type="button" class="btn dark full" data-act="save-meet">' + (m.id ? "保存する" : "ミーグリにいれる") + '</button>' + (m.id ? '<div style="display:flex;justify-content:space-between">' + "<span></span>" + '<button type="button" class="btn del" style="min-height:40px" data-act="del" data-k="meet" data-id="' + m.id + '">この人を消す</button></div>' : "");
+  openSheet(m.id ? "ミーグリ" : "会いたい人をいれる", body, foot);
+}
+function sheetOff(o, pre) {
+  ui.sheet = { type: "off", id: o ? o.id : null }; o = o || { label: "", time: "" };
+  var std = ["物販", "開場", "開演"];
+  var body = (pre || "") + '<div class="form"><div><div class="lbl" style="margin-bottom:8px">なに？</div>' + chipGroup("offl", std, o.label) + '</div>' + fld("o-label", "ほかの名前", std.indexOf(o.label) < 0 ? o.label : "", "特典会 など") + fld("o-time", "時刻", o.time, "", "time") + '<p class="autonote" style="margin:0">時間は公式情報も確認してね</p></div>';
+  openSheet(o.id ? "公式の時間" : "公式の時間をいれる", body, '<button type="button" class="btn dark full" data-act="save-off">保存する</button>' + (o.id ? '<button type="button" class="btn del full" data-act="del" data-k="off" data-id="' + o.id + '">この時間を消す</button>' : ""));
+}
+function findItem(k, id) { var d = day(), list = k === "trade" ? d.trades : k === "meet" ? d.meets : d.myplans; return list.filter(function (x) { return x.id === id; })[0]; }
+function sheetFix(k, id) {
+  var x = findItem(k, id), d = day(); if (!x) return;
+  ui.sheet = { type: "fix", k: k, id: id };
+  var body = '<div class="preview" style="background:var(--desk);border:0"><span class="hand" style="font-size:17px">' + esc(x.who) + '</span> ' + (k === "trade" ? '<span class="stamp c-mint">交換</span><div class="hint">' + esc(x.give) + ' ⇄ ' + esc(x.get) + '</div>' : '<div class="hint">' + esc(bandLabel(d, x.band)) + '</div>') + '</div>' +
+    '<div class="form" style="margin-top:16px">' + fld("x-time", "何時？", x.time, "", "time") + fld("x-place", "どこで？", x.place, "会場 南口 階段下") + fld("x-mark", "相手の目印", x.mark, "ミントのマステのクリアファイル") + '</div>';
+  openSheet("時間が決まった！", body, '<button type="button" class="btn dark full" data-act="save-fix">保存する</button>' + (x.time ? '<button type="button" class="link" data-act="unfix" data-k="' + k + '" data-id="' + id + '">時間を未定にもどす</button>' : ""));
+}
+function sheetDetail(k, id) {
+  var x = findItem(k, id), d = day(); if (!x) return;
+  ui.sheet = { type: "detail", k: k, id: id };
+  var body = '<div class="paper meetcard"><i class="tape ' + (k === "trade" ? "t-mint" : "t-berry") + '"></i><div class="en" style="font-size:12px;letter-spacing:.2em;color:var(--berry-ink)">' + (k === "trade" ? "TRADE" : "MEET") + ' ' + esc(x.time) + '</div>' +
+    '<div class="big">' + esc(x.who) + '</div>' + (k === "trade" ? '<div class="k">交換</div><div style="font-size:15px;font-weight:700">' + esc(x.give) + ' ⇄ ' + esc(x.get) + '</div>' : "") +
+    '<div class="k">どこで</div><div class="v">' + esc(x.place || "未定") + '</div>' +
+    (x.mark ? '<div class="k">相手の目印</div><div class="mark">' + esc(x.mark) + '</div>' : "") +
+    '<div class="k">わたしの目印</div><input type="text" id="my-mark" value="' + esc(d.myMark || "") + '" placeholder="白いキャップ・ミントのマステ付きバッグ" style="width:100%;font-size:16px;border:0;border-bottom:var(--dash);background:transparent;padding:4px 0;font-family:var(--hand);font-weight:600;outline:none">' +
+    (x.memo ? '<div class="k">メモ</div><div>' + esc(x.memo) + '</div>' : "") + '</div>';
+  var foot = '<button type="button" class="btn dark full" data-act="dm" data-k="' + k + '" data-id="' + id + '">場所と目印をDM用にコピー</button>' +
+    '<button type="button" class="btn oval full" data-act="' + (k === "trade" ? "trade-done" : "meet-done") + '" data-id="' + id + '">' + (x.done ? "まだにもどす" : (k === "trade" ? "交換できた！" : "会えた！")) + '</button>' +
+    '<div style="display:flex;justify-content:space-between"><button type="button" class="link" data-act="' + (k === "trade" ? "edit-trade" : "edit-meet") + '" data-id="' + id + '">時間や場所をなおす</button><button type="button" class="link" style="color:var(--red)" data-act="del-quick" data-k="' + k + '" data-id="' + id + '">消す</button></div>';
+  openSheet("会う直前カード", body, foot);
+}
+function dmText(k, id) { var x = findItem(k, id), d = day(); return (x.time ? x.time + " " : "") + (x.place || "") + "で待ってます！" + (d.myMark ? d.myMark + "が目印です" : "") + (k === "trade" && x.give ? "（" + x.give + " 持っていきます）" : ""); }
+function sheetKey() {
+  ui.sheet = { type: "key" };
+  var dk = deviceKey();
+  var body = '<p class="hint" style="margin:0 0 12px">' + (link.key ? "KEYを変えるときは、新しいKEYを入れて「このKEYで読み込む」。同じKEYで最新にしたいときは「再同期」。<br>" : "") + '交換約束ログを使っている人は、ログの「KEY」画面に出ている MUZE KEY を入れてね。使っていない人は、下の「新しくMUZE KEYを作る」でOK。<br>・交換約束ログから交換を読み込むよ（ログを書きかえることはないよ）<br>・MUZE DAY の予定も、このKEYで暗号化してクラウドに保存するよ。別の端末で同じKEYを入れると復元できるよ</p>' +
+    '<div class="field"><label for="k-in">MUZE KEY</label><input id="k-in" type="text" inputmode="text" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="MUZE-XXXX-XXXX-XXXX" value="' + esc(link.key || "") + '" style="font-family:var(--en);font-weight:700;letter-spacing:.06em"></div>' +
+    (dk && dk !== link.key ? '<button type="button" class="link" data-act="use-device-key" style="margin-top:6px">この端末の交換約束ログのKEY（' + esc(maskKey(dk)) + '）を使う</button>' : "") +
+    (link.key ? '<button type="button" class="btn full" style="margin-top:10px" data-act="copy-key">いまのKEYをコピー（スクショ・メモで保管）</button>'
+      : '<div class="newkey"><b>KEYを持っていない？</b><span>交換約束ログを使っていなくても大丈夫。ここで新しいMUZE KEYを作れるよ</span><button type="button" class="btn full" data-act="new-key">新しくMUZE KEYを作る</button></div>') +
+    (link.key ? '<div class="preview" style="margin-top:14px">いまつながっているKEY：<b class="en">' + esc(maskKey(link.key)) + '</b><br>' + (link.at ? hhmm(link.at) + ' に読み込み ・ まだ終わっていない手渡し交換 ' + openLogRows().length + '件' : "") + '</div>' : "") +
+    '<p style="margin-top:14px;padding:12px 14px;background:rgba(226,122,148,.12);font-size:12px;line-height:1.7"><b class="hand">KEYは人に教えないでね。</b><br>同じKEYを知っている人は、予定と交換ログを見られてしまうよ。予定はブラウザの中で暗号化してから送るので、運営側からは読めないよ。しおりにKEYは入らないよ。</p>' + (cloudKey() ? '<p class="hint cloudstat" style="margin-top:10px">' + esc(cloudStatusText()) + '</p>' : "");
+  openSheet(link.key ? "MUZE KEYの再同期・変更" : "MUZE KEYでつなぐ", body, '<button type="button" class="btn dark full" data-act="connect">' + (link.key ? "このKEYで読み込む" : "読み込む") + '</button>' + (link.key ? '<button type="button" class="btn full" data-act="relink-close">↻ いまのKEYで再同期</button><button type="button" class="link" data-act="unlink">つなぐのをやめる</button>' : '') + '<a class="link" style="text-align:center" href="../muze-key/">MUZE KEYについて</a>');
+}
+function sheetDayMenu() {
+  var d = day(); ui.sheet = { type: "daymenu" };
+  var body = '<div class="form">' + fld("dm-title", "名前", d.title) + fld("dm-venue", "会場", d.venue) + fld("dm-date", "日付", d.date, "", "date") + fld("dm-mark", "わたしの目印（DMの文に入るよ）", d.myMark, "白いキャップ") +
+    '<div><div class="lbl" style="margin-bottom:6px">公式の時間</div>' + d.official.map(function (o) { return '<button type="button" class="off" style="margin:4px 0;width:100%" data-act="edit-off" data-id="' + o.id + '"><span class="en">' + esc(o.time) + '</span><span class="hand">' + esc(o.label) + '</span><span class="sub">編集</span></button>'; }).join("") + '<button type="button" class="link" data-act="add-off">＋ 公式の時間を足す</button><p class="autonote" style="margin:4px 0 0">時間は公式情報も確認してね</p></div></div>';
+  openSheet("この日のこと", body, '<button type="button" class="btn dark full" data-act="save-daymenu">保存する</button><button type="button" class="btn del full" data-act="del-day">この日を丸ごと消す</button>');
+}
+
+/* ========== しおり（自分で保存する用） ========== */
+function sheetShare() {
+  ui.sheet = { type: "share" };
+  var dd = day(); if (dd && !dd.savedAt) { dd.savedAt = Date.now(); save(); }
+  openSheet("しおりを保存", '<p class="hint" style="margin:0 0 10px">当日の流れ・交換・ミーグリ・持ち物を1枚にまとめたよ。スマホに保存しておけば、当日電波が悪くても見られるよ。</p><img id="share-img" class="shareimg" alt="しおりのプレビュー">',
+    '<button type="button" class="btn green full" data-act="save-img">画像を保存・共有する</button><p class="hint" style="text-align:center;margin:0">共有シートの「画像を保存」で写真に入るよ。開かないときは画像を<b>長押し</b>して「写真に保存」してね</p>');
+  drawShiori(day()).then(function (url) { var i = $("#share-img"); if (i) i.src = url; });
+}
+function drawShiori(d) {
+  var W = 1080, c = document.createElement("canvas"); c.width = W; c.height = 4000; var x = c.getContext("2d");
+  var HAND = '"Klee One","Zen Kaku Gothic New",sans-serif', GOTH = '"Zen Kaku Gothic New",sans-serif', EN = '"Montserrat",sans-serif', SERIF = '"DM Serif Display",serif';
+  var INK = "#40382f", FADED = "#6f6456", L = 130, R = W - 130;
+  return (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(function () {
+    var y = 250;
+    function text(t, px, py, font, col) { x.font = font; x.fillStyle = col || INK; x.fillText(t, px, py); }
+    function wrap(t, px, py, w, lh, font) { x.font = font; x.fillStyle = INK; var cur = "", n = 0; String(t).split("").forEach(function (ch) { if (x.measureText(cur + ch).width > w) { x.fillText(cur, px, py + n * lh); n++; cur = ch; } else cur += ch; }); x.fillText(cur, px, py + n * lh); return n + 1; }
+    function head(t) { y += 20; text(t, L, y, "600 34px " + HAND); y += 18; x.setLineDash([10, 8]); x.strokeStyle = "rgba(64,56,47,.35)"; x.lineWidth = 3; x.beginPath(); x.moveTo(L, y); x.lineTo(R, y); x.stroke(); x.setLineDash([]); y += 52; }
+    function box(px, py, on) { x.strokeStyle = INK; x.lineWidth = 3; x.strokeRect(px, py - 26, 30, 30); if (on) { x.beginPath(); x.moveTo(px + 6, py - 11); x.lineTo(px + 13, py - 3); x.lineTo(px + 25, py - 20); x.strokeStyle = "#a8445f"; x.lineWidth = 4; x.stroke(); } }
+    text("MUZE DAY", L, y, "84px " + SERIF);
+    y += 70; var ds = d.date.replace(/-/g, "."); text(ds, L, y, "700 42px " + EN); x.font = "700 42px " + EN; text(dow(d.date), L + x.measureText(ds).width + 16, y, "600 24px " + EN, FADED);
+    var kt = d.kind === "LIVE" ? "LIVE" : "その他", kc = d.kind === "LIVE" ? "#65559a" : "#4a7556"; x.font = "600 26px " + (d.kind === "LIVE" ? EN : HAND); var kw = x.measureText(kt).width + 30; x.strokeStyle = kc; x.lineWidth = 3; x.strokeRect(R - kw, y - 34, kw, 44); text(kt, R - kw + 15, y, x.font, kc);
+    y += 56; y += (wrap(d.title, L, y, R - L, 44, "600 32px " + HAND) - 1) * 44;
+    y += 44; text(d.venue || "", L, y, "500 26px " + GOTH, FADED); y += 40;
+    var items = timedItems(d).filter(function (i) { return !i.x.done; });
+    if (items.length) {
+      head("当日の流れ");
+      items.forEach(function (i) {
+        var nm = itemName(i), pl = i.x.place || "";
+        if (i.type === "off") { x.fillStyle = "#efe5ff"; x.fillRect(L - 12, y - 36, R - L + 24, 50); }
+        text(fmt(i.t), L, y, "700 30px " + EN);
+        text(nm, L + 130, y, "600 30px " + HAND);
+        x.font = "600 30px " + HAND; var nw = x.measureText(nm).width;
+        if (i.type === "trade" || i.type === "meet") { text(i.type === "trade" ? "交換" : "ミーグリ", L + 150 + nw, y, "600 22px " + HAND, i.type === "trade" ? "#4a7556" : "#a8445f"); nw += i.type === "trade" ? 70 : 110; }
+        if (pl) { x.font = "500 24px " + GOTH; text(clip(pl, R - (L + 170 + nw), x), L + 170 + nw, y, "500 24px " + GOTH, FADED); }
+        y += 60;
+      });
+    }
+    var trades = d.trades.filter(function (t) { return !t.done; });
+    if (trades.length) {
+      head("交換");
+      trades.forEach(function (t) {
+        text(t.who, L, y, "600 30px " + HAND);
+        x.font = "700 26px " + (t.time ? EN : HAND); var r = t.time ? t.time : bandLabel(d, t.band || "any"); text(r, R - x.measureText(r).width, y, x.font, t.time ? INK : FADED);
+        y += 42; x.font = "500 24px " + GOTH; text(clip(t.give + " ⇄ " + t.get, R - L, x), L, y, "500 24px " + GOTH, FADED);
+        if (t.place) { y += 36; text(clip("だいたい：" + t.place, R - L, x), L, y, "500 24px " + GOTH, FADED); }
+        y += 56;
+      });
+    }
+    var loose = d.meets.filter(function (m) { return !m.time && !m.done; });
+    if (loose.length) {
+      head("ミーグリ");
+      bands(d).forEach(function (b) {
+        var ms = loose.filter(function (m) { return (m.band || "any") === b.id; }); if (!ms.length) return;
+        text(b.label, L, y, "600 26px " + HAND, FADED);
+        var lines = wrap(ms.map(function (m) { return m.who + (m.place ? "（" + m.place + "）" : ""); }).join("・"), L + 200, y, R - L - 200, 44, "600 28px " + HAND);
+        y += 44 * lines + 12;
+      });
+    }
+    var tradeItems = d.trades.filter(function (t) { return !t.done && t.give; });
+    if (d.checklist.length || tradeItems.length) {
+      head("持ち物");
+      var all = d.checklist.map(function (c) { return { t: c.text, on: c.done }; }).concat(tradeItems.map(function (t) { return { t: t.give + "（" + t.who + "）", on: !!t.packed }; }));
+      var two = all.length > 6, colW = (R - L) / 2;
+      all.forEach(function (it, k) {
+        var col = two ? k % 2 : 0, px = L + col * colW;
+        box(px, y, it.on); x.font = "500 26px " + GOTH; text(clip(it.t, (two ? colW : R - L) - 60, x), px + 46, y, "500 26px " + GOTH);
+        if (!two || col === 1 || k === all.length - 1) y += 54;
+      });
+    }
+    y += 40; text("MUZE TOOL BOX ♡", R - 230, y, "600 20px " + EN, FADED);
+    var H = Math.max(1350, y + 120);
+    var out = document.createElement("canvas"); out.width = W; out.height = H; var o = out.getContext("2d");
+    o.fillStyle = "#f1ebe1"; o.fillRect(0, 0, W, H);
+    o.fillStyle = "rgba(64,56,47,.06)"; for (var gx = 0; gx < W; gx += 44) for (var gy = 0; gy < H; gy += 44) { o.beginPath(); o.arc(gx, gy, 2, 0, 7); o.fill(); }
+    o.save(); o.shadowColor = "rgba(64,56,47,.2)"; o.shadowBlur = 40; o.shadowOffsetY = 18; o.fillStyle = "#fff"; o.fillRect(64, 96, W - 128, H - 170); o.restore();
+    function tape(tx, ty, w, h, col, r) { o.save(); o.translate(tx, ty); o.rotate(r); o.fillStyle = col; o.fillRect(-w / 2, -h / 2, w, h); o.restore(); }
+    tape(220, 100, 170, 44, "rgba(226,122,148,.85)", -0.12); tape(W - 230, 102, 140, 40, "rgba(164,197,175,.85)", 0.09);
+    o.drawImage(c, 0, 0, W, H, 0, 0, W, H);
+    return out.toDataURL("image/png");
+  });
+}
+function clip(t, w, x) { t = String(t || ""); if (x.measureText(t).width <= w) return t; while (t.length && x.measureText(t + "…").width > w) t = t.slice(0, -1); return t + "…"; }
+function saveImg() {
+  var img = $("#share-img"); if (!img || !img.src) return;
+  var name = "muze-day-" + (day().date || "") + ".png";
+  function download() { var a = document.createElement("a"); a.href = img.src; a.download = name; document.body.appendChild(a); a.click(); a.remove(); toast("保存できないときは画像を長押ししてね"); }
+  fetch(img.src).then(function (r) { return r.blob(); }).then(function (blob) {
+    var file = new File([blob], name, { type: "image/png" });
+    if (navigator.share && (!navigator.canShare || navigator.canShare({ files: [file] }))) {
+      return navigator.share({ files: [file], title: "MUZE DAY しおり" }).catch(function (e) { if (e && e.name === "AbortError") return; download(); });
+    }
+    download();
+  }).catch(download);
+}
+
+/* ========== 操作 ========== */
+document.addEventListener("click", function (e) {
+  var chipEl = e.target.closest("[data-chip]");
+  if (chipEl) {
+    var g = chipEl.getAttribute("data-chip");
+    $$('#sheet [data-chip="' + g + '"]').forEach(function (b) { b.setAttribute("aria-pressed", String(b === chipEl)); });
+    if (g === "offl") { var ol = $("#o-label"); if (ol) ol.value = ""; }
+    if (g === "mykind") { var w = $("#my-name-wrap"); if (w) w.classList.toggle("hidden", chipEl.getAttribute("data-v") !== "その他"); }
+    return;
+  }
+  var el = e.target.closest("[data-act]"); if (!el) return;
+  var act = el.getAttribute("data-act"), id = el.getAttribute("data-id"), k = el.getAttribute("data-k"), v = el.getAttribute("data-v"), d = day();
+  switch (act) {
+    case "dd": ui.dd = !ui.dd; renderStart(); break;
+    case "ddf": ui.ddFilter = v; renderStart(); break;
+    case "pick": pickPreset(id); renderStart(); break;
+    case "custom": draft = newDraft(); draft.custom = true; ui.dd = false; renderStart(); break;
+    case "kind": draft.kind = v; renderStart(); break;
+    case "off-add": draft.official.push({ label: "", time: "" }); renderStart(); break;
+    case "off-del": draft.official.splice(+el.getAttribute("data-i"), 1); renderStart(); break;
+    case "create": createDay(); break;
+    case "home": goHome(); break;
+    case "open-day": openDay(id); break;
+    case "view": d.view = v; save(); renderDay(d); window.scrollTo(0, 0); break;
+    case "go-event": if (d.view !== "event") { d.view = "event"; save(); renderDay(d); } var sec = v && $(v); if (sec) window.scrollTo({ top: sec.getBoundingClientRect().top + window.scrollY - 90, behavior: "smooth" }); break;
+    case "go-meet": d.view = "meet"; save(); renderDay(d); window.scrollTo(0, 0); break;
+    case "add-kind": sheetAdd(v); break;
+    case "add-direct": d.view = v === "trade" || v === "meet" ? "meet" : "event"; save(); sheetAdd(v); break;
+    case "del-quick":
+      var dx = findItem(k, id); if (!dx) return;
+      if (!confirm("「" + (k === "my" ? myLabel(dx) : dx.who) + "」を消していい？")) return;
+      removeItem(d, k, id); save(); closeSheet(); render(); toast("消したよ"); break;
+    case "add-off": closeSheet(); sheetOff(null); break;
+    case "close": closeSheet(); break;
+    case "edit-my": sheetMy(findItem("my", id)); break;
+    case "edit-trade": closeSheet(); sheetTrade(findItem("trade", id)); break;
+    case "edit-meet": closeSheet(); sheetMeet(findItem("meet", id)); break;
+    case "edit-off": closeSheet(); sheetOff(d.official.filter(function (o) { return o.id === id; })[0]); break;
+    case "fix": closeSheet(); sheetFix(k, id); break;
+    case "detail": sheetDetail(k, id); break;
+    case "key": closeSheet(); sheetKey(); break;
+    case "use-device-key": $("#k-in").value = deviceKey(); break;
+    case "new-key": newKey(); break;
+    case "copy-key": copyText(link.key || ""); break;
+    case "connect": connectKey(); break;
+    case "unlink": link = {}; saveLink(); cloud.aes = null; cloud.state = "off"; closeSheet(); render(); toast("つなぐのをやめたよ（この端末の予定は残るよ）"); break;
+    case "relink": refreshLink(false); pullCloud(true); break;
+    case "set-band": var sb = findItem(k, id); if (sb) { sb.band = v; sb.time = ""; save(); renderDay(d); } break;
+    case "relink-close": closeSheet(); refreshLink(false); break;
+    case "pick-log": closeSheet(); sheetPickLog(); break;
+    case "save-pick":
+      var map = {}; openLogRows().forEach(function (r) { map[r.id] = r; }); var n = 0;
+      $$("#sheet [data-pick]").forEach(function (cb) { var rid = cb.getAttribute("data-pick"); if (cb.checked && map[rid]) { d.trades.push(tradeFromLog(map[rid])); if (d.skipLog) delete d.skipLog[rid]; n++; } });
+      save(); closeSheet(); d.view = "meet"; render(); toast(n ? "交換を " + n + "件 いれたよ" : "えらばれていなかったよ"); break;
+    case "daymenu": sheetDayMenu(); break;
+    case "share": sheetShare(); break;
+    case "save-img": saveImg(); break;
+    case "dm": var mm = $("#my-mark"); if (mm) { d.myMark = mm.value.trim(); save(); } copyText(dmText(k, id)); break;
+    case "trade-done": var td = findItem("trade", id); td.done = !td.done; save(); closeSheet(); render(); toast(td.done ? "交換できた！" + (td.logId ? "（ログのステータスは交換約束ログで更新してね）" : "") : "まだにもどしたよ"); break;
+    case "meet-done": var m2 = findItem("meet", id); m2.done = !m2.done; save(); closeSheet(); render(); toast(m2.done ? "会えた！" : "まだにもどしたよ"); break;
+    case "unfix": var uf = findItem(k, id); uf.time = ""; save(); closeSheet(); render(); break;
+    case "del":
+      if (!confirm("消していい？")) return;
+      removeItem(d, k, id); save(); closeSheet(); render(); toast("消したよ"); break;
+    case "save-my": saveMy(); break;
+    case "save-trade": saveTrade(); break;
+    case "save-meet": saveMeet(); break;
+    case "save-off": saveOff(); break;
+    case "save-fix": saveFix(); break;
+    case "save-daymenu": d.title = val("dm-title") || d.title; d.venue = val("dm-venue"); d.date = val("dm-date") || d.date; d.myMark = val("dm-mark"); save(); closeSheet(); render(); break;
+    case "del-day":
+      var target = id ? db.days.filter(function (x) { return x.id === id; })[0] : d; if (!target) return;
+      if (!confirm("「" + md(target.date) + " " + target.title + "」を丸ごと消していい？\n予定・持ち物・交換・ミーグリがすべて消えるよ（交換約束ログは消えないよ）")) return;
+      db.days = db.days.filter(function (x) { return x.id !== target.id; });
+      db.deleted = db.deleted || {}; db.deleted[target.id] = Date.now();
+      if (db.current === target.id) db.current = db.days[0] ? db.days[0].id : null;
+      save(); goHome(); toast("消したよ"); break;
+    case "guide-hide": db.hideGuide = true; save(); renderDay(d); break;
+    case "guide-show": db.hideGuide = false; save(); renderDay(d); break;
+    case "ck-del": e.preventDefault(); d.checklist = d.checklist.filter(function (c) { return c.id !== id; }); save(); renderDay(d); break;
+  }
+});
+document.addEventListener("change", function (e) {
+  var t = e.target, d = day();
+  if (t.hasAttribute("data-draft")) { draft[t.getAttribute("data-draft")] = t.value; if (t.getAttribute("data-draft") === "date") renderStart(); return; }
+  if (t.hasAttribute("data-off-label")) { draft.official[+t.getAttribute("data-off-label")].label = t.value; return; }
+  if (t.hasAttribute("data-off-time")) { draft.official[+t.getAttribute("data-off-time")].time = t.value; return; }
+  if (t.hasAttribute("data-imp")) { draft.imports[t.getAttribute("data-imp")] = t.checked; return; }
+  if (t.id === "ck-new") { addCheck(); return; }
+  if (t.hasAttribute("data-settime")) { var it = findItem(t.getAttribute("data-settime"), t.getAttribute("data-id")); if (it) { it.time = t.value; save(); renderDay(d); toast(t.value ? "時間を入れたよ" : "時間を未定にしたよ"); } return; }
+  if (t.hasAttribute("data-ck")) { var c = d.checklist.filter(function (x) { return x.id === t.getAttribute("data-ck"); })[0]; c.done = t.checked; save(); renderDay(d); return; }
+  if (t.hasAttribute("data-pack")) { var p = findItem("trade", t.getAttribute("data-pack")); p.packed = t.checked; save(); renderDay(d); return; }
+});
+document.addEventListener("input", function (e) { if (e.target.hasAttribute && e.target.hasAttribute("data-draft")) draft[e.target.getAttribute("data-draft")] = e.target.value; });
+document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("#sheet").classList.contains("hidden")) closeSheet(); if (e.key === "Enter" && e.target.id === "ck-new" && !e.isComposing) { e.preventDefault(); addCheck(); } });
+$("#sheet").addEventListener("click", function (e) { if (e.target.id === "sheet") closeSheet(); });
+
+function removeItem(d, k, id) {
+  if (k === "trade") { var t = findItem("trade", id); if (t && t.logId) { d.skipLog = d.skipLog || {}; d.skipLog[t.logId] = 1; } d.trades = d.trades.filter(function (x) { return x.id !== id; }); }
+  if (k === "meet") d.meets = d.meets.filter(function (x) { return x.id !== id; });
+  if (k === "my") d.myplans = d.myplans.filter(function (x) { return x.id !== id; });
+  if (k === "off") d.official = d.official.filter(function (x) { return x.id !== id; });
+}
+function addCheck() {
+  var d = day(), inp = $("#ck-new"); if (!d || !inp || !inp.value.trim()) return;
+  d.checklist.push({ id: uid(), text: inp.value.trim(), done: false, keep: true }); inp.value = ""; save(); renderDay(d);
+  var n = $("#ck-new"); if (n) n.focus();
+}
+function genKey() {
+  var a = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789", r = new Uint32Array(12), out = "";
+  crypto.getRandomValues(r);
+  for (var i = 0; i < 12; i++) { out += a[r[i] % a.length]; if (i === 3 || i === 7) out += "-"; }
+  return "MUZE-" + out;
+}
+function newKey() {
+  var k = genKey();
+  link = { key: k, rows: [], at: Date.now(), err: "" }; saveLink(); cloud.aes = null;
+  try { if (!deviceKey()) localStorage.setItem("muze_day_design_test_key_v1", k); } catch (e) {}
+  closeSheet(); render(); pullCloud(true);
+  ui.sheet = { type: "newkey" };
+  openSheet("MUZE KEYを作ったよ", '<p class="hint" style="margin:0 0 12px">このKEYで、予定を暗号化してクラウドに保存するよ。<b>機種変更や別の端末で復元するときに必要</b>なので、スクショかメモで必ず保管してね。</p>' +
+    '<div class="keyshow en">' + esc(k) + '</div>' +
+    '<p style="margin-top:14px;padding:12px 14px;background:rgba(226,122,148,.12);font-size:12px;line-height:1.7"><b>なくすと復元できないよ。</b>運営側でも再発行はできません。人には教えないでね。<br>あとから交換約束ログを使うときも、同じKEYを入れればつながるよ。</p>',
+    '<button type="button" class="btn dark full" data-act="copy-key">KEYをコピー</button><button type="button" class="link" style="text-align:center" data-act="close">保管したので閉じる</button>');
+}
+function connectKey() {
+  var k = normKey(val("k-in"));
+  if (!k) { toast("MUZE-XXXX-XXXX-XXXX の形で入れてね"); return; }
+  var btn = $('#sheet [data-act="connect"]'); if (btn) { btn.disabled = true; btn.textContent = "読み込み中…"; }
+  fetchLog(k).then(function (rows) {
+    if (!rows) { link = { key: k, rows: [], at: Date.now(), err: "notfound" }; saveLink(); cloud.aes = null; closeSheet(); render(); pullCloud(false); toast("交換約束ログは見つからなかったけど、予定はこのKEYで保存するよ"); return; }
+    link = { key: k, rows: rows, at: Date.now(), err: "" }; saveLink(); cloud.aes = null; var n = autoAdd(); closeSheet(); render(); pullCloud(false);
+    toast("つながったよ。" + (n ? "この日の交換を " + n + "件 入れたよ" : "「ログからえらぶ」で交換を入れてね"));
+  }).catch(function () { if (btn) { btn.disabled = false; btn.textContent = "読み込む"; } toast("読み込めなかったよ。KEYと電波を確認してね"); });
+}
+function saveMy() {
+  var d = day(), s = ui.sheet, p = s.id ? findItem("my", s.id) : null, kind = chipVal("mykind") || "その他";
+  if (kind === "その他" && !val("p-name")) { toast("予定の名前を入れてね"); return; }
+  if (!p) { p = { id: uid() }; d.myplans.push(p); }
+  p.kind = kind; p.name = kind === "その他" ? val("p-name") : ""; p.time = val("p-time"); p.place = val("p-place"); p.memo = val("p-memo");
+  save(); closeSheet(); d.view = "event"; render(); toast("予定にいれたよ");
+}
+function saveTrade() {
+  var d = day(), s = ui.sheet, t = s.id ? findItem("trade", s.id) : null;
+  if (!t) { if (!val("t-who")) { toast("だれと交換するか入れてね"); return; } t = { id: uid(), done: false }; d.trades.push(t); }
+  if (!t.logId) { t.who = val("t-who") || t.who; t.give = val("t-give"); t.get = val("t-get"); }
+  t.priority = chipVal("prio") || "must"; t.band = chipVal("tband") || "any"; t.time = val("t-time"); t.place = val("t-place");
+  save(); closeSheet(); d.view = "meet"; render(); toast("交換をいれたよ");
+}
+function saveMeet() {
+  var d = day(), s = ui.sheet, m = s.id ? findItem("meet", s.id) : null;
+  if (!m) { if (!val("m-who")) { toast("だれに会いたいか入れてね"); return; } m = { id: uid(), time: "", place: "", done: false }; d.meets.push(m); }
+  m.who = val("m-who") || m.who; m.band = chipVal("band") || "any"; m.time = val("m-time"); m.place = val("m-place"); m.mark = val("m-mark"); m.memo = val("m-memo");
+  save(); closeSheet(); d.view = "meet"; render(); toast("ミーグリにいれたよ");
+}
+function saveOff() {
+  var d = day(), s = ui.sheet, label = val("o-label") || chipVal("offl"), time = val("o-time");
+  if (!label || !time) { toast("名前と時刻を入れてね"); return; }
+  var o = s.id ? d.official.filter(function (x) { return x.id === s.id; })[0] : null;
+  if (!o) { o = { id: uid() }; d.official.push(o); }
+  o.label = label; o.time = time; save(); closeSheet(); render();
+}
+function saveFix() {
+  var s = ui.sheet, x = findItem(s.k, s.id); if (!x) return;
+  if (!val("x-time")) { toast("時刻を入れてね"); return; }
+  x.time = val("x-time"); x.place = val("x-place"); x.mark = val("x-mark");
+  save(); closeSheet(); render(); toast("保存したよ");
+}
+
+/* 画面の行き来（ブラウザの「戻る」でも最初の画面へ） */
+function openDay(id) {
+  db.current = id; ui.home = false; draft = null; save(); render(); window.scrollTo(0, 0);
+  try { history.pushState({ muzeDay: "day" }, ""); } catch (e) {}
+  refreshLink(true);
+}
+function goHome() { ui.home = true; ui.dd = false; draft = newDraft(); closeSheet(); render(); window.scrollTo(0, 0); }
+window.addEventListener("popstate", function () {
+  if (!$("#sheet").classList.contains("hidden")) { closeSheet(); return; }
+  if (day() && !ui.home) goHome();
+});
+
+/* スワイプで切りかえ */
+var sx = null, sy = null;
+$("#app").addEventListener("touchstart", function (e) { var t = e.touches[0]; sx = t.clientX; sy = t.clientY; }, { passive: true });
+$("#app").addEventListener("touchend", function (e) {
+  if (sx == null) return; var t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy; sx = null;
+  var d = day(); if (!d || ui.home || Math.abs(dx) < 70 || Math.abs(dy) > 50) return;
+  if (e.target.closest(".dd-list,input,textarea")) return;
+  d.view = dx < 0 ? "meet" : "event"; save(); renderDay(d);
+}, { passive: true });
+
+saveLocalOnly();
+pullCloud(true);
+if (day()) { try { history.replaceState({ muzeDay: "home" }, ""); history.pushState({ muzeDay: "day" }, ""); } catch (e) {} refreshLink(true); }
+render();
+})();
+</script>
+</body>
+</html>
+
