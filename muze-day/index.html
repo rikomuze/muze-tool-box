@@ -439,6 +439,36 @@ button.cloudstat{background:none;border:0;padding:4px 0;font-size:11.5px;color:v
 .dd-btn{border-width:1.5px}
 .dd-list{border-width:1.5px}
 .foot{font-size:10.5px}
+
+/* ---- 2026.10.02-7 しおりをいつでも見る／ミーグリ側の囲みをへらす ---- */
+.dtop .seeshiori{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;background:var(--green);color:#fff;border:0;font-weight:700;font-size:13px;white-space:nowrap}
+.daycard{background:var(--paper);box-shadow:var(--shadow-s);margin:8px 0}
+.dc-main{display:flex;align-items:center;gap:12px;width:100%;padding:14px 14px 10px;background:none;border:0;text-align:left;color:var(--ink)}
+.dc-date{font-family:var(--en);font-weight:700;font-size:17px;flex-shrink:0;min-width:50px}
+.dc-t{flex:1;min-width:0}.dc-t b{display:block;font-size:14px;line-height:1.4}
+.dc-go{font-size:12px;color:var(--faded);white-space:nowrap}
+.dc-acts{display:flex;align-items:center;gap:8px;padding:0 14px 12px 76px}
+.seebtn{min-height:38px;padding:0 14px;background:var(--green);border:0;color:#fff;font-weight:700;font-size:13px}
+.dc-del{margin-left:auto;min-height:38px;background:none;border:0;color:var(--red);font-size:12.5px;padding:0 4px}
+.linkbar .keyacts{width:100%;justify-content:flex-start;gap:18px;display:flex}
+.daystat{margin-top:8px}
+.daystat{text-align:center;margin-top:18px}
+.daystat .cloudstat{text-align:center}
+.linkbar{background:none;padding:2px 0 10px;border-bottom:var(--dash);border-radius:0}
+.keyacts button{flex:0 0 auto!important;border:0!important;background:none!important;font-size:13px;font-weight:700;color:var(--lav-ink);padding:6px 4px;min-height:36px}
+.summary[data-act="key"]{background:none!important;padding:2px 0 10px!important;border-bottom:var(--dash);border-radius:0}
+.trade .swap{background:none;padding:2px 0}
+.inlinerow{margin:4px 16px 0;gap:18px;justify-content:flex-start}
+.inlineadd,.inlineadd.lav{background:none!important;border:0!important;box-shadow:none!important;min-height:44px;padding:4px 0;width:auto;justify-content:flex-start;font-size:14.5px}
+.inlinerow .inlineadd{flex:0 0 auto}
+.inlineadd.lav{color:var(--lav-ink)}
+.inlineadd:active{transform:none}
+.bands{margin:0 16px;padding:2px 14px;background:var(--paper);box-shadow:var(--shadow-s)}
+.bands+.bands{margin-top:10px}
+.bandh{margin:12px 0 0}
+.mrow{background:none;box-shadow:none;margin:0;padding:8px 0 10px;border-bottom:var(--dash)}
+.mrow:last-child{border-bottom:0}
+.homelink{display:block;margin:26px auto 0;background:none;border:0;font-size:14px;font-weight:700;color:var(--ink);min-height:44px;padding:0 10px}
 </style>
 </head>
 <body>
@@ -454,12 +484,12 @@ button.cloudstat{background:none;border:0;padding:4px 0;font-size:11.5px;color:v
   </div>
 </nav>
 <main class="wrap" id="app" aria-live="polite"></main>
-<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">ver 2026.10.02-6</span><br>MUZE DAY はテスト版です。予定はこの端末に保存され、MUZE KEYを入れると暗号化してクラウドにも保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
+<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">ver 2026.10.02-7</span><br>MUZE DAY はテスト版です。予定はこの端末に保存され、MUZE KEYを入れると暗号化してクラウドにも保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
 <div id="dock"></div>
 <div id="sheet" class="sheet hidden" role="dialog" aria-modal="true"></div>
 <div id="toast" class="toast hidden" role="status"></div>
 
-<script src="./events.js?v=2026.10.02-6"></script>
+<script src="./events.js?v=2026.10.02-7"></script>
 <script>
 (function () {
 "use strict";
@@ -714,8 +744,9 @@ function savedDays() {
   return '<div style="margin-top:22px"><div class="lbl" style="font-size:16px;margin-bottom:6px">つくった日</div>' +
     list.map(function (d) {
       var n = daysUntil(d.date), when = n > 0 ? "あと" + n + "日" : n === 0 ? "当日" : "おわった日";
-      return '<div class="dayrow"><button type="button" class="mini" style="width:100%;min-height:56px" data-act="open-day" data-id="' + d.id + '"><span class="en" style="width:auto;min-width:48px">' + md(d.date) + '</span><span style="flex:1;min-width:0"><span class="hand" style="display:block;font-size:14px;line-height:1.35">' + esc(d.title) + '</span><span class="hint">' + KIND_LABEL[d.kind] + ' ・ ' + esc(d.venue || "") + '</span></span><span class="hint" style="white-space:nowrap">' + when + ' →</span></button><button type="button" class="xbtn" data-act="del-day" data-id="' + d.id + '" aria-label="' + esc(d.title) + 'を消す">✕</button></div>';
-    }).join("") + '<p class="hint" style="margin:4px 0 0">いらなくなった日は右の ✕ で消せるよ</p></div>';
+      return '<div class="daycard"><button type="button" class="dc-main" data-act="open-day" data-id="' + d.id + '"><span class="en dc-date">' + md(d.date) + '</span><span class="dc-t"><b>' + esc(d.title) + '</b><span class="hint">' + KIND_LABEL[d.kind] + (d.venue ? ' ・ ' + esc(d.venue) : "") + ' ・ ' + when + '</span></span><span class="dc-go">開く ›</span></button>' +
+        '<div class="dc-acts"><button type="button" class="seebtn" data-act="see-day" data-id="' + d.id + '">しおりを見る</button><button type="button" class="dc-del" data-act="del-day" data-id="' + d.id + '" aria-label="' + esc(d.title) + 'を消す">✕ 消す</button></div></div>';
+    }).join("") + '</div>';
 }
 function renderStart() {
   var p = draft.presetId ? presetById(draft.presetId) : null;
@@ -810,13 +841,14 @@ function renderDay(d) {
   var tradesOpen = d.trades.filter(function (t) { return !t.done; }).length, meetsOpen = d.meets.filter(function (m) { return !m.done; }).length;
   var n = daysUntil(d.date), when = n > 0 ? "当日まで あと " + n + " 日" : n === 0 ? "当日！" : "おわった日";
   var evSub = d.official.filter(function (o) { return o.label === "開場" || o.label === "開演"; }).map(function (o) { return o.label + o.time; }).join("・") || "公式の時間・わたしの予定";
-  var html = '<div class="dtop"><button type="button" class="back" data-act="home">‹ しおり一覧</button><button type="button" class="cloudstat" data-act="key">' + esc(cloudStatusText() || "☁ クラウド保存はKEYから") + '</button></div>' +
+  var html = '<div class="dtop"><button type="button" class="back" data-act="home">‹ しおり一覧</button><button type="button" class="seeshiori" data-act="share">しおりを見る</button></div>' +
     '<button type="button" class="dhead" data-act="daymenu"><span class="dd2"><span class="en">' + md(d.date) + '</span><small>' + dow(d.date) + '</small></span><span class="dt"><span class="kind ' + d.kind + '">' + (d.kind === "LIVE" ? "LIVE" : "その他") + '</span><b>' + esc(d.title) + '</b><span class="hint">' + esc(d.venue || "") + ' ・ ' + when + '</span></span><span class="ed">編集</span></button>' +
     '<div class="vtabs" role="tablist"><button type="button" role="tab" class="vtab" data-act="view" data-v="event" aria-selected="' + (d.view === "event") + '"><span class="l">' + (d.kind === "LIVE" ? "LIVEの予定" : "当日の予定") + '</span><span class="s">' + esc(evSub) + '</span></button>' +
     '<button type="button" role="tab" class="vtab" data-act="view" data-v="meet" aria-selected="' + (d.view === "meet") + '"><span class="l">ミーグリの予定</span><span class="s">交換' + tradesOpen + '・ミーグリ' + meetsOpen + '</span></button></div>';
   html += guideBox(d);
   html += d.view === "meet" ? meetView(d) : eventView(d);
-  html += '<button type="button" class="inlineadd" style="margin-top:18px" data-act="home">‹ トップ（しおり一覧）にもどる</button>';
+  html += '<button type="button" class="homelink" data-act="home">‹ トップ（しおり一覧）にもどる</button>';
+  html += '<div class="daystat"><button type="button" class="cloudstat" data-act="key">' + esc(cloudStatusText() || "☁ クラウド保存はMUZE KEYから") + '</button></div>';
   html += '<div class="dayend"><button type="button" class="link" style="color:var(--red)" data-act="del-day">この日のしおりを丸ごと消す</button></div>';
   $("#app").innerHTML = html;
   $("#dock").innerHTML = "";
@@ -959,7 +991,7 @@ function openSheet(title, body, foot) {
   s.innerHTML = '<div class="sheet-inner"><div class="sheet-head"><h2>' + title + '</h2><button type="button" class="close" data-act="close" aria-label="とじる">✕</button></div>' + body + (foot ? '<div class="sheet-foot">' + foot + '</div>' : "") + '</div>';
   s.classList.remove("hidden"); document.body.style.overflow = "hidden";
 }
-function closeSheet() { var was = ui.sheet && ui.sheet.type; $("#sheet").classList.add("hidden"); $("#sheet").innerHTML = ""; document.body.style.overflow = ""; ui.sheet = null; if (was === "share" && day() && !ui.home) renderDay(day()); }
+function closeSheet() { var was = ui.sheet && ui.sheet.type; $("#sheet").classList.add("hidden"); $("#sheet").innerHTML = ""; document.body.style.overflow = ""; ui.sheet = null; if (was === "share" && day()) render(); }
 function chipGroup(name, opts, cur) {
   return '<div class="chips" data-group="' + name + '">' + opts.map(function (o) { var v = typeof o === "string" ? o : o.id, l = typeof o === "string" ? o : o.label; return '<button type="button" class="chip" data-chip="' + name + '" data-v="' + esc(v) + '" aria-pressed="' + (String(cur) === String(v)) + '">' + esc(l) + '</button>'; }).join("") + '</div>';
 }
@@ -1069,7 +1101,7 @@ function sheetDayMenu() {
 function sheetShare() {
   ui.sheet = { type: "share" };
   var dd = day(); if (dd && !dd.savedAt) { dd.savedAt = Date.now(); save(); }
-  openSheet("しおりを保存", '<p class="hint" style="margin:0 0 10px">当日の流れ・交換・ミーグリ・持ち物を1枚にまとめたよ。スマホに保存しておけば、当日電波が悪くても見られるよ。</p><img id="share-img" class="shareimg" alt="しおりのプレビュー">',
+  openSheet("しおり", '<p class="hint" style="margin:0 0 10px">いつでも「しおりを見る」から見返せるよ。予定を直すと、しおりも新しくなるよ。電波が悪い会場にそなえて画像でも保存しておくと安心。</p><img id="share-img" class="shareimg" alt="しおりのプレビュー">',
     '<button type="button" class="btn green full" data-act="save-img">画像を保存・共有する</button><p class="hint" style="text-align:center;margin:0">共有シートの「画像を保存」で写真に入るよ。開かないときは画像を<b>長押し</b>して「写真に保存」してね</p>');
   drawShiori(day()).then(function (url) { var i = $("#share-img"); if (i) i.src = url; });
 }
@@ -1183,6 +1215,7 @@ document.addEventListener("click", function (e) {
     case "create": createDay(); break;
     case "home": goHome(); break;
     case "open-day": openDay(id); break;
+    case "see-day": db.current = id; sheetShare(); break;
     case "view": d.view = v; save(); renderDay(d); window.scrollTo(0, 0); break;
     case "go-event": if (d.view !== "event") { d.view = "event"; save(); renderDay(d); } var sec = v && $(v); if (sec) window.scrollTo({ top: sec.getBoundingClientRect().top + window.scrollY - 90, behavior: "smooth" }); break;
     case "go-meet": d.view = "meet"; save(); renderDay(d); window.scrollTo(0, 0); break;
