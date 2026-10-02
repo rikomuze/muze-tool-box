@@ -13,7 +13,7 @@ const pending=new Set();
 const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
 const uid=()=>crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random().toString(36).slice(2);
 const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
-const catalogUrl=(member,n)=>CATALOG+member.toLowerCase()+'/'+String(n).padStart(2,'0')+'.jpg';
+const catalogUrl=(member,n)=>CATALOG+member.toLowerCase()+'/'+String(n).padStart(2,'0')+(member==='RYUKI'&&n!==6?'.png':'.jpg');
 const status=t=>{$('#appStatus').textContent=t;};
 const photoStatus=t=>{$('#photoStatus').textContent=t;};
 function show(id){
