@@ -1,0 +1,16 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>解釈シチュエーションMAP｜MUZE PLAY ROOM</title><meta name="description" content="もし8人がここにいたら？10のシチュエーションにMAZZELを並べて、あなたの解釈を一枚に。"><meta name="robots" content="noindex"><meta name="theme-color" content="#f7f5ed"><link rel="icon" href="../icon-192.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="styles.css"><script src="app.js" defer></script></head><body>
+<div class="wrap"><nav class="nav"><a href="../play-room/">MUZE PLAY ROOM</a><a class="back" href="../play-room/">あそび場にもどる</a></nav>
+<header class="intro"><p class="room-label">MAKE YOUR SCENE <span>おためし版</span></p><h1>もしも、<span>8人だったら。</span></h1><p class="hand">あなたの解釈で、好きな場所に並べてみよう。</p></header>
+<main><div class="layout"><aside class="themes"><h2><span class="step">01</span> シチュエーションを選ぶ</h2><select id="mobileTheme" class="mobile-select" aria-label="シチュエーションを選ぶ"></select><div id="themeList" class="theme-list"></div></aside>
+<section class="workspace" aria-labelledby="sceneTitle"><div class="scene-heading"><div><p class="eyebrow" id="sceneNumber"></p><h2 id="sceneTitle"></h2></div><span class="stamp">MY<br>MAZZEL</span></div>
+<p class="scene-note" id="sceneNote"></p><div class="board" id="board" aria-label="メンバーを自由に並べるマップ"><div class="art" id="art" aria-hidden="true"></div><div id="sceneLabels" aria-hidden="true"></div><div id="tokens"></div></div>
+<div class="board-caption"><span>こんな8人、想像しちゃう。</span><span id="placedCount">0 / 8</span></div>
+<div class="member-heading"><h3><span class="step">02</span> 8人を並べる</h3><button class="text-button" id="reset">このマップをやり直す</button></div><p class="howto">写真をドラッグ。<br class="mobile-only">または、写真を選んでマップをタップ。</p><div id="tray" class="tray" aria-label="メンバー一覧"></div>
+<div class="adjust"><label for="size">写真の大きさ</label><input id="size" type="range" min="10" max="19" value="13" step="1"><button class="text-button" id="returnMember" disabled>選んだ人を戻す</button></div>
+<p class="selected-note" id="selectedNote" aria-live="polite">同じ場所に何人置いてもOK。8人の距離感も自由に。</p>
+<div class="actions"><button class="primary" id="saveImage" disabled>完成画像を保存</button><button class="secondary" id="nextTheme">次のシチュエーションへ</button></div><p id="status" class="status" role="status"></p>
+<div class="image-result" id="imageResult" hidden><p>画像を長押しして保存もできます。</p><img id="resultImage" alt="完成したあなたのMAZZEL解釈マップ"></div>
+<p class="gentle-note">これはファンの「もしも」を楽しむ遊びです。<br>実際の性格・行動を決めつけるものではありません。</p></section></div></main>
+<footer>MAZZEL・BMSG公式とは関係のない非公式ファンメイドサイトです。<br><span>MUZE PLAY ROOM / MUZE TOOL BOX</span></footer></div>
+<dialog id="resetDialog"><form method="dialog"><h2>このマップをやり直す？</h2><p>このシチュエーションの8人を、下の一覧に戻します。</p><div class="dialog-actions"><button value="cancel" class="secondary">そのまま続ける</button><button value="reset" class="primary">やり直す</button></div></form></dialog>
+</body></html>
