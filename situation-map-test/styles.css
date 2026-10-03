@@ -8,3 +8,10 @@
 .scene-label:after{content:'';position:absolute;left:0;right:0;bottom:5px;height:10px;background:var(--pink);z-index:-1;transform:rotate(-2deg)}.memo-1:after{background:var(--lime);transform:rotate(2deg)}.memo-2:after{background:var(--violet);transform:rotate(-1deg)}
 .memo-fields{display:grid;gap:12px;margin:18px 0 24px}.memo-fields label{display:grid;gap:4px;font-size:.875rem}.memo-fields input{width:100%;min-width:0;background:#fffdf7;border:1px solid var(--line);border-radius:3px;padding:9px 11px;font:inherit;font-size:1rem}
 @media(max-width:760px){.scene-meta{align-items:baseline;gap:8px}.scene-meta .scene-note{font-size:.875rem}.scene-meta .text-button{font-size:.8125rem}}
+
+.map-plot{position:absolute;inset:14%;touch-action:pan-y}.map-plot:before,.map-plot:after{content:'';position:absolute;background:#bcb5c4;pointer-events:none}.map-plot:before{left:0;right:0;top:50%;height:1px}.map-plot:after{top:0;bottom:0;left:50%;width:1px}
+.scene-label{max-width:68%;background:#fffdf7;font-size:clamp(.875rem,1.5vw,1.125rem);line-height:1.4;padding:4px 7px;word-break:normal}
+.memo-0:after,.memo-1:after{background:var(--pink)}.memo-2:after,.memo-3:after{background:var(--lime)}
+.memo-2,.memo-3{writing-mode:vertical-rl;text-orientation:mixed;max-height:72%;max-width:none;letter-spacing:.04em;padding:5px 3px}
+.memo-2:after,.memo-3:after{top:0;bottom:0;left:auto;right:2px;width:7px;height:auto;transform:rotate(-1deg)}
+.memo-fields{grid-template-columns:repeat(2,minmax(0,1fr))}
