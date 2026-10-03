@@ -30,7 +30,8 @@ const $=s=>document.querySelector(s), KEY='muze-situation-map-v1';
 const empty=()=>({size:13,positions:{}});
 let saved={theme:0,maps:{}};try{const raw=JSON.parse(localStorage.getItem(KEY));if(raw&&Number.isInteger(raw.theme)&&raw.theme>=0&&raw.theme<THEMES.length&&raw.maps&&typeof raw.maps==='object')saved=raw;}catch(_){ }
 let theme=saved.theme,selected=null,drag=null,busy=false,outputURL=null;
-function map(){const id=THEMES[theme].id;let m=saved.maps[id];if(!m||typeof m!=='object')m=empty();m.size=Math.max(10,Math.min(19,Number(m.size)||13));const positions={};for(const name of MEMBERS){const p=m.positions?.[name];if(p&&Number.isFinite(p.x)&&Number.isFinite(p.y))positions[name]={x:p.x,y:p.y};}m.positions=positions;saved.maps[id]=m;return m;}
+const normalized=new Set();
+function map(){const id=THEMES[theme].id;let m=saved.maps[id];if(normalized.has(id)&&m)return m;if(!m||typeof m!=='object')m=empty();m.size=Math.max(10,Math.min(19,Number(m.size)||13));const positions={};for(const name of MEMBERS){const p=m.positions?.[name];if(p&&Number.isFinite(p.x)&&Number.isFinite(p.y))positions[name]={x:p.x,y:p.y};}m.positions=positions;saved.maps[id]=m;normalized.add(id);return m;}
 function persist(){saved.theme=theme;try{localStorage.setItem(KEY,JSON.stringify(saved));}catch(_){$('#status').textContent='この端末での途中保存が使えません。完成画像を保存してね。';}}
 function photo(name){return 'assets/'+name.toLowerCase()+'.webp';}
 function constrain(p){const half=map().size/200;p.x=Math.max(half,Math.min(1-half,p.x));p.y=Math.max(half,Math.min(1-half-.04,p.y));return p;}
