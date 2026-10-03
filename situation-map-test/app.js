@@ -45,7 +45,8 @@ THEMES.forEach((t,i)=>{const option=document.createElement('option');option.valu
 $('#mobileTheme').onchange=()=>showTheme(Number($('#mobileTheme').value));
 function position(x,y){const r=$('#board').getBoundingClientRect();return constrain({x:(x-r.left)/r.width,y:(y-r.top)/r.height});}
 function place(name,p){map().positions[name]=p;clearResult();renderTokens();persist();}
-function startDrag(e){if(busy||e.button>0)return;const b=e.target.closest('[data-member]');if(!b)return;e.preventDefault();select(b.dataset.member);const p=map().positions[b.dataset.member],r=$('#board').getBoundingClientRect();drag={name:b.dataset.member,id:e.pointerId,startX:e.clientX,startY:e.clientY,moved:false,offsetX:b.classList.contains('token')?e.clientX-r.left-p.x*r.width:0,offsetY:b.classList.contains('token')?e.clientY-r.top-p.y*r.height:0};}
+function startDrag(e){if(busy||e.button>0)return;const b=e.target.closest('[data-member]');if(!b)return;e.preventDefault();select(b.dataset.member);const p=map().positions[b.dataset.member],r=$('#board').getBoundingClientRect();drag={name:b.dataset.member,id:e.pointerId,startX:e.clientX,startY:e.clientY,moved:false,offsetX:b.classList.contains('token')?e.clientX-r.left-p.x*r.width:0,offsetY:b.classList.contains('token')?e.clientY-r.top-p.y*r.height:0};try{e.currentTarget.setPointerCapture(e.pointerId);}catch(_){}}
+$('#board').dataset.appVersion='2';
 $('#tray').addEventListener('pointerdown',startDrag);$('#tokens').addEventListener('pointerdown',startDrag);
 window.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId)return;if(Math.hypot(e.clientX-drag.startX,e.clientY-drag.startY)<5&&!drag.moved)return;drag.moved=true;e.preventDefault();const r=$('#board').getBoundingClientRect();if(e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom){map().positions[drag.name]=position(e.clientX-drag.offsetX,e.clientY-drag.offsetY);renderTokens();}},{passive:false});
 let ignoreBoardClick=false;
