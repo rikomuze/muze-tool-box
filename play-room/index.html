@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>MUZE PLAY ROOM｜MUZE TOOL BOXの裏の遊び場</title>
-  <meta name="description" content="推しガチャ開封所、衣装選手権、BIAS MAP。MUZE TOOL BOXの裏の遊び場で、今日も推しと遊ぼう。">
+  <meta name="description" content="推しガチャ開封所、衣装選手権、BIAS MAP、ライブ帰りシミュレーター。MUZE TOOL BOXの裏の遊び場で、今日も推しと遊ぼう。">
   <meta name="robots" content="noindex">
   <meta name="theme-color" content="#f7f5ed">
   <link rel="icon" href="../icon-192.png">
@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
   <style>
-    :root{--paper:#f7f5ed;--ink:#282536;--muted:#625f6d;--pink:#ffd5df;--lime:#dcefa5;--violet:#ded7ff;--line:#d5d1d9;--hand:'Klee One','Hiragino Sans',sans-serif;--font:'Zen Kaku Gothic New','Hiragino Sans','Yu Gothic',sans-serif}
+    :root{--sky:#cfe3ff;--paper:#f7f5ed;--ink:#282536;--muted:#625f6d;--pink:#ffd5df;--lime:#dcefa5;--violet:#ded7ff;--line:#d5d1d9;--hand:'Klee One','Hiragino Sans',sans-serif;--font:'Zen Kaku Gothic New','Hiragino Sans','Yu Gothic',sans-serif}
     *{box-sizing:border-box}
     body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font);line-height:1.7;-webkit-text-size-adjust:100%}
     a{color:inherit;text-decoration:none}
@@ -31,7 +31,8 @@
     .hero-note{margin:12px 0 0;font-family:var(--hand);font-size:1.0rem;font-weight:600}
     .room-number{flex-shrink:0;margin:0 2px 6px 0;border:1.5px solid var(--ink);padding:9px 16px;text-align:center;transform:rotate(5deg);font-size:0.8125rem;letter-spacing:.13em;line-height:1.4}
     .room-number strong{display:block;font-size:2.125rem;font-weight:500;letter-spacing:.02em;line-height:1.2}
-    .tools{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;padding:12px 0 36px}
+    .tools{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;padding:12px 0 36px}
+    @media(max-width:1000px) and (min-width:761px){.tools{grid-template-columns:repeat(2,minmax(0,1fr))}}
     .tool{display:flex;flex-direction:column;position:relative;background:#fff;border:1.5px solid var(--ink);border-radius:5px;box-shadow:4px 5px 0 var(--ink);transition:transform .18s ease,box-shadow .18s ease}
     .tool:hover{transform:translateY(-4px);box-shadow:4px 9px 0 var(--ink)}
     .tool:active{transform:translate(3px,3px);box-shadow:1px 2px 0 var(--ink)}
@@ -39,6 +40,7 @@
     .gacha .preview{background:var(--pink)}
     .outfit .preview{background:var(--lime)}
     .bias .preview{background:var(--violet);padding:20px 15px}
+    .train .preview{background:var(--sky)}
     .photo{display:block;width:100%;height:100%;object-fit:cover;object-position:center;border:6px solid #fff;box-shadow:0 3px 7px #28253626}
     .gacha .photo{transform:rotate(-5deg);max-width:250px;object-position:center 34%}
     .outfit .photo{transform:rotate(4deg);width:128px;object-position:center 30%}
@@ -52,6 +54,11 @@
     .gacha .open{background:var(--pink)}
     .outfit .open{background:var(--lime)}
     .bias .open{background:var(--violet)}
+    .train .open{background:var(--sky)}
+    .chat-preview{display:flex;flex-direction:column;gap:7px;width:100%;max-width:220px;transform:rotate(-3deg)}
+    .chat-preview span{display:block;max-width:82%;padding:6px 11px;border-radius:14px;font-size:0.8125rem;font-weight:700;line-height:1.4;background:#fff;box-shadow:0 2px 5px #28253620}
+    .chat-preview span.me{align-self:flex-end;background:#8de055}
+    .chat-preview span.sys{align-self:center;background:var(--ink);color:var(--paper);font-size:0.6875rem;border-radius:4px;letter-spacing:.04em}
     .map-preview{width:100%;height:100%;max-width:240px;filter:drop-shadow(0 3px 5px #28253620);transform:rotate(-3deg)}
     .bottom-note{margin:8px 0 26px;text-align:center;font-family:var(--hand);font-weight:600;font-size:1.0rem}
     footer{padding:20px 0 30px;border-top:1px dashed var(--line);text-align:center;color:var(--muted);font-size:0.8125rem}
@@ -74,6 +81,8 @@
       .outfit .photo{height:139px;width:81px;border-width:4px}
       .preview-label{right:5px;bottom:10px;font-size:0.75rem;padding:0 5px}
       .bias .preview{padding:10px 4px}
+      .chat-preview{max-width:96px;gap:5px}
+      .chat-preview span{font-size:0.625rem;padding:4px 7px;border-radius:10px}
       .map-preview{width:108px;height:134px;max-width:none}
       .tool-copy{padding:13px 14px}
       .eyebrow{font-size:0.75rem;margin-bottom:4px;gap:7px;letter-spacing:.03em}
@@ -108,7 +117,7 @@
         <h1>裏の<span>あそび場。</span></h1>
         <p class="hero-note">ちょっと寄り道、推しと遊ぼう。</p>
       </div>
-      <p class="room-number">TOOLS<strong>03</strong></p>
+      <p class="room-number">TOOLS<strong>04</strong></p>
     </header>
     <main>
       <div class="tools" aria-label="遊びツール一覧">
@@ -156,6 +165,23 @@
             <h2 id="bias-title">BIAS MAP</h2>
             <p class="tool-desc" id="bias-desc">写真をマップに並べて、あなたの「推し解釈」を一枚に。</p>
             <span class="open">マップをつくる</span>
+          </div>
+        </a>
+        <a class="tool train" href="../live-kaeri/" aria-labelledby="train-title" aria-describedby="train-desc">
+          <div class="preview" aria-hidden="true">
+            <div class="chat-preview">
+              <span class="sys">LAST TRAIN 23:12</span>
+              <span>柱の前にいます！</span>
+              <span class="me">今向かってます！</span>
+              <span>ねえ生きてる？笑</span>
+            </div>
+            <span class="preview-label">終電まで98分</span>
+          </div>
+          <div class="tool-copy">
+            <p class="eyebrow"><span class="number">04</span> CHAT GAME</p>
+            <h2 id="train-title">ライブ帰りシミュレーター</h2>
+            <p class="tool-desc" id="train-desc">規制退場から終電まで。トレカを手渡しで交換して、電池を残して帰れる？</p>
+            <span class="open">帰り道へいく</span>
           </div>
         </a>
       </div>
