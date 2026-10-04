@@ -145,6 +145,9 @@ button:focus-visible,a:focus-visible{outline:3px solid #8051bd;outline-offset:2p
   radial-gradient(circle at 70% 30%,#fffaf0 0 7%,transparent 8%),radial-gradient(circle at 54% 62%,#ffc9a8 0 8%,transparent 9%),
   linear-gradient(180deg,#e9eef5 0 62%,#c9d2de 62% 100%)}
 .photo::after{content:"";position:absolute;left:38%;top:70%;width:24%;height:14%;background:#fff;border-radius:2px}
+.photo.board{background:linear-gradient(90deg,transparent 30%,#9b7653 30% 33%,transparent 33% 67%,#9b7653 67% 70%,transparent 70%) bottom/100% 22% no-repeat,radial-gradient(circle at 50% 46%,#fff 0 36%,transparent 37%),linear-gradient(180deg,#efe4d2,#e3d3bb)}
+.photo.board::before{content:"WELCOME";position:absolute;left:0;right:0;top:24%;text-align:center;font-family:var(--f-hand);font-weight:600;font-size:15px;color:var(--hot);letter-spacing:.08em}
+.photo.board::after{left:41%;top:43%;width:18%;height:22%;border-radius:50%;background:#ffe3c2;box-shadow:-30px 6px 0 -6px #ffd5df,30px 6px 0 -6px #ded7ff}
 .photo.goods{background:linear-gradient(135deg,#f7e7d4,#f3f0ea)}
 .photo.goods::after{left:14%;top:22%;width:20%;height:52%;border-radius:4px;background:#cfd8ea;box-shadow:42px 0 0 #f2c6d3,84px 0 0 #d8ead2,126px 0 0 #efe2b7}
 .stamp{width:120px;height:110px;border-radius:20px;display:grid;place-items:center;text-align:center;font-size:12px;color:#33405a;background:rgba(255,255,255,.45);padding:8px;line-height:1.4;animation:pop .16s ease-out}
@@ -262,6 +265,12 @@ button:focus-visible,a:focus-visible{outline:3px solid #8051bd;outline-offset:2p
 .go{display:block;width:100%;margin:2px 0 14px;background:var(--pink);color:var(--ink);border:1.5px solid var(--ink);border-radius:30px;box-shadow:3px 4px 0 var(--ink);padding:12px;font-weight:900;font-size:16px;cursor:pointer;font-family:var(--f-head);transition:transform .15s,box-shadow .15s}
 .go:hover{transform:translateY(-2px);box-shadow:3px 6px 0 var(--ink)}
 .go:active{transform:translate(2px,2px);box-shadow:1px 2px 0 var(--ink)}
+.go.sub{background:#fff}
+.go:disabled{opacity:.6}
+.shot{background:rgba(40,37,54,.6);align-items:center;justify-content:center;padding:20px;gap:12px}
+.shot img{max-height:70%;width:auto;border:1.5px solid var(--ink);box-shadow:3px 4px 0 var(--ink);background:var(--paper)}
+.shot p{margin:0;color:#fff;font-weight:700;font-family:var(--f-head);text-align:center}
+.shot button{border:1.5px solid var(--ink);background:#fff;border-radius:30px;padding:8px 22px;font-weight:700;font-family:var(--f-head);cursor:pointer}
 .fine{margin:0;padding:16px 0 4px;border-top:1px dashed var(--pline);text-align:center;color:var(--pmuted);font-size:12px;line-height:1.7}
 .handnote{margin:0 0 14px;text-align:center;font-family:var(--f-hand);font-weight:600;font-size:14px}
 .end{margin:0;font-size:15px;line-height:1.9}
@@ -378,14 +387,14 @@ const YUI=[
    {t:"私も膝から崩れた",fx:{y:8},r:["でしょ！？","会場全体が崩れてた"]},
    {t:"予想当たってた。ドヤ",fx:{y:4},r:["えらい","次のセトリも当てて"]},
    {t:"正直記憶がない",fx:{y:6},r:["それが正解","記憶ないくらいが一番楽しんでる"]}]},
- {m:["ねえフラワーディスプレイの写真ある？","私撮りそびれた","入場の列に流されて"],c:[
-   ACT({t:"(フラワーディスプレイの写真を送る)",photo:"flower",fx:{y:6,b:-2},r:["神","{oshi}のお花きれいすぎる","札まで写ってる、保存した"]}),
+ {m:["ねえウェルカムボードの写真ある？","私撮りそびれた","入場の列に流されて"],c:[
+   ACT({t:"(ウェルカムボードの写真を送る)",photo:"board",fx:{y:6,b:-2},r:["神","待って絵かわいすぎる","{oshi}の似顔絵うますぎない？","描いた人天才、保存した"]}),
    {t:"人多くて遠くからしか撮れてない",fx:{y:3},r:["それでもいい","雰囲気だけでも欲しい"]},
    {t:"見とれてて撮るの忘れた",fx:{y:6},r:["わかる","誰かが上げてるの探そ"]}]},
  {m:["{oshi}こっち向いてくれた気がする","気のせいかな","いや絶対こっちだった"],c:[
    {t:"絶対こっちだった",fx:{y:8},r:["だよね！？","今日の私たち勝ってた"]},
    {t:"気のせいでも勝ち",fx:{y:6},r:["名言","それな"]},
-   {t:"私もそう思ってた",fx:{y:5},r:["全員そう思ってるやつ","それがアイドル"]}]},
+   {t:"私もそう思ってた",fx:{y:5},r:["全員そう思ってるやつ","それが現場の魔法"]}]},
  {m:["てかMCさ","あの話なに","腹筋死んだ"],c:[
    {t:"一生思い出し笑いする",fx:{y:7},r:["電車で思い出すのやめてね","私はもう3回思い出した"]},
    {t:"メモ取ったから後で送る",fx:{y:5},r:["有能","レポ職人じゃん"]},
@@ -406,7 +415,7 @@ const YUI=[
 const FIRSTBEAT={m:["ねえ","ねえ待って","私Aブロックだったからもう外出れた","まだ座ってる？"],c:[
    {t:"まだ座ってる。規制退場いつ終わるの",fx:{y:2},r:["スタンドは最後のほうだよね","待ってる間に感想戦しよ"],follow:[{t:"しよしよ！",fx:{y:2},r:["まずどこから語る？"]},{t:"まず{oshi}の話からね",fx:{y:3},r:["当然"]},ACT({t:"(うなずくスタンプ)",stamp:["🙆‍♀️","OKするいぬ"],fx:{y:2},r:[]})]},
    {t:"アナウンス待ち中",fx:{y:2},r:["おつ","外めっちゃ人いる","待ってる間に感想戦しよ"],follow:[{t:"しよしよ！",fx:{y:2},r:["まずどこから語る？"]},{t:"まず{oshi}の話からね",fx:{y:3},r:["当然"]},ACT({t:"(うなずくスタンプ)",stamp:["🙆‍♀️","OKするいぬ"],fx:{y:2},r:[]})]},
-   ACT({t:"(座席から見える景色の写真を送る)",photo:"flower",fx:{y:3,b:-2},r:["ペンラまだ光ってる人いて泣く","待ってる間に感想戦しよ"],follow:[{t:"しよしよ！",fx:{y:2},r:["まずどこから語る？"]},{t:"まず{oshi}の話からね",fx:{y:3},r:["当然"]},ACT({t:"(うなずくスタンプ)",stamp:["🙆‍♀️","OKするいぬ"],fx:{y:2},r:[]})]})]};
+   ACT({t:"(ペンライトを振るスタンプ)",stamp:["🔦","ペンライト振るひよこ"],fx:{y:3},r:["まだ光らせてるの好き","待ってる間に感想戦しよ"],follow:[{t:"しよしよ！",fx:{y:2},r:["まずどこから語る？"]},{t:"まず{oshi}の話からね",fx:{y:3},r:["当然"]},ACT({t:"(うなずくスタンプ)",stamp:["🙆‍♀️","OKするいぬ"],fx:{y:2},r:[]})]})]};
 const LASTBEAT={m:["てか終電大丈夫？","私あと20分で走る"],c:[
    {t:"まだ余裕",fx:{y:2},r:["ほんとに？","調べてね"]},
    {t:"やばい走る",fx:{y:3,t:-3},r:["走れ","無事を祈る"]},
@@ -1116,7 +1125,7 @@ function render(scroll){
     let body;
     if(m.k==="call") body=`<div class="bub">✆ ${esc(m.x)}</div>`;
     else if(m.post) body=`<div class="post"><div class="pimg"></div><div class="pbody"><b>公式アカウント</b>${esc(m.post.title)}</div><button type="button" data-post="${m.post.id}" ${m.post.seen?"disabled":""}>${m.post.seen?"見た":"投稿を見る（電池が減ります）"}</button></div>`;
-    else if(m.photo) body=`<div class="photo${m.photo==="goods"?" goods":""}" role="img" aria-label="写真"></div>`;
+    else if(m.photo) body=`<div class="photo${m.photo==="goods"?" goods":m.photo==="board"?" board":""}" role="img" aria-label="写真"></div>`;
     else if(m.stamp) body=`<div class="stamp"><span><b>${m.stamp[0]}</b>${esc(m.stamp[1])}</span></div>`;
     else body=`<div class="bub">${esc(m.x)}</div>`;
     const tm=`<span class="tm">${mine?`<span>${th==="group"?"既読2":"既読"}</span>`:""}<span>${fmt(m.t)}</span></span>`;
@@ -1178,16 +1187,79 @@ function end(kind){
       <div class="stampbox"><small>称号</small><b>${title()}</b></div></div>
     <div class="pcard"><p class="lbl">きろく</p><dl class="kv"><dt>体力</dt><dd>${S.tai}</dd><dt>電池</dt><dd>${S.bat}%</dd>
     <dt>語った回数</dt><dd>${S.m.talk}</dd><dt>送った写真</dt><dd>${S.m.photo}枚</dd><dt>届いた通知</dt><dd>${S.m.notif}件</dd>
-    <dt>公式の投稿を見た</dt><dd>${S.m.postSeen}回</dd><dt>出た電話 / 出なかった電話</dt><dd>${S.m.calls} / ${S.m.miss}</dd>
+    <dt>出た電話 / 出なかった電話</dt><dd>${S.m.calls} / ${S.m.miss}</dd>
     <dt>追撃された回数</dt><dd>${S.m.chased}</dd><dt>規制退場を無視した回数</dt><dd>${S.sneaks}</dd></dl></div>
     <div class="pcard violet"><p class="lbl">見たエンディング ${got} / ${ENDKEYS.length}</p><div class="endmap">${ENDKEYS.map(k=>`<span class="${seen[k]?"got":""}${k==="clear"&&seen[k]?" clear":""}">${seen[k]?ENDNAME[k]:"？？？"}</span>`).join("")}</div></div>
-    <button class="go" type="button" id="again">もう一度帰る</button>
+    <button class="go" type="button" id="saveImg">結果を画像で保存</button>
+    <button class="go sub" type="button" id="again">もう一度帰る</button>
     <p class="handnote">${kind==="clear"?(S.cards<3?"次は、トレカ3枚に挑戦してみて。":"トレカ3枚、完璧な帰り道。"):"次は、ちがう帰り道で。"}</p>
     <p class="fine">フィクションです。登場する人物・会場・団体はすべて架空です。</p>`;
     $("again").onclick=showIntro;
+    const R={kind,no,got,ending:ENDNAME[kind],text:fill(ENDS[kind]),time:fmt(Math.min(S.t,LAST)),where:where(),yoin:S.yoin,okSwap,okTrain,okBat,cards:S.cards,title:title(),oshi:S.oshi,talk:S.m.talk,photo:S.m.photo,chased:S.m.chased,bat:S.bat};
+    let blobP=makeResultImage(R).catch(()=>null);
+    $("saveImg").onclick=()=>saveResult(blobP);
   };
   if(kind==="dead"){const el=$("osd");el.hidden=false;el.className="ov dead";el.innerHTML="";setTimeout(()=>{el.hidden=true;el.className="ov osd";go()},1600)}
   else go();
+}
+
+
+/* ---------------- result image (share sheet) ---------------- */
+function wrapText(ctx,text,maxW){const lines=[];let cur="";for(const ch of text){if(ctx.measureText(cur+ch).width>maxW&&cur){lines.push(cur);cur=ch}else cur+=ch}if(cur)lines.push(cur);return lines}
+async function makeResultImage(R){
+  try{if(document.fonts){await Promise.all([document.fonts.load('900 80px "Zen Kaku Gothic New"'),document.fonts.load('700 36px "Zen Kaku Gothic New"'),document.fonts.load('600 40px "Klee One"')]);}}catch(e){}
+  const W=1080,H=1350,c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");
+  const INK="#282536",PAPER="#f7f5ed",PINK="#ffd5df",LIME="#dcefa5",VIOLET="#ded7ff",MUTED="#625f6d";
+  const G='"Zen Kaku Gothic New","Hiragino Sans",sans-serif',HAND='"Klee One","Hiragino Sans",sans-serif';
+  x.fillStyle=PAPER;x.fillRect(0,0,W,H);
+  x.fillStyle=INK;x.font="700 34px "+G;x.textBaseline="alphabetic";x.fillText("ライブ帰りシミュレーター",80,110);
+  x.textAlign="right";x.font="600 32px "+HAND;x.fillText("ENDING "+R.got+" / 6",W-80,110);x.textAlign="left";
+  x.strokeStyle="#d5d1d9";x.lineWidth=2;x.setLineDash([]);x.beginPath();x.moveTo(80,140);x.lineTo(W-80,140);x.stroke();
+  // tag
+  x.save();x.translate(80,215);x.rotate(-3*Math.PI/180);x.font="700 30px "+G;const tag=R.kind==="clear"?"CLEAR":"ENDING "+R.no;const tw=x.measureText(tag).width;x.fillStyle=INK;x.fillRect(0,-36,tw+36,50);x.fillStyle=PAPER;x.fillText(tag,18,0);x.restore();
+  // ending title with highlighter
+  let fs=84;x.font="900 "+fs+"px "+G;while(x.measureText(R.ending).width>640&&fs>56){fs-=4;x.font="900 "+fs+"px "+G}const tl=wrapText(x,R.ending,640);let y=330;
+  for(const t of tl){const w=x.measureText(t).width;x.save();x.translate(80,y);x.rotate(-1.8*Math.PI/180);x.fillStyle=R.kind==="clear"?LIME:PINK;x.fillRect(-10,-20,w+20,30);x.restore();x.fillStyle=INK;x.fillText(t,80,y);y+=100}
+  x.font="600 38px "+HAND;x.fillStyle=INK;x.fillText(R.time+"、"+R.where+"にて。",80,y-20);
+  // ticket
+  x.save();x.translate(W-210,250);x.rotate(5*Math.PI/180);x.fillStyle="#fff";x.fillRect(-90,-70,180,150);x.strokeStyle=INK;x.lineWidth=4;x.strokeRect(-90,-70,180,150);x.fillStyle=INK;x.textAlign="center";x.font="700 26px "+G;x.fillText("余韻",0,-25);x.font="500 72px "+G;x.fillText(String(R.yoin),0,55);x.restore();x.textAlign="left";
+  // card
+  const cy=y+20,cx=80,cw=W-160;x.font="500 36px "+G;const nLines=Math.min(4,wrapText(x,R.text,cw-80).length);const ch=90+nLines*58+10+165+200+110-cy+cy;
+  x.fillStyle=INK;x.fillRect(cx+10,cy+12,cw,ch);x.fillStyle="#fff";x.fillRect(cx,cy,cw,ch);x.strokeStyle=INK;x.lineWidth=4;x.strokeRect(cx,cy,cw,ch);
+  x.save();x.translate(cx+cw-200,cy);x.rotate(-3*Math.PI/180);x.fillStyle=PINK;x.fillRect(0,-24,170,46);x.strokeStyle=INK;x.lineWidth=2;x.strokeRect(0,-24,170,46);x.fillStyle=INK;x.font="700 26px "+G;x.fillText("今夜のこと",20,8);x.restore();
+  x.font="500 36px "+G;x.fillStyle=INK;let ty=cy+90;for(const l of wrapText(x,R.text,cw-80).slice(0,4)){x.fillText(l,cx+40,ty);ty+=58}
+  // checks
+  const items=[["手渡し交換",R.okSwap],["終電",R.okTrain],["電池",R.okBat]];const bw=(cw-80-40)/3;let bx=cx+40;const by=ty+10;
+  for(const [lab,ok] of items){x.fillStyle=ok?LIME:"#fff";x.fillRect(bx,by,bw,120);x.strokeStyle=INK;x.lineWidth=3;x.strokeRect(bx,by,bw,120);x.fillStyle=ok?INK:MUTED;x.textAlign="center";x.font="900 48px "+G;x.fillText(ok?"✓":"—",bx+bw/2,by+58);x.font="700 28px "+G;x.fillText(lab,bx+bw/2,by+100);x.textAlign="left";bx+=bw+20}
+  // cards + title
+  const ky=by+165;x.fillStyle=INK;x.fillRect(cx+46,ky+6,330,140);x.fillStyle=VIOLET;x.fillRect(cx+40,ky,330,140);x.strokeStyle=INK;x.lineWidth=3;x.strokeRect(cx+40,ky,330,140);
+  x.fillStyle=INK;x.font="900 72px "+G;x.fillText(String(R.cards),cx+64,ky+80);x.font="700 34px "+G;x.fillText("/ 3枚",cx+64+x.measureText(String(R.cards)).width+40,ky+78);
+  x.font="500 24px "+G;x.fillStyle=MUTED;x.fillText("集めた推しのトレカ",cx+64,ky+120);
+  x.save();x.translate(cx+430,ky+14);x.rotate(-2*Math.PI/180);x.fillStyle=PAPER;x.fillRect(0,0,cw-470,112);x.strokeStyle=INK;x.lineWidth=3;x.strokeRect(0,0,cw-470,112);x.fillStyle=MUTED;x.font="700 22px "+G;x.fillText("称号",20,36);x.fillStyle=INK;x.font="600 42px "+HAND;x.fillText(R.title,20,88);x.restore();
+  // stats row
+  const sy=ky+200;x.strokeStyle="#d5d1d9";x.lineWidth=2;x.setLineDash([8,8]);x.beginPath();x.moveTo(cx+40,sy-30);x.lineTo(cx+cw-40,sy-30);x.stroke();x.setLineDash([]);
+  const st=[["語った回数",R.talk+"回"],["送った写真",R.photo+"枚"],["追撃された",R.chased+"回"],["残りの電池",R.bat+"%"]];const sw=(cw-80)/4;
+  st.forEach(([l,v],i)=>{const sx=cx+40+sw*i;x.fillStyle=MUTED;x.font="700 24px "+G;x.fillText(l,sx,sy+10);x.fillStyle=INK;x.font="900 46px "+G;x.fillText(v,sx,sy+66)});
+  // footer
+  x.fillStyle=MUTED;x.font="500 26px "+G;x.textAlign="center";x.fillText("推し："+R.oshi+"　｜　フィクションです",W/2,H-70);x.textAlign="left";
+  return await new Promise((res,rej)=>c.toBlob(b=>b?res(b):rej(new Error("toBlob")),"image/png"));
+}
+async function saveResult(blobP){
+  const btn=$("saveImg");
+  const blob=await blobP;
+  if(!blob){btn.textContent="画像を作れませんでした";return}
+  const file=new File([blob],"live-kaeri-result.png",{type:"image/png"});
+  try{
+    if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:"ライブ帰りシミュレーター"});return}
+  }catch(e){if(e&&e.name==="AbortError") return}
+  showShot(blob);
+}
+function showShot(blob){
+  const fr=new FileReader();
+  fr.onload=()=>{const el=$("osd");el.hidden=false;el.className="ov shot";
+    el.innerHTML=`<img src="${fr.result}" alt="結果の画像"><p>画像を長押しして保存してください</p><button type="button" id="shotX">閉じる</button>`;
+    $("shotX").onclick=()=>{el.hidden=true;el.className="ov osd"}};
+  fr.readAsDataURL(blob);
 }
 
 /* ---------------- intro ---------------- */
