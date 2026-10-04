@@ -736,7 +736,7 @@ function swapMeet(){
   them("swap",["あっ！見えました！","今行きます🏃‍♀️"],{then:()=>{
     sys("swap","手渡しで交換した");addTime(3);
     S.swapDone=true;S.cards++;change("yoin",10);hud();later(rinReady,4000);
-    scene(fmt(S.t),"トレカ交換、完了",S.oshi+"のトレカをお迎えした。","あとは電池を残して終電に乗るだけ","good");
+    scene(fmt(S.t),"トレカ交換、完了",S.oshi+"のトレカをお迎えした。",S.rin===2?"次はみおに、着いたことをスタンプで知らせよう":"あとは電池を残して終電に乗るだけ","good");
     them("swap",["ありがとうございました！！","私も推しをお迎えできて嬉しいです…！","またご縁があればよろしくお願いします🙇‍♀️"],{then:()=>setPending("swap",[
       {t:"{oshi}、大事にします！ありがとうございました！"},
       {t:"気をつけて帰ってください！"},
@@ -1030,7 +1030,7 @@ function alerts(){
   if(S.raining&&!S.umbrella&&S.stage==="walk") A.push({lv:2,x:"雨に濡れて、体力が減り続けている",th:null});
   if(S.photo===1) A.push({lv:1,x:"ももさんが広場で返事を待っている",th:"photo"});
   if(S.rin===2&&S.t<22*60+50) A.push(S.rinPing&&!S.hold?{lv:2,x:"駅に着いた。みおにスタンプで知らせよう",th:"mio"}:{lv:1,x:"みおが改札前で22:50まで待っている",th:"mio"});
-  if(atStation()&&S.swapDone&&S.hold==null) A.push({lv:1,x:"交換完了。「改札に入る」で帰れる",th:null});
+  if(atStation()&&S.swapDone&&S.hold==null&&S.rin!==2) A.push({lv:1,x:"交換完了。「改札に入る」で帰れる",th:null});
   for(const k of ["swap","riku","yui","group","photo","mio","mom"]){
     const T=S.th[k];if(T.pending&&!T.pending.end&&!T.busy) A.push({lv:1,x:TH[k].name.replace(/[🫧📸].*$/,"")+"が返事を待っている",th:k});
   }
@@ -1077,7 +1077,7 @@ function hud(){
   else if(S.hold==="rin"){txt="改札前でみおからトレカを受け取り中"}
   else if(S.hold==="drink"){txt="駅前の居酒屋で乾杯中"}
   else if(S.stage==="walk"){txt="駅へ歩いている・あと約"+walkLeft()+"分"+(S.t<S.crowdUntil?"（混雑）":"")+(S.raining&&!S.umbrella?"（雨）":"");acts=S.t<S.crowdUntil?"":`<button class="act sub" type="button" id="aRun">走る（体力-5）</button>`}
-  else{txt="駅・東口にいる"+(S.swapDone?"。交換は完了":"");go=S.swapDone;acts=`<button class="act${S.swapDone?" pulse":""}" type="button" id="aGate">改札に入る</button>`}
+  else{txt="駅・東口にいる"+(S.swapDone?(S.rin===2?"。みおが改札前で待っている":"。交換は完了"):"");go=S.swapDone&&S.rin!==2;acts=`<button class="act${go?" pulse":""}" type="button" id="aGate">改札に入る</button>`}
   const st=$("stage");st.className="stage"+(go?" ready":"");st.innerHTML=`<b>${tag}</b><span>${esc(txt)}</span>`;
   $("acts").innerHTML=acts;
   if($("aLeave")) $("aLeave").onclick=leaveVenue;
@@ -1151,7 +1151,7 @@ function render(scroll){
 /* ---------------- gate & endings ---------------- */
 function gate(){
   if(!S||S.over||!atStation()||S.hold) return;
-  const warn=S.swapDone?"ホームへ向かいます。":S.swapFail?"トレカ交換はできなかった。このまま帰りますか？":"トレカ交換がまだです。改札に入ると「交換できなかった」になります。";
+  const warn=S.swapDone?(S.rin===2?"みおからまだトレカを受け取っていません。このまま帰りますか？":"ホームへ向かいます。"):S.swapFail?"トレカ交換はできなかった。このまま帰りますか？":"トレカ交換がまだです。改札に入ると「交換できなかった」になります。";
   confirmBox("改札に入りますか？",warn,"入る","まだ",()=>{
     S.boarded=true;
     if(!S.swapDone) end("noswap");
