@@ -192,6 +192,39 @@ a{color:inherit;text-decoration:none}
 .scribble.fav{left:2%;bottom:34%;transform:rotate(-5deg)}
 @media(max-width:420px){.scribble.fav{display:none}}
 
+.playroom-gateway{
+  display:block;
+  max-width:520px;
+  margin:30px auto 8px;
+  background:var(--paper);
+  border:1.5px solid var(--pencil);
+  padding:20px 22px;
+  box-shadow:var(--obj-shadow);
+  transform:rotate(-1deg);
+}
+.playroom-gateway .playroom-kicker{
+  display:inline-block;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.18em;
+  color:var(--faded);
+  margin-bottom:4px;
+}
+.playroom-gateway strong{
+  display:block;
+  font-family:var(--hand);
+  font-size:22px;
+  line-height:1.5;
+}
+.playroom-gateway>span:last-child{
+  display:block;
+  margin-top:6px;
+  font-size:12px;
+  color:var(--faded);
+  line-height:1.8;
+}
+.playroom-gateway:hover,.playroom-gateway:active{transform:rotate(0deg) translateY(-2px)}
+
 /* ---------- 道具一覧(実用の顔) ---------- */
 .inventory{margin-top:44px;padding-bottom:10px}
 .inventory>h2{
@@ -283,10 +316,9 @@ a{color:inherit;text-decoration:none}
     <a class="tool-nav-brand" href="https://rikomuze.github.io/muze-tool-box/">Muze Tool Box</a>
     <div class="tool-nav-links">
       <a href="https://rikomuze.github.io/muze-tool-box/">MUZE TOOL BOXのトップ</a>
-      <a href="https://rikomuze.github.io/mazzel-best-visual/">アー写編９マス</a>
-      <a href="https://rikomuze.github.io/mazzel-best-visual-performance/">パフォ衣装編９マス</a>
-      <a href="https://rikomuze.github.io/oshi-visual-6/">推しビジュ6選</a>
-      <a href="https://rikomuze.github.io/otaku-numa-shindan/">オタクタイプ診断</a>
+      <a href="./play-room/">PLAY ROOM</a>
+      <a href="./exchange-log/">交換約束ログ</a>
+      <a href="./muze-day/">MUZE DAY</a>
       <a href="https://rikomuze.github.io/mazzel-touch-campaign/">新曲キャンペーン</a>
     </div>
   </div>
@@ -296,36 +328,14 @@ a{color:inherit;text-decoration:none}
   <div class="sticker-logo">
     <img src="assets/images/muze-tool-box-logo.png" alt="MUZE TOOL BOX">
   </div>
-  <p class="note">便利なもの、遊べるもの。つくったものここに並べてます</p>
+  <p class="note">現場で使うもの、管理するもの。遊びはPLAY ROOMへ。</p>
 
 
-  <div class="photos" aria-label="あそべるツールの完成画像">
-    <a class="photo settle" href="https://rikomuze.github.io/oshi-visual-6/" target="_blank" rel="noopener">
-      <span class="tape"></span>
-      <img src="assets/images/oshi-visual-6.jpeg" alt="推しビジュ6選の作例">
-      <span class="cap">推しビジュ6選</span>
-    </a>
-    <a class="photo settle" href="https://rikomuze.github.io/mazzel-best-visual/" target="_blank" rel="noopener">
-      <span class="tape"></span>
-      <img src="assets/images/best-visual-photo-20260918-v3.jpg" alt="最強9マス アー写の作例" loading="lazy">
-      <span class="cap">最強9マス アー写</span>
-    </a>
-    <a class="photo settle" href="https://rikomuze.github.io/mazzel-best-visual-performance/" target="_blank" rel="noopener">
-      <span class="tape"></span>
-      <img src="assets/images/best-visual-costume-20260918-v3.jpg" alt="最強9マス パフォ衣装の作例" loading="lazy">
-      <span class="cap">パフォ衣装ver.</span>
-    </a>
-    <a class="photo settle" href="https://rikomuze.github.io/otaku-numa-shindan/" target="_blank" rel="noopener">
-      <span class="tape"></span>
-      <img src="assets/images/otaku-numa.jpeg" alt="オタク沼診断" loading="lazy">
-      <span class="cap">オタク沼診断</span>
-    </a>
-  </div>
-
-  <div class="scribble fav">
-    ぜんぶ保存できるよ
-    <svg viewBox="0 0 52 36" aria-hidden="true"><path d="M6 6 C18 16 30 22 46 28 M46 28 l-11 1 M46 28 l-4 -10"/></svg>
-  </div>
+  <a class="playroom-gateway settle" href="./play-room/">
+    <span class="playroom-kicker">PLAY ROOM</span>
+    <strong>遊ぶものは、こっち。</strong>
+    <span>ガチャ・診断・推しビジュ・9マス・BIAS MAPなどをまとめました →</span>
+  </a>
 </header>
 
 <main class="inventory desk">
@@ -372,24 +382,9 @@ a{color:inherit;text-decoration:none}
 
   <div class="inv-group settle">
     <h3>あそぶ</h3>
-    <a class="inv-item" href="https://rikomuze.github.io/oshi-visual-6/" target="_blank" rel="noopener">
-      <img src="assets/images/oshi-visual-6.jpeg" alt="" loading="lazy">
-      <span><span class="t">推しビジュ6選</span><br><span class="d">好きなビジュ6枚をタグ画っぽい一枚に</span></span>
-      <span class="v">遊ぶ</span>
-    </a>
-    <a class="inv-item" href="https://rikomuze.github.io/mazzel-best-visual/" target="_blank" rel="noopener">
-      <img src="assets/images/best-visual-photo-20260918-v3.jpg" alt="" loading="lazy">
-      <span><span class="t">最強9マス アー写</span><br><span class="d">アー写で組む自分だけの最強ビジュ</span></span>
-      <span class="v">遊ぶ</span>
-    </a>
-    <a class="inv-item" href="https://rikomuze.github.io/mazzel-best-visual-performance/" target="_blank" rel="noopener">
-      <img src="assets/images/best-visual-costume-20260918-v3.jpg" alt="" loading="lazy">
-      <span><span class="t">最強9マス パフォ衣装</span><br><span class="d">好きな衣装で組むもうひとつの9マス</span></span>
-      <span class="v">遊ぶ</span>
-    </a>
-    <a class="inv-item" href="https://rikomuze.github.io/otaku-numa-shindan/" target="_blank" rel="noopener">
-      <img src="assets/images/otaku-numa.jpeg" alt="" loading="lazy">
-      <span><span class="t">オタク沼診断</span><br><span class="d">自分のオタクタイプが分かる診断</span></span>
+    <a class="inv-item" href="./play-room/">
+      <span style="width:44px;height:44px;background:#ded7ff;display:grid;place-items:center;font-family:var(--hand);font-size:12px;font-weight:600">PLAY</span>
+      <span><span class="t">PLAY ROOM</span><br><span class="d">ガチャ・診断・推しビジュ・9マス・BIAS MAPなど、遊び系はこちらにまとめました</span></span>
       <span class="v">遊ぶ</span>
     </a>
   </div>

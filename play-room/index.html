@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>MUZE PLAY ROOM｜MUZE TOOL BOXの裏の遊び場</title>
-  <meta name="description" content="推しガチャ開封所、衣装選手権、BIAS MAP、ライブ帰りシミュレーター。MUZE TOOL BOXの裏の遊び場で、今日も推しと遊ぼう。">
+  <title>PLAY ROOM｜推し活の遊び場</title>
+  <meta name="description" content="推しガチャ、衣装選手権、BIAS MAP、推しビジュ、9マス、診断などをまとめた推し活の遊び場。">
   <meta name="robots" content="noindex">
   <meta name="theme-color" content="#f7f5ed">
   <link rel="icon" href="../icon-192.png">
@@ -41,6 +41,10 @@
     .outfit .preview{background:var(--lime)}
     .bias .preview{background:var(--violet);padding:20px 15px}
     .train .preview{background:var(--sky)}
+    .visual6 .preview{background:#ffe7ef}
+    .best9 .preview{background:#dfeaff}
+    .best9-performance .preview{background:#ece5ff}
+    .diagnosis .preview{background:#fff0c9}
     .photo{display:block;width:100%;height:100%;object-fit:cover;object-position:center;border:6px solid #fff;box-shadow:0 3px 7px #28253626}
     .gacha .photo{transform:rotate(-5deg);max-width:250px;object-position:center 34%}
     .outfit .photo{transform:rotate(4deg);width:128px;object-position:center 30%}
@@ -55,6 +59,10 @@
     .outfit .open{background:var(--lime)}
     .bias .open{background:var(--violet)}
     .train .open{background:var(--sky)}
+    .visual6 .open{background:#ffe7ef}
+    .best9 .open{background:#dfeaff}
+    .best9-performance .open{background:#ece5ff}
+    .diagnosis .open{background:#fff0c9}
     .chat-preview{display:flex;flex-direction:column;gap:7px;width:100%;max-width:220px;transform:rotate(-3deg)}
     .chat-preview span{display:block;max-width:82%;padding:6px 11px;border-radius:14px;font-size:0.8125rem;font-weight:700;line-height:1.4;background:#fff;box-shadow:0 2px 5px #28253620}
     .chat-preview span.me{align-self:flex-end;background:#8de055}
@@ -107,17 +115,17 @@
 </head>
 <body>
   <div class="wrap">
-    <nav class="nav" aria-label="MUZE TOOL BOX">
-      <a class="nav-brand" href="../">MUZE TOOL BOX</a>
-      <a class="nav-back" href="../">表にもどる</a>
+    <nav class="nav" aria-label="PLAY ROOM navigation">
+      <a class="nav-brand" href="./">PLAY ROOM</a>
+      <a class="nav-back" href="../">TOOL BOXへ</a>
     </nav>
     <header class="hero">
       <div>
-        <p class="room-label">MUZE PLAY ROOM</p>
-        <h1>裏の<span>あそび場。</span></h1>
+        <p class="room-label">PLAY ROOM</p>
+        <h1>推し活の<span>あそび場。</span></h1>
         <p class="hero-note">ちょっと寄り道、推しと遊ぼう。</p>
       </div>
-      <p class="room-number">TOOLS<strong>04</strong></p>
+      <p class="room-number">TOOLS<strong>08</strong></p>
     </header>
     <main>
       <div class="tools" aria-label="遊びツール一覧">
@@ -133,6 +141,7 @@
             <span class="open">開封しにいく</span>
           </div>
         </a>
+
         <a class="tool outfit" href="https://rikomuze.github.io/mazzel-outfit/" aria-labelledby="outfit-title" aria-describedby="outfit-desc">
           <div class="preview" aria-hidden="true">
             <img class="photo" src="https://rikomuze.github.io/mazzel-outfit/photos/naoya/07.jpg" alt="" width="180" height="240">
@@ -145,6 +154,7 @@
             <span class="open">選びにいく</span>
           </div>
         </a>
+
         <a class="tool bias" href="../bias-map/" aria-labelledby="bias-title" aria-describedby="bias-desc">
           <div class="preview" aria-hidden="true">
             <svg class="map-preview" viewBox="0 0 220 205" xmlns="http://www.w3.org/2000/svg">
@@ -167,6 +177,7 @@
             <span class="open">マップをつくる</span>
           </div>
         </a>
+
         <a class="tool train" href="../live-kaeri/" aria-labelledby="train-title" aria-describedby="train-desc">
           <div class="preview" aria-hidden="true">
             <div class="chat-preview">
@@ -184,12 +195,64 @@
             <span class="open">帰り道へいく</span>
           </div>
         </a>
+
+        <a class="tool visual6" href="https://rikomuze.github.io/oshi-visual-6/" aria-labelledby="visual6-title" aria-describedby="visual6-desc">
+          <div class="preview" aria-hidden="true">
+            <img class="photo" src="../assets/images/oshi-visual-6.jpeg" alt="" width="400" height="400">
+            <span class="preview-label">好きな6枚を一枚に</span>
+          </div>
+          <div class="tool-copy">
+            <p class="eyebrow"><span class="number">05</span> PICK SIX</p>
+            <h2 id="visual6-title">推しビジュ6選</h2>
+            <p class="tool-desc" id="visual6-desc">好きなビジュ6枚を選んで、タグ画っぽい一枚にまとめる。</p>
+            <span class="open">6枚を選ぶ</span>
+          </div>
+        </a>
+
+        <a class="tool best9" href="https://rikomuze.github.io/mazzel-best-visual/" aria-labelledby="best9-title" aria-describedby="best9-desc">
+          <div class="preview" aria-hidden="true">
+            <img class="photo" src="../assets/images/best-visual-photo-20260918-v3.jpg" alt="" width="400" height="400">
+            <span class="preview-label">アー写で最強9マス</span>
+          </div>
+          <div class="tool-copy">
+            <p class="eyebrow"><span class="number">06</span> BEST NINE</p>
+            <h2 id="best9-title">最強9マス アー写</h2>
+            <p class="tool-desc" id="best9-desc">好きなアー写で組む、自分だけの最強ビジュ9マス。</p>
+            <span class="open">9マスをつくる</span>
+          </div>
+        </a>
+
+        <a class="tool best9-performance" href="https://rikomuze.github.io/mazzel-best-visual-performance/" aria-labelledby="best9p-title" aria-describedby="best9p-desc">
+          <div class="preview" aria-hidden="true">
+            <img class="photo" src="../assets/images/best-visual-costume-20260918-v3.jpg" alt="" width="400" height="400">
+            <span class="preview-label">パフォ衣装で9マス</span>
+          </div>
+          <div class="tool-copy">
+            <p class="eyebrow"><span class="number">07</span> PERFORMANCE NINE</p>
+            <h2 id="best9p-title">最強9マス パフォ衣装</h2>
+            <p class="tool-desc" id="best9p-desc">好きなパフォーマンス衣装で組む、もうひとつの最強9マス。</p>
+            <span class="open">衣装を選ぶ</span>
+          </div>
+        </a>
+
+        <a class="tool diagnosis" href="https://rikomuze.github.io/otaku-numa-shindan/" aria-labelledby="diagnosis-title" aria-describedby="diagnosis-desc">
+          <div class="preview" aria-hidden="true">
+            <img class="photo" src="../assets/images/otaku-numa.jpeg" alt="" width="400" height="400">
+            <span class="preview-label">あなたは何タイプ？</span>
+          </div>
+          <div class="tool-copy">
+            <p class="eyebrow"><span class="number">08</span> FIND YOUR TYPE</p>
+            <h2 id="diagnosis-title">オタク沼診断</h2>
+            <p class="tool-desc" id="diagnosis-desc">いくつかの質問に答えて、自分のオタクタイプを診断。</p>
+            <span class="open">診断する</span>
+          </div>
+        </a>
       </div>
       <p class="bottom-note">気分に合わせて、好きなところからどうぞ。</p>
     </main>
     <footer>
       <p>MAZZEL・BMSG公式とは関係のない<br>非公式ファンメイドサイトです。</p>
-      <p class="credit">MUZE PLAY ROOM / MUZE TOOL BOX</p>
+      <p class="credit">PLAY ROOM</p>
     </footer>
   </div>
 </body>
