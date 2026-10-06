@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>ライブ帰りシミュレーター｜PLAY ROOM</title>
+  <title>ライブ帰りシミュレーター｜MUZE PLAY ROOM</title>
   <meta name="description" content="規制退場から終電まで。手渡しのトレカ交換を済ませて、電池を残したまま終電に乗れるか。チャットで遊ぶライブ帰りシミュレーター。">
   <meta name="robots" content="noindex">
   <meta name="theme-color" content="#f7f5ed">
@@ -316,7 +316,7 @@ button:focus-visible,a:focus-visible{outline:3px solid #8051bd;outline-offset:2p
     <div class="arow"><div class="stage" id="stage"><b>いま</b><span>座席で待機中</span></div><span id="acts"></span></div>
   </div>
   <div class="phone">
-  <div class="sbar" id="sbar"><span id="clk">21:34</span><span class="r"><span>4G</span><span class="bat" id="bat"><span id="batp">26%</span><i><b id="batb"></b></i></span></span></div>
+  <div class="sbar" id="sbar"><span id="clk">21:34</span><span class="r"><span>4G</span><span class="bat" id="bat"><span id="batp">22%</span><i><b id="batb"></b></i></span></span></div>
   <div class="view" id="view"></div>
   </div>
   <button class="pa" id="pa" type="button" aria-live="polite"><i id="paI"></i><b id="paT">場内アナウンス</b><span id="paX"></span></button>
@@ -351,8 +351,8 @@ const TH={
   zemi:{name:"ゼミ 3年",n:9,col:"#b2b7c2",ini:"ゼ",static:true}
 };
 const ORDER=["yui","riku","swap","photo","mio","group","mom","info","baito","zemi"];
-const ENDKEYS=["clear","missed","giveup","noswap","sleep","dead"];
-const ENDNAME={clear:"最高の帰り道",missed:"終電を乗りそびれた",giveup:"終電を諦めた",noswap:"交換できなかった",sleep:"終点まで寝過ごした",dead:"電池ゼロ"};
+const ENDKEYS=["clear","drink","missed","giveup","noswap","sleep","dead"];
+const ENDNAME={clear:"最高の帰り道",drink:"駅前で感想会",missed:"終電を乗りそびれた",giveup:"終電を諦めた",noswap:"交換できなかった",sleep:"終点まで寝過ごした",dead:"電池ゼロ"};
 const BLOCKS=["スタンド南","スタンドE","スタンド北","バルコニー"];
 let seen={};try{seen=JSON.parse(localStorage.getItem("lkSeen2")||"{}")}catch(e){}
 
@@ -364,7 +364,7 @@ function fresh(oshi){
   th.baito.last="みさき: ごめんなさい無理です🙏";th.baito.lastT=20*60+43;
   th.zemi.msgs=[{k:"them",who:"佐藤",x:"来週のレジュメ共有しました",t:19*60+15}];
   th.zemi.last="佐藤: 来週のレジュメ共有しました";th.zemi.lastT=19*60+15;
-  return {oshi,t:START,acc:0,yoin:70,tai:60,bat:26,lp:false,view:"list",
+  return {oshi,t:START,acc:0,yoin:70,tai:42,bat:22,lp:false,view:"list",
     th,fired:{},over:false,idle:0,chase:0,ridle:0,rchase:0,
     block:pick(BLOCKS),releaseAt:START+rnd(12,19),released:false,stage:"seat",sneaks:0,crowdUntil:0,
     pos:0,hold:null,
@@ -447,9 +447,9 @@ function startClock(){
 function speed(){let v=S.t<S.crowdUntil?40:80;if(S.raining&&!S.umbrella&&!atStation()) v=Math.round(v*.7);return v}
 function minute(){
   S.t++;const n=S.t-START;
-  if(n%(S.lp?8:4)===0) setBat(S.bat-1);
+  if(n%(S.lp?6:4)===0) setBat(S.bat-1);
   if(S.over) return;
-  if(n%6===0) change("tai",-1);
+  if(n%5===0) change("tai",-1);
   if(S.raining&&!S.umbrella&&S.stage==="walk"&&n%3===0) change("tai",-1);
   if(S.stage==="walk"&&!S.hold) walk(speed());
   runEvents();
@@ -503,7 +503,7 @@ const EV=[
  {at:()=>S.releaseAt-2, f:()=>pa("駅が大変混雑しております。お帰りの際は、時間に余裕を持ってご移動ください。")},
  {at:()=>S.releaseAt, f:()=>{pa(S.block+"の方、ご退場ください。お忘れ物のないようご注意ください。");release()}},
  {at:()=>21*60+41, f:()=>rikuHello()},
- {at:()=>21*60+58, f:()=>photoAsk()},
+ {at:()=>21*60+52, f:()=>photoAsk()},
  {at:()=>22*60+1, f:()=>momCall()},
  {at:()=>21*60+50, f:()=>rikuDinner()},
  {at:()=>21*60+58, f:()=>info("雨雲レーダー","30分後に雨が降り出す予報です（現在地周辺）",true)},
@@ -611,25 +611,14 @@ function drinkInvite(){
   if(S.drink||S.t>22*60+44) return;
   if(openQ("group")||S.th.group.busy||S.hold){later(drinkInvite,3000);return}
   S.drink=1;
-  them("group",[["あや","駅着いた！"],["あや","ねえ、駅前で1杯だけ飲んでかない？"],["りん","感想戦第二部しよ🍻"]],{then:()=>setPending("group",[
-    {t:"1杯だけなら！",k:"one",cost:"約25分かかる"},
-    {t:"終電諦めて朝まで語ろう",k:"all"},
+  them("group",[["あや","駅着いた！"],["あや","ねえ、駅前で感想会しない？"],["りん","居酒屋あいてるよ🍻"]],{then:()=>setPending("group",[
+    {t:"行く！感想会しよ",k:"go",cost:"終電は諦めることになる"},
+    ACT({t:"(乾杯のスタンプ)",stamp:["🍻","乾杯するくま"],k:"go",cost:"終電は諦めることになる"}),
     {t:"今日は帰る！また誘って",k:"no"}
   ],c=>{
-    if(c.k==="no"){S.drink=-1;later(()=>them("group",[["あや","了解〜！気をつけて"],["りん","次は飲も"]]),400);return}
-    if(c.k==="all"){later(()=>them("group",[["あや","そうこなくちゃ"],["りん","始発まで語るぞ"]],{then:()=>later(()=>end("giveup"),1500)}),400);return}
+    if(c.k==="no"){S.drink=-1;later(()=>them("group",[["あや","了解〜！気をつけて"],["りん","次は飲も"]],{then:()=>endStamp("group",[ACT({t:"(手を振るスタンプ)",stamp:["👋","手をふるくま"]}),{t:"またね！"}])}),400);return}
     S.drink=2;S.hold="drink";hud();
-    later(()=>{
-      them("group",[["あや","やった！駅前の居酒屋いるね"]],{then:()=>{
-        sys("group","駅前の居酒屋で乾杯した🍻");
-        addTime(12);change("yoin",10);change("tai",-4);
-        if(S.over) return;
-        sys("group","感想戦第二部。最後の曲の話だけで20分経った");
-        addTime(12);change("yoin",8);change("tai",-4);setBat(S.bat-2);
-        if(S.over) return;
-        them("group",[["りん","やば、もうこんな時間"],["あや","解散しよ！楽しかった〜"]],{then:()=>{sys("group","店を出た");S.hold=null;S.drink=3;hud()}});
-      }});
-    },400);
+    later(()=>them("group",[["あや","やった！"],["りん","駅前の居酒屋いるね"],["あや","今日は語り尽くすぞ"]],{then:()=>later(()=>end("drink"),1500)}),400);
   })});
 }
 /* ---------------- riku ---------------- */
@@ -837,8 +826,8 @@ function photoAsk(){
   })});
 }
 function photoCost(){
-  if(S.stage==="seat") return "会場を出たら広場に寄る（相手を待つ時間あり）";
-  const back=Math.max(0,S.pos-PLAZA);const m=Math.round(back/80)+(S.stage==="station"?Math.round((DIST-PLAZA)/80):0)+9;
+  if(S.stage==="seat"||S.pos<=PLAZA) return "通り道の広場で交換（約9分ロス）";
+  const back=Math.max(0,S.pos-PLAZA);const m=Math.round(back/80)*(S.stage==="station"?1:2)+9;
   return "広場まで引き返す（合計 約"+m+"分ロス）";
 }
 function photoGo(){
@@ -933,7 +922,7 @@ function incoming(th,o){
   S.callOn=true;
   const el=$("call");el.hidden=false;el.classList.remove("live");
   let decided=false;
-  el.innerHTML=`<div><div class="av" style="background:${TH[th].col}">${TH[th].ini}</div><h3>${esc(TH[th].name)}</h3><p>音声通話の着信（出ると電池 -3）</p></div><div class="subs"></div>
+  el.innerHTML=`<div><div class="av" style="background:${TH[th].col}">${TH[th].ini}</div><h3>${esc(TH[th].name)}</h3><p>音声通話の着信（出ると電池 -4）</p></div><div class="subs"></div>
   <div class="cbtns"><button class="cb no" id="cNo" type="button"><i>✕</i>拒否</button><button class="cb yes" id="cYes" type="button"><i>✆</i>応答</button></div>`;
   const decline=missed=>{
     if(decided)return;decided=true;el.hidden=true;S.callOn=false;
@@ -952,7 +941,7 @@ function incoming(th,o){
     const next=()=>{
       if(i>=o.lines.length){
         clearInterval(tick);
-        later(()=>{el.hidden=true;S.callOn=false;line(th,{k:"call",x:"通話時間 "+Math.floor(sec/60)+":"+String(sec%60).padStart(2,"0")});S.th[th].last="通話が終了しました";setBat(S.bat-3);if(S.over)return;addTime(3);o.onEnd&&o.onEnd();render()},700);
+        later(()=>{el.hidden=true;S.callOn=false;line(th,{k:"call",x:"通話時間 "+Math.floor(sec/60)+":"+String(sec%60).padStart(2,"0")});S.th[th].last="通話が終了しました";setBat(S.bat-4);if(S.over)return;addTime(3);o.onEnd&&o.onEnd();render()},700);
         return;
       }
       const d=document.createElement("div");d.className="s";d.textContent=fill(o.lines[i++]);subs.appendChild(d);
@@ -1025,8 +1014,8 @@ function alerts(){
   if(S.swapFail) A.push({lv:2,x:"トレカ交換は断られた",th:"swap"});
   if(S.bat<=10) A.push({lv:3,x:"電池残り"+S.bat+"%。写真や電話は控えて",th:null});
   else if(S.bat<=20) A.push({lv:2,x:"電池残り"+S.bat+"%",th:null});
-  if(S.tai<=15) A.push({lv:3,x:"体力が限界。座ったら寝過ごすかも",th:null});
-  else if(S.tai<=30) A.push({lv:2,x:"体力が減ってきた",th:null});
+  if(S.tai<20) A.push({lv:3,x:"体力が限界。このまま座ると寝過ごす",th:null});
+  else if(S.tai<=28) A.push({lv:2,x:"体力が減ってきた（20を切ると寝過ごす）",th:null});
   if(S.raining&&!S.umbrella&&S.stage==="walk") A.push({lv:2,x:"雨に濡れて、体力が減り続けている",th:null});
   if(S.photo===1) A.push({lv:1,x:"ももさんが広場で返事を待っている",th:"photo"});
   if(S.rin===2&&S.t<22*60+50) A.push(S.rinPing&&!S.hold?{lv:2,x:"駅に着いた。みおにスタンプで知らせよう",th:"mio"}:{lv:1,x:"みおが改札前で22:50まで待っている",th:"mio"});
@@ -1045,7 +1034,7 @@ function pinch(){
   el.dataset.th=top&&top.th?top.th:"";
   const s=$("vS");const v=S.slack;
   s.textContent=v<=0?"間に合わない":"余裕 "+v+"分";s.className=v<=10?"crit":v<=20?"warn":"";
-  $("tWarn").textContent=S.tai<=15?"限界":S.tai<=30?"ピンチ":"";
+  $("tWarn").textContent=S.tai<20?"限界":S.tai<=28?"ピンチ":"";
 }
 function drawPlist(){
   const el=$("plist");if(el.hidden||!S) return;
@@ -1059,7 +1048,7 @@ function hud(){
   if(!S) return;
   $("clk").textContent=fmt(S.t);
   $("vY").textContent=S.yoin;$("bY").style.width=S.yoin+"%";$("bY").style.background="var(--pink)";
-  $("vT").textContent=S.tai;$("bT").style.width=S.tai+"%";$("bT").style.background=S.tai>30?"var(--lime)":S.tai>15?"#ffe08a":"var(--hot)";
+  $("vT").textContent=S.tai;$("bT").style.width=S.tai+"%";$("bT").style.background=S.tai>28?"var(--lime)":S.tai>=20?"#ffe08a":"var(--hot)";
   $("vL").textContent="あと"+Math.max(0,LAST-S.t)+"分";
   $("batp").textContent=S.bat+"%";$("batb").style.width=Math.max(2,S.bat/100*19)+"px";
   $("bat").classList.toggle("low",S.bat<=20&&!S.lp);$("bat").classList.toggle("lp",S.lp);
@@ -1155,13 +1144,14 @@ function gate(){
   confirmBox("改札に入りますか？",warn,"入る","まだ",()=>{
     S.boarded=true;
     if(!S.swapDone) end("noswap");
-    else if(S.tai<12) end("sleep");
+    else if(S.tai<20) end("sleep");
     else end("clear");
   });
 }
 const ENDS={
   clear:"終電の扉が閉まる。手の中には{oshi}のトレカ。電池はまだ残っていて、ゆいからの通知が止まらない。",
   missed:"23:12。ホームに着いたとき、最終電車の赤いランプが遠ざかっていった。",
+  drink:"駅前の居酒屋で、感想会が始まった。終電の時間はとっくに過ぎて、話はまだ1曲目のイントロ。今日はこのまま朝まで。",
   giveup:"終電の時間を過ぎても、話はまだ2曲目にも辿り着いていない。始発まで、あと5時間。",
   noswap:"改札を抜けて、電車に揺られる。カバンの中のトレカは、交換されないままだった。",
   sleep:"座った瞬間に意識が消えた。目を開けたら知らない駅。トークの未読だけが、今日の楽しさを覚えている。",
@@ -1213,7 +1203,7 @@ async function makeResultImage(R){
   const G='"Zen Kaku Gothic New","Hiragino Sans",sans-serif',HAND='"Klee One","Hiragino Sans",sans-serif';
   x.fillStyle=PAPER;x.fillRect(0,0,W,H);
   x.fillStyle=INK;x.font="700 34px "+G;x.textBaseline="alphabetic";x.fillText("ライブ帰りシミュレーター",80,110);
-  x.textAlign="right";x.font="600 32px "+HAND;x.fillText("ENDING "+R.got+" / 6",W-80,110);x.textAlign="left";
+  x.textAlign="right";x.font="600 32px "+HAND;x.fillText("ENDING "+R.got+" / "+ENDKEYS.length,W-80,110);x.textAlign="left";
   x.strokeStyle="#d5d1d9";x.lineWidth=2;x.setLineDash([]);x.beginPath();x.moveTo(80,140);x.lineTo(W-80,140);x.stroke();
   // tag
   x.save();x.translate(80,215);x.rotate(-3*Math.PI/180);x.font="700 30px "+G;const tag=R.kind==="clear"?"CLEAR":"ENDING "+R.no;const tw=x.measureText(tag).width;x.fillStyle=INK;x.fillRect(0,-36,tw+36,50);x.fillStyle=PAPER;x.fillText(tag,18,0);x.restore();
@@ -1269,7 +1259,7 @@ function showIntro(){
   ["result","call","osd","viewer","scene"].forEach(id=>$(id).hidden=true);$("osd").className="ov osd";
   $("view").innerHTML="";
   const el=$("intro");el.hidden=false;
-  el.innerHTML=`<div class="pnav"><span>ライブ帰りシミュレーター</span><span>エンディング6種</span></div>
+  el.innerHTML=`<div class="pnav"><span>ライブ帰りシミュレーター</span><span>エンディング7種</span></div>
   <header class="hero"><div><p class="tag">CHAT GAME</p><h1>ライブ<span>帰り</span>シミュレーター</h1><p class="note">終電まで、あと98分。</p></div><p class="ticket">LAST TRAIN<strong>23:12</strong></p></header>
   <div class="pcard pink"><p class="lbl">21:34</p><p class="story">最後の曲の余韻が、まだ耳に残っている。規制退場の<em>アナウンス待ち</em>。手渡しのトレカ交換が<em>1件</em>残っていて、終電は<em>23:12</em>。<br>スマホが、震えた。</p></div>
   <div class="pcard sky"><p class="lbl">ゴール</p><p class="goal"><em>手渡しでトレカ交換</em>して、<em>電池を残したまま</em>、<em>終電に乗る</em>。</p><p class="story" style="font-size:13px;color:var(--pmuted)">寄り道すれば、推しのトレカは最大3枚まで集められる。</p></div>
