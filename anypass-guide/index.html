@@ -26,8 +26,9 @@ table{width:100%;border-collapse:collapse;font-size:12px;background:#fff}th,td{p
 
 <section class="paper tape"><div class="lead">まず、あなたの状況を教えてね。</div>
 <label for="show">参戦する公演</label><select id="show"></select>
+<label>あなたは？</label><div class="choices" id="role"><button data-v="parent" class="on">購入者（親チケット）</button><button data-v="companion">同行者（分配で受取）</button></div>
 <label>チケット</label><div class="choices" id="seat"><button data-v="normal" class="on">通常指定席</button><button data-v="ss">SS指定席</button></div>
-<label>購入枚数</label><div class="choices" id="count"><button data-v="1" class="on">1枚</button><button data-v="2">2枚以上</button></div>
+<div id="countWrap"><label>購入枚数</label><div class="choices" id="count"><button data-v="1" class="on">1枚</button><button data-v="2">2枚以上</button></div></div>
 <div class="result" id="result"></div></section>
 
 <div class="alert"><strong>⚠️ まずここだけ！</strong>チケットは1人1枚。同行者がいる場合は事前に分配します。入場用QRコードのスクショでは入場できません。公演当日は身分証明書も忘れずに。</div>
@@ -42,10 +43,8 @@ table{width:100%;border-collapse:collapse;font-size:12px;background:#fff}th,td{p
 <div class="tip"><strong>💡 誤って退会してしまった場合</strong>公式案内では、公演日までに再入会するとチケットを受け取れるとされています。購入者・同行者ともに、公演日当日まで会員を継続しておきましょう。</div>
 <div class="alert"><strong>「発券開始」と「座席表示」は別！</strong>チケットの発券は公演ごとの日時から。座席番号は各公演日当日 <b>9:00頃</b>に表示予定です。</div></section>
 
-<h2>03. 同行者へ分配する</h2>
-<section class="paper"><p>2枚以上で購入した場合、同行者分のチケットをAnyPASSで分配します。<b>購入者本人のチケットは分配・譲渡できません。</b></p>
-<div class="steps"><div class="step"><b>購入者が対象公演を開く</b>同行者分のチケットを選んで分配します。</div><div class="step"><b>同行者もAnyPASSを準備</b>利用登録・電話番号認証まで済ませます。</div><div class="step"><b>同行者本人が受け取る</b>同行者自身のMUZEUM / B-Townのメールアドレス・パスワードを入力し、受け取りを完了します。</div></div>
-<div class="alert"><strong>SS指定席は分配相手を必ず確認</strong>アップグレード申込時に登録した同行者情報が各チケットに表示されています。間違えて別の方へ分配した場合は、一度返却してもらい、正しい同行者へ再分配してください。</div></section>
+<h2 id="distTitle">03. 同行者へ分配する</h2>
+<section class="paper" id="distSection"></section>
 
 <h2>04. SS指定席の人へ <span class="badge">重要</span></h2>
 <section class="paper"><p class="lead">SS指定席は、同行者を含む全員に本人確認があります。</p><p>当日はアップグレード申込時の登録情報と照合されます。<b>顔写真付きの身分証を必ず持参</b>してください。</p>
@@ -63,13 +62,12 @@ table{width:100%;border-collapse:collapse;font-size:12px;background:#fff}th,td{p
 <div class="tip"><strong>⭕ 座席番号 → スクショ推奨</strong>入場後に電波が悪くなっても座席を確認できるよう、表示されたら保存しておきましょう。</div></section>
 
 <h2>07. チケットが出ないとき</h2>
-<section class="paper"><div class="steps"><div class="step"><b>発券開始日時を過ぎている？</b>下の一覧で自分の公演を確認。</div><div class="step"><b>電話番号は合っている？</b>購入時の受取用携帯電話番号と、AnyPASSを登録した端末の番号を確認。</div><div class="step"><b>AnyPASSの利用登録は完了している？</b>認証まで済んでいるか確認。</div><div class="step"><b>会員状態を確認</b>MUZEUM / B-Townを誤って退会していないか確認。</div><div class="step"><b>解決しなければ公式HELPへ</b>AnyPASSの問い合わせ窓口を利用してください。</div></div></section>
+<section class="paper" id="troubleSection"></section>
 
 <h2>08. 発券開始日一覧</h2><section class="paper"><table id="schedule"></table><div class="tip"><strong>座席番号は全公演共通</strong>各公演日当日9:00頃から表示予定です。</div></section>
 
-<h2>09. 前日・当日チェック</h2>
-<section class="paper check">
-<label><input type="checkbox">AnyPASSが起動する</label><label><input type="checkbox">対象公演がマイイベントに表示されている</label><label><input type="checkbox">自分のチケットを受け取った</label><label><input type="checkbox">同行者への分配・受け取りが完了した（同行者ありの場合）</label><label><input type="checkbox">MUZEUM / B-Townを退会していない</label><label><input type="checkbox">身分証明書をバッグに入れた</label><label><input type="checkbox">SS指定席なら顔写真付き身分証を用意した</label><label><input type="checkbox">スマホを充電した</label><label><input type="checkbox">モバイルバッテリーを持った</label><label><input type="checkbox">当日9:00以降、座席番号を確認・保存した</label></section>
+<h2>09. あなたの前日・当日チェック</h2>
+<section class="paper check" id="checkSection"></section>
 
 <h2>公式リンク</h2><section class="paper links">
 <a href="https://mazzel.tokyo/tour/play_at_the_muzeum2/news/57/" target="_blank" rel="noopener">MAZZEL公式｜AnyPASSチケット発券・ご入場に関するご案内 ↗</a>
@@ -83,11 +81,61 @@ table{width:100%;border-collapse:collapse;font-size:12px;background:#fff}th,td{p
 <script>
 const shows=[
 ["10/22","東京","LINE CUBE SHIBUYA","10/8 15:00〜"],["10/24","北海道","カナモトホール","10/10 15:00〜"],["10/25","北海道","函館サーモン・まるなまホール","10/11 15:00〜"],["11/2","福島","とうほう・みんなの文化センター","10/19 15:00〜"],["11/3","宮城","東京エレクトロンホール宮城","10/20 15:00〜"],["11/7","新潟","新潟テルサ","10/24 15:00〜"],["11/10","神奈川","パシフィコ横浜 国立大ホール","10/27 15:00〜"],["11/17","岡山","倉敷市民会館","11/3 15:00〜"],["11/18","広島","広島文化学園HBGホール","11/4 15:00〜"],["11/25","兵庫","神戸国際会館 こくさいホール","11/11 15:00〜"],["11/26","大阪","大阪国際会議場 メインホール","11/12 15:00〜"],["12/1","埼玉","大宮ソニックシティ 大ホール","11/17 15:00〜"],["12/3","群馬","Gメッセ群馬 展示ホールA・B","11/19 15:00〜"],["12/4","栃木","宇都宮市文化会館 大ホール","11/20 15:00〜"],["12/7","福岡","福岡サンパレス","11/23 15:00〜"],["12/11","愛知","愛知県芸術劇場大ホール","11/27 15:00〜"],["12/15","香川","レクザムホール・大ホール","12/1 15:00〜"],["12/16","高知","新来島高知重工ホール・オレンジホール","12/2 15:00〜"],["12/21","静岡","アクトシティ浜松 大ホール","12/7 15:00〜"],["12/23","熊本","熊本城ホール メインホール","12/9 15:00〜"]];
-let seat="normal",count="1";const sel=document.querySelector("#show");
+let role="parent",seat="normal",count="1";const sel=document.querySelector("#show");
 shows.forEach((s,i)=>sel.add(new Option(s[0]+" "+s[1]+"｜"+s[2],i)));
-function pick(id,key){document.querySelectorAll("#"+id+" button").forEach(b=>b.onclick=()=>{document.querySelectorAll("#"+id+" button").forEach(x=>x.classList.remove("on"));b.classList.add("on");if(id==="seat")seat=b.dataset.v;else count=b.dataset.v;render()})}
-pick("seat");pick("count");sel.onchange=render;
-function render(){const s=shows[+sel.value];let todo=count==="2"?"チケット受取後、同行者への分配まで済ませよう。":"分配は不要。自分のチケットを受け取ればOK。";if(seat==="ss")todo+=" SS指定席なので、顔写真付き身分証と登録情報も必ず確認。";document.querySelector("#result").innerHTML='<small>あなたの公演</small><div class="big">'+s[0]+' '+s[1]+'｜'+s[2]+'</div><div class="datecard"><div><b>🎟 発券開始</b><strong>'+s[3]+'</strong></div><div><b>💺 座席表示</b><strong>公演当日 9:00頃〜</strong></div></div><p>'+todo+'</p>'}
+function pick(id){document.querySelectorAll("#"+id+" button").forEach(b=>b.onclick=()=>{document.querySelectorAll("#"+id+" button").forEach(x=>x.classList.remove("on"));b.classList.add("on");if(id==="role")role=b.dataset.v;else if(id==="seat")seat=b.dataset.v;else count=b.dataset.v;render()})}
+pick("role");pick("seat");pick("count");sel.onchange=render;
+
+function checkItem(t){return '<label><input type="checkbox">'+t+'</label>'}
+
+function render(){
+ const s=shows[+sel.value];
+ document.querySelector("#countWrap").style.display=role==="parent"?"block":"none";
+ let tasks=[];
+ if(role==="parent"){
+   tasks.push("発券開始後、自分のAnyPASSで親チケットを受け取る");
+   if(count==="2") tasks.push("同行者分を正しい相手へ分配し、相手の「受け取り完了」まで確認する");
+ }else{
+   tasks.push("AnyPASSの利用登録・電話番号認証を済ませておく");
+   tasks.push("購入者から分配が届いたら、自分のMUZEUM / B-Townアカウントで受け取る");
+ }
+ if(seat==="ss"){
+   tasks.push("AnyPASSの登録情報と顔写真付き身分証の情報が一致しているか確認する");
+   if(role==="companion") tasks.push("自分の名前が表示されたSSチケットを受け取っているか確認する");
+ }
+ tasks.push("公演当日9:00頃〜座席番号を確認し、スクショ保存する");
+ tasks.push("当日はAnyPASSのQRを表示して入場する");
+
+ document.querySelector("#result").innerHTML=
+   '<small>あなたの公演</small><div class="big">'+s[0]+' '+s[1]+'｜'+s[2]+'</div>'+
+   '<div class="datecard"><div><b>🎟 発券開始</b><strong>'+s[3]+'</strong></div><div><b>💺 座席表示</b><strong>公演当日 9:00頃〜</strong></div></div>'+
+   '<div class="tip"><strong>あなたがやること</strong>'+tasks.map((t,i)=>(i+1)+'. '+t).join('<br>')+'</div>';
+
+ if(role==="parent"){
+   document.querySelector("#distTitle").textContent=count==="2"?"03. 同行者へ分配する":"03. 今回、分配は不要です";
+   document.querySelector("#distSection").innerHTML=count==="2"
+   ? '<p>2枚以上で購入した場合、同行者分のチケットをAnyPASSで分配します。<b>購入者本人の親チケットは分配・譲渡できません。</b></p><div class="steps"><div class="step"><b>対象公演を開く</b>同行者分のチケットを選んで分配します。</div><div class="step"><b>同行者へ受取をお願いする</b>同行者側もAnyPASSの利用登録・電話番号認証が必要です。</div><div class="step"><b>「受け取り完了」まで確認</b>同行者自身のMUZEUM / B-Town情報で受け取りを完了してもらいます。</div></div>'+(seat==="ss"?'<div class="alert"><strong>SS指定席は誰にどのチケットを渡すか必ず確認</strong>アップグレード申込時に登録した同行者情報が各チケットに表示されています。間違えた場合は一度返却してもらい、正しい同行者へ再分配してください。</div>':'')
+   : '<div class="tip"><strong>1枚購入なら分配操作はありません</strong>自分の親チケットをAnyPASSで受け取ればOKです。購入者本人のチケットは他の方へ分配・譲渡できません。</div>';
+
+   document.querySelector("#troubleSection").innerHTML='<div class="steps"><div class="step"><b>発券開始日時を過ぎている？</b>自分の公演の日時を確認。</div><div class="step"><b>購入時の受取用携帯電話番号は合っている？</b>AnyPASSを登録した端末の番号と一致しているか確認。</div><div class="step"><b>AnyPASSの利用登録は完了している？</b>電話番号認証まで済んでいるか確認。</div><div class="step"><b>MUZEUM / B-Townを退会していない？</b>会員状態を確認。</div><div class="step"><b>それでも出ない場合</b>申込内容の電話番号を確認し、AnyPASS公式HELPへ。</div></div>';
+ }else{
+   document.querySelector("#distTitle").textContent="03. 分配チケットを受け取る";
+   document.querySelector("#distSection").innerHTML='<p>同行者のあなたは、<b>購入者から分配されたチケットを自分のAnyPASSで受け取ります。</b>購入者の端末で一緒に入るのではなく、原則1人1枚です。</p><div class="steps"><div class="step"><b>AnyPASSを準備</b>利用登録・電話番号認証まで先に済ませておきます。</div><div class="step"><b>購入者から分配してもらう</b>分配が届いたら、自分の端末で受取操作を進めます。</div><div class="step"><b>自分の会員情報で受け取る</b>自分のMUZEUM / B-Townのメールアドレス・パスワードを入力します。</div></div>'+(seat==="ss"?'<div class="alert"><strong>SS指定席は自分の名前を確認</strong>アップグレード申込時に登録された同行者情報がチケットに表示されます。自分以外の名前のチケットが届いた場合は、購入者に返却・再分配をお願いしてください。</div>':'');
+   document.querySelector("#troubleSection").innerHTML='<div class="steps"><div class="step"><b>購入者から分配済み？</b>まず購入者側で分配操作が完了しているか確認。</div><div class="step"><b>AnyPASSの利用登録は完了している？</b>自分の端末で電話番号認証まで済ませます。</div><div class="step"><b>受取時は自分の会員情報を使っている？</b>自分のMUZEUM / B-Townのメールアドレス・パスワードで受け取ります。</div><div class="step"><b>会員を退会していない？</b>公演日当日まで会員継続が必要です。</div><div class="step"><b>それでも受け取れない場合</b>購入者に分配状態を確認してもらい、必要に応じてAnyPASS公式HELPへ。</div></div>';
+ }
+
+ let checks=[
+  "AnyPASSが起動する",
+  role==="parent"?"対象公演がマイイベントに表示されている":"分配された自分のチケットがマイイベントに表示されている",
+  role==="parent"?"自分の親チケットを受け取った":"分配チケットの受け取りを完了した"
+ ];
+ if(role==="parent"&&count==="2") checks.push("同行者への分配が完了し、相手も受け取り済み");
+ checks.push("MUZEUM / B-Townを退会していない");
+ if(seat==="ss") checks.push("顔写真付き身分証を用意し、登録情報との一致を確認した");
+ else checks.push("身分証明書をバッグに入れた");
+ checks.push("スマホを充電した","モバイルバッテリーを持った","当日9:00以降、座席番号を確認・保存した");
+ document.querySelector("#checkSection").innerHTML=checks.map(checkItem).join("");
+}
 render();
 document.querySelector("#schedule").innerHTML="<tr><th>公演</th><th>発券開始</th></tr>"+shows.map(s=>"<tr><td><b>"+s[0]+" "+s[1]+"</b><br>"+s[2]+"</td><td><b>"+s[3]+"</b></td></tr>").join("");
 </script></body></html>
