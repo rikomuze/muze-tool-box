@@ -45,6 +45,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;background:#fff}th,td{p
 
 <h2 id="distTitle">03. 同行者へ分配する</h2>
 <section class="paper" id="distSection"></section>
+<div class="tip"><strong>分配方法は4つ</strong>LINE／メール／SMS／QRコード。LINE・メール・SMSでは受け取り用URLが送られ、同行者がそのURLからAnyPASSで受け取ります。</div>
 
 <h2>04. SS指定席の人へ <span class="badge">重要</span></h2>
 <section class="paper"><p class="lead">SS指定席は、同行者を含む全員に本人確認があります。</p><p>当日はアップグレード申込時の登録情報と照合されます。<b>顔写真付きの身分証を必ず持参</b>してください。</p>
@@ -94,10 +95,10 @@ function render(){
  let tasks=[];
  if(role==="parent"){
    tasks.push("発券開始後、自分のAnyPASSで親チケットを受け取る");
-   if(count==="2") tasks.push("同行者分を正しい相手へ分配し、相手の「受け取り完了」まで確認する");
+   if(count==="2") tasks.push("同行者分をLINE・メール・SMS・QRで送り、相手の「受け取り完了」まで確認する");
  }else{
    tasks.push("AnyPASSの利用登録・電話番号認証を済ませておく");
-   tasks.push("購入者から分配が届いたら、自分のMUZEUM / B-Townアカウントで受け取る");
+   tasks.push("購入者からLINE・メール・SMS・QRで分配を受け取り、自分のMUZEUM / B-Townアカウントで受け取る");
  }
  if(seat==="ss"){
    tasks.push("AnyPASSの登録情報と顔写真付き身分証の情報が一致しているか確認する");
@@ -114,13 +115,13 @@ function render(){
  if(role==="parent"){
    document.querySelector("#distTitle").textContent=count==="2"?"03. 同行者へ分配する":"03. 今回、分配は不要です";
    document.querySelector("#distSection").innerHTML=count==="2"
-   ? '<p>2枚以上で購入した場合、同行者分のチケットをAnyPASSで分配します。<b>購入者本人の親チケットは分配・譲渡できません。</b></p><div class="steps"><div class="step"><b>対象公演を開く</b>同行者分のチケットを選んで分配します。</div><div class="step"><b>同行者へ受取をお願いする</b>同行者側もAnyPASSの利用登録・電話番号認証が必要です。</div><div class="step"><b>「受け取り完了」まで確認</b>同行者自身のMUZEUM / B-Town情報で受け取りを完了してもらいます。</div></div>'+(seat==="ss"?'<div class="alert"><strong>SS指定席は誰にどのチケットを渡すか必ず確認</strong>アップグレード申込時に登録した同行者情報が各チケットに表示されています。間違えた場合は一度返却してもらい、正しい同行者へ再分配してください。</div>':'')
+   ? '<p>2枚以上で購入した場合、同行者分のチケットをAnyPASSで分配します。<b>購入者本人の親チケットは分配・譲渡できません。</b></p><div class="steps"><div class="step"><b>「マイイベント」から対象公演を開く</b>同行者分のチケットの「家族や友人にわたす」を押します。</div><div class="step"><b>LINE・メール・SMS・QRのいずれかで送る</b>LINE／メール／SMSなら受け取り用URLを送信。QRなら同行者にQRコードを読み取ってもらいます。</div><div class="step"><b>同行者がAnyPASSで受け取る</b>届いたURLを開く、またはAnyPASSの「QR読取」から読み取り、同行者自身のMUZEUM / B-Town情報で受け取りを完了します。</div><div class="step"><b>購入者側で「受け取り完了」を確認</b>「受け取り依頼中」のままならまだ完了していません。</div></div>'+(seat==="ss"?'<div class="alert"><strong>SS指定席は誰にどのチケットを渡すか必ず確認</strong>アップグレード申込時に登録した同行者情報が各チケットに表示されています。間違えた場合は一度返却してもらい、正しい同行者へ再分配してください。</div>':'')
    : '<div class="tip"><strong>1枚購入なら分配操作はありません</strong>自分の親チケットをAnyPASSで受け取ればOKです。購入者本人のチケットは他の方へ分配・譲渡できません。</div>';
 
    document.querySelector("#troubleSection").innerHTML='<div class="steps"><div class="step"><b>発券開始日時を過ぎている？</b>自分の公演の日時を確認。</div><div class="step"><b>購入時の受取用携帯電話番号は合っている？</b>AnyPASSを登録した端末の番号と一致しているか確認。</div><div class="step"><b>AnyPASSの利用登録は完了している？</b>電話番号認証まで済んでいるか確認。</div><div class="step"><b>MUZEUM / B-Townを退会していない？</b>会員状態を確認。</div><div class="step"><b>それでも出ない場合</b>申込内容の電話番号を確認し、AnyPASS公式HELPへ。</div></div>';
  }else{
    document.querySelector("#distTitle").textContent="03. 分配チケットを受け取る";
-   document.querySelector("#distSection").innerHTML='<p>同行者のあなたは、<b>購入者から分配されたチケットを自分のAnyPASSで受け取ります。</b>購入者の端末で一緒に入るのではなく、原則1人1枚です。</p><div class="steps"><div class="step"><b>AnyPASSを準備</b>利用登録・電話番号認証まで先に済ませておきます。</div><div class="step"><b>購入者から分配してもらう</b>分配が届いたら、自分の端末で受取操作を進めます。</div><div class="step"><b>自分の会員情報で受け取る</b>自分のMUZEUM / B-Townのメールアドレス・パスワードを入力します。</div></div>'+(seat==="ss"?'<div class="alert"><strong>SS指定席は自分の名前を確認</strong>アップグレード申込時に登録された同行者情報がチケットに表示されます。自分以外の名前のチケットが届いた場合は、購入者に返却・再分配をお願いしてください。</div>':'');
+   document.querySelector("#distSection").innerHTML='<p>同行者のあなたは、<b>購入者からLINE・メール・SMS・QRのいずれかで分配してもらい、自分のAnyPASSで受け取ります。</b>購入者の端末で一緒に入るのではなく、原則1人1枚です。</p><div class="steps"><div class="step"><b>AnyPASSを準備</b>利用登録・電話番号認証まで先に済ませておきます。</div><div class="step"><b>購入者から受け取り用URL／QRを送ってもらう</b>LINE・メール・SMSで届いた場合は受け取り用URLを開きます。QRの場合はAnyPASSの「QR読取」から読み取ります。</div><div class="step"><b>AnyPASSでチケットを受け取る</b>画面の案内に沿って進み、自分のMUZEUM / B-Townのメールアドレス・パスワードを入力します。</div><div class="step"><b>マイイベントに表示されたら完了</b>自分の端末に対象公演のチケットが表示されていることを確認します。</div></div>'+(seat==="ss"?'<div class="alert"><strong>SS指定席は自分の名前を確認</strong>アップグレード申込時に登録された同行者情報がチケットに表示されます。自分以外の名前のチケットが届いた場合は、購入者に返却・再分配をお願いしてください。</div>':'');
    document.querySelector("#troubleSection").innerHTML='<div class="steps"><div class="step"><b>購入者から分配済み？</b>まず購入者側で分配操作が完了しているか確認。</div><div class="step"><b>AnyPASSの利用登録は完了している？</b>自分の端末で電話番号認証まで済ませます。</div><div class="step"><b>受取時は自分の会員情報を使っている？</b>自分のMUZEUM / B-Townのメールアドレス・パスワードで受け取ります。</div><div class="step"><b>会員を退会していない？</b>公演日当日まで会員継続が必要です。</div><div class="step"><b>それでも受け取れない場合</b>購入者に分配状態を確認してもらい、必要に応じてAnyPASS公式HELPへ。</div></div>';
  }
 
