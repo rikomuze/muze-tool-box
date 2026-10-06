@@ -292,6 +292,10 @@ button:focus-visible,a:focus-visible{outline:3px solid #8051bd;outline-offset:2p
 .endmap span{font-size:12px;border:1px dashed var(--pline);border-radius:30px;padding:1px 10px;color:var(--pmuted)}
 .endmap span.got{border:1px solid var(--ink);background:var(--violet);color:var(--ink);font-weight:700}
 .endmap span.got.clear{background:var(--lime)}
+.endmap.titles span.got{background:var(--sky)}
+.endmap.titles span.got.clear{background:var(--lime)}
+.thint{margin:0;font-size:12px;color:var(--pmuted)}
+.stampbox small{white-space:pre}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -372,7 +376,7 @@ function fresh(oshi){
     yuiBeats:shuffle(YUI).slice(0,6),groupDone:0,
     swap:0,swapDone:false,swapFail:false,searchTries:0,
     photo:0,rin:0,cards:0,drink:0,pickup:false,posts:0,
-    rq:[],rAsking:false,rinPing:false,yuiWait:false,m:{talk:0,photo:0,notif:0,calls:0,miss:0,chased:0,postSeen:0},batPrompted:false,callOn:false,boarded:false};
+    rq:[],rAsking:false,rinPing:false,yuiWait:false,m:{talk:0,photo:0,notif:0,calls:0,miss:0,chased:0,postSeen:0,runs:0,wet:0,board:0,by:{}},batPrompted:false,callOn:false,boarded:false};
 }
 const atStation=()=>S.stage==="station";
 
@@ -450,7 +454,7 @@ function minute(){
   if(n%(S.lp?6:4)===0) setBat(S.bat-1);
   if(S.over) return;
   if(n%5===0) change("tai",-1);
-  if(S.raining&&!S.umbrella&&S.stage==="walk"&&n%3===0) change("tai",-1);
+  if(S.raining&&!S.umbrella&&S.stage==="walk"){S.m.wet=1;if(n%3===0) change("tai",-1)}
   if(S.stage==="walk"&&!S.hold) walk(speed());
   runEvents();
   if(S.over) return;
@@ -576,6 +580,8 @@ function setPending(th,choices,onPick){S.th[th].pending={choices:shuffle(choices
 function answer(th,c){
   const T=S.th[th];if(!T.pending) return;
   const p=T.pending;T.pending=null;
+  if(!p.end) S.m.by[th]=(S.m.by[th]||0)+1;
+  if(c.photo==="board") S.m.board=1;
   if(c.photo){S.m.photo++;me(th,{photo:c.photo})}
   else if(c.stamp) me(th,{stamp:c.stamp});
   else me(th,{x:fill(c.t)});
@@ -882,7 +888,7 @@ function rainPrompt(){
   const el=$("osd");el.hidden=false;
   el.innerHTML=`<div class="osbox" role="dialog" aria-label="雨"><div class="in"><b>雨が降ってきた</b><p>駅まではまだ距離がある。傘はない。</p></div><div class="bt v"><button type="button" id="r1">コンビニで傘を買う（3分）</button><button type="button" id="r2">走る（体力 -6）</button><button type="button" id="r3">濡れながら歩く（遅くなる）</button></div></div>`;
   $("r1").onclick=()=>{el.hidden=true;S.umbrella=true;addTime(3);hud()};
-  $("r2").onclick=()=>{el.hidden=true;change("tai",-6);walk(350);hud()};
+  $("r2").onclick=()=>{el.hidden=true;S.m.runs++;change("tai",-6);walk(350);hud()};
   $("r3").onclick=()=>{el.hidden=true;hud()};
 }
 function officialPost(title,n){
@@ -1072,7 +1078,7 @@ function hud(){
   if($("aLeave")) $("aLeave").onclick=leaveVenue;
   if($("aSneak")) $("aSneak").onclick=()=>confirmBox("こっそり先に出る？","まだあなたのブロックは呼ばれていない。","出てみる","やめておく",leaveVenue);
   if($("aGate")) $("aGate").onclick=gate;
-  if($("aRun")) $("aRun").onclick=()=>{if(S.stage!=="walk"||S.hold)return;change("tai",-5);walk(250);if(S.stage==="walk")addTime(1);hud()};
+  if($("aRun")) $("aRun").onclick=()=>{if(S.stage!=="walk"||S.hold)return;S.m.runs++;change("tai",-5);walk(250);if(S.stage==="walk")addTime(1);hud()};
 }
 function confirmBox(title,body,yes,no,onYes){
   const el=$("osd");el.hidden=false;
@@ -1157,13 +1163,43 @@ const ENDS={
   sleep:"座った瞬間に意識が消えた。目を開けたら知らない駅。トークの未読だけが、今日の楽しさを覚えている。",
   dead:"画面が、静かに暗くなった。最後に見えたのは、ゆいの「ねえ」だった。"
 };
-function title(){const y=S.yoin;return y>=95?"余韻の化身":y>=80?"感想戦の主":y>=60?"ちゃんと帰れるオタク":"燃え尽きたオタク"}
+/* titles: first match wins */
+const TITLES=[
+ {id:"dead",name:"充電は推しに捧げた",hint:"電池ゼロで終わる",ok:k=>k==="dead"},
+ {id:"drink",name:"感想会の幹事",hint:"感想会に行く",ok:k=>k==="drink"},
+ {id:"giveup",name:"始発待ちの民",hint:"終電を諦める",ok:k=>k==="giveup"},
+ {id:"missed",name:"ホームの見送り係",hint:"終電を乗りそびれる",ok:k=>k==="missed"},
+ {id:"sleep",name:"終点の旅人",hint:"終点まで寝過ごす",ok:k=>k==="sleep"},
+ {id:"refused",name:"手渡しの壁",hint:"交換を断られたまま帰る",ok:k=>k==="noswap"&&S.swapFail},
+ {id:"noswap",name:"交換は次の現場で",hint:"交換しないまま帰る",ok:k=>k==="noswap"},
+ {id:"perfect",name:"完璧な帰り道",hint:"トレカ3枚・体力30以上・電池10%以上でクリア",ok:k=>k==="clear"&&S.cards===3&&S.tai>=30&&S.bat>=10},
+ {id:"allin",name:"感想戦も交換も全部やる人",hint:"ゆいと6回以上話してトレカ3枚クリア",ok:k=>k==="clear"&&S.cards===3&&(S.m.by.yui||0)>=6},
+ {id:"pro",name:"取引のプロ",hint:"ゆい・はるや・母に返信せずトレカ3枚クリア",ok:k=>k==="clear"&&S.cards===3&&!(S.m.by.yui||S.m.by.riku||S.m.by.mom)},
+ {id:"comp",name:"トレカ3枚コンプ",hint:"トレカ3枚でクリア",ok:k=>k==="clear"&&S.cards===3},
+ {id:"lasttrain",name:"終電の申し子",hint:"23:05以降に改札に入ってクリア",ok:k=>k==="clear"&&S.t>=23*60+5},
+ {id:"battery",name:"電池1桁の奇跡",hint:"電池3%以下でクリア",ok:k=>k==="clear"&&S.bat<=3},
+ {id:"willpower",name:"気力だけで立ってる",hint:"体力21以下でクリア",ok:k=>k==="clear"&&S.tai<=21},
+ {id:"runner",name:"改札まで全力疾走",hint:"2回以上走ってクリア",ok:k=>k==="clear"&&S.m.runs>=2},
+ {id:"family",name:"実家に優しいオタク",hint:"電話に2回出てクリア",ok:k=>k==="clear"&&S.m.calls>=2},
+ {id:"sneak",name:"規制退場に挑んだ人",hint:"規制退場を無視してクリア",ok:k=>k==="clear"&&S.sneaks>=1},
+ {id:"wet",name:"濡れても平気",hint:"雨に濡れながらクリア",ok:k=>k==="clear"&&S.m.wet},
+ {id:"board",name:"ウェルカムボード係",hint:"ウェルカムボードの写真を送ってクリア",ok:k=>k==="clear"&&S.m.board},
+ {id:"riku",name:"彼氏にも優しい",hint:"はるやに6回以上返信してクリア",ok:k=>k==="clear"&&(S.m.by.riku||0)>=6},
+ {id:"kidoku",name:"既読スルーの達人",hint:"5回以上追撃されてクリア",ok:k=>k==="clear"&&S.m.chased>=5},
+ {id:"yoin",name:"余韻の化身",hint:"余韻95以上でクリア",ok:k=>k==="clear"&&S.yoin>=95},
+ {id:"normal",name:"ちゃんと帰れるオタク",hint:"手渡し交換して終電で帰る",ok:k=>k==="clear"}
+];
+let titlesGot={};try{titlesGot=JSON.parse(localStorage.getItem("lkTitles")||"{}")}catch(e){}
+function pickTitle(kind){const t=TITLES.find(t=>t.ok(kind))||TITLES[TITLES.length-1];return t}
+function title(){return S.titleObj?S.titleObj.name:"ちゃんと帰れるオタク"}
 function where(){if(S.stage==="seat") return "座席";if(S.stage==="station") return "〇〇駅 東口";return S.pos<PLAZA?"会場前":"駅までの道"}
 function end(kind){
   if(!S||S.over) return;
   S.over=true;clearInterval(timer);
   ["call","osd","viewer","scene"].forEach(id=>$(id).hidden=true);$("pa").classList.remove("on");
   seen[kind]=1;try{localStorage.setItem("lkSeen2",JSON.stringify(seen))}catch(e){}
+  S.titleObj=pickTitle(kind);const newTitle=!titlesGot[S.titleObj.id];titlesGot[S.titleObj.id]=1;try{localStorage.setItem("lkTitles",JSON.stringify(titlesGot))}catch(e){}
+  S.newTitle=newTitle;
   const go=()=>{
     const el=$("result");el.hidden=false;
     const got=ENDKEYS.filter(k=>seen[k]).length;
@@ -1174,12 +1210,13 @@ function end(kind){
     <div class="pcard pink"><p class="lbl">今夜のこと</p><p class="end">${esc(fill(ENDS[kind]))}</p>
       <div class="checks"><div class="${okSwap?"ok":"ng"}"><b>${okSwap?"✓":"—"}</b>手渡し交換</div><div class="${okTrain?"ok":"ng"}"><b>${okTrain?"✓":"—"}</b>終電</div><div class="${okBat?"ok":"ng"}"><b>${okBat?"✓":"—"}</b>電池</div></div>
       <div class="cards"><b>${S.cards}</b><span>/ 3枚</span><small>集めた${esc(S.oshi)}のトレカ</small></div>
-      <div class="stampbox"><small>称号</small><b>${title()}</b></div></div>
+      <div class="stampbox"><small>称号${S.newTitle?"　NEW":""}</small><b>${title()}</b></div></div>
     <div class="pcard"><p class="lbl">きろく</p><dl class="kv"><dt>体力</dt><dd>${S.tai}</dd><dt>電池</dt><dd>${S.bat}%</dd>
     <dt>語った回数</dt><dd>${S.m.talk}</dd><dt>送った写真</dt><dd>${S.m.photo}枚</dd><dt>届いた通知</dt><dd>${S.m.notif}件</dd>
     <dt>出た電話 / 出なかった電話</dt><dd>${S.m.calls} / ${S.m.miss}</dd>
     <dt>追撃された回数</dt><dd>${S.m.chased}</dd><dt>規制退場を無視した回数</dt><dd>${S.sneaks}</dd></dl></div>
     <div class="pcard violet"><p class="lbl">見たエンディング ${got} / ${ENDKEYS.length}</p><div class="endmap">${ENDKEYS.map(k=>`<span class="${seen[k]?"got":""}${k==="clear"&&seen[k]?" clear":""}">${seen[k]?ENDNAME[k]:"？？？"}</span>`).join("")}</div></div>
+    <div class="pcard sky"><p class="lbl">集めた称号 ${TITLES.filter(t=>titlesGot[t.id]).length} / ${TITLES.length}</p><div class="endmap titles">${TITLES.map(t=>`<span class="${titlesGot[t.id]?"got":""}${t.id===S.titleObj.id?" clear":""}" title="${esc(t.hint)}">${titlesGot[t.id]?esc(t.name):"？？？"}</span>`).join("")}</div><p class="thint">「？？？」のヒント：${esc((pick(TITLES.filter(t=>!titlesGot[t.id]))||{hint:"ぜんぶ集めました！"}).hint)}</p></div>
     <button class="go" type="button" id="saveImg">結果を画像で保存</button>
     <button class="go sub" type="button" id="again">もう一度帰る</button>
     <p class="handnote">${kind==="clear"?(S.cards<3?"次は、トレカ3枚に挑戦してみて。":"トレカ3枚、完璧な帰り道。"):"次は、ちがう帰り道で。"}</p>
