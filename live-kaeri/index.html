@@ -1232,7 +1232,7 @@ function end(kind){
 
 
 /* ---------------- result image (share sheet) ---------------- */
-function wrapText(ctx,text,maxW){const lines=[];let cur="";for(const ch of text){if(ctx.measureText(cur+ch).width>maxW&&cur){lines.push(cur);cur=ch}else cur+=ch}if(cur)lines.push(cur);return lines}
+function wrapText(ctx,text,maxW){const lines=[];let cur="";for(const ch of text){if(ctx.measureText(cur+ch).width>maxW&&cur&&!"。、！？」）ー…".includes(ch)){lines.push(cur);cur=ch}else cur+=ch}if(cur)lines.push(cur);return lines}
 async function makeResultImage(R){
   try{if(document.fonts){await Promise.all([document.fonts.load('900 80px "Zen Kaku Gothic New"'),document.fonts.load('700 36px "Zen Kaku Gothic New"'),document.fonts.load('600 40px "Klee One"')]);}}catch(e){}
   const W=1080,H=1350,c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");
@@ -1262,7 +1262,7 @@ async function makeResultImage(R){
   const ky=by+165;x.fillStyle=INK;x.fillRect(cx+46,ky+6,330,140);x.fillStyle=VIOLET;x.fillRect(cx+40,ky,330,140);x.strokeStyle=INK;x.lineWidth=3;x.strokeRect(cx+40,ky,330,140);
   x.fillStyle=INK;x.font="900 72px "+G;x.fillText(String(R.cards),cx+64,ky+80);x.font="700 34px "+G;x.fillText("/ 3枚",cx+64+x.measureText(String(R.cards)).width+40,ky+78);
   x.font="500 24px "+G;x.fillStyle=MUTED;x.fillText("集めた推しのトレカ",cx+64,ky+120);
-  x.save();x.translate(cx+430,ky+14);x.rotate(-2*Math.PI/180);x.fillStyle=PAPER;x.fillRect(0,0,cw-470,112);x.strokeStyle=INK;x.lineWidth=3;x.strokeRect(0,0,cw-470,112);x.fillStyle=MUTED;x.font="700 22px "+G;x.fillText("称号",20,36);x.fillStyle=INK;x.font="600 42px "+HAND;x.fillText(R.title,20,88);x.restore();
+  x.save();x.translate(cx+430,ky+14);x.rotate(-2*Math.PI/180);x.fillStyle=PAPER;x.fillRect(0,0,cw-470,112);x.strokeStyle=INK;x.lineWidth=3;x.strokeRect(0,0,cw-470,112);x.fillStyle=MUTED;x.font="700 22px "+G;x.fillText("称号",20,36);x.fillStyle=INK;let tf=42;x.font="600 "+tf+"px "+HAND;while(x.measureText(R.title).width>cw-510&&tf>24){tf-=2;x.font="600 "+tf+"px "+HAND}x.fillText(R.title,20,88);x.restore();
   // stats row
   const sy=ky+200;x.strokeStyle="#d5d1d9";x.lineWidth=2;x.setLineDash([8,8]);x.beginPath();x.moveTo(cx+40,sy-30);x.lineTo(cx+cw-40,sy-30);x.stroke();x.setLineDash([]);
   const st=[["語った回数",R.talk+"回"],["送った写真",R.photo+"枚"],["追撃された",R.chased+"回"],["残りの電池",R.bat+"%"]];const sw=(cw-80)/4;
