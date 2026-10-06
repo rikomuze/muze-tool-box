@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>ライブ帰りシミュレーター｜PLAY ROOM</title>
+  <title>ライブ帰りシミュレーター｜MUZE PLAY ROOM</title>
   <meta name="description" content="規制退場から終電まで。手渡しのトレカ交換を済ませて、電池を残したまま終電に乗れるか。チャットで遊ぶライブ帰りシミュレーター。">
   <meta name="robots" content="noindex">
   <meta name="theme-color" content="#f7f5ed">
@@ -292,6 +292,10 @@ button:focus-visible,a:focus-visible{outline:3px solid #8051bd;outline-offset:2p
 .endmap span{font-size:12px;border:1px dashed var(--pline);border-radius:30px;padding:1px 10px;color:var(--pmuted)}
 .endmap span.got{border:1px solid var(--ink);background:var(--violet);color:var(--ink);font-weight:700}
 .endmap span.got.clear{background:var(--lime)}
+.endmap.titles span.got{background:var(--sky)}
+.endmap.titles span.got.clear{background:var(--lime)}
+.thint{margin:0;font-size:12px;color:var(--pmuted)}
+.stampbox small{white-space:pre}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -316,7 +320,7 @@ button:focus-visible,a:focus-visible{outline:3px solid #8051bd;outline-offset:2p
     <div class="arow"><div class="stage" id="stage"><b>いま</b><span>座席で待機中</span></div><span id="acts"></span></div>
   </div>
   <div class="phone">
-  <div class="sbar" id="sbar"><span id="clk">21:34</span><span class="r"><span>4G</span><span class="bat" id="bat"><span id="batp">26%</span><i><b id="batb"></b></i></span></span></div>
+  <div class="sbar" id="sbar"><span id="clk">21:34</span><span class="r"><span>4G</span><span class="bat" id="bat"><span id="batp">22%</span><i><b id="batb"></b></i></span></span></div>
   <div class="view" id="view"></div>
   </div>
   <button class="pa" id="pa" type="button" aria-live="polite"><i id="paI"></i><b id="paT">場内アナウンス</b><span id="paX"></span></button>
@@ -351,8 +355,8 @@ const TH={
   zemi:{name:"ゼミ 3年",n:9,col:"#b2b7c2",ini:"ゼ",static:true}
 };
 const ORDER=["yui","riku","swap","photo","mio","group","mom","info","baito","zemi"];
-const ENDKEYS=["clear","missed","giveup","noswap","sleep","dead"];
-const ENDNAME={clear:"最高の帰り道",missed:"終電を乗りそびれた",giveup:"終電を諦めた",noswap:"交換できなかった",sleep:"終点まで寝過ごした",dead:"電池ゼロ"};
+const ENDKEYS=["clear","drink","missed","giveup","noswap","sleep","dead"];
+const ENDNAME={clear:"最高の帰り道",drink:"駅前で感想会",missed:"終電を乗りそびれた",giveup:"終電を諦めた",noswap:"交換できなかった",sleep:"終点まで寝過ごした",dead:"電池ゼロ"};
 const BLOCKS=["スタンド南","スタンドE","スタンド北","バルコニー"];
 let seen={};try{seen=JSON.parse(localStorage.getItem("lkSeen2")||"{}")}catch(e){}
 
@@ -364,15 +368,15 @@ function fresh(oshi){
   th.baito.last="みさき: ごめんなさい無理です🙏";th.baito.lastT=20*60+43;
   th.zemi.msgs=[{k:"them",who:"佐藤",x:"来週のレジュメ共有しました",t:19*60+15}];
   th.zemi.last="佐藤: 来週のレジュメ共有しました";th.zemi.lastT=19*60+15;
-  return {oshi,t:START,acc:0,yoin:70,tai:60,bat:26,lp:false,view:"list",
+  return {oshi,t:START,acc:0,yoin:70,tai:42,bat:22,lp:false,view:"list",
     th,fired:{},over:false,idle:0,chase:0,ridle:0,rchase:0,
-    block:pick(BLOCKS),releaseAt:START+rnd(12,19),released:false,stage:"seat",sneaks:0,crowdUntil:0,
+    block:pick(BLOCKS),releaseAt:START+rnd(12,17),released:false,stage:"seat",sneaks:0,crowdUntil:0,
     pos:0,hold:null,
     raining:false,umbrella:false,
     yuiBeats:shuffle(YUI).slice(0,6),groupDone:0,
     swap:0,swapDone:false,swapFail:false,searchTries:0,
     photo:0,rin:0,cards:0,drink:0,pickup:false,posts:0,
-    rq:[],rAsking:false,rinPing:false,yuiWait:false,m:{talk:0,photo:0,notif:0,calls:0,miss:0,chased:0,postSeen:0},batPrompted:false,callOn:false,boarded:false};
+    rq:[],rAsking:false,rinPing:false,yuiWait:false,m:{talk:0,photo:0,notif:0,calls:0,miss:0,chased:0,postSeen:0,runs:0,wet:0,board:0,by:{}},batPrompted:false,callOn:false,boarded:false};
 }
 const atStation=()=>S.stage==="station";
 
@@ -447,10 +451,10 @@ function startClock(){
 function speed(){let v=S.t<S.crowdUntil?40:80;if(S.raining&&!S.umbrella&&!atStation()) v=Math.round(v*.7);return v}
 function minute(){
   S.t++;const n=S.t-START;
-  if(n%(S.lp?8:4)===0) setBat(S.bat-1);
+  if(n%(S.lp?6:4)===0) setBat(S.bat-1);
   if(S.over) return;
-  if(n%6===0) change("tai",-1);
-  if(S.raining&&!S.umbrella&&S.stage==="walk"&&n%3===0) change("tai",-1);
+  if(n%5===0) change("tai",-1);
+  if(S.raining&&!S.umbrella&&S.stage==="walk"){S.m.wet=1;if(n%3===0) change("tai",-1)}
   if(S.stage==="walk"&&!S.hold) walk(speed());
   runEvents();
   if(S.over) return;
@@ -503,7 +507,7 @@ const EV=[
  {at:()=>S.releaseAt-2, f:()=>pa("駅が大変混雑しております。お帰りの際は、時間に余裕を持ってご移動ください。")},
  {at:()=>S.releaseAt, f:()=>{pa(S.block+"の方、ご退場ください。お忘れ物のないようご注意ください。");release()}},
  {at:()=>21*60+41, f:()=>rikuHello()},
- {at:()=>21*60+58, f:()=>photoAsk()},
+ {at:()=>21*60+52, f:()=>photoAsk()},
  {at:()=>22*60+1, f:()=>momCall()},
  {at:()=>21*60+50, f:()=>rikuDinner()},
  {at:()=>21*60+58, f:()=>info("雨雲レーダー","30分後に雨が降り出す予報です（現在地周辺）",true)},
@@ -576,6 +580,8 @@ function setPending(th,choices,onPick){S.th[th].pending={choices:shuffle(choices
 function answer(th,c){
   const T=S.th[th];if(!T.pending) return;
   const p=T.pending;T.pending=null;
+  if(!p.end) S.m.by[th]=(S.m.by[th]||0)+1;
+  if(c.photo==="board") S.m.board=1;
   if(c.photo){S.m.photo++;me(th,{photo:c.photo})}
   else if(c.stamp) me(th,{stamp:c.stamp});
   else me(th,{x:fill(c.t)});
@@ -611,25 +617,14 @@ function drinkInvite(){
   if(S.drink||S.t>22*60+44) return;
   if(openQ("group")||S.th.group.busy||S.hold){later(drinkInvite,3000);return}
   S.drink=1;
-  them("group",[["あや","駅着いた！"],["あや","ねえ、駅前で1杯だけ飲んでかない？"],["りん","感想戦第二部しよ🍻"]],{then:()=>setPending("group",[
-    {t:"1杯だけなら！",k:"one",cost:"約25分かかる"},
-    {t:"終電諦めて朝まで語ろう",k:"all"},
+  them("group",[["あや","駅着いた！"],["あや","ねえ、駅前で感想会しない？"],["りん","居酒屋あいてるよ🍻"]],{then:()=>setPending("group",[
+    {t:"行く！感想会しよ",k:"go",cost:"終電は諦めることになる"},
+    ACT({t:"(乾杯のスタンプ)",stamp:["🍻","乾杯するくま"],k:"go",cost:"終電は諦めることになる"}),
     {t:"今日は帰る！また誘って",k:"no"}
   ],c=>{
-    if(c.k==="no"){S.drink=-1;later(()=>them("group",[["あや","了解〜！気をつけて"],["りん","次は飲も"]]),400);return}
-    if(c.k==="all"){later(()=>them("group",[["あや","そうこなくちゃ"],["りん","始発まで語るぞ"]],{then:()=>later(()=>end("giveup"),1500)}),400);return}
+    if(c.k==="no"){S.drink=-1;later(()=>them("group",[["あや","了解〜！気をつけて"],["りん","次は飲も"]],{then:()=>endStamp("group",[ACT({t:"(手を振るスタンプ)",stamp:["👋","手をふるくま"]}),{t:"またね！"}])}),400);return}
     S.drink=2;S.hold="drink";hud();
-    later(()=>{
-      them("group",[["あや","やった！駅前の居酒屋いるね"]],{then:()=>{
-        sys("group","駅前の居酒屋で乾杯した🍻");
-        addTime(12);change("yoin",10);change("tai",-4);
-        if(S.over) return;
-        sys("group","感想戦第二部。最後の曲の話だけで20分経った");
-        addTime(12);change("yoin",8);change("tai",-4);setBat(S.bat-2);
-        if(S.over) return;
-        them("group",[["りん","やば、もうこんな時間"],["あや","解散しよ！楽しかった〜"]],{then:()=>{sys("group","店を出た");S.hold=null;S.drink=3;hud()}});
-      }});
-    },400);
+    later(()=>them("group",[["あや","やった！"],["りん","駅前の居酒屋いるね"],["あや","今日は語り尽くすぞ"]],{then:()=>later(()=>end("drink"),1500)}),400);
   })});
 }
 /* ---------------- riku ---------------- */
@@ -837,8 +832,8 @@ function photoAsk(){
   })});
 }
 function photoCost(){
-  if(S.stage==="seat") return "会場を出たら広場に寄る（相手を待つ時間あり）";
-  const back=Math.max(0,S.pos-PLAZA);const m=Math.round(back/80)+(S.stage==="station"?Math.round((DIST-PLAZA)/80):0)+9;
+  if(S.stage==="seat"||S.pos<=PLAZA) return "通り道の広場で交換（約9分ロス）";
+  const back=Math.max(0,S.pos-PLAZA);const m=Math.round(back/80)*(S.stage==="station"?1:2)+9;
   return "広場まで引き返す（合計 約"+m+"分ロス）";
 }
 function photoGo(){
@@ -893,7 +888,7 @@ function rainPrompt(){
   const el=$("osd");el.hidden=false;
   el.innerHTML=`<div class="osbox" role="dialog" aria-label="雨"><div class="in"><b>雨が降ってきた</b><p>駅まではまだ距離がある。傘はない。</p></div><div class="bt v"><button type="button" id="r1">コンビニで傘を買う（3分）</button><button type="button" id="r2">走る（体力 -6）</button><button type="button" id="r3">濡れながら歩く（遅くなる）</button></div></div>`;
   $("r1").onclick=()=>{el.hidden=true;S.umbrella=true;addTime(3);hud()};
-  $("r2").onclick=()=>{el.hidden=true;change("tai",-6);walk(350);hud()};
+  $("r2").onclick=()=>{el.hidden=true;S.m.runs++;change("tai",-6);walk(350);hud()};
   $("r3").onclick=()=>{el.hidden=true;hud()};
 }
 function officialPost(title,n){
@@ -933,7 +928,7 @@ function incoming(th,o){
   S.callOn=true;
   const el=$("call");el.hidden=false;el.classList.remove("live");
   let decided=false;
-  el.innerHTML=`<div><div class="av" style="background:${TH[th].col}">${TH[th].ini}</div><h3>${esc(TH[th].name)}</h3><p>音声通話の着信（出ると電池 -3）</p></div><div class="subs"></div>
+  el.innerHTML=`<div><div class="av" style="background:${TH[th].col}">${TH[th].ini}</div><h3>${esc(TH[th].name)}</h3><p>音声通話の着信（出ると電池 -4）</p></div><div class="subs"></div>
   <div class="cbtns"><button class="cb no" id="cNo" type="button"><i>✕</i>拒否</button><button class="cb yes" id="cYes" type="button"><i>✆</i>応答</button></div>`;
   const decline=missed=>{
     if(decided)return;decided=true;el.hidden=true;S.callOn=false;
@@ -952,7 +947,7 @@ function incoming(th,o){
     const next=()=>{
       if(i>=o.lines.length){
         clearInterval(tick);
-        later(()=>{el.hidden=true;S.callOn=false;line(th,{k:"call",x:"通話時間 "+Math.floor(sec/60)+":"+String(sec%60).padStart(2,"0")});S.th[th].last="通話が終了しました";setBat(S.bat-3);if(S.over)return;addTime(3);o.onEnd&&o.onEnd();render()},700);
+        later(()=>{el.hidden=true;S.callOn=false;line(th,{k:"call",x:"通話時間 "+Math.floor(sec/60)+":"+String(sec%60).padStart(2,"0")});S.th[th].last="通話が終了しました";setBat(S.bat-4);if(S.over)return;addTime(3);o.onEnd&&o.onEnd();render()},700);
         return;
       }
       const d=document.createElement("div");d.className="s";d.textContent=fill(o.lines[i++]);subs.appendChild(d);
@@ -1025,8 +1020,8 @@ function alerts(){
   if(S.swapFail) A.push({lv:2,x:"トレカ交換は断られた",th:"swap"});
   if(S.bat<=10) A.push({lv:3,x:"電池残り"+S.bat+"%。写真や電話は控えて",th:null});
   else if(S.bat<=20) A.push({lv:2,x:"電池残り"+S.bat+"%",th:null});
-  if(S.tai<=15) A.push({lv:3,x:"体力が限界。座ったら寝過ごすかも",th:null});
-  else if(S.tai<=30) A.push({lv:2,x:"体力が減ってきた",th:null});
+  if(S.tai<20) A.push({lv:3,x:"体力が限界。このまま座ると寝過ごす",th:null});
+  else if(S.tai<=28) A.push({lv:2,x:"体力が減ってきた（20を切ると寝過ごす）",th:null});
   if(S.raining&&!S.umbrella&&S.stage==="walk") A.push({lv:2,x:"雨に濡れて、体力が減り続けている",th:null});
   if(S.photo===1) A.push({lv:1,x:"ももさんが広場で返事を待っている",th:"photo"});
   if(S.rin===2&&S.t<22*60+50) A.push(S.rinPing&&!S.hold?{lv:2,x:"駅に着いた。みおにスタンプで知らせよう",th:"mio"}:{lv:1,x:"みおが改札前で22:50まで待っている",th:"mio"});
@@ -1045,7 +1040,7 @@ function pinch(){
   el.dataset.th=top&&top.th?top.th:"";
   const s=$("vS");const v=S.slack;
   s.textContent=v<=0?"間に合わない":"余裕 "+v+"分";s.className=v<=10?"crit":v<=20?"warn":"";
-  $("tWarn").textContent=S.tai<=15?"限界":S.tai<=30?"ピンチ":"";
+  $("tWarn").textContent=S.tai<20?"限界":S.tai<=28?"ピンチ":"";
 }
 function drawPlist(){
   const el=$("plist");if(el.hidden||!S) return;
@@ -1059,7 +1054,7 @@ function hud(){
   if(!S) return;
   $("clk").textContent=fmt(S.t);
   $("vY").textContent=S.yoin;$("bY").style.width=S.yoin+"%";$("bY").style.background="var(--pink)";
-  $("vT").textContent=S.tai;$("bT").style.width=S.tai+"%";$("bT").style.background=S.tai>30?"var(--lime)":S.tai>15?"#ffe08a":"var(--hot)";
+  $("vT").textContent=S.tai;$("bT").style.width=S.tai+"%";$("bT").style.background=S.tai>28?"var(--lime)":S.tai>=20?"#ffe08a":"var(--hot)";
   $("vL").textContent="あと"+Math.max(0,LAST-S.t)+"分";
   $("batp").textContent=S.bat+"%";$("batb").style.width=Math.max(2,S.bat/100*19)+"px";
   $("bat").classList.toggle("low",S.bat<=20&&!S.lp);$("bat").classList.toggle("lp",S.lp);
@@ -1083,7 +1078,7 @@ function hud(){
   if($("aLeave")) $("aLeave").onclick=leaveVenue;
   if($("aSneak")) $("aSneak").onclick=()=>confirmBox("こっそり先に出る？","まだあなたのブロックは呼ばれていない。","出てみる","やめておく",leaveVenue);
   if($("aGate")) $("aGate").onclick=gate;
-  if($("aRun")) $("aRun").onclick=()=>{if(S.stage!=="walk"||S.hold)return;change("tai",-5);walk(250);if(S.stage==="walk")addTime(1);hud()};
+  if($("aRun")) $("aRun").onclick=()=>{if(S.stage!=="walk"||S.hold)return;S.m.runs++;change("tai",-5);walk(250);if(S.stage==="walk")addTime(1);hud()};
 }
 function confirmBox(title,body,yes,no,onYes){
   const el=$("osd");el.hidden=false;
@@ -1155,25 +1150,56 @@ function gate(){
   confirmBox("改札に入りますか？",warn,"入る","まだ",()=>{
     S.boarded=true;
     if(!S.swapDone) end("noswap");
-    else if(S.tai<12) end("sleep");
+    else if(S.tai<20) end("sleep");
     else end("clear");
   });
 }
 const ENDS={
   clear:"終電の扉が閉まる。手の中には{oshi}のトレカ。電池はまだ残っていて、ゆいからの通知が止まらない。",
   missed:"23:12。ホームに着いたとき、最終電車の赤いランプが遠ざかっていった。",
+  drink:"駅前の居酒屋で、感想会が始まった。終電の時間はとっくに過ぎて、話はまだ1曲目のイントロ。今日はこのまま朝まで。",
   giveup:"終電の時間を過ぎても、話はまだ2曲目にも辿り着いていない。始発まで、あと5時間。",
   noswap:"改札を抜けて、電車に揺られる。カバンの中のトレカは、交換されないままだった。",
   sleep:"座った瞬間に意識が消えた。目を開けたら知らない駅。トークの未読だけが、今日の楽しさを覚えている。",
   dead:"画面が、静かに暗くなった。最後に見えたのは、ゆいの「ねえ」だった。"
 };
-function title(){const y=S.yoin;return y>=95?"余韻の化身":y>=80?"感想戦の主":y>=60?"ちゃんと帰れるオタク":"燃え尽きたオタク"}
+/* titles: first match wins */
+const TITLES=[
+ {id:"dead",name:"充電は推しに捧げた",hint:"電池ゼロで終わる",ok:k=>k==="dead"},
+ {id:"drink",name:"感想会の幹事",hint:"感想会に行く",ok:k=>k==="drink"},
+ {id:"giveup",name:"始発待ちの民",hint:"終電を諦める",ok:k=>k==="giveup"},
+ {id:"missed",name:"ホームの見送り係",hint:"終電を乗りそびれる",ok:k=>k==="missed"},
+ {id:"sleep",name:"終点の旅人",hint:"終点まで寝過ごす",ok:k=>k==="sleep"},
+ {id:"refused",name:"手渡しの壁",hint:"交換を断られたまま帰る",ok:k=>k==="noswap"&&S.swapFail},
+ {id:"noswap",name:"交換は次の現場で",hint:"交換しないまま帰る",ok:k=>k==="noswap"},
+ {id:"perfect",name:"完璧な帰り道",hint:"トレカ3枚・体力30以上・電池10%以上でクリア",ok:k=>k==="clear"&&S.cards===3&&S.tai>=30&&S.bat>=10},
+ {id:"allin",name:"感想戦も交換も全部やる人",hint:"ゆいと6回以上話してトレカ3枚クリア",ok:k=>k==="clear"&&S.cards===3&&(S.m.by.yui||0)>=6},
+ {id:"pro",name:"取引のプロ",hint:"ゆい・はるや・母に返信せずトレカ3枚クリア",ok:k=>k==="clear"&&S.cards===3&&!(S.m.by.yui||S.m.by.riku||S.m.by.mom)},
+ {id:"comp",name:"トレカ3枚コンプ",hint:"トレカ3枚でクリア",ok:k=>k==="clear"&&S.cards===3},
+ {id:"lasttrain",name:"終電の申し子",hint:"23:05以降に改札に入ってクリア",ok:k=>k==="clear"&&S.t>=23*60+5},
+ {id:"battery",name:"電池1桁の奇跡",hint:"電池3%以下でクリア",ok:k=>k==="clear"&&S.bat<=3},
+ {id:"willpower",name:"気力だけで立ってる",hint:"体力21以下でクリア",ok:k=>k==="clear"&&S.tai<=21},
+ {id:"runner",name:"改札まで全力疾走",hint:"2回以上走ってクリア",ok:k=>k==="clear"&&S.m.runs>=2},
+ {id:"family",name:"実家に優しいオタク",hint:"電話に2回出てクリア",ok:k=>k==="clear"&&S.m.calls>=2},
+ {id:"sneak",name:"規制退場に挑んだ人",hint:"規制退場を無視してクリア",ok:k=>k==="clear"&&S.sneaks>=1},
+ {id:"wet",name:"濡れても平気",hint:"雨に濡れながらクリア",ok:k=>k==="clear"&&S.m.wet},
+ {id:"board",name:"ウェルカムボード係",hint:"ウェルカムボードの写真を送ってクリア",ok:k=>k==="clear"&&S.m.board},
+ {id:"riku",name:"彼氏にも優しい",hint:"はるやに6回以上返信してクリア",ok:k=>k==="clear"&&(S.m.by.riku||0)>=6},
+ {id:"kidoku",name:"既読スルーの達人",hint:"5回以上追撃されてクリア",ok:k=>k==="clear"&&S.m.chased>=5},
+ {id:"yoin",name:"余韻の化身",hint:"余韻95以上でクリア",ok:k=>k==="clear"&&S.yoin>=95},
+ {id:"normal",name:"ちゃんと帰れるオタク",hint:"手渡し交換して終電で帰る",ok:k=>k==="clear"}
+];
+let titlesGot={};try{titlesGot=JSON.parse(localStorage.getItem("lkTitles")||"{}")}catch(e){}
+function pickTitle(kind){const t=TITLES.find(t=>t.ok(kind))||TITLES[TITLES.length-1];return t}
+function title(){return S.titleObj?S.titleObj.name:"ちゃんと帰れるオタク"}
 function where(){if(S.stage==="seat") return "座席";if(S.stage==="station") return "〇〇駅 東口";return S.pos<PLAZA?"会場前":"駅までの道"}
 function end(kind){
   if(!S||S.over) return;
   S.over=true;clearInterval(timer);
   ["call","osd","viewer","scene"].forEach(id=>$(id).hidden=true);$("pa").classList.remove("on");
   seen[kind]=1;try{localStorage.setItem("lkSeen2",JSON.stringify(seen))}catch(e){}
+  S.titleObj=pickTitle(kind);const newTitle=!titlesGot[S.titleObj.id];titlesGot[S.titleObj.id]=1;try{localStorage.setItem("lkTitles",JSON.stringify(titlesGot))}catch(e){}
+  S.newTitle=newTitle;
   const go=()=>{
     const el=$("result");el.hidden=false;
     const got=ENDKEYS.filter(k=>seen[k]).length;
@@ -1184,12 +1210,13 @@ function end(kind){
     <div class="pcard pink"><p class="lbl">今夜のこと</p><p class="end">${esc(fill(ENDS[kind]))}</p>
       <div class="checks"><div class="${okSwap?"ok":"ng"}"><b>${okSwap?"✓":"—"}</b>手渡し交換</div><div class="${okTrain?"ok":"ng"}"><b>${okTrain?"✓":"—"}</b>終電</div><div class="${okBat?"ok":"ng"}"><b>${okBat?"✓":"—"}</b>電池</div></div>
       <div class="cards"><b>${S.cards}</b><span>/ 3枚</span><small>集めた${esc(S.oshi)}のトレカ</small></div>
-      <div class="stampbox"><small>称号</small><b>${title()}</b></div></div>
+      <div class="stampbox"><small>称号${S.newTitle?"　NEW":""}</small><b>${title()}</b></div></div>
     <div class="pcard"><p class="lbl">きろく</p><dl class="kv"><dt>体力</dt><dd>${S.tai}</dd><dt>電池</dt><dd>${S.bat}%</dd>
     <dt>語った回数</dt><dd>${S.m.talk}</dd><dt>送った写真</dt><dd>${S.m.photo}枚</dd><dt>届いた通知</dt><dd>${S.m.notif}件</dd>
     <dt>出た電話 / 出なかった電話</dt><dd>${S.m.calls} / ${S.m.miss}</dd>
     <dt>追撃された回数</dt><dd>${S.m.chased}</dd><dt>規制退場を無視した回数</dt><dd>${S.sneaks}</dd></dl></div>
     <div class="pcard violet"><p class="lbl">見たエンディング ${got} / ${ENDKEYS.length}</p><div class="endmap">${ENDKEYS.map(k=>`<span class="${seen[k]?"got":""}${k==="clear"&&seen[k]?" clear":""}">${seen[k]?ENDNAME[k]:"？？？"}</span>`).join("")}</div></div>
+    <div class="pcard sky"><p class="lbl">集めた称号 ${TITLES.filter(t=>titlesGot[t.id]).length} / ${TITLES.length}</p><div class="endmap titles">${TITLES.map(t=>`<span class="${titlesGot[t.id]?"got":""}${t.id===S.titleObj.id?" clear":""}" title="${esc(t.hint)}">${titlesGot[t.id]?esc(t.name):"？？？"}</span>`).join("")}</div><p class="thint">「？？？」のヒント：${esc((pick(TITLES.filter(t=>!titlesGot[t.id]))||{hint:"ぜんぶ集めました！"}).hint)}</p></div>
     <button class="go" type="button" id="saveImg">結果を画像で保存</button>
     <button class="go sub" type="button" id="again">もう一度帰る</button>
     <p class="handnote">${kind==="clear"?(S.cards<3?"次は、トレカ3枚に挑戦してみて。":"トレカ3枚、完璧な帰り道。"):"次は、ちがう帰り道で。"}</p>
@@ -1205,7 +1232,7 @@ function end(kind){
 
 
 /* ---------------- result image (share sheet) ---------------- */
-function wrapText(ctx,text,maxW){const lines=[];let cur="";for(const ch of text){if(ctx.measureText(cur+ch).width>maxW&&cur){lines.push(cur);cur=ch}else cur+=ch}if(cur)lines.push(cur);return lines}
+function wrapText(ctx,text,maxW){const lines=[];let cur="";for(const ch of text){if(ctx.measureText(cur+ch).width>maxW&&cur&&!"。、！？」）ー…".includes(ch)){lines.push(cur);cur=ch}else cur+=ch}if(cur)lines.push(cur);return lines}
 async function makeResultImage(R){
   try{if(document.fonts){await Promise.all([document.fonts.load('900 80px "Zen Kaku Gothic New"'),document.fonts.load('700 36px "Zen Kaku Gothic New"'),document.fonts.load('600 40px "Klee One"')]);}}catch(e){}
   const W=1080,H=1350,c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");
@@ -1213,7 +1240,7 @@ async function makeResultImage(R){
   const G='"Zen Kaku Gothic New","Hiragino Sans",sans-serif',HAND='"Klee One","Hiragino Sans",sans-serif';
   x.fillStyle=PAPER;x.fillRect(0,0,W,H);
   x.fillStyle=INK;x.font="700 34px "+G;x.textBaseline="alphabetic";x.fillText("ライブ帰りシミュレーター",80,110);
-  x.textAlign="right";x.font="600 32px "+HAND;x.fillText("ENDING "+R.got+" / 6",W-80,110);x.textAlign="left";
+  x.textAlign="right";x.font="600 32px "+HAND;x.fillText("ENDING "+R.got+" / "+ENDKEYS.length,W-80,110);x.textAlign="left";
   x.strokeStyle="#d5d1d9";x.lineWidth=2;x.setLineDash([]);x.beginPath();x.moveTo(80,140);x.lineTo(W-80,140);x.stroke();
   // tag
   x.save();x.translate(80,215);x.rotate(-3*Math.PI/180);x.font="700 30px "+G;const tag=R.kind==="clear"?"CLEAR":"ENDING "+R.no;const tw=x.measureText(tag).width;x.fillStyle=INK;x.fillRect(0,-36,tw+36,50);x.fillStyle=PAPER;x.fillText(tag,18,0);x.restore();
@@ -1235,7 +1262,7 @@ async function makeResultImage(R){
   const ky=by+165;x.fillStyle=INK;x.fillRect(cx+46,ky+6,330,140);x.fillStyle=VIOLET;x.fillRect(cx+40,ky,330,140);x.strokeStyle=INK;x.lineWidth=3;x.strokeRect(cx+40,ky,330,140);
   x.fillStyle=INK;x.font="900 72px "+G;x.fillText(String(R.cards),cx+64,ky+80);x.font="700 34px "+G;x.fillText("/ 3枚",cx+64+x.measureText(String(R.cards)).width+40,ky+78);
   x.font="500 24px "+G;x.fillStyle=MUTED;x.fillText("集めた推しのトレカ",cx+64,ky+120);
-  x.save();x.translate(cx+430,ky+14);x.rotate(-2*Math.PI/180);x.fillStyle=PAPER;x.fillRect(0,0,cw-470,112);x.strokeStyle=INK;x.lineWidth=3;x.strokeRect(0,0,cw-470,112);x.fillStyle=MUTED;x.font="700 22px "+G;x.fillText("称号",20,36);x.fillStyle=INK;x.font="600 42px "+HAND;x.fillText(R.title,20,88);x.restore();
+  x.save();x.translate(cx+430,ky+14);x.rotate(-2*Math.PI/180);x.fillStyle=PAPER;x.fillRect(0,0,cw-470,112);x.strokeStyle=INK;x.lineWidth=3;x.strokeRect(0,0,cw-470,112);x.fillStyle=MUTED;x.font="700 22px "+G;x.fillText("称号",20,36);x.fillStyle=INK;let tf=42;x.font="600 "+tf+"px "+HAND;while(x.measureText(R.title).width>cw-510&&tf>24){tf-=2;x.font="600 "+tf+"px "+HAND}x.fillText(R.title,20,88);x.restore();
   // stats row
   const sy=ky+200;x.strokeStyle="#d5d1d9";x.lineWidth=2;x.setLineDash([8,8]);x.beginPath();x.moveTo(cx+40,sy-30);x.lineTo(cx+cw-40,sy-30);x.stroke();x.setLineDash([]);
   const st=[["語った回数",R.talk+"回"],["送った写真",R.photo+"枚"],["追撃された",R.chased+"回"],["残りの電池",R.bat+"%"]];const sw=(cw-80)/4;
@@ -1269,7 +1296,7 @@ function showIntro(){
   ["result","call","osd","viewer","scene"].forEach(id=>$(id).hidden=true);$("osd").className="ov osd";
   $("view").innerHTML="";
   const el=$("intro");el.hidden=false;
-  el.innerHTML=`<div class="pnav"><span>ライブ帰りシミュレーター</span><span>エンディング6種</span></div>
+  el.innerHTML=`<div class="pnav"><span>ライブ帰りシミュレーター</span><span>エンディング7種</span></div>
   <header class="hero"><div><p class="tag">CHAT GAME</p><h1>ライブ<span>帰り</span>シミュレーター</h1><p class="note">終電まで、あと98分。</p></div><p class="ticket">LAST TRAIN<strong>23:12</strong></p></header>
   <div class="pcard pink"><p class="lbl">21:34</p><p class="story">最後の曲の余韻が、まだ耳に残っている。規制退場の<em>アナウンス待ち</em>。手渡しのトレカ交換が<em>1件</em>残っていて、終電は<em>23:12</em>。<br>スマホが、震えた。</p></div>
   <div class="pcard sky"><p class="lbl">ゴール</p><p class="goal"><em>手渡しでトレカ交換</em>して、<em>電池を残したまま</em>、<em>終電に乗る</em>。</p><p class="story" style="font-size:13px;color:var(--pmuted)">寄り道すれば、推しのトレカは最大3枚まで集められる。</p></div>
