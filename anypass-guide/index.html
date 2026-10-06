@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex"><title>MUZEのための AnyPASS GUIDE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--desk:#f1ebe1;--paper:#fff;--ink:#40382f;--sub:#83796d;--pink:#e28aa1;--mint:#a4c5af;--yellow:#f2d77c;--lav:#c8b8df;--red:#b94b55;--hand:"Klee One","Yu Gothic",cursive;--goth:"Zen Kaku Gothic New","Hiragino Sans",sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(rgba(64,56,47,.045) 1px,transparent 1px) 0 0/22px 22px,var(--desk);color:var(--ink);font-family:var(--goth);line-height:1.8}.wrap{max-width:720px;margin:auto;padding:0 16px 70px}
+nav{max-width:720px;margin:auto;padding:12px 16px 0}.navin{background:#ffffffc7;border:1px solid #40382f24;padding:9px 11px;display:flex;justify-content:space-between;gap:12px;font-size:12px;font-weight:700}.navin a{color:inherit;text-decoration:none;border-bottom:1px dashed #777}
+.hero{text-align:center;padding:44px 4px 28px}.eyebrow{font-size:11px;letter-spacing:.18em;color:var(--sub);font-weight:700}.hero h1{font-family:var(--hand);font-size:clamp(30px,8vw,48px);line-height:1.25;margin:9px 0}.hero h1 span{display:inline-block;border-bottom:8px solid rgba(226,138,161,.42);line-height:.75}.hero p{font-size:13px;color:var(--sub)}
+.paper{background:var(--paper);padding:22px 18px;margin:18px 0;box-shadow:0 8px 20px #40382f18;position:relative}.paper.tape:before{content:"";position:absolute;width:68px;height:18px;background:#e28aa1aa;top:-9px;left:50%;transform:translateX(-50%) rotate(-2deg)}
+h2{font-family:var(--hand);font-size:23px;margin:38px 0 14px}h3{font-size:16px;margin:24px 0 8px}.lead{font-weight:700}.alert,.tip{padding:14px 15px;margin:15px 0;border-left:4px solid var(--pink);background:#fff8fa;font-size:13px}.tip{border-color:var(--mint);background:#f6fbf8}.alert strong,.tip strong{display:block;margin-bottom:3px}
+label{display:block;font-size:12px;font-weight:700;margin:14px 0 5px}.select,select{width:100%;font:inherit;color:var(--ink);background:#fff;border:1.5px solid #40382f55;padding:12px;border-radius:0}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:8px}.choices button{font:inherit;font-size:13px;font-weight:700;padding:11px 6px;border:1.5px solid #40382f55;background:#fff;color:var(--ink);cursor:pointer}.choices button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.result{margin-top:20px;border-top:1px dashed #aaa;padding-top:18px}.result small{color:var(--sub)}.big{font-family:var(--hand);font-size:21px;font-weight:600}.datecard{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0}.datecard div{padding:12px;background:#f8f4ed}.datecard b{display:block;font-size:12px}.datecard strong{font-size:15px}
+.steps{counter-reset:s}.step{position:relative;padding:5px 0 20px 44px}.step:before{counter-increment:s;content:counter(s);position:absolute;left:0;top:4px;width:29px;height:29px;border:1.5px solid var(--ink);border-radius:50%;display:grid;place-items:center;font-family:var(--hand);font-weight:600}.step:not(:last-child):after{content:"";position:absolute;left:14px;top:37px;bottom:3px;border-left:1px dashed #aaa}.step b{display:block}
+table{width:100%;border-collapse:collapse;font-size:12px;background:#fff}th,td{padding:9px 7px;border-bottom:1px solid #ddd;text-align:left;vertical-align:top}th{font-size:11px;color:var(--sub)}
+.check label{display:flex;gap:10px;align-items:flex-start;padding:9px 0;margin:0;border-bottom:1px dashed #ddd;font-size:13px;font-weight:500}.check input{margin-top:7px;accent-color:var(--pink)}
+.links a{display:block;color:var(--ink);font-size:13px;font-weight:700;padding:11px 0;border-bottom:1px dashed #bbb}.foot{text-align:center;font-size:11px;color:var(--sub);margin-top:44px}
+.badge{display:inline-block;padding:2px 8px;background:#efe7f7;font-size:11px;font-weight:700;margin-left:5px}
+@media(max-width:520px){.datecard{grid-template-columns:1fr}.hero{padding-top:34px}.paper{padding:20px 15px}table{font-size:11px}th,td{padding:8px 5px}}
+</style></head><body>
+<nav><div class="navin"><a href="../">← MUZE TOOL BOX</a><span>AnyPASS GUIDE</span></div></nav>
+<div class="wrap">
+<header class="hero"><div class="eyebrow">PLAY AT THE MUZEUM VOL.2</div><h1>MUZEのための<br><span>AnyPASS GUIDE</span></h1><p>発券から分配、当日の入場まで。<br>自分に必要な準備だけ、迷わず確認。</p></header>
+
+<section class="paper tape"><div class="lead">まず、あなたの状況を教えてね。</div>
+<label for="show">参戦する公演</label><select id="show"></select>
+<label>チケット</label><div class="choices" id="seat"><button data-v="normal" class="on">通常指定席</button><button data-v="ss">SS指定席</button></div>
+<label>購入枚数</label><div class="choices" id="count"><button data-v="1" class="on">1枚</button><button data-v="2">2枚以上</button></div>
+<div class="result" id="result"></div></section>
+
+<div class="alert"><strong>⚠️ まずここだけ！</strong>チケットは1人1枚。同行者がいる場合は事前に分配します。入場用QRコードのスクショでは入場できません。公演当日は身分証明書も忘れずに。</div>
+
+<h2>01. AnyPASSを準備する</h2>
+<section class="paper"><p>チケットの受け取りには、スマートフォン専用アプリ「AnyPASS」のダウンロードと無料の利用登録が必要です。</p>
+<div class="steps"><div class="step"><b>AnyPASSをダウンロード</b>iPhoneはiOS14以降、AndroidはAndroid9.0以降（一部機種を除く）。</div><div class="step"><b>利用登録・電話番号認証</b>iPhoneはSMS認証。SMS認証ができない場合は、しばらく待つと電話発信による認証画面が表示されます。</div><div class="step"><b>登録した電話番号を確認</b>購入時に「受取用携帯電話番号」として登録した番号の端末で受け取ります。</div></div>
+<div class="alert"><strong>SIMなし端末は使えません</strong>SIMカードが入っていない端末や、電話番号を取得していない端末ではAnyPASSを利用できません。</div></section>
+
+<h2>02. チケットを受け取る</h2>
+<section class="paper"><div class="steps"><div class="step"><b>発券開始日時を過ぎたらAnyPASSを開く</b>受け取り可能なチケットがあると、お知らせが表示されます。</div><div class="step"><b>MUZEUM / B-Townの情報でログイン</b>チケット発券時に、会員登録しているメールアドレスとパスワードを入力します。</div><div class="step"><b>受け取りを完了する</b>HOMEまたはマイイベントに対象公演が表示されていることを確認。</div></div>
+<div class="tip"><strong>💡 誤って退会してしまった場合</strong>公式案内では、公演日までに再入会するとチケットを受け取れるとされています。購入者・同行者ともに、公演日当日まで会員を継続しておきましょう。</div>
+<div class="alert"><strong>「発券開始」と「座席表示」は別！</strong>チケットの発券は公演ごとの日時から。座席番号は各公演日当日 <b>9:00頃</b>に表示予定です。</div></section>
+
+<h2>03. 同行者へ分配する</h2>
+<section class="paper"><p>2枚以上で購入した場合、同行者分のチケットをAnyPASSで分配します。<b>購入者本人のチケットは分配・譲渡できません。</b></p>
+<div class="steps"><div class="step"><b>購入者が対象公演を開く</b>同行者分のチケットを選んで分配します。</div><div class="step"><b>同行者もAnyPASSを準備</b>利用登録・電話番号認証まで済ませます。</div><div class="step"><b>同行者本人が受け取る</b>同行者自身のMUZEUM / B-Townのメールアドレス・パスワードを入力し、受け取りを完了します。</div></div>
+<div class="alert"><strong>SS指定席は分配相手を必ず確認</strong>アップグレード申込時に登録した同行者情報が各チケットに表示されています。間違えて別の方へ分配した場合は、一度返却してもらい、正しい同行者へ再分配してください。</div></section>
+
+<h2>04. SS指定席の人へ <span class="badge">重要</span></h2>
+<section class="paper"><p class="lead">SS指定席は、同行者を含む全員に本人確認があります。</p><p>当日はアップグレード申込時の登録情報と照合されます。<b>顔写真付きの身分証を必ず持参</b>してください。</p>
+<table><tr><th>有効な身分証の例</th><th>注意</th></tr><tr><td>運転免許証<br>マイナンバーカード<br>パスポート<br>在留カード<br>身体障害者手帳</td><td>コピー・期限切れ不可<br>通知カード不可</td></tr></table>
+<div class="alert"><strong>別の人への変更はできません</strong>登録情報と本人確認が一致しない場合は入場できず、返金もありません。登録した方が来場できなくなった場合は、後日実施予定の公式リセールを利用します。</div>
+<p>AnyPASSの登録情報も、当日持参する身分証と相違がないよう確認しておきましょう。</p></section>
+
+<h2>05. スマホを持っていない同行者がいる</h2>
+<section class="paper"><p>対応スマートフォンを持っていない等の理由で同行者が発券できない場合は、当日入場口付近のサポートデスクへ。</p>
+<div class="tip"><strong>必要なこと</strong>購入者・同行者全員がそろって入場／身分証明書を提示／氏名・連絡先等の情報を提供。身分証がない場合は入場できません。</div><p>通常より入場に時間がかかる可能性があるため、早めの来場がおすすめです。</p></section>
+
+<h2>06. 当日の入場</h2>
+<section class="paper"><div class="steps"><div class="step"><b>当日9:00頃〜 座席番号を確認</b>会場内の電波が悪い場合に備え、座席番号はスクリーンショットで保存しておくと安心。</div><div class="step"><b>AnyPASSのHOME画面を表示</b>会場の入場口でQRコードを認証します。</div><div class="step"><b>1人ずつQRコードを表示して入場</b>購入者・同行者ともに、自分のチケットで入場します。</div></div>
+<div class="alert"><strong>❌ 入場用QRコード → スクショNG</strong>QRコードのスクリーンショットや画面キャプチャーでは入場できません。</div>
+<div class="tip"><strong>⭕ 座席番号 → スクショ推奨</strong>入場後に電波が悪くなっても座席を確認できるよう、表示されたら保存しておきましょう。</div></section>
+
+<h2>07. チケットが出ないとき</h2>
+<section class="paper"><div class="steps"><div class="step"><b>発券開始日時を過ぎている？</b>下の一覧で自分の公演を確認。</div><div class="step"><b>電話番号は合っている？</b>購入時の受取用携帯電話番号と、AnyPASSを登録した端末の番号を確認。</div><div class="step"><b>AnyPASSの利用登録は完了している？</b>認証まで済んでいるか確認。</div><div class="step"><b>会員状態を確認</b>MUZEUM / B-Townを誤って退会していないか確認。</div><div class="step"><b>解決しなければ公式HELPへ</b>AnyPASSの問い合わせ窓口を利用してください。</div></div></section>
+
+<h2>08. 発券開始日一覧</h2><section class="paper"><table id="schedule"></table><div class="tip"><strong>座席番号は全公演共通</strong>各公演日当日9:00頃から表示予定です。</div></section>
+
+<h2>09. 前日・当日チェック</h2>
+<section class="paper check">
+<label><input type="checkbox">AnyPASSが起動する</label><label><input type="checkbox">対象公演がマイイベントに表示されている</label><label><input type="checkbox">自分のチケットを受け取った</label><label><input type="checkbox">同行者への分配・受け取りが完了した（同行者ありの場合）</label><label><input type="checkbox">MUZEUM / B-Townを退会していない</label><label><input type="checkbox">身分証明書をバッグに入れた</label><label><input type="checkbox">SS指定席なら顔写真付き身分証を用意した</label><label><input type="checkbox">スマホを充電した</label><label><input type="checkbox">モバイルバッテリーを持った</label><label><input type="checkbox">当日9:00以降、座席番号を確認・保存した</label></section>
+
+<h2>公式リンク</h2><section class="paper links">
+<a href="https://mazzel.tokyo/tour/play_at_the_muzeum2/news/57/" target="_blank" rel="noopener">MAZZEL公式｜AnyPASSチケット発券・ご入場に関するご案内 ↗</a>
+<a href="https://anypass.jp/beginner/config.html" target="_blank" rel="noopener">AnyPASS｜新規利用登録 ↗</a>
+<a href="https://anypass.jp/beginner/event.html" target="_blank" rel="noopener">AnyPASS｜チケットの受取方法 ↗</a>
+<a href="https://anypass.jp/beginner/share.html" target="_blank" rel="noopener">AnyPASS｜分配方法 ↗</a>
+<a href="https://anypass.jp/beginner/entry.html" target="_blank" rel="noopener">AnyPASS｜入場方法 ↗</a>
+<a href="https://faq.anypass.jp/" target="_blank" rel="noopener">AnyPASS HELP ↗</a></section>
+<p class="foot">非公式ファンメイドガイドです。最新情報・最終的な判断は必ず公式案内をご確認ください。<br>情報更新：2026.10.06</p>
+</div>
+<script>
+const shows=[
+["10/22","東京","LINE CUBE SHIBUYA","10/8 15:00〜"],["10/24","北海道","カナモトホール","10/10 15:00〜"],["10/25","北海道","函館サーモン・まるなまホール","10/11 15:00〜"],["11/2","福島","とうほう・みんなの文化センター","10/19 15:00〜"],["11/3","宮城","東京エレクトロンホール宮城","10/20 15:00〜"],["11/7","新潟","新潟テルサ","10/24 15:00〜"],["11/10","神奈川","パシフィコ横浜 国立大ホール","10/27 15:00〜"],["11/17","岡山","倉敷市民会館","11/3 15:00〜"],["11/18","広島","広島文化学園HBGホール","11/4 15:00〜"],["11/25","兵庫","神戸国際会館 こくさいホール","11/11 15:00〜"],["11/26","大阪","大阪国際会議場 メインホール","11/12 15:00〜"],["12/1","埼玉","大宮ソニックシティ 大ホール","11/17 15:00〜"],["12/3","群馬","Gメッセ群馬 展示ホールA・B","11/19 15:00〜"],["12/4","栃木","宇都宮市文化会館 大ホール","11/20 15:00〜"],["12/7","福岡","福岡サンパレス","11/23 15:00〜"],["12/11","愛知","愛知県芸術劇場大ホール","11/27 15:00〜"],["12/15","香川","レクザムホール・大ホール","12/1 15:00〜"],["12/16","高知","新来島高知重工ホール・オレンジホール","12/2 15:00〜"],["12/21","静岡","アクトシティ浜松 大ホール","12/7 15:00〜"],["12/23","熊本","熊本城ホール メインホール","12/9 15:00〜"]];
+let seat="normal",count="1";const sel=document.querySelector("#show");
+shows.forEach((s,i)=>sel.add(new Option(s[0]+" "+s[1]+"｜"+s[2],i)));
+function pick(id,key){document.querySelectorAll("#"+id+" button").forEach(b=>b.onclick=()=>{document.querySelectorAll("#"+id+" button").forEach(x=>x.classList.remove("on"));b.classList.add("on");if(id==="seat")seat=b.dataset.v;else count=b.dataset.v;render()})}
+pick("seat");pick("count");sel.onchange=render;
+function render(){const s=shows[+sel.value];let todo=count==="2"?"チケット受取後、同行者への分配まで済ませよう。":"分配は不要。自分のチケットを受け取ればOK。";if(seat==="ss")todo+=" SS指定席なので、顔写真付き身分証と登録情報も必ず確認。";document.querySelector("#result").innerHTML='<small>あなたの公演</small><div class="big">'+s[0]+' '+s[1]+'｜'+s[2]+'</div><div class="datecard"><div><b>🎟 発券開始</b><strong>'+s[3]+'</strong></div><div><b>💺 座席表示</b><strong>公演当日 9:00頃〜</strong></div></div><p>'+todo+'</p>'}
+render();
+document.querySelector("#schedule").innerHTML="<tr><th>公演</th><th>発券開始</th></tr>"+shows.map(s=>"<tr><td><b>"+s[0]+" "+s[1]+"</b><br>"+s[2]+"</td><td><b>"+s[3]+"</b></td></tr>").join("");
+</script></body></html>
