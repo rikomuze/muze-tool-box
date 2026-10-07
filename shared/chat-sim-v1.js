@@ -435,5 +435,5 @@ function showIntro(){
 function begin(name){sid++;S=fresh(name);hud();render();runEvents();startClock()}
 
 const api={ring,quietWhy(){if(S.callOn)return"call";if(!$("osd").hidden)return"osd";if(!$("scene").hidden)return"scene";for(const k of SCN.order){const T=S.th[k];if(T.busy)return k+" busy";if(T.asking&&!T.pending)return k+" asking";if(T.pending&&!T.pending.end&&!SCN.threads[k].static&&Date.now()-(T.pendAt||0)<6000)return k+" pending"}return "quiet "+(S.qms||0)},$,pick,rnd,shuffle,fmt,esc,ACT,LS,later,addTime,change,applyFx,line,sys,them,me,setPending,endStamp,openQ,ask,banner,info,scene,confirmBox,menu,incoming,callOut,hud,render,openTh,end,fill,get S(){return S},get SCN(){return SCN}};
-window.ChatSim={start(scn){SCN=scn;document.title=scn.title;seen=LS.get(scn.id+":seen",{});titlesGot=LS.get(scn.id+":titles",{});mount();showIntro()},api,ACT};
+window.ChatSim={start(scn){SCN=scn;if(!document.title) document.title=scn.title;seen=LS.get(scn.id+":seen",{});titlesGot=LS.get(scn.id+":titles",{});mount();showIntro()},api,ACT};
 })();
