@@ -205,8 +205,8 @@ const SCN={
       {stamp:["⏰","めざまし"],on:S=>S.chi=1,r:[["ちー","たよりにしてる"]]}])},
     {at:T(23,15),f:(S,api)=>{if(!S.id) api.them("group",[["さや","あ、明日身分証チェックあるって"],["さや","財布入れた？"]])}},
     {at:T(23,30),f:(S,api)=>api.them("group",[X("{name}の夢見れますように"),["さや","おやすみ〜"]])},
-    {at:T(23,38),f:(S,api)=>api.ask("group",[["みか","ねえ明日のコーデ見せ合お"],X("{name}の色入れた？")],[
-      {t:"（服の写真を送る）",act:1,photo:"outfit",cost:"スマホ電池−2",fx:{ex:3,bat:-2},on:S=>S.wear=1,r:[X("かわいい！！"),X("{name}の色ちゃんと入ってる"),["ちー","優勝"]]},
+    {at:T(23,38),f:(S,api)=>api.ask("group",[["みか","ねえ明日のコーデ見せ合お"],X("{name}のグッズどこに付けてく？")],[
+      {t:"（服の写真を送る）",act:1,photo:"outfit",cost:"スマホ電池−2",fx:{ex:3,bat:-2},on:S=>S.wear=1,r:[X("かわいい！！"),X("缶バッジの付け方わかってる"),["ちー","優勝"]]},
       {t:"明日のお楽しみ",r:[["みか","焦らすじゃん"]]},
       {stamp:["👗","ひみつ"],r:[["さや","気になる"]]}])},
     {at:T(23,50),f:(S,api)=>api.them("mom",["まだ起きてる？","既読ついてるよ"])},
@@ -245,7 +245,7 @@ function doMenu(S){
     S.ticket=1;act(S,2,2,"チケット","明日の座席、ちゃんと表示された。","スクショも撮っておく")}});
   it.push({label:"新幹線の切符を確認",short:"新幹線",done:S.train,sub:"2分",on:()=>{S.train=1;act(S,2,1,"新幹線","アプリにQRが入っている。","7:24発、5号車")}});
   it.push({label:"財布と身分証を入れる",short:"身分証",done:S.id,sub:"1分",on:()=>{S.id=1;act(S,1,0,"財布","身分証、ある。","本人確認があっても大丈夫")}});
-  it.push({label:"ペンライトを点ける",short:"ペンライト",done:S.pen,sub:S.penChecked&&S.penDead?"電池が切れている":"2分",disabled:S.penChecked&&S.penDead,on:()=>{S.penChecked=1;if(S.penDead){act(S,2,0,"ペンライト","…点かない。","電池が切れてる")}else{S.pen=1;act(S,2,3,"ペンライト","ちゃんと光った。","部屋の中が推しの色")}}});
+  it.push({label:"ペンライトを点ける",short:"ペンライト",done:S.pen,sub:S.penChecked&&S.penDead?"電池が切れている":"2分",disabled:S.penChecked&&S.penDead,on:()=>{S.penChecked=1;if(S.penDead){act(S,2,0,"ペンライト","…点かない。","電池が切れてる")}else{S.pen=1;act(S,2,3,"ペンライト","ちゃんと光った。","明日これを振る")}}});
   if(S.penChecked&&S.penDead&&!S.pen){
     it.push({label:"家の電池を探す",short:"電池探し",done:S.searched,sub:"5分・あるかは運",on:()=>{S.searched=1;if(Math.random()<.5){S.pen=1;S.homeBatt=1;act(S,5,0,"電池","リモコンの横に新品が2本。","ペンライトが点いた")}else act(S,5,0,"電池","引き出しを全部開けた。ない。","コンビニかな…")}});
     it.push({label:"コンビニで電池を買う",sub:"15分",on:()=>{S.pen=1;S.shopBatt=1;act(S,15,-6,"コンビニ","夜風にあたって少し落ち着いた。","ついでにおにぎりも")}});

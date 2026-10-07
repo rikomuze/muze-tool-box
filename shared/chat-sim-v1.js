@@ -192,18 +192,18 @@ function info(src,x,kind){const k=SCN.infoThread||"info";const T=S.th[k];line(k,
 let sceneT=null;
 function scene(tag,title,body,hand,kind){
   const el=$("scene");el.hidden=false;
-  el.innerHTML=`<div class="scard ${kind||""}" role="status"><span class="tag">${esc(tag)}</span><h3><span>${esc(title)}</span></h3><p>${esc(body)}</p>${hand?`<p class="hand">${esc(hand)}</p>`:""}</div>`;
+  el.innerHTML=`<div class="scard ${kind||""}" role="status"><span class="tag">${esc(fill(tag))}</span><h3><span>${esc(fill(title))}</span></h3><p>${esc(fill(body))}</p>${hand?`<p class="hand">${esc(fill(hand))}</p>`:""}</div>`;
   clearTimeout(sceneT);const close=()=>{el.hidden=true;clearTimeout(sceneT)};el.onclick=close;sceneT=setTimeout(close,3200);
 }
 function confirmBox(title,body,yes,no,onYes){
   const el=$("osd");el.hidden=false;el.className="ov osd";
-  el.innerHTML=`<div class="osbox" role="dialog" aria-label="${esc(title)}"><div class="in"><b>${esc(title)}</b><p>${esc(body)}</p></div><div class="bt"><button type="button" id="cbN">${esc(no)}</button><button type="button" id="cbY">${esc(yes)}</button></div></div>`;
+  el.innerHTML=`<div class="osbox" role="dialog" aria-label="${esc(title)}"><div class="in"><b>${esc(fill(title))}</b><p>${esc(fill(body))}</p></div><div class="bt"><button type="button" id="cbN">${esc(no)}</button><button type="button" id="cbY">${esc(yes)}</button></div></div>`;
   $("cbN").onclick=()=>{el.hidden=true};$("cbY").onclick=()=>{el.hidden=true;onYes()};
 }
 function menu(title,body,items){
   const el=$("osd");el.hidden=false;el.className="ov osd";
   const done=items.filter(it=>it.done),live=items.map((it,i)=>[it,i]).filter(([it])=>!it.done);
-  el.innerHTML=`<div class="osbox menu" role="dialog" aria-label="${esc(title)}"><div class="in"><b>${esc(title)}</b>${body?`<p>${esc(body)}</p>`:""}</div><div class="bt v scroll">${live.map(([it,i])=>`<button type="button" data-i="${i}" ${it.disabled?"disabled":""}>${esc(it.label)}${it.sub?`<small>${esc(it.sub)}</small>`:""}</button>`).join("")}${done.length?`<p class="done">済み：${done.map(it=>esc(it.short||it.label)).join("・")}</p>`:""}</div><div class="bt v"><button type="button" id="mX">閉じる</button></div></div>`;
+  el.innerHTML=`<div class="osbox menu" role="dialog" aria-label="${esc(title)}"><div class="in"><b>${esc(title)}</b>${body?`<p>${esc(body)}</p>`:""}</div><div class="bt v scroll">${live.map(([it,i])=>`<button type="button" data-i="${i}" ${it.disabled?"disabled":""}>${esc(fill(it.label))}${it.sub?`<small>${esc(fill(it.sub))}</small>`:""}</button>`).join("")}${done.length?`<p class="done">済み：${done.map(it=>esc(it.short||it.label)).join("・")}</p>`:""}</div><div class="bt v"><button type="button" id="mX">閉じる</button></div></div>`;
   el.querySelectorAll("button[data-i]").forEach(b=>b.onclick=()=>{el.hidden=true;const it=items[+b.dataset.i];if(it&&!it.disabled&&it.on) it.on()});
   $("mX").onclick=()=>{el.hidden=true};
   el.onclick=e=>{if(e.target===el) el.hidden=true};
