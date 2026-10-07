@@ -226,6 +226,13 @@ function callOut(th,lines,onEnd,cost){
   el.innerHTML=`<div><div class="av" style="background:${d.col}">${d.ini}</div><h3>${esc(d.name)}</h3><p>発信中…</p></div><div class="subs"></div><div class="cbtns"></div>`;
   later(()=>talk(el,th,lines,cost==null?2:cost,onEnd),1400);
 }
+function ring(th,onEnd,ms){
+  if(S.over||S.callOn) return;
+  S.callOn=true;const d=SCN.threads[th];const el=$("call");el.hidden=false;el.classList.remove("live");
+  el.innerHTML=`<div><div class="av" style="background:${d.col}">${d.ini}</div><h3>${esc(d.name)}</h3><p>呼び出し中…</p></div><div class="subs"><div class="s">プルルル…</div></div><div class="cbtns"><button class="cb no" type="button" id="rgX"><i>✕</i>切る</button></div>`;
+  let done=false;const fin=()=>{if(done)return;done=true;el.hidden=true;S.callOn=false;line(th,{k:"me",x:"✆ 不在着信",read:true});S.th[th].last="発信しました";addTime(1);render();onEnd&&onEnd()};
+  $("rgX").onclick=fin;later(fin,ms||3600);
+}
 function talk(el,th,lines,cost,onEnd){
   el.classList.add("live");const p=el.querySelector("p");p.textContent="0:00";
   el.querySelector(".cbtns").innerHTML=`<button class="cb no" type="button" disabled><i>✕</i>通話中</button>`;
@@ -426,6 +433,6 @@ function showIntro(){
 }
 function begin(name){sid++;S=fresh(name);hud();render();runEvents();startClock()}
 
-const api={quietWhy(){if(S.callOn)return"call";if(!$("osd").hidden)return"osd";if(!$("scene").hidden)return"scene";for(const k of SCN.order){const T=S.th[k];if(T.busy)return k+" busy";if(T.asking&&!T.pending)return k+" asking";if(T.pending&&!T.pending.end&&!SCN.threads[k].static&&Date.now()-(T.pendAt||0)<8000)return k+" pending"}return "quiet "+(S.qms||0)},$,pick,rnd,shuffle,fmt,esc,ACT,LS,later,addTime,change,applyFx,line,sys,them,me,setPending,endStamp,openQ,ask,banner,info,scene,confirmBox,menu,incoming,callOut,hud,render,openTh,end,fill,get S(){return S},get SCN(){return SCN}};
+const api={ring,quietWhy(){if(S.callOn)return"call";if(!$("osd").hidden)return"osd";if(!$("scene").hidden)return"scene";for(const k of SCN.order){const T=S.th[k];if(T.busy)return k+" busy";if(T.asking&&!T.pending)return k+" asking";if(T.pending&&!T.pending.end&&!SCN.threads[k].static&&Date.now()-(T.pendAt||0)<8000)return k+" pending"}return "quiet "+(S.qms||0)},$,pick,rnd,shuffle,fmt,esc,ACT,LS,later,addTime,change,applyFx,line,sys,them,me,setPending,endStamp,openQ,ask,banner,info,scene,confirmBox,menu,incoming,callOut,hud,render,openTh,end,fill,get S(){return S},get SCN(){return SCN}};
 window.ChatSim={start(scn){SCN=scn;document.title=scn.title;seen=LS.get(scn.id+":seen",{});titlesGot=LS.get(scn.id+":titles",{});mount();showIntro()},api,ACT};
 })();
