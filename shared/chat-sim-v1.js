@@ -311,7 +311,7 @@ function render(scroll){
     if(m.k==="call") body=`<div class="bub">✆ ${esc(m.x)}</div>`;
     else if(m.photo) body=`<div class="photo ${esc(m.photo)}" role="img" aria-label="写真"><i></i></div>`;
     else if(m.stamp) body=`<div class="stamp"><span><b>${m.stamp[0]}</b>${esc(m.stamp[1])}</span></div>`;
-    else body=`<div class="bub${m.oshi?" oshi":""}">${esc(m.x)}</div>`;
+    else body=`<div class="bub${m.oshi?" oshi":""}${m.tag?" "+esc(m.tag):""}">${esc(m.x)}</div>`;
     const tm=`<span class="tm">${mine?`<span>${d.group?"既読"+(d.n?d.n-1:2):"既読"}</span>`:""}<span>${m.t!=null?fmt(m.t):""}</span></span>`;
     if(mine) html+=`<div class="m me${first?" first":""}"><span class="col">${body}</span>${tm}</div>`;
     else{const showWho=first&&(d.group||th===(SCN.infoThread||"info"))&&m.who;html+=`<div class="m them${first?" first":""}">${first?avatar(th):`<span class="gap"></span>`}<span class="col">${showWho?`<span class="who">${esc(m.who)}</span>`:""}${body}</span>${tm}</div>`}

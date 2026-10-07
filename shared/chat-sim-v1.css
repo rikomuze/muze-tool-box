@@ -304,3 +304,10 @@ button:focus-visible,a:focus-visible{outline:3px solid #8051bd;outline-offset:2p
 .photo.cards3 i{position:absolute;left:39%;top:14%;width:22%;height:66%;border-radius:5px;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.15),inset 0 0 0 4px #ded7ff}
 .photo.karaage{background:linear-gradient(180deg,#fff6e0,#ffe2b8)}
 .photo.karaage::after{left:44%;top:12%;width:12%;height:76%;border-radius:40px;background:repeating-linear-gradient(180deg,#c98a3a 0 18%,#e0a85a 18% 22%)}
+.bub.hype{position:relative}
+.bub.hype::after{content:"✨";position:absolute;right:-8px;top:-8px;font-size:11px}
+.photo.towel{background:linear-gradient(135deg,#fff0f4,#ece6ff)}
+.photo.towel::after{left:12%;top:36%;width:76%;height:28%;border-radius:4px;background:repeating-linear-gradient(90deg,#ffd5df 0 12%,#fff 12% 14%);box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.arow{flex-wrap:wrap;row-gap:6px}
+.arow .stage{flex:1 1 150px}
+.arow .acts{flex:0 1 auto;margin-left:auto}
