@@ -223,20 +223,20 @@ function later(fn,ms){A.later(fn,ms)}
 function act(S,min,ex,title,body,hand){S.lie=0;A.scene(min+"分",title,body,hand);A.addTime(min);if(ex)A.change("ex",ex);A.hud()}
 function doMenu(S){
   const it=[];
-  it.push({label:"電子チケットを表示する",sub:S.ticket?"OK":"2分・スマホ電池−2",disabled:S.ticket,on:()=>{A.change("bat",-2);
+  it.push({label:"電子チケットを表示する",short:"チケット",done:S.ticket,sub:"2分・スマホ電池−2",on:()=>{A.change("bat",-2);
     if(S.login&&!S.loginFixed){S.loginFixed=1;act(S,2,3,"ログイン","「パスワードが違います」。","…ここで！？　再設定してもう一回");return}
     S.ticket=1;act(S,2,2,"チケット","明日の座席、ちゃんと表示された。","スクショも撮っておく")}});
-  it.push({label:"新幹線の切符を確認",sub:S.train?"OK":"2分",disabled:S.train,on:()=>{S.train=1;act(S,2,1,"新幹線","アプリにQRが入っている。","7:24発、5号車")}});
-  it.push({label:"財布と身分証を入れる",sub:S.id?"OK":"1分",disabled:S.id,on:()=>{S.id=1;act(S,1,0,"財布","身分証、ある。","本人確認があっても大丈夫")}});
-  it.push({label:"ペンライトを点ける",sub:S.pen?"OK":S.penChecked&&S.penDead?"電池が切れている":"2分",disabled:S.pen||(S.penChecked&&S.penDead),on:()=>{S.penChecked=1;if(S.penDead){act(S,2,0,"ペンライト","…点かない。","電池が切れてる")}else{S.pen=1;act(S,2,3,"ペンライト","ちゃんと光った。","部屋の中が推しの色")}}});
+  it.push({label:"新幹線の切符を確認",short:"新幹線",done:S.train,sub:"2分",on:()=>{S.train=1;act(S,2,1,"新幹線","アプリにQRが入っている。","7:24発、5号車")}});
+  it.push({label:"財布と身分証を入れる",short:"身分証",done:S.id,sub:"1分",on:()=>{S.id=1;act(S,1,0,"財布","身分証、ある。","本人確認があっても大丈夫")}});
+  it.push({label:"ペンライトを点ける",short:"ペンライト",done:S.pen,sub:S.penChecked&&S.penDead?"電池が切れている":"2分",disabled:S.penChecked&&S.penDead,on:()=>{S.penChecked=1;if(S.penDead){act(S,2,0,"ペンライト","…点かない。","電池が切れてる")}else{S.pen=1;act(S,2,3,"ペンライト","ちゃんと光った。","部屋の中が推しの色")}}});
   if(S.penChecked&&S.penDead&&!S.pen){
-    it.push({label:"家の電池を探す",sub:S.searched?"もう探した":"5分・あるかは運",disabled:S.searched,on:()=>{S.searched=1;if(Math.random()<.5){S.pen=1;S.homeBatt=1;act(S,5,0,"電池","リモコンの横に新品が2本。","ペンライトが点いた")}else act(S,5,0,"電池","引き出しを全部開けた。ない。","コンビニかな…")}});
+    it.push({label:"家の電池を探す",short:"電池探し",done:S.searched,sub:"5分・あるかは運",on:()=>{S.searched=1;if(Math.random()<.5){S.pen=1;S.homeBatt=1;act(S,5,0,"電池","リモコンの横に新品が2本。","ペンライトが点いた")}else act(S,5,0,"電池","引き出しを全部開けた。ない。","コンビニかな…")}});
     it.push({label:"コンビニで電池を買う",sub:"15分",on:()=>{S.pen=1;S.shopBatt=1;act(S,15,-6,"コンビニ","夜風にあたって少し落ち着いた。","ついでにおにぎりも")}});
   }
-  it.push({label:"タオルを入れる",sub:S.towel?"OK":"2分",disabled:S.towel,on:()=>{S.towel=1;act(S,2,2,"タオル","いちばんお気に入りのタオル。","明日これを掲げる")}});
-  it.push({label:"アラームをセット",sub:S.alarm?A.fmt(S.wake)+"にセット済み":"1分",disabled:S.alarm&&S.alarmAt===S.wake,on:()=>{S.alarm=1;S.alarmAt=S.wake;act(S,1,0,"アラーム",A.fmt(S.wake)+"、5分おきに3つ。","これで安心")}});
-  it.push({label:"お風呂に入る",sub:S.bath?"もう入った":"20分・ワクワク−15",disabled:S.bath,on:()=>{S.bath=1;act(S,20,-15,"お風呂","湯船につかると、肩の力が抜けた。","明日にそなえる")}});
-  it.push({label:"ホットミルクを飲む",sub:S.milk?"もう飲んだ":"5分・ワクワク−8",disabled:S.milk,on:()=>{S.milk=1;act(S,5,-8,"ホットミルク","はちみつを少し。","ほっとする")}});
+  it.push({label:"タオルを入れる",short:"タオル",done:S.towel,sub:"2分",on:()=>{S.towel=1;act(S,2,2,"タオル","いちばんお気に入りのタオル。","明日これを掲げる")}});
+  it.push({label:"アラームをセット",short:"アラーム "+A.fmt(S.wake),done:S.alarm&&S.alarmAt===S.wake,sub:S.alarm?A.fmt(S.alarmAt)+"のまま。"+A.fmt(S.wake)+"にかけ直す・1分":"1分",on:()=>{S.alarm=1;S.alarmAt=S.wake;act(S,1,0,"アラーム",A.fmt(S.wake)+"、5分おきに3つ。","これで安心")}});
+  it.push({label:"お風呂に入る",short:"お風呂",done:S.bath,sub:"20分・ワクワク−15",on:()=>{S.bath=1;act(S,20,-15,"お風呂","湯船につかると、肩の力が抜けた。","明日にそなえる")}});
+  it.push({label:"ホットミルクを飲む",short:"ホットミルク",done:S.milk,sub:"5分・ワクワク−8",on:()=>{S.milk=1;act(S,5,-8,"ホットミルク","はちみつを少し。","ほっとする")}});
   it.push({label:"ストレッチ",sub:S.t<S.stretchT?"さっきやった":"3分・ワクワク−4",disabled:S.t<S.stretchT,on:()=>{S.stretchT=S.t+20;act(S,3,-4,"ストレッチ","深呼吸しながら背中をのばす。","")}});
   it.push({label:"過去のライブ映像を見る",sub:"20分・ワクワク+15",on:()=>{S.video=1;act(S,20,15,"予習","あのときの{name}。何度見てもいい。","…目が冴えてきた")}});
   it.push({label:"ベッドでスマホを見る",sub:"ちょっとだけ",on:()=>{S.lie=1;S.lieUntil=S.t+A.rnd(12,20);A.scene("ベッド","ちょっとだけ","横になってタイムラインを眺める。","明日の準備は、あとで…")}});

@@ -202,9 +202,11 @@ function confirmBox(title,body,yes,no,onYes){
 }
 function menu(title,body,items){
   const el=$("osd");el.hidden=false;el.className="ov osd";
-  el.innerHTML=`<div class="osbox" role="dialog" aria-label="${esc(title)}"><div class="in"><b>${esc(title)}</b>${body?`<p>${esc(body)}</p>`:""}</div><div class="bt v">${items.map((it,i)=>`<button type="button" data-i="${i}" ${it.disabled?"disabled":""}>${esc(it.label)}${it.sub?`<small>${esc(it.sub)}</small>`:""}</button>`).join("")}<button type="button" id="mX">閉じる</button></div></div>`;
+  const done=items.filter(it=>it.done),live=items.map((it,i)=>[it,i]).filter(([it])=>!it.done);
+  el.innerHTML=`<div class="osbox menu" role="dialog" aria-label="${esc(title)}"><div class="in"><b>${esc(title)}</b>${body?`<p>${esc(body)}</p>`:""}</div><div class="bt v scroll">${live.map(([it,i])=>`<button type="button" data-i="${i}" ${it.disabled?"disabled":""}>${esc(it.label)}${it.sub?`<small>${esc(it.sub)}</small>`:""}</button>`).join("")}${done.length?`<p class="done">済み：${done.map(it=>esc(it.short||it.label)).join("・")}</p>`:""}</div><div class="bt v"><button type="button" id="mX">閉じる</button></div></div>`;
   el.querySelectorAll("button[data-i]").forEach(b=>b.onclick=()=>{el.hidden=true;const it=items[+b.dataset.i];if(it&&!it.disabled&&it.on) it.on()});
   $("mX").onclick=()=>{el.hidden=true};
+  el.onclick=e=>{if(e.target===el) el.hidden=true};
 }
 function incoming(th,o){
   if(S.over) return;

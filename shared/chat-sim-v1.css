@@ -311,3 +311,9 @@ button:focus-visible,a:focus-visible{outline:3px solid #8051bd;outline-offset:2p
 .arow{flex-wrap:wrap;row-gap:6px}
 .arow .stage{flex:1 1 150px}
 .arow .acts{flex:0 1 auto;margin-left:auto}
+.osbox.menu{display:flex;flex-direction:column;max-height:100%}
+.osbox.menu .in{flex:none;padding:14px 16px 10px}
+.osbox.menu .bt.scroll{overflow-y:auto;min-height:0;flex:1 1 auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.osbox.menu .bt.scroll button{padding:9px 12px}
+.osbox.menu .bt:last-child{flex:none}
+.osbox.menu .done{margin:0;padding:8px 14px 10px;font-size:11px;color:var(--sub);border-top:1px solid #d5d6db;line-height:1.5}
