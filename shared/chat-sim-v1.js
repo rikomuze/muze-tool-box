@@ -157,7 +157,7 @@ function answer(th,c){
   const T=S.th[th];if(!T.pending) return;
   const why=SCN.canReply&&SCN.canReply(S,th);if(why) return;
   const p=T.pending;T.pending=null;
-  if(!p.end) S.m.by[th]=(S.m.by[th]||0)+1;
+  if(!p.end){S.m.by[th]=(S.m.by[th]||0)+1;S.lastAns=S.lastAns||{};S.lastAns[th]=S.t}
   if(c.photo){S.m.photo++;me(th,{photo:c.photo})}
   else if(c.stamp) me(th,{stamp:c.stamp});
   else me(th,{x:fill(c.t)});

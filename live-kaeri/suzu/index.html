@@ -69,12 +69,12 @@ const SCN={
   ],
   init(S){
     const mk=(arr)=>({st:"wait",arr,find:0,waved:0});
-    S.p={miku:mk(START+A.rnd(8,12)),nono:mk(START+A.rnd(22,26)),nanase:mk(START+A.rnd(60,76)),rui:mk(0)};
+    S.p={miku:mk(START+A.rnd(8,12)),nono:mk(START+A.rnd(22,26)),nanase:mk(START+A.rnd(58,82)),rui:mk(0)};
     S.p.miku.st="coming";S.p.nono.st="coming";S.p.nanase.st="coming";
-    S.gated=0;S.trading=0;S.photos=0;S.calls=0;S.pickNono=0;S.mail=0;S.declined=0;S.rain=0;S.roof=0;S.waveN=0;
-    S.th.miku.lastT=START-20;S.th.miku.last="今日よろしくお願いします！";S.th.miku.msgs.push({k:"them",x:"今日よろしくお願いします！",t:START-20,read:true});
-    S.th.nono.lastT=START-35;S.th.nono.last="終演後、東口でお願いします🙏";S.th.nono.msgs.push({k:"them",x:"終演後、東口でお願いします🙏",t:START-35,read:true});
-    S.th.nanase.lastT=START-50;S.th.nanase.last="規制退場おそいブロックかもです…";S.th.nanase.msgs.push({k:"them",x:"規制退場おそいブロックかもです…",t:START-50,read:true});
+    S.ruiNoShow=Math.random()<.35;S.mikuTwist=Math.random()<.5;S.gated=0;S.trading=0;S.photos=0;S.calls=0;S.pickNono=0;S.mail=0;S.declined=0;S.rain=0;S.roof=0;S.waveN=0;
+    S.th.miku.lastT=START-20;S.th.miku.last="今日よろしくお願いします〜！！🥹💐";S.th.miku.msgs.push({k:"them",x:"今日よろしくお願いします〜！！🥹💐",t:START-20,read:true});
+    S.th.nono.lastT=START-35;S.th.nono.last="本日はよろしくお願いいたします。方向音痴なのでご迷惑をおかけするかもしれません";S.th.nono.msgs.push({k:"them",x:"本日はよろしくお願いいたします。方向音痴なのでご迷惑をおかけするかもしれません",t:START-35,read:true});
+    S.th.nanase.lastT=START-50;S.th.nanase.last="すみません、規制退場おそいブロックかもです…本当にすみません";S.th.nanase.msgs.push({k:"them",x:"すみません、規制退場おそいブロックかもです…本当にすみません",t:START-50,read:true});
   },
   ticket(S){const l=LAST-S.t;return {small:"終電",big:"23:12",sub:"あと"+Math.max(0,l)+"分",cls:l<=15?"hot":""}},
   minute(S,api,n){
@@ -82,6 +82,7 @@ const SCN={
     if(n%5===0) api.change("tai",-1);
     if(S.rain&&!S.roof&&n%3===0) api.change("tai",-1);
     for(const k in S.p){const p=S.p[k];
+      if(k==="rui"&&p.st==="coming"&&S.ruiNoShow&&p.arr&&S.t>=p.arr-6){p.st="noshow";api.them("rui",["すみません","連れとはぐれて今日は行けなくなりました","また今度"]);continue}
       if(p.st==="coming"&&p.arr&&S.t>=p.arr) arrive(S,api,k);
       if(p.st==="search"){p.find--;if(p.find<=0){p.st="meeting";api.later(()=>meet(S,api,k),300)}}
     }
@@ -132,6 +133,7 @@ const SCN={
   titles:[
     {id:"four",name:"交換の鬼",hint:"追加の申し込みも受けて、全員と手渡し",ok:(S,k)=>k==="perfect"&&S.p.rui.st==="done"},
     {id:"perfect",name:"東口の主",hint:"3人と手渡しして終電",ok:(S,k)=>k==="perfect"},
+    {id:"kind",name:"私服もゆずれる人",hint:"みくのお願いを聞く",ok:S=>S.twistOk},
     {id:"west",name:"西口まで迎えに行く人",hint:"迷子を迎えに行く",ok:S=>S.pickNono&&S.p.nono.st==="done"},
     {id:"decline",name:"手渡し優先の人",hint:"「今回は手渡しを優先したくて」",ok:S=>S.declined},
     {id:"mail",name:"郵送でも優しい人",hint:"間に合わない人に郵送を",ok:S=>S.mail},
@@ -155,23 +157,23 @@ const SCN={
   },
   events:[
     {at:START+1,f:(S,api)=>api.them("mana",["すず交換ファイト","うちら先にホーム行ってるね","終電23:12だよ！！"])},
-    {at:START+3,f:(S,api)=>api.ask("miku",["いま駅向かってます！","目印ありますか？"],[
+    {at:START+3,f:(S,api)=>api.ask("miku",["いま駅向かってます！！🏃‍♀️💨","はじめての交換で緊張してます🥹","目印ありますか？"],[
       {t:"東口の柱の横、白いトートです",on:S=>S.p.miku.mark=2,r:["了解です！"]},
       {t:"東口にいます！",on:S=>S.p.miku.mark=6,r:["東口ですね！"]},
       {t:"服の写真送りますね",cost:"電池−3",fx:{bat:-3},on:S=>{S.p.miku.mark=1;S.photos++},r:["わかりやすい！ありがとうございます"]}])},
-    {at:START+8,f:(S,api)=>api.ask("nanase",["すみません、まだ規制退場で座席です…","たぶんだいぶ遅くなります"],[
+    {at:START+8,f:(S,api)=>api.ask("nanase",["すみません、まだ規制退場で座席です…","本当にすみません、たぶんだいぶ遅くなります"],[
       {t:"大丈夫です、待ってます！",r:["ありがとうございます😭"]},
       {t:"何時ごろになりそうですか？",r:["23時…ぎりぎりかもです","急ぎます"]},
       {stamp:["🙆","OK"],r:["ほんとすみません"]}])},
-    {at:START+14,f:(S,api)=>api.ask("nono",["もうすぐ着きます！","すずさん何口でしたっけ？"],[
+    {at:START+14,f:(S,api)=>api.ask("nono",["まもなく到着いたします","念のため確認なのですが、すずさんは何口でしたでしょうか"],[
       {t:"東口です！改札出て右",on:S=>S.nonoTold=1,r:["右ですね！"]},
       {t:"東口の柱の横です",on:S=>S.nonoTold=0,r:["はい！"]},
       {stamp:["👍","了解"],on:S=>S.nonoTold=0,r:["…？"]}])},
     {at:T(22,20),f:(S,api)=>{S.rain=1;api.info("雨雲レーダー","いる場所で雨が降りはじめました","rain")}},
-    {at:T(22,24),f:(S,api)=>{S.p.rui.st="dm";api.ask("rui",["はじめまして、交換ポストを見ました","{name}のトレカ、まだ募集してますか？","いま西口の近くにいます"],[
-      {t:"はい！東口の柱の横です",on:S=>{S.p.rui.st="coming";S.p.rui.arr=S.t+A.rnd(20,28)},r:["行きます！20分くらいで着きます"]},
+    {at:T(22,24),f:(S,api)=>{S.p.rui.st="dm";api.ask("rui",["交換ポスト見ました","{name}、まだありますか","西口にいます"],[
+      {t:"はい！東口の柱の横です",on:S=>{S.p.rui.st="coming";S.p.rui.arr=S.t+A.rnd(20,28)},r:["行きます","20分くらい"]},
       {t:"今日はもう締め切りました",r:["了解です、またの機会に！"]},
-      {t:"終電なので23時までなら",on:S=>{S.p.rui.st="coming";S.p.rui.arr=S.t+A.rnd(18,24)},r:["間に合わせます！"]}])}},
+      {t:"終電なので23時までなら",on:S=>{S.p.rui.st="coming";S.p.rui.arr=S.t+A.rnd(18,24)},r:["了解","急ぎます"]}])}},
     {at:T(22,46),f:(S,api)=>{if(S.p.nanase.arr>T(22,56)&&S.p.nanase.st==="coming") api.ask("nanase",["やっと出られました…","でもまだ会場の近くで","間に合わないかもです","郵送でもいいですか…？"],[
       {t:"待ちます！走らなくて大丈夫",r:["ありがとうございます、急ぎます！"]},
       {t:"郵送でお願いします",on:S=>{S.p.nanase.st="mail";S.mail++},r:["ありがとうございます、住所DMします！"]},
@@ -202,7 +204,7 @@ const SCN={
     {th:"nono",lines:["いま電車おりました！"],when:S=>S.p.nono.st==="coming"},
     {th:"nanase",lines:["やっと通路まで来ました…"],when:S=>S.p.nanase.st==="coming"&&S.t<T(22,35)},
     {th:"nanase",lines:["まだ座席です😭","アナウンスまだです"],when:S=>S.p.nanase.st==="coming"&&S.t<T(22,15)},
-    {th:"rui",lines:["いま向かってます！","黒いキャップです"],when:S=>S.p.rui.st==="coming"},
+    {th:"rui",lines:["向かってます","黒キャップ"],when:S=>S.p.rui.st==="coming"&&!S.ruiNoShow},
     {th:"miku",lines:["無事に電車乗れました！","今日はほんとにありがとうございました🙏"],when:S=>S.p.miku.st==="done"}
   ],
   fill(S,s){return s}
@@ -219,7 +221,7 @@ const EXTRA={
     {t:"どうぞ！送ってもらえますか",cost:"電池−2",fx:{bat:-2},on:S=>S.photos++,r:[{photo:"card"},"送りました！"]},
     {t:"急いでるのでまた今度で",r:["了解です、ありがとうございました！"]}]]
 };
-function lab(p){return {done:"手渡しで交換",mail:"郵送にした",cancel:"お断りした",dm:"返事してない",wait:"—"}[p.st]||"会えなかった"}
+function lab(p){return {done:"手渡しで交換",mail:"郵送にした",cancel:"お断りした",dm:"返事してない",noshow:"来られなくなった",wait:"—"}[p.st]||"会えなかった"}
 function arrive(S,api,k){
   const p=S.p[k];
   if(k==="nono"&&!S.nonoTold){p.st="lost";api.them("nono",["着きました！","改札出て、左に出ました","柱…どこだろう"]);
@@ -237,6 +239,9 @@ function nonoChoices(S){return [
 function nonoFix(S,api){api.later(()=>api.ask("nono",["どうしましょう…"],nonoChoices(S)),1200)}
 function meet(S,api,k){
   const p=S.p[k];if(p.st==="done"||S.over) return;if(S.callOn||!A.$("scene").hidden){api.later(()=>meet(S,api,k),1500);return}
+  if(k==="miku"&&S.mikuTwist&&!S.twistDone){S.twistDone=1;p.st="meeting";const T0=S.th[k];if(T0.pending&&!T0.pending.end){T0.pending=null;T0.asking=false}T0.aq=[];api.ask("miku",["いました！！🥹","あの…ごめんなさい、実は","衣装のじゃなくて私服の{name}と交換ってできたりしますか…？🙏"],[
+      {t:"大丈夫ですよ！",cost:"1分",on:()=>{S.twistOk=1;api.addTime(1)},r:["えっ神ですか😭😭","一生大事にします"],after:()=>{p.st="x";meet(S,api,k)}},
+      {t:"ごめんなさい、私服は手放せなくて",r:["ですよね！！予定どおりで大丈夫です🙇‍♀️"],after:()=>{p.st="x";meet(S,api,k)}}]);return}
   p.st="done";const TT=S.th[k];if(TT.pending&&!TT.pending.end){TT.pending=null;TT.asking=false}TT.aq=[];
   api.them(k,["いました！","今日はありがとうございます！"]);
   api.scene("交換",SCN.threads[k].short+"と交換","ケースからトレカを出して、手渡しで交換。","{name}、おかえり");
@@ -247,7 +252,7 @@ function meet(S,api,k){
   api.hud();
 }
 function gate(S){
-  const open=Object.keys(S.p).filter(k=>["coming","search","lost","meeting"].includes(S.p[k].st)).map(k=>SCN.threads[k].short);
+  const open=Object.keys(S.p).filter(k=>["coming","search","lost","meeting","x"].includes(S.p[k].st)).map(k=>SCN.threads[k].short);
   const go=()=>{S.gated=1;const w=gateWalk(S);A.scene("改札","改札を通る","ホームまで"+w+"分。",open.length?open.join("・")+"さん、ごめんなさい":"");A.addTime(w);
     if(S.over) return;
     if(S.t>LAST) return A.end("missed");
