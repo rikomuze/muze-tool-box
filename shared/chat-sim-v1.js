@@ -61,15 +61,15 @@ function startClock(){
   timer=setInterval(()=>{
     if(my!==sid||!S||S.over||!$("scene").hidden) return;
     const q=isQuiet();S.qms=q?(S.qms||0)+250:0;
-    if(q&&S.qms>=(SCN.quietMs||10000)){S.qms=0;fireFiller()}
-    S.acc+=(q&&S.qms>=2000)?1250:250;
+    if(q&&S.qms>=(SCN.quietMs||8000)){S.qms=0;fireFiller()}
+    S.acc+=(q&&S.qms>=1500)?1500:250;
     if(S.acc>=SCN.speed){S.acc-=SCN.speed;minute()}
     idleTick(250);
   },250);
 }
 function isQuiet(){
   if(S.callOn||!$("osd").hidden) return false;
-  for(const k of SCN.order){const T=S.th[k];if(T.busy||T.asking&&!T.pending) return false;if(T.pending&&!T.pending.end&&!SCN.threads[k].static&&Date.now()-(T.pendAt||0)<8000) return false}
+  for(const k of SCN.order){const T=S.th[k];if(T.busy||T.asking&&!T.pending) return false;if(T.pending&&!T.pending.end&&!SCN.threads[k].static&&Date.now()-(T.pendAt||0)<6000) return false}
   return true;
 }
 function fireFiller(){
@@ -190,10 +190,11 @@ function info(src,x,kind){const k=SCN.infoThread||"info";const T=S.th[k];line(k,
 
 /* ---------------- overlays ---------------- */
 let sceneT=null;
-function scene(tag,title,body,hand,kind){
-  const el=$("scene");el.hidden=false;
-  el.innerHTML=`<div class="scard ${kind||""}" role="status"><span class="tag">${esc(fill(tag))}</span><h3><span>${esc(fill(title))}</span></h3><p>${esc(fill(body))}</p>${hand?`<p class="hand">${esc(fill(hand))}</p>`:""}</div>`;
-  clearTimeout(sceneT);const close=()=>{el.hidden=true;clearTimeout(sceneT)};el.onclick=close;sceneT=setTimeout(close,3200);
+function scene(tag,title,body,hand,kind,opt){
+  const el=$("scene");el.hidden=false;opt=opt||{};
+  el.innerHTML=`<div class="scard ${kind||""}" role="status"><span class="tag">${esc(fill(tag))}</span><h3><span>${esc(fill(title))}</span></h3><p>${esc(fill(body))}</p>${hand?`<p class="hand">${esc(fill(hand))}</p>`:""}${opt.wait?`<p class="tapnext">タップでつづき ›</p>`:""}</div>`;
+  clearTimeout(sceneT);let shut=false;const close=()=>{if(shut)return;shut=true;el.hidden=true;clearTimeout(sceneT);if(opt.onClose)opt.onClose()};el.onclick=close;
+  if(!opt.wait) sceneT=setTimeout(close,3200);
 }
 function confirmBox(title,body,yes,no,onYes){
   const el=$("osd");el.hidden=false;el.className="ov osd";
@@ -433,6 +434,6 @@ function showIntro(){
 }
 function begin(name){sid++;S=fresh(name);hud();render();runEvents();startClock()}
 
-const api={ring,quietWhy(){if(S.callOn)return"call";if(!$("osd").hidden)return"osd";if(!$("scene").hidden)return"scene";for(const k of SCN.order){const T=S.th[k];if(T.busy)return k+" busy";if(T.asking&&!T.pending)return k+" asking";if(T.pending&&!T.pending.end&&!SCN.threads[k].static&&Date.now()-(T.pendAt||0)<8000)return k+" pending"}return "quiet "+(S.qms||0)},$,pick,rnd,shuffle,fmt,esc,ACT,LS,later,addTime,change,applyFx,line,sys,them,me,setPending,endStamp,openQ,ask,banner,info,scene,confirmBox,menu,incoming,callOut,hud,render,openTh,end,fill,get S(){return S},get SCN(){return SCN}};
+const api={ring,quietWhy(){if(S.callOn)return"call";if(!$("osd").hidden)return"osd";if(!$("scene").hidden)return"scene";for(const k of SCN.order){const T=S.th[k];if(T.busy)return k+" busy";if(T.asking&&!T.pending)return k+" asking";if(T.pending&&!T.pending.end&&!SCN.threads[k].static&&Date.now()-(T.pendAt||0)<6000)return k+" pending"}return "quiet "+(S.qms||0)},$,pick,rnd,shuffle,fmt,esc,ACT,LS,later,addTime,change,applyFx,line,sys,them,me,setPending,endStamp,openQ,ask,banner,info,scene,confirmBox,menu,incoming,callOut,hud,render,openTh,end,fill,get S(){return S},get SCN(){return SCN}};
 window.ChatSim={start(scn){SCN=scn;document.title=scn.title;seen=LS.get(scn.id+":seen",{});titlesGot=LS.get(scn.id+":titles",{});mount();showIntro()},api,ACT};
 })();

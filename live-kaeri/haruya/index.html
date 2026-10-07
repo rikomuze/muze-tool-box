@@ -6,6 +6,15 @@
   <title>ライブ帰りシミュレーター はるや版｜MUZE PLAY ROOM</title>
   <meta name="description" content="彼女が帰ってくるまで、起きていられるか。推しの話を聞くほど眠くなる、ライブ帰りシミュレーターのはるや版。">
   <meta name="robots" content="noindex">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="MUZE PLAY ROOM">
+  <meta property="og:title" content="ライブ帰りシミュレーター はるや版">
+  <meta property="og:description" content="彼女が帰ってくるまで、起きていられるか。推しの話を聞くほど眠くなる、ライブ帰りシミュレーターのはるや版。">
+  <meta property="og:url" content="https://rikomuze.github.io/muze-tool-box/live-kaeri/haruya/">
+  <meta property="og:image" content="https://rikomuze.github.io/muze-tool-box/live-kaeri/haruya/ogp.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#f7f5ed">
   <link rel="icon" href="../../icon-192.png">
   <link rel="apple-touch-icon" href="../../apple-touch-icon.png">
@@ -50,23 +59,48 @@ const home=S=>S.arrive+9;      // 家に着く
 const prep=S=>(S.karaage?1:0)+(S.shelf?1:0)+(S.bath?1:0);
 const left=S=>Math.max(0,home(S)-S.t);
 
-const TRAIN=[ // 電車で語らせて（2分ごとに1かたまり）
-  [O("まずね"),O("オープニングで{name}がいちばん最初に出てきたの")],
-  [O("で、2曲目の前に{name}が"),O("ちょっと笑ったの"),O("あれ絶対なんか思い出し笑い")],
-  [O("あとダンス"),O("前より腕の角度が変わってて"),O("ほんとに細かいんだけど")],
-  [O("{name}のソロのところ"),O("声がちょっと震えてて"),O("泣くかと思った")],
-  [O("MCで{name}が"),O("最近ハマってるパンの話してた"),O("たぶん駅前のあの店")],
-  [O("あとね"),O("最後のあいさつ"),O("「また会おうね」って3回言ってた")],
-  [O("3回目はちょっと噛んでた"),O("それもよかった")],
-  [O("衣装も2着目がほんとによくて"),O("ジャケットの裏地が"),O("ちらっと赤いの")],
-  [O("{name}がこっち側の花道来たとき"),O("時が止まった")],
-  [O("…ってことがあったの"),"ごめん長くなった"]
+const AQ=(t,fx,r,ex)=>Object.assign({t,fx,r:r||[]},ex||{});
+const AS=(st,fx,r)=>({stamp:st,fx,r:r||[]});
+const TRAIN=[ // 電車で語らせて（2分ごとに1かたまり。かたまりごとの相槌つき）
+  {l:[O("まずね"),O("オープニングで{name}がいちばん最初に出てきたの")],c:[
+    AQ("最初から！？",{sleep:2,mood:2},["そう！心の準備できてなかった"]),
+    AQ("うんうん",{sleep:1,mood:1},[],{aiz:1}),
+    AS(["🎆","どーん"],{mood:1},["それそれ"])]},
+  {l:[O("で、2曲目の前に{name}が"),O("ちょっと笑ったの"),O("あれ絶対なんか思い出し笑い")],c:[
+    AQ("何を思い出したんだろうね",{sleep:2,mood:3},["気になって次の曲入ってこなかった"]),
+    AQ("思い出し笑いかわいいね",{sleep:2,mood:2},["かわいいの"]),
+    AQ("気のせいじゃない？",{mood:-4},["見たもん"])]},
+  {l:[O("あとダンス"),O("前より腕の角度が変わってて"),O("ほんとに細かいんだけど")],c:[
+    AQ("よく気づくね",{sleep:2,mood:3},["見ちゃうの"]),
+    AQ("へえ〜",{sleep:1,mood:1},[],{aiz:1}),
+    AQ("（既読だけつけておく）",{mood:-5},[],{silent:1})]},
+  {l:[O("{name}のソロのところ"),O("声がちょっと震えてて"),O("泣くかと思った")],c:[
+    AQ("それは泣く",{sleep:2,mood:3},["でしょ！？"]),
+    AQ("泣かなかったの？",{sleep:2,mood:2},["…ちょっと泣いた"]),
+    AS(["🥲","うるっ"],{mood:1},["わかってくれる"])]},
+  {l:[O("MCで{name}が"),O("最近ハマってるパンの話してた"),O("たぶん駅前のあの店")],c:[
+    AQ("今度そのパン屋行こうよ",{sleep:1,mood:5},["行く！！","聖地巡礼"]),
+    AQ("パン好きなんだ",{sleep:1,mood:1},[],{aiz:1}),
+    AQ("俺もパン好きだけど",{mood:-1},["知ってる笑"],{jealous:1})]},
+  {l:[O("あとね"),O("最後のあいさつ"),O("「また会おうね」って3回言ってた")],c:[
+    AQ("3回も？",{sleep:2,mood:2},["3回！"]),
+    AQ("また会えるといいね",{sleep:1,mood:4},["うん…絶対会う"]),
+    AQ("なるほど",{sleep:1,mood:0},[],{aiz:1})]},
+  {l:[O("3回目はちょっと噛んでた"),O("それもよかった")],c:[
+    AQ("噛んだのもよかったんだ笑",{sleep:1,mood:3},["そこがいいの"]),
+    AQ("うんうん",{sleep:1,mood:1},[],{aiz:1}),
+    AS(["😂","わら"],{mood:1},["笑うとこじゃない笑"])]},
+  {l:[O("衣装も2着目がほんとによくて"),O("ジャケットの裏地が"),O("ちらっと赤いの")],c:[
+    AQ("裏地まで見てるの？",{sleep:2,mood:2},["見えるの、動くと"]),
+    AQ("写真ある？",{sleep:1,mood:3},["撮影禁止だよ","目に焼きつけた"]),
+    AQ("へえ〜",{sleep:1,mood:0},[],{aiz:1})]},
+  {l:[O("{name}がこっち側の花道来たとき"),O("時が止まった")],c:[
+    AQ("近かった？",{sleep:2,mood:3},["近かった…","まだ手が震えてる"]),
+    AQ("止まってよかったね",{sleep:1,mood:2},["よかった"]),
+    AS(["⏸","とまった"],{mood:2},["それ笑"])]},
+  {l:[O("…ってことがあったの"),"ごめん長くなった"],c:null}
 ];
-const AIZ=[ // 電車トークへの相槌
-  [{t:"うんうん",fx:{sleep:1,mood:1},aiz:1,r:[]},{t:"それで？",fx:{sleep:3,mood:2},r:["聞いてくれるの好き"]},{stamp:["😪","ねむ"],fx:{mood:-7},r:["え、寝てる？"]}],
-  [{t:"へえ〜",fx:{sleep:1,mood:1},aiz:1,r:[]},{t:"それは泣く",fx:{sleep:2,mood:2},r:["でしょ！？"]},{stamp:["👍","いいね"],fx:{mood:-2},r:["スタンプ…"]}],
-  [{t:"なるほど",fx:{sleep:1,mood:1},aiz:1,r:[]},{t:"細かいとこ見てるね",fx:{sleep:2,mood:3},r:["見ちゃうの"]},{t:"（既読だけつけておく）",fx:{mood:-5},silent:1,r:[]}]
-];
+
 
 const SCN={
   id:"lk-haruya",title:"ライブ帰りシミュレーター はるや版",start:START,speed:6000,
@@ -125,10 +159,9 @@ const SCN={
     if(S.delayMsg&&!T.busy&&!api.openQ("akari")&&!T.asking){S.delayMsg=0;api.them("akari",["ちょっと待って","電車止まった…","8分遅れるって","{home}くらいになるかも"]);return}
     if(S.talk>=0&&S.talk<S.talkN&&n%2===0&&!T.busy&&!api.openQ("akari")&&!T.asking){
       const chunk=TRAIN[S.talk];S.talk++;
-      const last=S.talk>=S.talkN;
-      if(last) api.them("akari",TRAIN[TRAIN.length-1]);
-      else if(S.talk%2===0){api.ask("akari",chunk,AIZ[(S.talk/2)%3].map(c=>Object.assign({},c,{on:(S)=>{if(c.aiz)S.aiz++;if(c.silent)S.silent++}})))}
-      else api.them("akari",chunk);
+      const last=S.talk>=S.talkN||!chunk.c;
+      if(last) api.them("akari",TRAIN[TRAIN.length-1].l);
+      else api.ask("akari",chunk.l,chunk.c.map(c=>Object.assign({},c,{on:(S)=>{if(c.aiz)S.aiz++;if(c.silent)S.silent++;if(c.jealous)S.jealous++}})));
       if(last) S.talk=99;
     }
     if(S.pick&&!S.akSlept&&S.t>=S.pickAt) finish(S,api,"pickup");
@@ -342,14 +375,14 @@ function finish(S,api,kind){
   if(S.bath) say.push("お風呂わいてる…神");else if(kind!=="pickup") say.push("お風呂入りたい〜");
   if(S.listenLater) say.push("で、MCの話の続きなんだけど");
   const title=say.shift();
-  api.scene(kind==="pickup"?"合流":"ただいま","「"+title+"」",say.map(x=>"「"+x+"」").join(" "),hand.join("・")||(kind==="pickup"?"紙袋をひとつ受け取る":"玄関で、あかりが笑っている"));
-  api.later(()=>{
+  api.scene(kind==="pickup"?"合流":"ただいま","「"+title+"」",say.map(x=>"「"+x+"」").join(" "),hand.join("・")||(kind==="pickup"?"紙袋をひとつ受け取る":"玄関で、あかりが笑っている"),"",{wait:true,onClose:()=>{
     if(S.mood<25) return api.end("cold");
     if(S.bet) return api.end("bet");
     if(kind==="pickup") return api.end("pickup");
     if(prep(S)===3&&S.mood>=70) return api.end("best");
     api.end("home");
-  },3400);
+  }});
+
 }
 function act(S,min,sleep,title,body,hand){
   S.lying=0;A.scene(min+"分",title,body,hand);A.addTime(min);A.change("sleep",sleep);A.hud();
