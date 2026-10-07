@@ -299,7 +299,9 @@ function render(scroll){
       const T=S.th[k],d=SCN.threads[k];
       return `<button class="row" type="button" data-th="${k}">${avatar(k)}<span style="min-width:0"><div class="nm">${esc(d.name)}${d.n?`<small>(${d.n})</small>`:""}</div><div class="pv">${esc(T.last||"")}</div></span><span class="side">${fmt(T.lastT)}${T.unread?`<span class="badge">${T.unread}</span>`:""}</span></button>`;
     }).join("");
+    const oldList=v.querySelector(".list"),keepY=oldList?oldList.scrollTop:0;
     v.innerHTML=`<div class="list"><div class="lhead"><h2>トーク</h2><span class="ic" aria-hidden="true"><span>⌕</span><span>✎</span></span></div><div class="search">検索</div><div class="tabs" aria-hidden="true"><span class="on">すべて</span><span>友だち</span><span>グループ</span><span>公式アカウント</span></div>${rows}</div><div class="nav" aria-hidden="true"><span><i>⌂</i>ホーム</span><span class="on"><i>💬</i>トーク</span><span><i>▤</i>ニュース</span><span><i>☰</i>ウォレット</span></div>`;
+    v.querySelector(".list").scrollTop=keepY;
     v.querySelectorAll(".row").forEach(b=>b.onclick=()=>openTh(b.dataset.th));
     return;
   }
