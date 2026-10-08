@@ -31,22 +31,22 @@ table{width:100%;border-collapse:collapse;font-size:12px;background:#fff}th,td{p
 <div id="countWrap"><label>購入枚数</label><div class="choices" id="count"><button data-v="1" class="on">1枚</button><button data-v="2">2枚以上</button></div></div>
 <div class="result" id="result"></div></section>
 
-<div class="alert"><strong>⚠️ まずここだけ！</strong>チケットは1人1枚。同行者がいる場合は事前に分配します。入場用QRコードのスクショでは入場できません。公演当日は身分証明書も忘れずに。</div>
+<div class="alert"><strong>⚠️ まずここだけ！</strong>購入者・同行者ともにMUZEUMまたはB-Townの対象FC会員であることが必須です。公演当日まで会員を継続してください。チケットは1人1枚。同行者がいる場合は事前に分配します。入場用QRコードのスクショでは入場できません。公演当日は身分証明書も忘れずに。</div>
 
 <h2>01. AnyPASSを準備する</h2>
 <section class="paper"><p>チケットの受け取りには、スマートフォン専用アプリ「AnyPASS」のダウンロードと無料の利用登録が必要です。</p>
 <div class="steps"><div class="step"><b>AnyPASSをダウンロード</b>iPhoneはiOS14以降、AndroidはAndroid9.0以降（一部機種を除く）。</div><div class="step"><b>利用登録・電話番号認証</b>iPhoneはSMS認証。SMS認証ができない場合は、しばらく待つと電話発信による認証画面が表示されます。</div><div class="step"><b>登録した電話番号を確認</b>購入時に「受取用携帯電話番号」として登録した番号の端末で受け取ります。</div></div>
 <div class="alert"><strong>SIMなし端末は使えません</strong>SIMカードが入っていない端末や、電話番号を取得していない端末ではAnyPASSを利用できません。</div></section>
 
-<h2>02. チケットを受け取る</h2>
-<section class="paper"><div class="steps"><div class="step"><b>発券開始日時を過ぎたらAnyPASSを開く</b>受け取り可能なチケットがあると、お知らせが表示されます。</div><div class="step"><b>MUZEUM / B-Townの情報でログイン</b>チケット発券時に入力するのは、<b>ローチケのID・パスワードではありません。</b> MUZEUMまたはB-Town〈Architect / Resident〉に登録しているメールアドレスとパスワードを入力します。</div><div class="step"><b>受け取りを完了する</b>HOMEまたはマイイベントに対象公演が表示されていることを確認。</div></div>
+<h2 id="receiveTitle">02. チケットを受け取る</h2>
+<section class="paper" id="receiveSection"><div class="steps"><div class="step"><b>発券開始日時を過ぎたらAnyPASSを開く</b>受け取り可能なチケットがあると、お知らせが表示されます。</div><div class="step"><b>MUZEUM / B-Townの情報でログイン</b>チケット発券時に入力するのは、<b>ローチケのID・パスワードではありません。</b> MUZEUMまたはB-Town〈Architect / Resident〉に登録しているメールアドレスとパスワードを入力します。</div><div class="step"><b>受け取りを完了する</b>HOMEまたはマイイベントに対象公演が表示されていることを確認。</div></div>
 <div class="alert"><strong>ローチケで申し込んでいても、受取時のログインはローチケではありません</strong>今回の公演では、AnyPASSでチケットを受け取る際に使うのは <b>MUZEUM / B-Townの登録メールアドレス＋パスワード</b> です。</div>
 <div class="tip"><strong>💡 誤って退会してしまった場合</strong>公式案内では、公演日までに再入会するとチケットを受け取れるとされています。購入者・同行者ともに、公演日当日まで会員を継続しておきましょう。</div>
 <div class="alert"><strong>「発券開始」と「座席表示」は別！</strong>チケットの発券は公演ごとの日時から。座席番号は各公演日当日 <b>9:00頃</b>に表示予定です。</div></section>
 
 <h2 id="distTitle">03. 同行者へ分配する</h2>
 <section class="paper" id="distSection"></section>
-<div class="tip"><strong>分配方法は4つ</strong>LINE／メール／SMS／QRコード。LINE・メール・SMSでは受け取り用URLが送られ、同行者がそのURLからAnyPASSで受け取ります。</div>
+<div class="tip" id="distTip"><strong>分配方法は4つ</strong>LINE／メール／SMS／QRコード。LINE・メール・SMSでは受け取り用URLが送られ、同行者がそのURLからAnyPASSで受け取ります。</div>
 
 <h2>04. SS指定席の人へ <span class="badge">重要</span></h2>
 <section class="paper"><p class="lead">SS指定席は、同行者を含む全員に本人確認があります。</p><p>当日はアップグレード申込時の登録情報と照合されます。<b>顔写真付きの身分証を必ず持参</b>してください。</p>
@@ -90,9 +90,14 @@ pick("role");pick("seat");pick("count");sel.onchange=render;
 
 function checkItem(t){return '<label><input type="checkbox">'+t+'</label>'}
 
+const parentReceive='<div class="steps"><div class="step"><b>発券開始日時を過ぎたらAnyPASSを開く</b>受け取り可能なチケットがあるとお知らせが表示されます。</div><div class="step"><b>自分のMUZEUM / B-Town情報で認証</b>ローチケのID・パスワードではありません。対象FCに登録したメールアドレスとパスワードを入力します。</div><div class="step"><b>親チケットの受け取りを完了</b>HOMEまたはマイイベントに対象公演が表示されていることを確認します。</div></div><div class="tip"><strong>FC会員資格は公演当日まで必要</strong>購入者・同行者ともに対象FC会員であることが必須です。</div><div class="alert"><strong>発券開始と座席表示は別</strong>座席番号は各公演当日9:00頃に表示予定です。</div>';
+const companionReceive='<p class="lead">同行者は購入者向けの発券操作をする必要はありません。</p><div class="steps"><div class="step"><b>AnyPASSの利用登録を済ませる</b>自分のスマートフォンで電話番号認証まで完了します。</div><div class="step"><b>購入者から分配URLまたはQRコードを受け取る</b>購入者が親チケットを発券した後、LINE・メール・SMSのURL、またはQRコードを送ってもらいます。</div><div class="step"><b>自分のFC会員情報で認証する</b>受け取り画面の案内に従い、自分のMUZEUM / B-Townの登録メールアドレス・パスワードを入力します。ローチケのログイン情報ではありません。</div><div class="step"><b>分配チケットの受け取りを完了する</b>AnyPASSのマイイベントに自分のチケットが表示されることを確認します。</div></div><div class="alert"><strong>同行者もFC会員必須</strong>購入者の会員情報ではなく、同行者本人の対象FC会員情報で認証します。公演当日まで会員資格を継続してください。</div><div class="tip"><strong>座席番号は当日9:00頃に表示予定</strong>分配チケットを受け取っていても、座席表示は公演当日です。</div>';
 function render(){
  const s=shows[+sel.value];
  document.querySelector("#countWrap").style.display=role==="parent"?"block":"none";
+ document.querySelector("#receiveTitle").textContent=role==="parent"?"02. チケットを発券・受け取る":"02. 分配チケットを受け取る";
+ document.querySelector("#receiveSection").innerHTML=role==="parent"?parentReceive:companionReceive;
+ document.querySelector("#distTip").style.display=role==="parent"&&count==="2"?"block":"none";
  let tasks=[];
  if(role==="parent"){
    tasks.push("発券開始後、自分のAnyPASSで親チケットを受け取る（受取時はMUZEUM / B-Town情報でログイン）");
@@ -121,8 +126,8 @@ function render(){
 
    document.querySelector("#troubleSection").innerHTML='<div class="steps"><div class="step"><b>発券開始日時を過ぎている？</b>自分の公演の日時を確認。</div><div class="step"><b>購入時の受取用携帯電話番号は合っている？</b>AnyPASSを登録した端末の番号と一致しているか確認。</div><div class="step"><b>AnyPASSの利用登録は完了している？</b>電話番号認証まで済んでいるか確認。</div><div class="step"><b>ログイン情報を間違えていない？</b>受取時に使うのはローチケではなく、MUZEUM / B-Townの登録メールアドレス・パスワードです。</div><div class="step"><b>MUZEUM / B-Townを退会していない？</b>会員状態を確認。</div><div class="step"><b>それでも出ない場合</b>申込内容の電話番号を確認し、AnyPASS公式HELPへ。</div></div>';
  }else{
-   document.querySelector("#distTitle").textContent="03. 分配チケットを受け取る";
-   document.querySelector("#distSection").innerHTML='<p>同行者のあなたは、<b>購入者からLINE・メール・SMS・QRのいずれかで分配してもらい、自分のAnyPASSで受け取ります。</b>購入者の端末で一緒に入るのではなく、原則1人1枚です。</p><div class="steps"><div class="step"><b>AnyPASSを準備</b>利用登録・電話番号認証まで先に済ませておきます。</div><div class="step"><b>購入者から受け取り用URL／QRを送ってもらう</b>LINE・メール・SMSで届いた場合は受け取り用URLを開きます。QRの場合はAnyPASSの「QR読取」から読み取ります。</div><div class="step"><b>AnyPASSでチケットを受け取る</b>画面の案内に沿って進み、自分のMUZEUM / B-Townのメールアドレス・パスワードを入力します。<b>ローチケのID・パスワードではありません。</b></div><div class="step"><b>マイイベントに表示されたら完了</b>自分の端末に対象公演のチケットが表示されていることを確認します。</div></div>'+(seat==="ss"?'<div class="alert"><strong>SS指定席は自分の名前を確認</strong>アップグレード申込時に登録された同行者情報がチケットに表示されます。自分以外の名前のチケットが届いた場合は、購入者に返却・再分配をお願いしてください。</div>':'');
+   document.querySelector("#distTitle").textContent="03. 分配後の確認ポイント";
+   document.querySelector("#distSection").innerHTML='<p>購入者からの分配が済んだら、<b>自分のAnyPASSの「マイイベント」に対象公演が表示されているか</b>確認しましょう。購入者にも受け取り完了を伝えると安心です。</p>'+(seat==="ss"?'<div class="alert"><strong>SS指定席はチケットの氏名も確認</strong>アップグレード申込時の登録情報と自分の氏名が一致するか確認してください。異なる場合は購入者に相談してください。</div>':'');
    document.querySelector("#troubleSection").innerHTML='<div class="steps"><div class="step"><b>購入者から分配済み？</b>まず購入者側で分配操作が完了しているか確認。</div><div class="step"><b>AnyPASSの利用登録は完了している？</b>自分の端末で電話番号認証まで済ませます。</div><div class="step"><b>受取時は自分の会員情報を使っている？</b>使うのはローチケ情報ではなく、自分のMUZEUM / B-Townのメールアドレス・パスワードです。</div><div class="step"><b>会員を退会していない？</b>公演日当日まで会員継続が必要です。</div><div class="step"><b>それでも受け取れない場合</b>購入者に分配状態を確認してもらい、必要に応じてAnyPASS公式HELPへ。</div></div>';
  }
 
