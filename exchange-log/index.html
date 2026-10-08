@@ -158,7 +158,7 @@ function optionHtml(values,current){return values.map(x=>'<option '+(x===current
 function renderItemEditors(side){
   const box=$("#"+side+"Items"),items=formItems[side];
   box.innerHTML=items.map((item,i)=>'<div class="itemEditor" data-side="'+side+'" data-index="'+i+'">'+
-    '<div class="itemEditorTop"><div><label class="fieldlabel">メンバー</label><select data-field="member">'+optionHtml(MEMBERS,item.member)+'</select></div>'+
+    '<div class="itemEditorTop"><div><label class="fieldlabel">メンバー</label><select data-field="member">'+(MEMBERS.includes(item.member)?'':'<option value="" disabled selected>選択してください</option>')+optionHtml(MEMBERS,item.member)+'</select></div>'+
     '<div><label class="fieldlabel">グッズ</label><select data-field="type">'+optionHtml(TYPES,item.type)+'</select></div></div>'+
     '<div class="otherItemWrap" '+(item.member==="その他"?"":"hidden")+'><label class="fieldlabel">メンバー / アーティスト名</label><input data-field="other" value="'+esc(item.other)+'" placeholder="例：MANATO / CHIKA"></div>'+
     '<label class="fieldlabel">絵柄 / シリーズ</label><select data-field="series">'+optionHtml(SERIES,item.series)+'</select>'+
