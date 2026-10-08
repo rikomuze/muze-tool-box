@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Play at the MUZEUM vol.2 会場グッズ計算機</title>
+  <meta name="description" content="MAZZEL 2nd Fan Meeting -Play at the MUZEUM Vol.2- 会場販売グッズの合計金額・点数・ショッパー特典をその場で計算できる非公式ファンメイドツール。" />
+  <meta name="theme-color" content="#f1ebe1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
+  <style>
+  /* =====================================================================
+     グッズ計算機 会場版 — MUZE TOOL BOX「作業机」ブランド
+     EC版の「方眼ノート＋レシート」を引き継ぎ、会場で使う前提で
+     ・公演セレクト（地方TIN自動切替）・特典ゲージ・売り切れチェック
+     ・レジで見せる注文リスト・入力の自動保存 を追加。
+     ===================================================================== */
+  :root{
+    --desk:#f1ebe1;
+    --paper:#ffffff;
+    --paper-dim:#e9e1d2;
+    --pencil:#40382f;
+    --faded:#8a8072;
+    --red-pencil:#c0472f;
+    --tape-berry:rgba(226,122,148,.85);
+    --tape-mint:rgba(164,197,175,.85);
+    --tape-sun:rgba(246,206,82,.85);
+    --mz-orange:#ee6a24;
+    --mz-green:#169a52;
+    --grid-line:rgba(64,56,47,.07);
+    --line:rgba(64,56,47,.18);
+    --hand:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",cursive;
+    --gothic:"Zen Kaku Gothic New","Hiragino Sans",sans-serif;
+    --obj-shadow:0 10px 24px rgba(64,56,47,.18);
+    --dash:1.5px dashed rgba(64,56,47,.32);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:radial-gradient(rgba(64,56,47,.05) 1px, transparent 1px) 0 0/22px 22px, var(--desk);
+    color:var(--pencil);
+    font-family:var(--gothic);
+    line-height:1.8;
+    -webkit-text-size-adjust:100%;
+    padding-bottom:110px;
+  }
+  img{display:block;max-width:100%}
+  a{color:inherit;text-decoration:none}
+  button,input{font-family:inherit;color:inherit}
+  button{-webkit-tap-highlight-color:transparent}
+  .shell{max-width:1080px;margin:0 auto;padding:0 14px}
+  :focus-visible{outline:2.5px solid var(--tape-berry);outline-offset:3px}
+  .num{font-variant-numeric:tabular-nums}
+
+  /* ---------- 見出し ---------- */
+  .intro{padding:18px 2px 6px}
+  .intro .kicker{
+    display:inline-block;font-size:11px;font-weight:700;letter-spacing:.14em;
+    background:var(--mz-orange);color:#fff;padding:2px 10px;transform:rotate(-1.2deg);
+  }
+  .intro h1{
+    font-family:var(--hand);font-weight:600;
+    font-size:clamp(25px,6.8vw,36px);
+    letter-spacing:.04em;line-height:1.35;margin-top:8px;
+    transform:rotate(-.4deg);
+  }
+  .intro h1 em{font-style:normal;border-bottom:3px solid var(--tape-berry)}
+  .intro .lede{font-size:12.5px;color:var(--faded);margin-top:4px}
+
+  /* ---------- 公演カード ---------- */
+  .venue-card{
+    position:relative;margin-top:18px;background:var(--paper);box-shadow:var(--obj-shadow);
+    padding:16px 14px 14px;
+  }
+  .venue-card::before{
+    content:"";position:absolute;width:56px;height:16px;background:var(--tape-sun);
+    top:-8px;left:22px;transform:rotate(-3deg);
+  }
+  .venue-card h2{font-family:var(--hand);font-weight:600;font-size:16px;letter-spacing:.06em}
+  .venue-chips{display:flex;gap:8px;overflow-x:auto;padding:8px 2px 10px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .venue-chips::-webkit-scrollbar{display:none}
+  .vchip{
+    flex:0 0 auto;min-height:58px;min-width:84px;padding:6px 12px;
+    border:1.5px solid var(--line);background:var(--paper);cursor:pointer;
+    display:grid;align-content:center;justify-items:start;line-height:1.35;text-align:left;
+  }
+  .vchip .d{font-size:11px;font-weight:700;color:var(--faded)}
+  .vchip .p{font-size:14px;font-weight:700}
+  .vchip.past{opacity:.45}
+  .vchip.active{border-color:var(--pencil);background:var(--pencil);color:var(--desk)}
+  .vchip.active .d{color:rgba(241,235,225,.75)}
+  .venue-info{
+    display:grid;grid-template-columns:64px minmax(0,1fr);gap:12px;align-items:center;
+    border-top:var(--dash);padding-top:12px;
+  }
+  .venue-info img{width:64px;height:64px;border-radius:50%;background:var(--paper)}
+  .venue-info .hall{font-size:14px;font-weight:700;line-height:1.5}
+  .venue-info .meta{font-size:12px;color:var(--faded);line-height:1.6}
+  .venue-info .meta b{color:var(--pencil)}
+  .region-select{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .region-select button{
+    min-height:36px;padding:4px 10px;font-size:11.5px;font-weight:700;letter-spacing:.06em;
+    border:1.5px solid var(--line);background:var(--paper);cursor:pointer;
+  }
+  .region-select button.active{border-color:var(--pencil);background:var(--pencil);color:var(--desk)}
+  details.rules{margin-top:12px;border-top:var(--dash);padding-top:8px}
+  details.rules summary{
+    cursor:pointer;font-size:13px;font-weight:700;min-height:40px;display:flex;align-items:center;gap:6px;
+    list-style:none;
+  }
+  details.rules summary::-webkit-details-marker{display:none}
+  details.rules summary::after{content:"＋";margin-left:auto;font-size:16px}
+  details.rules[open] summary::after{content:"−"}
+  .rules ul{list-style:none;display:grid;gap:6px;padding:4px 0 6px}
+  .rules li{font-size:12px;line-height:1.7;padding-left:14px;position:relative}
+  .rules li::before{content:"・";position:absolute;left:0}
+  .rules .src{font-size:11px;color:var(--faded)}
+  .rules .src a{text-decoration:underline dashed;text-underline-offset:3px}
+
+  /* ---------- 2カラム ---------- */
+  .layout{display:grid;gap:26px;margin-top:22px}
+  @media(min-width:900px){
+    .layout{grid-template-columns:minmax(0,1fr) 370px;align-items:start}
+    .receipt-col{position:sticky;top:16px}
+  }
+
+  /* ---------- タブ ---------- */
+  .tabs{display:flex;gap:6px;overflow-x:auto;padding:8px 10px 0;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{
+    flex:0 0 auto;min-height:46px;padding:10px 14px 12px;
+    background:var(--paper-dim);border:1px solid var(--line);border-bottom:0;
+    font-size:12.5px;font-weight:700;letter-spacing:.03em;color:var(--faded);
+    cursor:pointer;position:relative;transform:translateY(2px);
+  }
+  .tab .c{
+    display:inline-block;min-width:18px;margin-left:4px;padding:0 5px;border-radius:9px;
+    background:var(--pencil);color:var(--desk);font-size:10px;line-height:18px;text-align:center;
+  }
+  .tab.active{background:var(--paper);color:var(--pencil);transform:translateY(0);z-index:2}
+  .tab.active::before{
+    content:"";position:absolute;width:30px;height:9px;background:var(--tape-berry);
+    top:-5px;left:50%;transform:translateX(-50%) rotate(-3deg);
+  }
+
+  /* ---------- ノート ---------- */
+  .notebook{
+    position:relative;
+    background:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
+      var(--paper);
+    background-size:18px 18px,18px 18px,auto;
+    box-shadow:var(--obj-shadow);
+    padding:12px 14px 18px;
+  }
+  .note-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding-bottom:6px}
+  .note-bar h2{font-family:var(--hand);font-weight:600;font-size:19px;letter-spacing:.05em}
+  .soldout-toggle{
+    display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:4px 12px;
+    border:1.5px dashed var(--line);background:transparent;cursor:pointer;
+    font-size:12px;font-weight:700;color:var(--faded);
+  }
+  .soldout-toggle[aria-pressed="true"]{border-style:solid;border-color:var(--red-pencil);color:var(--red-pencil);background:rgba(255,245,241,.9)}
+  .soldout-hint{display:none;font-size:11.5px;color:var(--red-pencil);font-family:var(--hand);font-weight:600;padding-bottom:4px}
+  body.so-mode .soldout-hint{display:block}
+
+  .goods-list{display:grid}
+  .empty-note{padding:30px 6px;text-align:center;color:var(--faded);font-size:13px}
+  .item{
+    display:grid;grid-template-columns:64px minmax(0,1fr);gap:12px;align-items:start;
+    padding:14px 0;border-bottom:var(--dash);
+  }
+  .item:last-child{border-bottom:0}
+  .item-image-wrap{position:relative;width:64px;height:64px}
+  .item-image{
+    width:64px;height:64px;object-fit:cover;background:var(--paper);padding:3px;
+    box-shadow:0 3px 10px rgba(64,56,47,.14);position:relative;z-index:2;cursor:zoom-in;
+  }
+  .item-image.is-missing{opacity:0}
+  .item-image-placeholder{
+    position:absolute;inset:0;display:grid;place-items:center;padding:4px;background:var(--paper);
+    border:1px dashed var(--line);color:var(--faded);font-family:var(--hand);font-size:9px;font-weight:600;
+    line-height:1.35;text-align:center;z-index:1;
+  }
+  .item-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+  .name{font-size:14.5px;font-weight:700;line-height:1.5;min-width:0}
+  .price{font-size:15px;font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .badges{display:flex;gap:5px;flex-wrap:wrap;margin:4px 0 2px}
+  .badge{
+    display:inline-flex;align-items:center;min-height:21px;padding:1px 7px;border:1px solid var(--line);
+    background:rgba(255,255,255,.7);font-size:10px;font-weight:700;letter-spacing:.05em;
+  }
+  .badge.random{background:rgba(226,122,148,.16);border-color:rgba(192,71,47,.35);color:var(--red-pencil)}
+  .badge.venue{background:var(--mz-green);border-color:var(--mz-green);color:#fff}
+  .badge.nobenefit{border-style:dashed;color:var(--faded)}
+  .note{font-size:11px;color:var(--faded)}
+  .limit-note{font-family:var(--hand);font-size:11.5px;font-weight:600;color:var(--red-pencil);margin-left:6px}
+
+  .controls{display:flex;gap:8px;align-items:center;margin-top:10px}
+  .step{
+    width:48px;height:48px;border:1.5px solid var(--pencil);background:var(--paper);
+    font-size:22px;font-weight:700;cursor:pointer;line-height:1;
+  }
+  .step:active,.mstep:active{background:var(--pencil);color:var(--paper)}
+  .step:disabled,.mstep:disabled{opacity:.3;cursor:default;background:var(--paper);color:var(--pencil)}
+  .qty{
+    width:56px;height:48px;text-align:center;border:0;border-bottom:var(--dash);background:transparent;
+    font-size:18px;font-weight:700;font-variant-numeric:tabular-nums;
+  }
+  .qty.has{color:var(--mz-orange)}
+  .so-btn{
+    display:none;min-height:40px;padding:4px 12px;margin-left:auto;font-size:11.5px;font-weight:700;
+    border:1.5px solid var(--red-pencil);color:var(--red-pencil);background:var(--paper);cursor:pointer;
+  }
+  body.so-mode .so-btn{display:inline-block}
+  .so-btn[aria-pressed="true"]{background:var(--red-pencil);color:#fff}
+
+  /* 売り切れ表示 */
+  .item.is-soldout .name,.item.is-soldout .price{text-decoration:line-through;text-decoration-thickness:2px;color:var(--faded)}
+  .item.is-soldout .item-image{filter:grayscale(1);opacity:.55}
+  .stamp{
+    display:inline-block;font-family:var(--hand);font-size:11px;font-weight:600;color:var(--red-pencil);
+    border:1.5px solid var(--red-pencil);padding:0 6px;transform:rotate(-6deg);margin-left:6px;
+  }
+
+  /* 種類選択 */
+  .member-box{
+    grid-column:1 / -1;display:grid;gap:10px;border:var(--dash);
+    background:rgba(255,255,255,.6);padding:12px;margin-top:4px;
+  }
+  .member-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+  .member-title{font-size:12px;font-weight:700;color:var(--faded);font-variant-numeric:tabular-nums}
+  .clear-btn{
+    min-height:38px;padding:6px 12px;font-family:var(--hand);font-size:12.5px;font-weight:600;
+    background:transparent;border:1.5px solid var(--pencil);border-radius:50%;cursor:pointer;
+  }
+  .member-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+  @media(max-width:700px){.member-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  .member-row{
+    display:grid;gap:4px;padding:8px 9px 9px;background:var(--paper);
+    box-shadow:0 2px 8px rgba(64,56,47,.10);border-top:3px solid transparent;
+  }
+  .member-row.has{border-top-color:var(--mz-orange)}
+  .member-row.is-soldout{opacity:.5}
+  .member-row.is-soldout .member-name{text-decoration:line-through}
+  .member-name{font-size:12px;font-weight:700;letter-spacing:.06em;display:flex;justify-content:space-between;align-items:center;gap:4px}
+  .member-controls{display:flex;align-items:center;justify-content:space-between;gap:4px}
+  .mstep{
+    width:44px;height:44px;border:1.5px solid var(--pencil);background:transparent;
+    font-size:19px;font-weight:700;cursor:pointer;line-height:1;
+  }
+  .member-count{min-width:26px;text-align:center;font-size:16px;font-weight:700;font-variant-numeric:tabular-nums}
+  .member-count.at-limit{color:var(--red-pencil)}
+  .vso{
+    display:none;font-size:10px;font-weight:700;padding:1px 6px;min-height:26px;
+    border:1px solid var(--red-pencil);color:var(--red-pencil);background:var(--paper);cursor:pointer;
+  }
+  body.so-mode .vso{display:inline-block}
+  .vso[aria-pressed="true"]{background:var(--red-pencil);color:#fff}
+
+  /* TIN専用 */
+  .tin-main{display:grid;grid-template-columns:76px minmax(0,1fr);gap:12px;align-items:center}
+  .tin-main img{width:76px;height:76px;border-radius:50%;box-shadow:0 3px 10px rgba(64,56,47,.16)}
+  .tin-main .rname{font-size:15px;font-weight:700;letter-spacing:.1em}
+  .tin-main .rnote{font-size:11px;color:var(--faded);line-height:1.6}
+  .tin-more{font-size:12px;font-weight:700;color:var(--faded);background:none;border:0;cursor:pointer;
+    text-decoration:underline dashed;text-underline-offset:4px;min-height:40px;justify-self:start}
+  .tin-grid .member-row img{width:40px;height:40px;border-radius:50%}
+  .tin-grid .member-name{justify-content:flex-start;gap:6px}
+
+  /* ---------- レシート ---------- */
+  .receipt-wrap{padding:14px 6px}
+  .receipt{background:var(--paper);box-shadow:var(--obj-shadow);font-variant-numeric:tabular-nums}
+  .zigzag{
+    height:12px;
+    background:
+      linear-gradient(135deg, var(--paper) 6px, transparent 0) 0 0,
+      linear-gradient(45deg, transparent 6px, var(--paper) 0) 0 0;
+    background-size:12px 12px;background-repeat:repeat-x;
+  }
+  .zigzag.bottom{transform:scaleY(-1)}
+  .receipt-body{padding:16px 18px 14px}
+  .receipt-head{text-align:center;padding-bottom:12px;border-bottom:var(--dash);margin-bottom:10px}
+  .receipt-head .shop{font-family:var(--hand);font-weight:600;font-size:17px;letter-spacing:.12em}
+  .receipt-head .date{font-size:11px;color:var(--faded);letter-spacing:.1em;margin-top:2px}
+  .row{
+    display:flex;justify-content:space-between;gap:12px;padding:7px 0;
+    border-bottom:1px dashed rgba(64,56,47,.18);font-size:12.5px;
+  }
+  .row span:first-child{min-width:0;overflow-wrap:anywhere;line-height:1.6}
+  .row span:last-child{white-space:nowrap;font-weight:700}
+  .row.head{font-weight:700;color:var(--faded);font-size:11.5px;letter-spacing:.08em}
+  .row.empty{color:var(--faded);border-bottom:0}
+  .row .x{color:var(--faded);font-size:11px}
+  .row .nb{font-size:10px;color:var(--faded)}
+  .receipt-total{margin-top:10px;padding-top:12px;border-top:2px solid var(--pencil)}
+  .t-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:3px 0}
+  .t-row .label{font-size:12.5px;font-weight:700;letter-spacing:.1em}
+  .t-row .count-value{font-size:16px;font-weight:700}
+  .t-row.grand .label{font-family:var(--hand);font-weight:600;font-size:15px}
+  .t-row.grand .price-value{font-size:clamp(28px,7vw,34px);font-weight:700}
+  .t-row.sub .label,.t-row.sub span:last-child{font-size:11.5px;color:var(--faded);font-weight:700}
+  .warn{
+    display:none;margin:12px 0 0;padding:10px 12px;border:1.5px dashed var(--red-pencil);
+    color:var(--red-pencil);font-family:var(--hand);font-size:12px;font-weight:600;white-space:pre-line;line-height:1.9;
+  }
+
+  /* 予算 */
+  .budget{margin-top:12px;padding-top:10px;border-top:var(--dash);display:grid;gap:6px}
+  .budget label{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12.5px;font-weight:700}
+  .budget input{
+    width:130px;min-height:42px;text-align:right;font-size:16px;font-weight:700;
+    border:0;border-bottom:var(--dash);background:transparent;font-variant-numeric:tabular-nums;
+  }
+  .budget .left{display:flex;justify-content:space-between;font-size:12.5px;font-weight:700}
+  .budget .left.over{color:var(--red-pencil)}
+
+  /* 特典ゲージ */
+  .benefit-box{margin-top:14px;padding:14px;border:1.5px dashed var(--line);background:rgba(255,255,255,.6)}
+  .benefit-title{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:.05em}
+  .benefit-title .bag{font-size:18px}
+  .gauge{position:relative;height:14px;background:var(--paper-dim);margin:10px 0 6px;overflow:hidden}
+  .gauge i{position:absolute;inset:0 auto 0 0;background:repeating-linear-gradient(-45deg,var(--mz-green) 0 8px,#1fae62 8px 16px);transition:width .35s ease}
+  .gauge-text{font-size:12.5px;font-weight:700;line-height:1.6}
+  .gauge-text .ok{color:var(--mz-green)}
+  .gauge-sub{font-size:11px;color:var(--faded);line-height:1.6;margin-top:2px}
+  .split-toggle{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;
+    padding:10px 12px;border:1px solid var(--line);background:#fff;cursor:pointer;
+  }
+  .split-toggle strong{display:block;font-size:12px}
+  .split-toggle span.s{display:block;font-size:10.5px;color:var(--faded);line-height:1.5;margin-top:2px}
+  .switch{position:relative;width:44px;height:26px;flex:0 0 auto}
+  .switch input{position:absolute;opacity:0;width:100%;height:100%;margin:0;cursor:pointer}
+  .switch .sl{position:absolute;inset:0;border-radius:999px;background:#d8d2ca;transition:.2s;pointer-events:none}
+  .switch .sl::before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;background:#fff;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,.18);transition:.2s}
+  .switch input:checked + .sl{background:var(--mz-green)}
+  .switch input:checked + .sl::before{transform:translateX(18px)}
+  .switch input:focus-visible + .sl{outline:2.5px solid var(--tape-berry);outline-offset:3px}
+  .checkout-list{display:grid;gap:8px;margin-top:10px}
+  .checkout-card{background:#fff;border:1px solid var(--line);padding:10px}
+  .checkout-head{display:flex;justify-content:space-between;gap:10px;font-weight:700;font-size:12px}
+  .checkout-gift{font-size:10.5px;padding:1px 8px;border-radius:999px;background:rgba(22,154,82,.12);color:var(--mz-green);white-space:nowrap}
+  .checkout-gift.no{background:var(--paper-dim);color:var(--faded)}
+  .checkout-items{font-size:11px;line-height:1.6;color:var(--faded);margin-top:5px}
+  .checkout-sum{display:flex;justify-content:space-between;font-size:12px;font-weight:700;margin-top:6px;padding-top:6px;border-top:1px dashed var(--line)}
+  .benefit-foot{margin-top:8px;font-size:10.5px;line-height:1.7;color:var(--faded)}
+
+  /* ---------- ボタン ---------- */
+  .actions{display:grid;gap:9px;margin-top:14px;padding:0 6px}
+  .actions .two{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .btn{
+    min-height:50px;padding:12px 14px;font-size:14px;font-weight:700;letter-spacing:.03em;
+    cursor:pointer;background:var(--paper);border:1.5px solid var(--pencil);
+  }
+  .btn.primary{background:var(--pencil);color:var(--desk)}
+  .btn.accent{background:var(--mz-orange);border-color:var(--mz-orange);color:#fff}
+  .btn:disabled{opacity:.5;cursor:default}
+  .btn.quiet{
+    background:transparent;border:0;color:var(--faded);font-size:12.5px;min-height:44px;
+    text-decoration:underline dashed rgba(64,56,47,.4);text-underline-offset:4px;
+  }
+  .status{min-height:1.3em;margin-top:6px;padding:0 6px;font-family:var(--hand);font-size:12px;font-weight:600;color:var(--red-pencil);text-align:center}
+  .status.ok{color:var(--pencil)}
+  .memo-text{margin-top:8px;padding:0 6px;font-size:11.5px;color:var(--faded);line-height:1.8}
+
+  /* ---------- 下部ドック ---------- */
+  .dock{
+    position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--paper);
+    border-top:var(--dash);padding:8px 14px calc(8px + env(safe-area-inset-bottom));
+    box-shadow:0 -6px 18px rgba(64,56,47,.08);
+  }
+  @media(min-width:900px){.dock{display:none}}
+  .dock-inner{max-width:1080px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .dock-total{display:grid;min-width:0;line-height:1.3;font-variant-numeric:tabular-nums}
+  .dock-total .top{display:flex;align-items:baseline;gap:8px}
+  .dock-total strong{font-size:22px;font-weight:700;white-space:nowrap;display:inline-block}
+  .dock-total .pts{font-size:12px;font-weight:700;color:var(--faded);white-space:nowrap}
+  .dock-total .bagline{font-size:11px;font-weight:700;color:var(--mz-green);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .dock-total .bagline.no{color:var(--faded)}
+  .dock-btns{display:flex;gap:6px}
+  .dock-btn{
+    min-height:50px;padding:8px 14px;background:var(--paper);border:1.5px solid var(--pencil);
+    font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;
+  }
+  .dock-btn.primary{background:var(--pencil);color:var(--desk)}
+  @media(prefers-reduced-motion:no-preference){
+    .dock-total strong.pop{animation:pop .3s ease}
+    @keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.13)}100%{transform:scale(1)}}
+  }
+
+  /* ---------- レジで見せる ---------- */
+  .order-sheet{
+    position:fixed;inset:0;z-index:100;background:#fff;color:#111;display:none;
+    flex-direction:column;padding:calc(14px + env(safe-area-inset-top)) 18px calc(14px + env(safe-area-inset-bottom));
+  }
+  .order-sheet.open{display:flex}
+  .os-head{display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:3px solid #111;padding-bottom:10px}
+  .os-head h2{font-size:20px;font-weight:700;letter-spacing:.06em}
+  .os-close{min-height:48px;min-width:48px;padding:0 14px;border:2px solid #111;background:#fff;font-size:15px;font-weight:700;cursor:pointer}
+  .os-tabs{display:flex;gap:6px;flex-wrap:wrap;padding-top:10px}
+  .os-tabs button{min-height:40px;padding:4px 12px;border:2px solid #111;background:#fff;font-size:13px;font-weight:700;cursor:pointer}
+  .os-tabs button.active{background:#111;color:#fff}
+  .os-list{flex:1;overflow:auto;padding:6px 0}
+  .os-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 2px;border-bottom:1px solid #ddd}
+  .os-row .n{font-size:clamp(17px,4.8vw,22px);font-weight:700;line-height:1.4}
+  .os-row .v{display:inline-block;margin-left:6px;padding:0 8px;border:2px solid #111;font-size:.85em}
+  .os-row .q{font-size:clamp(24px,7vw,32px);font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .os-row.done{opacity:.3}
+  .os-row.done .n{text-decoration:line-through}
+  .os-foot{border-top:3px solid #111;padding-top:10px;display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-variant-numeric:tabular-nums}
+  .os-foot .l{font-size:15px;font-weight:700}
+  .os-foot .r{font-size:clamp(28px,8vw,38px);font-weight:700}
+  .os-hint{font-size:12px;color:#555;padding-top:6px}
+
+  /* 画像拡大 */
+  .zoom{position:fixed;inset:0;z-index:110;background:rgba(40,34,28,.82);display:none;place-items:center;padding:24px;cursor:zoom-out}
+  .zoom.open{display:grid}
+  .zoom figure{background:#fff;padding:10px;max-width:min(92vw,520px)}
+  .zoom img{width:100%;height:auto}
+  .zoom figcaption{font-size:13px;font-weight:700;padding-top:8px;text-align:center}
+
+  /* ---------- フッター ---------- */
+  .back-desk{
+    display:flex;align-items:center;justify-content:center;gap:8px;margin:36px auto 10px;
+    font-family:var(--hand);font-weight:600;font-size:15px;width:fit-content;padding:10px 6px;
+  }
+  .back-desk svg{width:34px;height:18px;stroke:var(--pencil);fill:none;stroke-width:1.8;stroke-linecap:round}
+  .memo-card{
+    margin:0 auto 26px;max-width:520px;background:var(--paper);padding:18px 20px 20px;
+    transform:rotate(.8deg);box-shadow:var(--obj-shadow);position:relative;font-size:12px;line-height:2;
+  }
+  .memo-card::before{
+    content:"";position:absolute;width:64px;height:18px;background:var(--tape-mint);
+    top:-9px;left:50%;transform:translateX(-50%) rotate(-2deg);
+  }
+  .memo-card small{display:block;color:var(--faded);margin-top:6px}
+  .memo-card a{text-decoration:underline dashed;text-underline-offset:3px}
+  </style>
+</head>
+<body>
+
+<div class="shell">
+  <section class="intro">
+    <span class="kicker">会場販売版</span>
+    <h1>グッズ計算機 <em>Play at the MUZEUM vol.2</em></h1>
+    <p class="lede">ファンミ会場で買うグッズを入れると、合計・点数・ショッパー特典までその場で計算。入力は自動で保存されます。</p>
+  </section>
+
+  <section class="venue-card" aria-label="公演を選ぶ">
+    <h2>どの公演で買う？</h2>
+    <div class="venue-chips" id="venueChips" role="radiogroup" aria-label="公演"></div>
+    <div class="venue-info" id="venueInfo"></div>
+
+    <details class="rules">
+      <summary>会場販売のルール（公式告知より）</summary>
+      <ul>
+        <li>購入は<b>お一人様 各商品3点まで</b>（サイズ別・メンバー別はそれぞれ3点まで）。ランダムフォトカード・ステッカーセットとMZ Mate ランダムぷりぷりチャームは<b>10点まで</b>。</li>
+        <li><b>8,000円（税込）以上</b>のお会計で LIMITED SHOPPING BAG を1枚（数量限定・1会計1枚まで）。<b>LIGHT BAND S+ は対象外</b>。会計を分けた後のレシート合算は不可。</li>
+        <li>お支払いは現金・クレジットカード・QRコード決済（一括のみ）。<b>現金とカード／QRの併用はできません</b>。</li>
+        <li>MZ Mate TIN（各地方）は各会場の先行販売。ツアー後に数量限定でEC・ツリービレッジ販売予定。</li>
+        <li>先行販売時間はLINE整理券（抽選）。申込 10/9(金)20:00〜10/12(月・祝)23:59、結果 10/14(水)15:00予定。整理券の案内後は当日チケットをお持ちの方、開演後はチケットなしでも購入可。終演後の販売もあり。</li>
+      </ul>
+      <p class="src">出典：<a href="https://mazzel.tokyo/tour/play_at_the_muzeum2/news/68/" target="_blank" rel="noopener noreferrer">公式NEWS（2026.10.08）</a>。当日の状況で制限が変わる場合があります。</p>
+    </details>
+  </section>
+
+  <div class="layout">
+    <section aria-label="商品一覧">
+      <div id="categoryTabs" class="tabs" role="tablist" aria-label="カテゴリ"></div>
+      <div class="notebook">
+        <div class="note-bar">
+          <h2>会場販売グッズ</h2>
+          <button type="button" class="soldout-toggle" id="soldoutToggle" aria-pressed="false">売り切れチェック</button>
+        </div>
+        <p class="soldout-hint">売り切れの商品・サイズをタップで印をつけると、合計から外れます。</p>
+        <div id="goodsList" class="goods-list"></div>
+      </div>
+    </section>
+
+    <aside class="receipt-col" id="receiptCol" aria-label="計算結果">
+      <div class="receipt-wrap" id="receiptWrap">
+        <div class="receipt">
+          <div class="zigzag" aria-hidden="true"></div>
+          <div class="receipt-body">
+            <div class="receipt-head">
+              <div class="shop">MUZEUM vol.2 GOODS</div>
+              <div class="date" id="receiptDate"></div>
+            </div>
+            <div class="breakdown" id="breakdown"></div>
+            <div class="receipt-total">
+              <div class="t-row">
+                <span class="label">合計点数</span>
+                <span class="count-value" id="totalCount">0点</span>
+              </div>
+              <div class="t-row grand">
+                <span class="label">合計金額</span>
+                <span class="price-value" id="totalPrice">¥0</span>
+              </div>
+              <div class="t-row sub" id="qualRow" hidden>
+                <span class="label">うち特典対象</span>
+                <span id="qualPrice">¥0</span>
+              </div>
+            </div>
+            <div class="warn" id="warningBox"></div>
+
+            <div class="budget">
+              <label for="budgetInput">予算（任意）<input id="budgetInput" type="text" inputmode="numeric" placeholder="例：20000" autocomplete="off"></label>
+              <div class="left" id="budgetLeft" hidden></div>
+            </div>
+
+            <div class="benefit-box" id="benefitBox">
+              <div class="benefit-title"><span class="bag" aria-hidden="true">🛍️</span>LIMITED SHOPPING BAG</div>
+              <div class="gauge" aria-hidden="true"><i id="gaugeBar" style="width:0"></i></div>
+              <div class="gauge-text" id="gaugeText"></div>
+              <div class="gauge-sub" id="gaugeSub"></div>
+              <label class="split-toggle">
+                <span>
+                  <strong>会計を分けて枚数を最大化</strong>
+                  <span class="s">8,000円以上ずつに分ける組み合わせを計算（会場は送料なし）</span>
+                </span>
+                <span class="switch"><input type="checkbox" id="splitToggle"><span class="sl" aria-hidden="true"></span></span>
+              </label>
+              <div id="splitResult" hidden></div>
+            </div>
+          </div>
+          <div class="zigzag bottom" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="orderBtn" type="button" class="btn accent">レジで見せる注文リスト</button>
+        <button id="downloadBtn" type="button" class="btn primary">画像を共有・保存</button>
+        <div class="two">
+          <button id="copyBtn" type="button" class="btn">結果をコピー</button>
+          <button id="resetBtn" type="button" class="btn">リセット</button>
+        </div>
+      </div>
+      <div id="status" class="status" aria-live="polite"></div>
+      <p class="memo-text">入力はこの端末に自動保存されるので、会場の列に並んでから開いてもそのまま使えます。電波が弱い会場に備えて、事前に一度開いておくと安心です。</p>
+    </aside>
+  </div>
+
+  <a class="back-desk" href="https://rikomuze.github.io/muze-tool-box/">
+    <svg viewBox="0 0 34 18" aria-hidden="true"><path d="M32 9 C22 9 14 9 4 9 M4 9 l7 -5 M4 9 l7 5"/></svg>
+    ホームに戻る
+  </a>
+
+  <footer class="memo-card">
+    Play at the MUZEUM vol.2 の会場グッズ購入予定を整理するための非公式ファンメイド計算機です。紹介やシェアは許可なくどうぞ。オンラインストア用は<a href="https://rikomuze.github.io/mazzel-muzeum-vol2-goods-calculator/">グッズ計算機 EC</a>へ。
+    <small>BMSG公式とは関係のない非公式ファンメイドサイトです。商品画像はイメージです。価格・購入制限・販売時間は変更される場合があるので、必ず公式の告知をご確認ください。</small>
+  </footer>
+</div>
+
+<div class="dock" role="region" aria-label="合計">
+  <div class="dock-inner">
+    <div class="dock-total">
+      <div class="top"><strong id="dockPrice">¥0</strong><span class="pts" id="dockCount">0点</span></div>
+      <span class="bagline no" id="dockBag">特典まで ¥8,000</span>
+    </div>
+    <div class="dock-btns">
+      <button type="button" id="dockOrder" class="dock-btn">注文リスト</button>
+      <button type="button" id="dockResult" class="dock-btn primary">結果</button>
+    </div>
+  </div>
+</div>
+
+<div class="order-sheet" id="orderSheet" role="dialog" aria-modal="true" aria-labelledby="osTitle">
+  <div class="os-head">
+    <h2 id="osTitle">注文リスト</h2>
+    <button type="button" class="os-close" id="osClose">閉じる</button>
+  </div>
+  <div class="os-tabs" id="osTabs"></div>
+  <div class="os-list" id="osList"></div>
+  <div class="os-foot"><span class="l" id="osCount">0点</span><span class="r" id="osTotal">¥0</span></div>
+  <p class="os-hint">スタッフさんに画面を見せて注文できます。受け取った行をタップすると薄くなります。</p>
+</div>
+
+<div class="zoom" id="zoom" role="dialog" aria-modal="true" aria-label="商品画像">
+  <figure><img id="zoomImg" alt=""><figcaption id="zoomCap"></figcaption></figure>
+</div>
+
+<script>
+(function () {
+"use strict";
+
+/* ---------- 公演（公式NEWS 2026.10.08 / 10月〜11月前半） ---------- */
+var REGIONS = [
+  { id:'kanto',    label:'KANTO',    ja:'関東' },
+  { id:'hokkaido', label:'HOKKAIDO', ja:'北海道' },
+  { id:'tohoku',   label:'TOHOKU',   ja:'東北' },
+  { id:'chubu',    label:'CHUBU',    ja:'中部' },
+  { id:'kinki',    label:'KINKI',    ja:'近畿' },
+  { id:'chugoku',  label:'CHUGOKU',  ja:'中国' },
+  { id:'shikoku',  label:'SHIKOKU',  ja:'四国' },
+  { id:'kyusyu',   label:'KYUSYU',   ja:'九州' }
+];
+var VENUES = [
+  { id:'tokyo',    date:'2026-10-22', dow:'木', pref:'東京',   hall:'LINE CUBE SHIBUYA', open:'13:00', region:'kanto' },
+  { id:'sapporo',  date:'2026-10-24', dow:'土', pref:'札幌',   hall:'カナモトホール', open:'13:00', region:'hokkaido' },
+  { id:'hakodate', date:'2026-10-25', dow:'日', pref:'函館',   hall:'函館サーモン・まるなまホール（函館市民会館）', open:'12:00', region:'hokkaido' },
+  { id:'fukushima',date:'2026-11-02', dow:'月', pref:'福島',   hall:'とうほう・みんなの文化センター 大ホール', open:'13:00', region:'tohoku' },
+  { id:'miyagi',   date:'2026-11-03', dow:'火・祝', pref:'宮城', hall:'東京エレクトロンホール宮城', open:'12:00', region:'tohoku' },
+  { id:'niigata',  date:'2026-11-07', dow:'土', pref:'新潟',   hall:'新潟テルサ', open:'12:00', region:'chubu' },
+  { id:'other',    date:'', dow:'', pref:'その他', hall:'11月後半以降の公演（販売時間は未発表）', open:'', region:null }
+];
+var TIN_REGION_NOTE = {
+  kanto:'東京・神奈川・埼玉・群馬・栃木公演', hokkaido:'北海道（札幌・函館）公演', tohoku:'福島・宮城公演',
+  chubu:'新潟・愛知・静岡公演', kinki:'兵庫・大阪公演', chugoku:'岡山・広島公演',
+  shikoku:'香川・高知公演', kyusyu:'福岡・熊本公演'
+};
+
+/* ---------- 商品（会場販売。EC版からWHTシャツを除き、TINとLIGHT BAND S+を追加） ---------- */
+var MEMBERS = ['KAIRYU','NAOYA','RAN','SEITO','RYUKI','TAKUTO','HAYATO','EIKI'];
+var GOODS = [
+  { id:'mz-mate-tin', name:'MZ Mate TIN（各地方）', price:1800, limit:3, cat:'先行', tin:true, vlabel:'地方', venueOnly:true,
+    note:'中身はMZ Mateプリントグミ（ヨーグルト味）ランダム5粒入り' },
+  { id:'official-light-band-splus', name:'MAZZEL OFFICIAL LIGHT BAND S+', price:5500, limit:3, cat:'グッズ', noBenefit:true },
+  { id:'official-light-custom-band-or', name:'MAZZEL OFFICIAL LIGHT CUSTOM BAND (OR)', price:2200, limit:3, cat:'グッズ' },
+  { id:'muzeum-vol2-towel', name:'タオル', price:2500, limit:3, cat:'グッズ' },
+  { id:'muzeum-vol2-rubber-band', name:'ラバーバンド', price:1000, limit:3, cat:'グッズ' },
+  { id:'muzeum-vol2-tshirt-bk', name:'Tシャツ BK', price:4500, limit:3, cat:'アパレル', variants:['S','M','L'], vlabel:'サイズ' },
+  { id:'muzeum-vol2-tshirt-meeting', name:'Tシャツ MEETING', price:5000, limit:3, cat:'アパレル', variants:['S','M','L'], vlabel:'サイズ' },
+  { id:'muzeum-vol2-long-tshirt', name:'ロンT', price:5500, limit:3, cat:'アパレル', variants:['M','L'], vlabel:'サイズ' },
+  { id:'muzeum-vol2-acrylic-stand', name:'アクリルスタンド', price:1300, limit:3, cat:'メンバー別', variants:MEMBERS, vlabel:'メンバー' },
+  { id:'muzeum-vol2-random-photo-sticker-set', name:'ランダムフォトカード・ステッカーセット', price:500, limit:10, cat:'ランダム', random:true },
+  { id:'muzeum-vol2-buruburu-keyholder', name:'MZ Mate ぶるぶるキーホルダー', price:3500, limit:3, cat:'メンバー別', variants:MEMBERS, vlabel:'メンバー' },
+  { id:'muzeum-vol2-mz-mate-random-charm', name:'MZ Mate ランダムぷりぷりチャーム', price:1300, limit:10, cat:'ランダム', random:true },
+  { id:'muzeum-vol2-art-pins', name:'アートピンズ', price:2000, limit:3, cat:'メンバー別', variants:MEMBERS, vlabel:'メンバー' },
+  { id:'muzeum-vol2-bansu-clip', name:'バンスクリップ', price:2800, limit:3, cat:'グッズ' },
+  { id:'muzeum-vol2-fur-bag', name:'ファーBAG', price:5000, limit:3, cat:'グッズ' },
+  { id:'muzeum-vol2-photo-card-case', name:'フォトカードケース', price:2500, limit:3, cat:'グッズ' }
+];
+GOODS.forEach(function (g) { if (g.tin) g.variants = REGIONS.map(function (r) { return r.id; }); });
+var CATS = ['すべて','選んだもの','先行','アパレル','メンバー別','ランダム','グッズ'];
+var THRESHOLD = 8000;
+var STORE_KEY = 'muzeum-vol2-venue-calc:v1';
+
+/* ---------- 状態 ---------- */
+var state = { q:{}, so:{}, venue:null, region:null, cat:'すべて', split:false, budget:'', showAllTins:false };
+var soMode = false;
+
+function key(id, v) { return v == null ? id : id + '|' + v; }
+function regionOf(id) { return REGIONS.find(function (r) { return r.id === id; }); }
+function goodsById(id) { return GOODS.find(function (g) { return g.id === id; }); }
+function variantLabel(g, v) { return g.tin ? regionOf(v).label : v; }
+
+function todayStr() {
+  var d = new Date(Date.now() + 9 * 3600 * 1000); // JST
+  return d.toISOString().slice(0, 10);
+}
+function defaultVenue() {
+  var t = todayStr();
+  var v = VENUES.find(function (x) { return x.date && x.date >= t; });
+  return v ? v.id : 'other';
+}
+
+function load() {
+  try {
+    var raw = localStorage.getItem(STORE_KEY);
+    if (raw) {
+      var s = JSON.parse(raw);
+      if (s && typeof s === 'object') {
+        ['q','so'].forEach(function (k) { if (s[k] && typeof s[k] === 'object') state[k] = s[k]; });
+        if (VENUES.some(function (v) { return v.id === s.venue; })) state.venue = s.venue;
+        if (s.region && regionOf(s.region)) state.region = s.region;
+        if (CATS.indexOf(s.cat) >= 0) state.cat = s.cat;
+        state.split = !!s.split;
+        state.budget = typeof s.budget === 'string' ? s.budget : '';
+      }
+    }
+  } catch (e) {}
+  if (!state.venue) state.venue = defaultVenue();
+  // 数量のサニタイズ
+  Object.keys(state.q).forEach(function (k) {
+    var g = goodsById(k.split('|')[0]);
+    if (!g) { delete state.q[k]; return; }
+    state.q[k] = clamp(state.q[k], g.limit);
+    if (!state.q[k]) delete state.q[k];
+  });
+}
+var saveTimer;
+function save() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(function () {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {}
+  }, 150);
+}
+
+/* ---------- ユーティリティ ---------- */
+function yen(v) { return '¥' + Number(v).toLocaleString('ja-JP'); }
+function clamp(v, limit) { var n = Math.floor(Number(v) || 0); return n < 0 ? 0 : n > limit ? limit : n; }
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function imgCandidates(id) { var b = 'images/' + id; return [b + '.webp', b + '.jpg', b + '.png']; }
+function currentVenue() { return VENUES.find(function (v) { return v.id === state.venue; }); }
+function currentRegion() { var v = currentVenue(); return (v && v.region) || state.region; }
+function shortDate(s) { var p = s.split('-'); return Number(p[1]) + '/' + Number(p[2]); }
+
+/* ---------- 計算 ---------- */
+function getLines() {
+  var lines = [];
+  GOODS.forEach(function (g) {
+    if (g.variants) {
+      g.variants.forEach(function (v) {
+        var k = key(g.id, v), n = state.q[k] || 0;
+        if (n > 0) lines.push({ g:g, v:v, k:k, n:n, sub:g.price * n, so:!!(state.so[k] || state.so[g.id]) });
+      });
+    } else {
+      var n = state.q[g.id] || 0;
+      if (n > 0) lines.push({ g:g, v:null, k:g.id, n:n, sub:g.price * n, so:!!state.so[g.id] });
+    }
+  });
+  return lines;
+}
+function lineName(l) { return l.g.name + (l.v ? ' / ' + variantLabel(l.g, l.v) : ''); }
+function totals(lines) {
+  var t = { price:0, count:0, qual:0, soCount:0 };
+  lines.forEach(function (l) {
+    if (l.so) { t.soCount += l.n; return; }
+    t.price += l.sub; t.count += l.n;
+    if (!l.g.noBenefit) t.qual += l.sub;
+  });
+  return t;
+}
+function countFor(g) {
+  if (!g.variants) return state.q[g.id] || 0;
+  return g.variants.reduce(function (s, v) { return s + (state.q[key(g.id, v)] || 0); }, 0);
+}
+
+/* 会計分け：特典対象の商品だけで8,000円以上の会計をできるだけ多く作る。
+   価格は100円単位なので部分和DPで「8,000円以上でいちばん近い組」を順に取る。 */
+function atomic(lines) {
+  var out = [];
+  lines.forEach(function (l) { if (!l.so) for (var i = 0; i < l.n; i++) out.push({ label:lineName(l), price:l.g.price, nb:!!l.g.noBenefit }); });
+  return out;
+}
+function pickNear(items, threshold) {
+  var unit = 100;
+  var p = items.map(function (x) { return Math.round(x.price / unit); });
+  var target = threshold / unit;
+  var total = p.reduce(function (a, b) { return a + b; }, 0);
+  if (total < target) return null;
+  var max = Math.min(total, target + Math.max.apply(null, p));
+  var prev = new Array(max + 1).fill(null);
+  prev[0] = { i:-1, from:-1 };
+  for (var i = 0; i < p.length; i++) {
+    for (var s = max - p[i]; s >= 0; s--) {
+      if (prev[s] !== null && prev[s + p[i]] === null) prev[s + p[i]] = { i:i, from:s };
+    }
+  }
+  var best = -1;
+  for (var sum = target; sum <= max; sum++) if (prev[sum] !== null) { best = sum; break; }
+  if (best < 0) return null;
+  var idx = [], cur = best;
+  while (cur > 0) { var nd = prev[cur]; idx.push(nd.i); cur = nd.from; }
+  return idx;
+}
+function optimize(lines) {
+  var all = atomic(lines);
+  var qual = all.filter(function (x) { return !x.nb; });
+  var other = all.filter(function (x) { return x.nb; });
+  var qTotal = qual.reduce(function (s, x) { return s + x.price; }, 0);
+  var maxBags = Math.floor(qTotal / THRESHOLD);
+  var groups = [], rest = qual.slice();
+  while (groups.length < maxBags - 1) {
+    var pick = pickNear(rest, THRESHOLD);
+    if (!pick) break;
+    var set = {}; pick.forEach(function (i) { set[i] = true; });
+    var g = [], r = [];
+    rest.forEach(function (x, i) { (set[i] ? g : r).push(x); });
+    var rTotal = r.reduce(function (s, x) { return s + x.price; }, 0);
+    if (rTotal < (maxBags - groups.length - 1) * THRESHOLD) break;
+    groups.push(g); rest = r;
+  }
+  rest = rest.concat(other);
+  if (rest.length) groups.push(rest);
+  return groups.map(function (items) {
+    var q = items.filter(function (x) { return !x.nb; }).reduce(function (s, x) { return s + x.price; }, 0);
+    var sum = items.reduce(function (s, x) { return s + x.price; }, 0);
+    return { items:items, sum:sum, qual:q, bag:q >= THRESHOLD };
+  });
+}
+function groupLabels(items) {
+  var m = {}, order = [];
+  items.forEach(function (x) { if (!m[x.label]) { m[x.label] = 0; order.push(x.label); } m[x.label]++; });
+  return order.map(function (l) { return l + (m[l] > 1 ? ' ×' + m[l] : ''); });
+}
+
+/* ---------- 描画：公演 ---------- */
+var venueChips = document.getElementById('venueChips');
+var venueInfo = document.getElementById('venueInfo');
+function renderVenue() {
+  var t = todayStr();
+  venueChips.innerHTML = VENUES.map(function (v) {
+    var active = v.id === state.venue;
+    var past = v.date && v.date < t;
+    return '<button type="button" role="radio" aria-checked="' + active + '" class="vchip' + (active ? ' active' : '') + (past ? ' past' : '') +
+      '" data-venue="' + v.id + '"><span class="d">' + (v.date ? shortDate(v.date) + '（' + v.dow + '）' : '未発表') +
+      '</span><span class="p">' + esc(v.pref) + '</span></button>';
+  }).join('');
+  var v = currentVenue(), rid = currentRegion(), r = rid && regionOf(rid);
+  var html = '<img src="images/tin-' + (rid || 'kanto') + '.webp" alt="" style="' + (rid ? '' : 'opacity:.25') + '">' +
+    '<div><div class="hall">' + esc(v.hall) + '</div><div class="meta">';
+  if (v.date) html += 'グッズ販売 <b>' + shortDate(v.date) + '（' + v.dow + '） ' + v.open + '〜</b>（予定）<br>';
+  if (r) html += 'この会場の先行TIN：<b>' + r.label + '</b>';
+  else html += '公演地方を選ぶと、その地方のTINを表示します。';
+  html += '</div>';
+  if (!v.region) {
+    html += '<div class="region-select">' + REGIONS.map(function (x) {
+      return '<button type="button" data-region="' + x.id + '" class="' + (state.region === x.id ? 'active' : '') + '">' + x.label + '</button>';
+    }).join('') + '</div>';
+  }
+  html += '</div>';
+  venueInfo.innerHTML = html;
+}
+venueChips.addEventListener('click', function (e) {
+  var b = e.target.closest('[data-venue]'); if (!b) return;
+  state.venue = b.dataset.venue; state.showAllTins = false;
+  save(); renderVenue(); update();
+});
+venueInfo.addEventListener('click', function (e) {
+  var b = e.target.closest('[data-region]'); if (!b) return;
+  state.region = b.dataset.region; save(); renderVenue(); update();
+});
+
+/* ---------- 描画：商品 ---------- */
+var goodsList = document.getElementById('goodsList');
+var categoryTabs = document.getElementById('categoryTabs');
+
+function renderTabs() {
+  categoryTabs.innerHTML = CATS.map(function (c) {
+    var n = 0;
+    if (c === '選んだもの') n = GOODS.filter(function (g) { return countFor(g) > 0; }).length;
+    return '<button type="button" role="tab" aria-selected="' + (state.cat === c) + '" class="tab' + (state.cat === c ? ' active' : '') +
+      '" data-cat="' + esc(c) + '">' + esc(c) + (n ? '<span class="c">' + n + '</span>' : '') + '</button>';
+  }).join('');
+}
+
+function stepper(g, k, n, so) {
+  var dis = so ? ' disabled' : '';
+  return '<div class="controls">' +
+    '<button type="button" class="step" data-act="dec" data-k="' + k + '" aria-label="' + esc(g.name) + 'を1つ減らす"' + (n <= 0 ? ' disabled' : '') + '>−</button>' +
+    '<input class="qty' + (n ? ' has' : '') + '" type="number" inputmode="numeric" min="0" max="' + g.limit + '" value="' + n + '" data-act="input" data-k="' + k + '" aria-label="' + esc(g.name) + 'の数量"' + dis + '>' +
+    '<button type="button" class="step" data-act="inc" data-k="' + k + '" aria-label="' + esc(g.name) + 'を1つ増やす"' + (n >= g.limit || so ? ' disabled' : '') + '>＋</button>' +
+    '<button type="button" class="so-btn" data-act="so" data-k="' + g.id + '" aria-pressed="' + !!state.so[g.id] + '">売り切れ</button>' +
+    '</div>';
+}
+
+function cell(g, v, extraHead) {
+  var k = key(g.id, v), c = state.q[k] || 0, so = !!(state.so[k] || state.so[g.id]);
+  return '<div class="member-row' + (c ? ' has' : '') + (so ? ' is-soldout' : '') + '">' +
+    '<div class="member-name">' + (extraHead || '') + '<span>' + esc(variantLabel(g, v)) + '</span>' +
+      '<button type="button" class="vso" data-act="so" data-k="' + k + '" aria-pressed="' + !!state.so[k] + '">売切</button></div>' +
+    '<div class="member-controls">' +
+      '<button type="button" class="mstep" data-act="dec" data-k="' + k + '" aria-label="' + esc(variantLabel(g, v)) + 'を減らす"' + (c <= 0 ? ' disabled' : '') + '>−</button>' +
+      '<div class="member-count' + (c >= g.limit ? ' at-limit' : '') + '">' + c + '</div>' +
+      '<button type="button" class="mstep" data-act="inc" data-k="' + k + '" aria-label="' + esc(variantLabel(g, v)) + 'を増やす"' + (c >= g.limit || so ? ' disabled' : '') + '>＋</button>' +
+    '</div></div>';
+}
+
+function renderVariants(g) {
+  var total = countFor(g);
+  var types = g.variants.filter(function (v) { return (state.q[key(g.id, v)] || 0) > 0; }).length;
+  var head = '<div class="member-head"><div class="member-title">' + esc(g.vlabel) + 'ごとに' + g.limit + '点まで｜選択中 ' + types + '種 / ' + total + '点</div>' +
+    (total ? '<button type="button" class="clear-btn" data-act="clear" data-k="' + g.id + '">クリア</button>' : '') + '</div>';
+  return '<div class="member-box">' + head + '<div class="member-grid">' + g.variants.map(function (v) { return cell(g, v); }).join('') + '</div></div>';
+}
+
+function renderTin(g) {
+  var rid = currentRegion();
+  var html = '<div class="member-box">';
+  if (rid) {
+    var r = regionOf(rid), k = key(g.id, rid);
+    html += '<div class="tin-main"><img src="images/tin-' + rid + '.webp" alt="' + r.label + 'デザイン缶" data-zoom="' + r.label + ' デザイン"><div>' +
+      '<div class="rname">' + r.label + '</div><div class="rnote">' + esc(TIN_REGION_NOTE[rid]) + 'で先行販売</div></div></div>' +
+      '<div class="member-grid" style="grid-template-columns:minmax(0,1fr)">' + cell(g, rid) + '</div>';
+  } else {
+    html += '<div class="rnote" style="font-size:12px;color:var(--faded)">上の「どの公演で買う？」で地方を選ぶと、その会場のデザインが出ます。</div>';
+  }
+  var others = g.variants.filter(function (v) { return v !== rid; });
+  var otherCount = others.reduce(function (s, v) { return s + (state.q[key(g.id, v)] || 0); }, 0);
+  if (state.showAllTins || otherCount > 0 || !rid) {
+    html += '<div class="member-title">' + (rid ? 'ほかの地方（会場で販売されているかは当日ご確認ください）' : '地方を選ぶ') + '</div>' +
+      '<div class="member-grid tin-grid">' + others.map(function (v) {
+        return cell(g, v, '<img src="images/tin-' + v + '.webp" alt="">');
+      }).join('') + '</div>';
+  } else {
+    html += '<button type="button" class="tin-more" data-act="alltins">ほかの地方のデザインも表示</button>';
+  }
+  return html + '</div>';
+}
+
+function renderItem(g) {
+  var n = state.q[g.id] || 0, so = !!state.so[g.id];
+  var imgs = g.tin ? ['images/mz-mate-tin.webp'] : imgCandidates(g.id);
+  var badges = [];
+  if (g.venueOnly) badges.push('<span class="badge venue">会場先行販売</span>');
+  if (g.random) badges.push('<span class="badge random">RANDOM</span>');
+  if (g.variants && !g.tin) badges.push('<span class="badge">全' + g.variants.length + (g.vlabel === 'サイズ' ? 'サイズ' : '種') + '</span>');
+  if (g.tin) badges.push('<span class="badge">全8種</span>');
+  if (g.noBenefit) badges.push('<span class="badge nobenefit">購入特典対象外</span>');
+  var limitHit = !g.variants && n >= g.limit;
+  return '<div class="item' + (so ? ' is-soldout' : '') + '">' +
+    '<div class="item-image-wrap"><div class="item-image-placeholder">IMAGE<br>COMING SOON</div>' +
+      '<img class="item-image" src="' + imgs[0] + '" data-candidates="' + esc(JSON.stringify(imgs)) + '" data-index="0" data-zoom="' + esc(g.name) + '" alt="' + esc(g.name) + '" loading="lazy"></div>' +
+    '<div><div class="item-head"><div class="name">' + esc(g.name) + (so ? '<span class="stamp">売切</span>' : '') + '</div><div class="price">' + yen(g.price) + '</div></div>' +
+      (badges.length ? '<div class="badges">' + badges.join('') + '</div>' : '') +
+      (g.note ? '<div class="note">' + esc(g.note) + '</div>' : '') +
+      '<div class="note">' + (g.variants ? esc(g.vlabel) + 'ごとに' + g.limit + '点まで' : 'お一人様' + g.limit + '点まで') +
+        (limitHit ? '<span class="limit-note">← 上限の' + g.limit + '点です</span>' : '') + '</div>' +
+      (g.variants ? (g.variants.length && soMode ? '<div class="controls" style="margin-top:6px"><button type="button" class="so-btn" style="margin-left:0" data-act="so" data-k="' + g.id + '" aria-pressed="' + so + '">この商品すべて売り切れ</button></div>' : '') : stepper(g, g.id, n, so)) +
+    '</div>' +
+    (g.tin ? renderTin(g) : g.variants ? renderVariants(g) : '') +
+  '</div>';
+}
+
+function renderGoods() {
+  var list = GOODS.filter(function (g) {
+    if (state.cat === 'すべて') return true;
+    if (state.cat === '選んだもの') return countFor(g) > 0;
+    return g.cat === state.cat;
+  });
+  goodsList.innerHTML = list.length ? list.map(renderItem).join('')
+    : '<p class="empty-note">まだ選んだ商品はありません。<br>「すべて」から数量を入れてください。</p>';
+}
+
+/* ---------- 描画：レシート ---------- */
+var el = function (id) { return document.getElementById(id); };
+var lastTotal = null;
+
+function renderReceipt() {
+  var lines = getLines(), t = totals(lines), v = currentVenue();
+  el('receiptDate').textContent = (v.date ? v.date.replace(/-/g, '.') + ' ' : '') + v.pref + (v.date ? '公演' : '');
+
+  if (!lines.length) {
+    el('breakdown').innerHTML = '<div class="row empty"><span>まだ商品が選択されていません</span><span>—</span></div>';
+  } else {
+    el('breakdown').innerHTML = '<div class="row head"><span>内訳</span><span>小計</span></div>' + lines.map(function (l) {
+      return '<div class="row"' + (l.so ? ' style="opacity:.45;text-decoration:line-through"' : '') + '><span>' + esc(lineName(l)) +
+        ' <span class="x">×' + l.n + '</span>' + (l.g.noBenefit ? ' <span class="nb">特典対象外</span>' : '') + (l.so ? ' <span class="nb">売切</span>' : '') +
+        '</span><span>' + yen(l.sub) + '</span></div>';
+    }).join('');
+  }
+  el('totalPrice').textContent = yen(t.price);
+  el('totalCount').textContent = t.count + '点';
+  el('qualRow').hidden = t.qual === t.price;
+  el('qualPrice').textContent = yen(t.qual);
+
+  // ドック
+  var dp = el('dockPrice');
+  dp.textContent = yen(t.price);
+  el('dockCount').textContent = t.count + '点';
+  if (lastTotal !== null && lastTotal !== t.price) { dp.classList.remove('pop'); void dp.offsetWidth; dp.classList.add('pop'); }
+  lastTotal = t.price;
+
+  // 上限の注意
+  var warns = [];
+  GOODS.forEach(function (g) {
+    if (g.variants) {
+      var hit = g.variants.filter(function (v) { return (state.q[key(g.id, v)] || 0) >= g.limit; });
+      if (hit.length) warns.push('「' + g.name + '」' + hit.map(function (v) { return variantLabel(g, v); }).join('・') + 'は上限の' + g.limit + '点です。');
+    } else if ((state.q[g.id] || 0) >= g.limit) warns.push('「' + g.name + '」は上限の' + g.limit + '点です。');
+  });
+  if (t.soCount) warns.push('売り切れの印がついた' + t.soCount + '点は合計から外しています。');
+  el('warningBox').style.display = warns.length ? 'block' : 'none';
+  el('warningBox').textContent = warns.join('\n');
+
+  renderBudget(t);
+  renderBenefit(lines, t);
+}
+
+function parseBudget() { var n = Number(String(state.budget).replace(/[^\d]/g, '')); return n > 0 ? n : 0; }
+function renderBudget(t) {
+  var b = parseBudget(), left = el('budgetLeft');
+  if (!b) { left.hidden = true; return; }
+  left.hidden = false;
+  var d = b - t.price;
+  left.className = 'left' + (d < 0 ? ' over' : '');
+  left.innerHTML = d >= 0 ? '<span>残り</span><span class="num">' + yen(d) + '</span>' : '<span>予算オーバー</span><span class="num">' + yen(-d) + '</span>';
+}
+
+function renderBenefit(lines, t) {
+  var single = t.qual >= THRESHOLD;
+  var pct = Math.min(100, t.qual / THRESHOLD * 100);
+  el('gaugeBar').style.width = pct + '%';
+  var dockBag = el('dockBag');
+  var groups = state.split && t.qual >= THRESHOLD ? optimize(lines) : null;
+  var bags = groups ? groups.filter(function (g) { return g.bag; }).length : (single ? 1 : 0);
+
+  if (!single) {
+    el('gaugeText').innerHTML = 'あと <span class="num">' + yen(THRESHOLD - t.qual) + '</span> でショッパー1枚';
+    dockBag.textContent = '特典まで あと' + yen(THRESHOLD - t.qual);
+    dockBag.className = 'bagline no';
+  } else {
+    el('gaugeText').innerHTML = '<span class="ok">✓ 特典対象（' + (groups ? groups.length + '会計で最大' + bags + '枚' : '1会計で1枚') + '）</span>';
+    dockBag.textContent = '🛍 ショッパー ' + bags + '枚' + (groups && groups.length > 1 ? '（' + groups.length + '会計）' : '');
+    dockBag.className = 'bagline';
+  }
+  var sub = [];
+  if (t.qual !== t.price) sub.push('LIGHT BAND S+ は特典の金額に含まれません。');
+  if (single && !groups && t.qual >= THRESHOLD * 2) sub.push('1会計でも特典は1枚まで。会計を分けると最大' + Math.floor(t.qual / THRESHOLD) + '枚の目安です。');
+  el('gaugeSub').textContent = sub.join(' ');
+
+  var box = el('splitResult');
+  if (!state.split) { box.hidden = true; return; }
+  box.hidden = false;
+  if (!groups) {
+    box.innerHTML = '<p class="benefit-foot">特典対象の商品が8,000円以上になると、会計の分け方を表示します。</p>';
+    return;
+  }
+  var next = (bags + 1) * THRESHOLD - t.qual;
+  box.innerHTML = '<div class="checkout-list">' + groups.map(function (g, i) {
+    return '<div class="checkout-card"><div class="checkout-head"><span>会計 ' + (i + 1) + '</span>' +
+      '<span class="checkout-gift' + (g.bag ? '' : ' no') + '">' + (g.bag ? '🛍 1枚' : '特典なし') + '</span></div>' +
+      '<div class="checkout-items">' + groupLabels(g.items).map(esc).join('<br>') + '</div>' +
+      '<div class="checkout-sum"><span>支払い</span><span class="num">' + yen(g.sum) + '</span></div></div>';
+  }).join('') + '</div>' +
+  '<p class="benefit-foot">' + (groups.length > 1 ? '分けた分だけお会計の回数が増えます。混雑時は売場スタッフの案内に従ってください。購入上限（各3点など）は会計を分けても合算です。' : '') +
+  ' あと約' + yen(next) + '分の特典対象グッズで、もう1枚の目安。</p>';
+}
+
+/* ---------- 全体更新 ---------- */
+function update() {
+  renderTabs();
+  renderGoods();
+  renderReceipt();
+  save();
+}
+
+/* ---------- 操作 ---------- */
+function act(a, k) {
+  var id = k.split('|')[0], g = goodsById(id);
+  if (a === 'inc') state.q[k] = clamp((state.q[k] || 0) + 1, g.limit);
+  else if (a === 'dec') state.q[k] = clamp((state.q[k] || 0) - 1, g.limit);
+  else if (a === 'clear') g.variants.forEach(function (v) { delete state.q[key(id, v)]; });
+  else if (a === 'so') { if (state.so[k]) delete state.so[k]; else state.so[k] = true; }
+  if (state.q[k] === 0) delete state.q[k];
+  update();
+}
+goodsList.addEventListener('click', function (e) {
+  var z = e.target.closest('[data-zoom]');
+  if (z && z.tagName === 'IMG' && !z.classList.contains('is-missing')) { openZoom(z.src, z.dataset.zoom); return; }
+  var b = e.target.closest('[data-act]');
+  if (!b || b.dataset.act === 'input' || b.disabled) return;
+  if (b.dataset.act === 'alltins') { state.showAllTins = true; update(); return; }
+  act(b.dataset.act, b.dataset.k);
+});
+goodsList.addEventListener('change', function (e) {
+  var i = e.target.closest('[data-act="input"]'); if (!i) return;
+  var g = goodsById(i.dataset.k);
+  state.q[i.dataset.k] = clamp(i.value, g.limit);
+  if (!state.q[i.dataset.k]) delete state.q[i.dataset.k];
+  update();
+});
+goodsList.addEventListener('focusin', function (e) { if (e.target.matches('.qty')) e.target.select(); });
+goodsList.addEventListener('error', function (e) {
+  var img = e.target;
+  if (img.tagName !== 'IMG' || !img.dataset.candidates) return;
+  var c; try { c = JSON.parse(img.dataset.candidates); } catch (err) { img.classList.add('is-missing'); return; }
+  var n = Number(img.dataset.index || 0) + 1;
+  if (n < c.length) { img.dataset.index = String(n); img.src = c[n]; }
+  else { img.removeAttribute('data-candidates'); img.classList.add('is-missing'); }
+}, true);
+
+categoryTabs.addEventListener('click', function (e) {
+  var t = e.target.closest('[data-cat]'); if (!t) return;
+  state.cat = t.dataset.cat; update();
+});
+
+var soToggle = el('soldoutToggle');
+soToggle.addEventListener('click', function () {
+  soMode = !soMode;
+  document.body.classList.toggle('so-mode', soMode);
+  soToggle.setAttribute('aria-pressed', String(soMode));
+  soToggle.textContent = soMode ? '売り切れチェック中（タップで終了）' : '売り切れチェック';
+  renderGoods();
+});
+
+var splitToggle = el('splitToggle');
+splitToggle.addEventListener('change', function () { state.split = splitToggle.checked; renderReceipt(); save(); });
+
+var budgetInput = el('budgetInput');
+budgetInput.addEventListener('input', function () {
+  var n = budgetInput.value.replace(/[^\d]/g, '');
+  state.budget = n;
+  renderBudget(totals(getLines())); save();
+});
+budgetInput.addEventListener('blur', function () {
+  var n = parseBudget(); budgetInput.value = n ? n.toLocaleString('ja-JP') : '';
+});
+budgetInput.addEventListener('focus', function () { budgetInput.value = state.budget; });
+
+el('resetBtn').addEventListener('click', function () {
+  var has = Object.keys(state.q).length;
+  if (has && !confirm('選んだ数量と売り切れの印をすべて消しますか？')) return;
+  state.q = {}; state.so = {}; state.showAllTins = false;
+  update(); setStatus('リセットしました。', true);
+});
+
+function toResult() { el('receiptCol').scrollIntoView({ behavior:'smooth', block:'start' }); }
+el('dockResult').addEventListener('click', toResult);
+
+/* ---------- レジで見せる注文リスト ---------- */
+var sheet = el('orderSheet'), osDone = {}, osGroup = 0, lastFocus = null;
+function openSheet() {
+  var lines = getLines().filter(function (l) { return !l.so; });
+  if (!lines.length) { setStatus('先に商品を選んでください。'); toResult(); return; }
+  lastFocus = document.activeElement;
+  osDone = {}; osGroup = 0;
+  renderSheet();
+  sheet.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  el('osClose').focus();
+}
+function closeSheet() {
+  sheet.classList.remove('open');
+  document.body.style.overflow = '';
+  if (lastFocus) try { lastFocus.focus(); } catch (e) {}
+}
+function renderSheet() {
+  var lines = getLines(), t = totals(lines);
+  var groups = state.split && t.qual >= THRESHOLD ? optimize(lines) : null;
+  var tabs = el('osTabs');
+  if (groups && groups.length > 1) {
+    tabs.innerHTML = '<button type="button" data-g="0" class="' + (osGroup === 0 ? 'active' : '') + '">まとめて</button>' +
+      groups.map(function (g, i) { return '<button type="button" data-g="' + (i + 1) + '" class="' + (osGroup === i + 1 ? 'active' : '') + '">会計' + (i + 1) + '</button>'; }).join('');
+  } else { tabs.innerHTML = ''; osGroup = 0; }
+
+  var rows, sum, count;
+  if (osGroup > 0) {
+    var g = groups[osGroup - 1], m = {}, order = [];
+    g.items.forEach(function (x) { if (!m[x.label]) { m[x.label] = 0; order.push(x.label); } m[x.label]++; });
+    rows = order.map(function (l) { return { name:l, n:m[l] }; });
+    sum = g.sum; count = g.items.length;
+  } else {
+    rows = lines.filter(function (l) { return !l.so; }).map(function (l) { return { name:lineName(l), n:l.n }; });
+    sum = t.price; count = t.count;
+  }
+  el('osList').innerHTML = rows.map(function (r, i) {
+    var parts = r.name.split(' / ');
+    var id = osGroup + ':' + r.name;
+    return '<button type="button" class="os-row' + (osDone[id] ? ' done' : '') + '" data-done="' + esc(id) + '" style="width:100%;text-align:left;background:none;border:0;border-bottom:1px solid #ddd;cursor:pointer">' +
+      '<span class="n">' + esc(parts[0]) + (parts[1] ? '<span class="v">' + esc(parts[1]) + '</span>' : '') + '</span>' +
+      '<span class="q">×' + r.n + '</span></button>';
+  }).join('');
+  el('osCount').textContent = count + '点' + (osGroup > 0 && groups[osGroup - 1].bag ? '　🛍 特典対象' : '');
+  el('osTotal').textContent = yen(sum);
+}
+el('osTabs').addEventListener('click', function (e) { var b = e.target.closest('[data-g]'); if (!b) return; osGroup = Number(b.dataset.g); renderSheet(); });
+el('osList').addEventListener('click', function (e) { var b = e.target.closest('[data-done]'); if (!b) return; var id = b.dataset.done; osDone[id] = !osDone[id]; b.classList.toggle('done', osDone[id]); });
+el('osClose').addEventListener('click', closeSheet);
+el('orderBtn').addEventListener('click', openSheet);
+el('dockOrder').addEventListener('click', openSheet);
+
+/* 画像拡大 */
+var zoom = el('zoom');
+function openZoom(src, cap) { el('zoomImg').src = src; el('zoomImg').alt = cap; el('zoomCap').textContent = cap; zoom.classList.add('open'); }
+zoom.addEventListener('click', function () { zoom.classList.remove('open'); });
+document.addEventListener('keydown', function (e) {
+  if (e.key !== 'Escape') return;
+  if (zoom.classList.contains('open')) zoom.classList.remove('open');
+  else if (sheet.classList.contains('open')) closeSheet();
+});
+venueInfo.addEventListener('click', function (e) { var z = e.target.closest('img'); if (z && currentRegion()) openZoom(z.src, regionOf(currentRegion()).label + ' デザイン'); });
+
+/* ---------- コピー ---------- */
+function resultText() {
+  var lines = getLines(), t = totals(lines), v = currentVenue();
+  var out = ['【Play at the MUZEUM vol.2 会場グッズ購入メモ】'];
+  if (v.date) out.push(shortDate(v.date) + '（' + v.dow + '） ' + v.pref + '公演');
+  lines.forEach(function (l) { if (!l.so) out.push('・' + lineName(l) + ' ×' + l.n + ' = ' + yen(l.sub)); });
+  out.push('合計点数：' + t.count + '点', '合計金額：' + yen(t.price));
+  if (t.qual !== t.price) out.push('（特典対象：' + yen(t.qual) + '）');
+  if (state.split && t.qual >= THRESHOLD) {
+    var g = optimize(lines);
+    out.push('', '【会計の分け方】ショッパー最大 ' + g.filter(function (x) { return x.bag; }).length + '枚 / ' + g.length + '会計');
+    g.forEach(function (x, i) { out.push('会計' + (i + 1) + '：' + yen(x.sum) + (x.bag ? '（特典1枚）' : '') + ' … ' + groupLabels(x.items).join('、')); });
+  } else if (t.qual >= THRESHOLD) out.push('ショッパー：1枚');
+  else if (t.count) out.push('ショッパーまで：あと' + yen(THRESHOLD - t.qual));
+  return out.join('\n');
+}
+el('copyBtn').addEventListener('click', async function () {
+  var b = this, text = resultText(), orig = b.textContent;
+  try { await navigator.clipboard.writeText(text); }
+  catch (e) {
+    var ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta);
+    ta.select(); try { document.execCommand('copy'); } catch (er) {} ta.remove();
+  }
+  b.textContent = 'コピーしました'; setTimeout(function () { b.textContent = orig; }, 1600);
+});
+
+/* ---------- 画像保存 ---------- */
+function safeScale(w, h, want) {
+  var bySide = Math.min(4096 / w, 4096 / h), byArea = Math.sqrt(16000000 / (w * h));
+  return Math.max(1, Math.floor(Math.min(want || 2, bySide, byArea) * 100) / 100);
+}
+el('downloadBtn').addEventListener('click', async function () {
+  var b = this, orig = b.textContent, target = el('receiptWrap');
+  if (typeof html2canvas !== 'function') { setStatus('画像機能を読み込めませんでした。スクリーンショットをご利用ください。'); return; }
+  b.disabled = true; b.textContent = '画像を作成中…';
+  try {
+    try { await document.fonts.ready; } catch (e) {}
+    var r = target.getBoundingClientRect();
+    var canvas = await html2canvas(target, { backgroundColor:'#f1ebe1', scale:safeScale(r.width, r.height, 2), useCORS:true, logging:false });
+    var blob = await new Promise(function (res, rej) { canvas.toBlob(function (x) { x ? res(x) : rej(new Error('blob')); }, 'image/png'); });
+    var name = 'muzeum-vol2-venue-goods.png';
+    var file = new File([blob], name, { type:'image/png' });
+    if (navigator.share && navigator.canShare && navigator.canShare({ files:[file] })) {
+      try { await navigator.share({ files:[file], title:'MUZEUM vol.2 会場グッズ購入メモ' }); setStatus('共有シートを開きました。', true); return; }
+      catch (se) { if (se && se.name === 'AbortError') { setStatus('共有をキャンセルしました。', true); return; } }
+    }
+    var url = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    setStatus('画像を保存しました。', true);
+  } catch (e) {
+    console.error(e);
+    setStatus('画像の保存に失敗しました。レシートをスクリーンショットしてください。');
+  } finally { b.disabled = false; b.textContent = orig; }
+});
+
+function setStatus(msg, ok) {
+  var s = el('status');
+  s.textContent = msg || ''; s.classList.toggle('ok', !!ok);
+  clearTimeout(setStatus.t); setStatus.t = setTimeout(function () { s.textContent = ''; }, 3500);
+}
+
+/* ---------- 初期化 ---------- */
+load();
+splitToggle.checked = state.split;
+budgetInput.value = parseBudget() ? parseBudget().toLocaleString('ja-JP') : '';
+renderVenue();
+update();
+lastTotal = null;
+
+})();
+</script>
+</body>
+</html>
