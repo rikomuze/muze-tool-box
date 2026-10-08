@@ -325,18 +325,9 @@
   .benefit-title{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:.05em}
   .benefit-title .bag{font-size:18px}
   .gauge{position:relative;height:14px;background:var(--paper-dim);margin:10px 0 6px;overflow:hidden}
-  .gauge i{position:absolute;inset:0 auto 0 0;background:var(--mz-green);transition:width .35s ease}
-  .capturing .gauge i{transition:none}
-  /* ショッパー判定スタンプ（保存画像でも一目でわかるように） */
-  .bag-stamp{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;padding:10px 12px;border:2px solid var(--mz-green);background:var(--mz-green);color:#fff}
-  .bag-stamp .k{font-size:13px;font-weight:700;letter-spacing:.06em;line-height:1.4}
-  .bag-stamp .k small{display:block;font-size:10.5px;font-weight:700;opacity:.85;letter-spacing:.02em}
-  .bag-stamp .v{font-size:22px;font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
-  .bag-stamp.no{background:var(--paper);color:var(--faded);border-style:dashed;border-color:rgba(64,56,47,.35)}
-  .bag-stamp.no .v{font-size:15px;color:var(--pencil)}
-  .bag-stamp[hidden]{display:none}
-  .capturing .split-toggle.off,.capturing .budget.empty{display:none}
-  .capturing .budget input{border-bottom-color:transparent}
+  .gauge i{position:absolute;inset:0 auto 0 0;background:repeating-linear-gradient(-45deg,var(--mz-green) 0 8px,#1fae62 8px 16px);transition:width .35s ease}
+  /* 画像保存時は単色に（html2canvasが斜線グラデを描けず空に見えるため） */
+  .capturing .gauge i{background:var(--mz-green);transition:none}
   .gauge-text{font-size:12.5px;font-weight:700;line-height:1.6}
   .gauge-text .ok{color:var(--mz-green)}
   .gauge-sub{font-size:11px;color:var(--faded);line-height:1.6;margin-top:2px}
@@ -518,10 +509,9 @@
                 <span id="qualPrice">¥0</span>
               </div>
             </div>
-            <div class="bag-stamp" id="bagStamp" hidden><span class="k" id="bagStampK"></span><span class="v" id="bagStampV"></span></div>
             <div class="warn" id="warningBox"></div>
 
-            <div class="budget" id="budgetBox">
+            <div class="budget">
               <label for="budgetInput">予算（任意）<input id="budgetInput" type="text" inputmode="numeric" placeholder="例：20000" autocomplete="off"></label>
               <div class="left" id="budgetLeft" hidden></div>
             </div>
@@ -531,7 +521,7 @@
               <div class="gauge" aria-hidden="true"><i id="gaugeBar" style="width:0"></i></div>
               <div class="gauge-text" id="gaugeText"></div>
               <div class="gauge-sub" id="gaugeSub"></div>
-              <label class="split-toggle" id="splitLabel">
+              <label class="split-toggle">
                 <span>
                   <strong>会計を分けて枚数を最大化</strong>
                   <span class="s">8,000円以上ずつに分ける組み合わせを計算（会場は送料なし）</span>
@@ -1000,23 +990,9 @@ function renderBenefit(lines, t) {
   var single = t.qual >= THRESHOLD;
   var pct = Math.min(100, t.qual / THRESHOLD * 100);
   el('gaugeBar').style.width = pct + '%';
-  el('splitLabel').classList.toggle('off', !state.split);
-  el('budgetBox').classList.toggle('empty', !parseBudget());
   var dockBag = el('dockBag');
   var groups = state.split && t.qual >= THRESHOLD ? optimize(lines) : null;
   var bags = groups ? groups.filter(function (g) { return g.bag; }).length : (single ? 1 : 0);
-
-  var stamp = el('bagStamp');
-  stamp.hidden = t.count === 0;
-  if (single) {
-    stamp.className = 'bag-stamp';
-    el('bagStampK').innerHTML = '🛍 ショッパー特典 あり<small>' + (groups && groups.length > 1 ? groups.length + '会計に分けた場合' : '1会計で購入') + '</small>';
-    el('bagStampV').textContent = '×' + bags + '枚';
-  } else {
-    stamp.className = 'bag-stamp no';
-    el('bagStampK').innerHTML = 'ショッパー特典 なし<small>特典対象 ' + yen(t.qual) + ' / ' + yen(THRESHOLD) + '</small>';
-    el('bagStampV').textContent = 'あと' + yen(THRESHOLD - t.qual);
-  }
 
   if (!single) {
     el('gaugeText').innerHTML = 'あと <span class="num">' + yen(THRESHOLD - t.qual) + '</span> でショッパー1枚';
