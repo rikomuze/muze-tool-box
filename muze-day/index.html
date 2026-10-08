@@ -741,7 +741,7 @@ function savedDays() {
   return '<div style="margin-top:22px"><div class="lbl" style="font-size:16px;margin-bottom:6px">つくった日</div>' +
     list.map(function (d) {
       var n = daysUntil(d.date), when = n > 0 ? "あと" + n + "日" : n === 0 ? "当日" : "おわった日";
-      return '<div class="daycard"><button type="button" class="dc-main" data-act="open-day" data-id="' + d.id + '"><span class="en dc-date">' + md(d.date) + '</span><span class="dc-t"><b>' + esc(d.title) + '</b><span class="hint">' + KIND_LABEL[d.kind] + (d.venue ? ' ・ ' + esc(d.venue) : "") + ' ・ ' + when + '</span></span><span class="dc-go">開く ›</span></button>' +
+      return '<div class="daycard"><button type="button" class="dc-main" data-act="open-day" data-id="' + d.id + '"><span class="en dc-date">' + md(d.date) + '</span><span class="dc-t"><b>' + esc(d.title) + '</b><span class="hint">' + KIND_LABEL[d.kind] + (d.venue ? ' ・ ' + esc(d.venue) : "") + ' ・ ' + when + '</span></span><span class="dc-go">編集する ›</span></button>' +
         '<div class="dc-acts"><button type="button" class="seebtn" data-act="see-day" data-id="' + d.id + '">しおりを見る</button><button type="button" class="dc-del" data-act="del-day" data-id="' + d.id + '" aria-label="' + esc(d.title) + 'を消す">✕ 消す</button></div></div>';
     }).join("") + '</div>';
 }
@@ -944,7 +944,7 @@ function meetView(d) {
   html += secHead("02", "ミーグリ", "名前と「いつごろ」だけでOK");
   if (!fixed.length && !loose.length) html += '<div class="empty">会いたい人はまだいないよ。</div>';
   function mrow(m) {
-    return '<div class="mrow"><button type="button" class="body" data-act="edit-meet" data-id="' + m.id + '"><span class="nm">' + esc(m.who) + '</span><span class="memo">' + esc([m.time ? m.time : "", m.place ? "だいたい " + m.place : "", m.mark ? "目印：" + m.mark : "", m.memo].filter(Boolean).join(" ・ ") || "タップで だいたいの場所・目印をいれる") + '</span></button>' +
+    return '<div class="mrow"><button type="button" class="body" data-act="edit-meet" data-id="' + m.id + '"><span class="nm">' + esc(m.who) + '</span><span class="memo">' + esc([m.time ? m.time : "", m.place ? "だいたい " + m.place : "", m.companion ? "連番：" + m.companion : "", m.mark ? "目印：" + m.mark : "", m.memo].filter(Boolean).join(" ・ ") || "タップで だいたいの場所・目印をいれる") + '</span></button>' +
       '<button type="button" class="xbtn" data-act="del-quick" data-k="meet" data-id="' + m.id + '" aria-label="' + esc(m.who) + 'を消す">✕</button></div>';
   }
   if (fixed.length) html += '<div class="bands"><div class="bandh"><b>時間が決まっている</b></div>' + fixed.map(mrow).join("") + '</div>';
@@ -1048,7 +1048,7 @@ function sheetMeet(m, pre) {
     '<div><div class="lbl" style="margin-bottom:8px">いつごろ？</div>' + chipGroup("band", bands(d), m.band || "any") + '</div>' +
     fld("m-place", "だいたいの場所", m.place, "南口あたり・会場の近く など") +
     '<details class="more"' + (m.time ? " open" : "") + '><summary>時間がぴったり決まっていれば</summary>' + fld("m-time", "時間", m.time, "", "time") + '</details>' +
-    fld("m-mark", "相手の目印（わかれば）", m.mark, "ラベンダーのトート") + fld("m-memo", "メモ", m.memo, "DMで当日連絡") + '</div>';
+    fld("m-companion", "相手の連番さん（任意）", m.companion, "一緒にいる方の名前・@IDなど") + fld("m-mark", "相手の目印（わかれば）", m.mark, "ラベンダーのトート") + fld("m-memo", "メモ", m.memo, "DMで当日連絡") + '</div>';
   var foot = '<button type="button" class="btn dark full" data-act="save-meet">' + (m.id ? "保存する" : "ミーグリにいれる") + '</button>' + (m.id ? '<div style="display:flex;justify-content:space-between">' + "<span></span>" + '<button type="button" class="btn del" style="min-height:40px" data-act="del" data-k="meet" data-id="' + m.id + '">この人を消す</button></div>' : "");
   openSheet(m.id ? "ミーグリ" : "会いたい人をいれる", body, foot);
 }
@@ -1108,6 +1108,7 @@ function sheetShare() {
     '<button type="button" class="btn green full" data-act="save-img">画像を保存・共有する</button><p class="hint" style="text-align:center;margin:0">共有シートの「画像を保存」で写真に入るよ。開かないときは画像を<b>長押し</b>して「写真に保存」してね</p>');
   drawShiori(day()).then(function (url) { var i = $("#share-img"); if (i) i.src = url; });
 }
+function meetShioriNotes(m) { return [m.companion ? "連番：" + m.companion : "", m.mark ? "目印：" + m.mark : "", m.memo ? "メモ：" + m.memo : ""].filter(Boolean).join(" ・ "); }
 function drawShiori(d) {
   var W = 1080, c = document.createElement("canvas"); c.width = W; c.height = 4000; var x = c.getContext("2d");
   var HAND = '"Klee One","Zen Kaku Gothic New",sans-serif', GOTH = '"Zen Kaku Gothic New",sans-serif', EN = '"Montserrat",sans-serif', SERIF = '"DM Serif Display",serif';
@@ -1134,6 +1135,7 @@ function drawShiori(d) {
         x.font = "600 30px " + HAND; var nw = x.measureText(nm).width;
         if (i.type === "trade" || i.type === "meet") { text(i.type === "trade" ? "交換" : "ミーグリ", L + 150 + nw, y, "600 22px " + HAND, i.type === "trade" ? "#4a7556" : "#a8445f"); nw += i.type === "trade" ? 70 : 110; }
         if (pl) { x.font = "500 24px " + GOTH; text(clip(pl, R - (L + 170 + nw), x), L + 170 + nw, y, "500 24px " + GOTH, FADED); }
+        if (i.type === "meet" && meetShioriNotes(i.x)) { y += 34 * wrap(meetShioriNotes(i.x), L + 130, y + 15, R - L - 130, 34, "500 23px " + GOTH); }
         y += 60;
       });
     }
@@ -1154,8 +1156,12 @@ function drawShiori(d) {
       bands(d).forEach(function (b) {
         var ms = loose.filter(function (m) { return (m.band || "any") === b.id; }); if (!ms.length) return;
         text(b.label, L, y, "600 26px " + HAND, FADED);
-        var lines = wrap(ms.map(function (m) { return m.who + (m.place ? "（" + m.place + "）" : ""); }).join("・"), L + 200, y, R - L - 200, 44, "600 28px " + HAND);
-        y += 44 * lines + 12;
+        ms.forEach(function (m) {
+          var lines = wrap(m.who + (m.place ? "（" + m.place + "）" : ""), L + 200, y, R - L - 200, 44, "600 28px " + HAND);
+          y += 44 * lines;
+          if (meetShioriNotes(m)) { var n = wrap(meetShioriNotes(m), L + 200, y, R - L - 200, 33, "500 22px " + GOTH); y += n * 33; }
+          y += 12;
+        });
       });
     }
     var tradeItems = d.trades.filter(function (t) { return !t.done && t.give; });
@@ -1348,7 +1354,7 @@ function saveTrade() {
 function saveMeet() {
   var d = day(), s = ui.sheet, m = s.id ? findItem("meet", s.id) : null;
   if (!m) { if (!val("m-who")) { toast("だれに会いたいか入れてね"); return; } m = { id: uid(), time: "", place: "", done: false }; d.meets.push(m); }
-  m.who = val("m-who") || m.who; m.band = chipVal("band") || "any"; m.time = val("m-time"); m.place = val("m-place"); m.mark = val("m-mark"); m.memo = val("m-memo");
+  m.who = val("m-who") || m.who; m.band = chipVal("band") || "any"; m.time = val("m-time"); m.place = val("m-place"); m.mark = val("m-mark"); m.companion = val("m-companion"); m.memo = val("m-memo");
   save(); closeSheet(); d.view = "meet"; render(); toast("ミーグリにいれたよ");
 }
 function saveOff() {
