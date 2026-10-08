@@ -711,7 +711,7 @@ function defaultChecklist(kind) {
 }
 
 /* ========== 状態 ========== */
-var ui = { dd: false, ddFilter: "all", sheet: null, home: false };
+var ui = { dd: false, ddFilter: "all", sheet: null, home: true };
 var draft = null;
 function newDraft() { return { presetId: null, kind: "LIVE", date: "", title: "", venue: "", official: [{ label: "物販", time: "" }, { label: "開場", time: "" }, { label: "開演", time: "" }], imports: {}, custom: false }; }
 
@@ -1395,7 +1395,7 @@ $("#app").addEventListener("touchend", function (e) {
 
 saveLocalOnly();
 pullCloud(true);
-if (day()) { try { history.replaceState({ muzeDay: "home" }, ""); history.pushState({ muzeDay: "day" }, ""); } catch (e) {} refreshLink(true); }
+if (day()) { try { history.replaceState({ muzeDay: "home" }, ""); } catch (e) {} refreshLink(true); }
 render();
 })();
 </script>
