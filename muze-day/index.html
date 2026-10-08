@@ -823,7 +823,7 @@ function createDay() {
   var d = {
     id: uid(), presetId: draft.presetId, kind: draft.kind, date: draft.date, title: draft.title || (KIND_LABEL[draft.kind] + " DAY"), venue: draft.venue,
     official: draft.official.filter(function (o) { return o.label && o.time; }).map(function (o) { return { id: uid(), label: o.label, time: o.time }; }),
-    myplans: defaultMyPlans(), trades: [], meets: [], checklist: defaultChecklist(draft.kind), view: "event", myMark: ""
+    myplans: defaultMyPlans(), trades: [], meets: [], checklist: defaultChecklist(draft.kind), view: "event", myMark: "", myCompanion: ""
   };
   openLogRows().forEach(function (r) {
     var on = draft.imports[r.id] != null ? draft.imports[r.id] : logDate(r) === d.date;
@@ -839,7 +839,7 @@ function renderDay(d) {
   var n = daysUntil(d.date), when = n > 0 ? "当日まで あと " + n + " 日" : n === 0 ? "当日！" : "おわった日";
   var evSub = d.official.filter(function (o) { return o.label === "開場" || o.label === "開演"; }).map(function (o) { return o.label + o.time; }).join("・") || "公式の時間・わたしの予定";
   var html = '<div class="dtop"><button type="button" class="back" data-act="home">‹ しおり一覧</button><button type="button" class="seeshiori" data-act="share">しおりを見る</button></div>' +
-    '<button type="button" class="dhead" data-act="daymenu"><span class="dd2"><span class="en">' + md(d.date) + '</span><small>' + dow(d.date) + '</small></span><span class="dt"><span class="kind ' + d.kind + '">' + (d.kind === "LIVE" ? "LIVE" : "その他") + '</span><b>' + esc(d.title) + '</b><span class="hint">' + esc(d.venue || "") + ' ・ ' + when + '</span></span><span class="ed">編集</span></button>' +
+    '<button type="button" class="dhead" data-act="daymenu"><span class="dd2"><span class="en">' + md(d.date) + '</span><small>' + dow(d.date) + '</small></span><span class="dt"><span class="kind ' + d.kind + '">' + (d.kind === "LIVE" ? "LIVE" : "その他") + '</span><b>' + esc(d.title) + '</b><span class="hint">' + esc(d.venue || "") + ' ・ ' + when + (d.myCompanion ? ' ・ 連番：' + esc(d.myCompanion) : '') + '</span></span><span class="ed">編集</span></button>' +
     '<div class="vtabs" role="tablist"><button type="button" role="tab" class="vtab" data-act="view" data-v="event" aria-selected="' + (d.view === "event") + '"><span class="l">' + (d.kind === "LIVE" ? "LIVEの予定" : "当日の予定") + '</span><span class="s">' + esc(evSub) + '</span></button>' +
     '<button type="button" role="tab" class="vtab" data-act="view" data-v="meet" aria-selected="' + (d.view === "meet") + '"><span class="l">ミーグリの予定</span><span class="s">交換' + tradesOpen + '・ミーグリ' + meetsOpen + '</span></button></div>';
   html += guideBox(d);
@@ -1095,7 +1095,7 @@ function sheetKey() {
 }
 function sheetDayMenu() {
   var d = day(); ui.sheet = { type: "daymenu" };
-  var body = '<div class="form">' + fld("dm-title", "名前", d.title) + fld("dm-venue", "会場", d.venue) + fld("dm-date", "日付", d.date, "", "date") + fld("dm-mark", "わたしの目印（DMの文に入るよ）", d.myMark, "白いキャップ") +
+  var body = '<div class="form">' + fld("dm-title", "名前", d.title) + fld("dm-venue", "会場", d.venue) + fld("dm-date", "日付", d.date, "", "date") + fld("dm-companion", "自分の連番さん（任意）", d.myCompanion, "一緒に参戦する人の名前・@ID") + fld("dm-mark", "わたしの目印（DMの文に入るよ）", d.myMark, "白いキャップ") +
     '<div><div class="lbl" style="margin-bottom:6px">公式の時間</div>' + d.official.map(function (o) { return '<button type="button" class="off" style="margin:4px 0;width:100%" data-act="edit-off" data-id="' + o.id + '"><span class="en">' + esc(o.time) + '</span><span class="hand">' + esc(o.label) + '</span><span class="sub">編集</span></button>'; }).join("") + '<button type="button" class="link" data-act="add-off">＋ 公式の時間を足す</button><p class="autonote" style="margin:4px 0 0">開場・開演などの時間は、今後自動で入るようにする予定です</p></div></div>';
   openSheet("この日のこと", body, '<button type="button" class="btn dark full" data-act="save-daymenu">保存する</button><button type="button" class="btn del full" data-act="del-day">この日を丸ごと消す</button>');
 }
@@ -1124,6 +1124,7 @@ function drawShiori(d) {
     var kt = d.kind === "LIVE" ? "LIVE" : "その他", kc = d.kind === "LIVE" ? "#65559a" : "#4a7556"; x.font = "600 26px " + (d.kind === "LIVE" ? EN : HAND); var kw = x.measureText(kt).width + 30; x.strokeStyle = kc; x.lineWidth = 3; x.strokeRect(R - kw, y - 34, kw, 44); text(kt, R - kw + 15, y, x.font, kc);
     y += 56; y += (wrap(d.title, L, y, R - L, 44, "600 32px " + HAND) - 1) * 44;
     y += 44; text(d.venue || "", L, y, "500 26px " + GOTH, FADED); y += 40;
+    if (d.myCompanion) { var companionLines = wrap("一緒に参戦：" + d.myCompanion, L, y, R - L, 35, "500 25px " + GOTH); y += companionLines * 35 + 12; }
     var items = timedItems(d).filter(function (i) { return !i.x.done; });
     if (items.length) {
       head("当日の流れ");
@@ -1271,7 +1272,7 @@ document.addEventListener("click", function (e) {
     case "save-meet": saveMeet(); break;
     case "save-off": saveOff(); break;
     case "save-fix": saveFix(); break;
-    case "save-daymenu": d.title = val("dm-title") || d.title; d.venue = val("dm-venue"); d.date = val("dm-date") || d.date; d.myMark = val("dm-mark"); save(); closeSheet(); render(); break;
+    case "save-daymenu": d.title = val("dm-title") || d.title; d.venue = val("dm-venue"); d.date = val("dm-date") || d.date; d.myMark = val("dm-mark"); d.myCompanion = val("dm-companion"); save(); closeSheet(); render(); break;
     case "del-day":
       var target = id ? db.days.filter(function (x) { return x.id === id; })[0] : d; if (!target) return;
       if (!confirm("「" + md(target.date) + " " + target.title + "」を丸ごと消していい？\n予定・持ち物・交換・ミーグリがすべて消えるよ（交換約束ログは消えないよ）")) return;
