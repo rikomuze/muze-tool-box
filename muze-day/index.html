@@ -713,7 +713,7 @@ function defaultChecklist(kind) {
 /* ========== 状態 ========== */
 var ui = { dd: false, ddFilter: "all", sheet: null, home: true };
 var draft = null;
-function newDraft() { return { presetId: null, kind: "LIVE", date: "", title: "", venue: "", official: [{ label: "物販", time: "" }, { label: "開場", time: "" }, { label: "開演", time: "" }], imports: {}, custom: false }; }
+function newDraft() { return { presetId: null, kind: "LIVE", date: "", title: "", venue: "", myCompanion: "", official: [{ label: "物販", time: "" }, { label: "開場", time: "" }, { label: "開演", time: "" }], imports: {}, custom: false }; }
 
 /* ========== 描画 ========== */
 function render() {
@@ -790,7 +790,8 @@ function startForm() {
       '<button type="button" class="kind" data-act="kind" data-v="OTHER" aria-pressed="' + (draft.kind === "OTHER") + '"><span class="hand" style="font-size:22px;display:block">その他</span><small>フェス・イベントなど</small></button></div>';
   html += '<div class="field"><label for="f-date">日付</label><input id="f-date" type="date" value="' + esc(draft.date) + '" data-draft="date"></div>' +
     '<div class="field"><label for="f-title">名前</label><input id="f-title" type="text" value="' + esc(draft.title) + '" data-draft="title" placeholder="〇〇 LIVE 東京公演"></div>' +
-    '<div class="field"><label for="f-venue">会場</label><input id="f-venue" type="text" value="' + esc(draft.venue) + '" data-draft="venue" placeholder="会場名"></div></div>';
+    '<div class="field"><label for="f-venue">会場</label><input id="f-venue" type="text" value="' + esc(draft.venue) + '" data-draft="venue" placeholder="会場名"></div>' +
+     '<div class="field"><label for="f-companion">自分の連番さん（任意）</label><input id="f-companion" type="text" value="' + esc(draft.myCompanion || "") + '" data-draft="myCompanion" placeholder="一緒に参戦する人の名前・@ID"></div></div>';
   html += '<div class="paper box"><i class="tape t-lav" style="width:54px;height:16px"></i><h3>公式の時間</h3><p class="hint" style="margin:2px 0 4px">わからないところは空欄でOK。</p>' +
     draft.official.map(function (o, i) { return '<div class="trow"><input type="text" value="' + esc(o.label) + '" data-off-label="' + i + '" aria-label="名前"><input type="time" value="' + esc(o.time) + '" data-off-time="' + i + '" aria-label="' + esc(o.label) + 'の時刻"><button type="button" class="x" data-act="off-del" data-i="' + i + '" aria-label="この行を消す">✕</button></div>'; }).join("") +
     '<button type="button" class="link" data-act="off-add">＋ 行を足す</button><p class="autonote">開場・開演などの時間は、今後自動で入るようにする予定です</p></div>';
@@ -823,7 +824,7 @@ function createDay() {
   var d = {
     id: uid(), presetId: draft.presetId, kind: draft.kind, date: draft.date, title: draft.title || (KIND_LABEL[draft.kind] + " DAY"), venue: draft.venue,
     official: draft.official.filter(function (o) { return o.label && o.time; }).map(function (o) { return { id: uid(), label: o.label, time: o.time }; }),
-    myplans: defaultMyPlans(), trades: [], meets: [], checklist: defaultChecklist(draft.kind), view: "event", myMark: "", myCompanion: ""
+    myplans: defaultMyPlans(), trades: [], meets: [], checklist: defaultChecklist(draft.kind), view: "event", myMark: "", myCompanion: draft.myCompanion || ""
   };
   openLogRows().forEach(function (r) {
     var on = draft.imports[r.id] != null ? draft.imports[r.id] : logDate(r) === d.date;
