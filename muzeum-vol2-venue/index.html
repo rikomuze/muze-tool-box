@@ -134,7 +134,7 @@
   .rules .src a{text-decoration:underline dashed;text-underline-offset:3px}
 
   /* ---------- 2カラム ---------- */
-  .layout{display:grid;gap:26px;margin-top:22px}
+  .layout{display:grid;grid-template-columns:minmax(0,1fr);gap:26px;margin-top:22px}
   @media(min-width:900px){
     .layout{grid-template-columns:minmax(0,1fr) 370px;align-items:start}
     .receipt-col{position:sticky;top:16px}
@@ -456,6 +456,7 @@
   .memo-card small{display:block;color:var(--faded);margin-top:6px}
   .memo-card a{text-decoration:underline dashed;text-underline-offset:3px}
   </style>
+<script src="https://rikomuze.github.io/muze-tool-box/assets/app-back.js" defer></script>
 </head>
 <body>
 
