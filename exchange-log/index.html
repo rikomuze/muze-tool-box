@@ -110,7 +110,7 @@ dialog{border:0;border-radius:0;width:min(94vw,620px);max-width:calc(100vw - 24p
 </form></dialog>
 <dialog id="keyDlg"><div class="formhead"><b>MUZE KEY</b><button class="close" id="keyClose" type="button">×</button></div><div class="keyPanel"><p>MUZE TOOL BOXで使う共通KEYです。交換約束ログは、このKEYを使ってブラウザ内で暗号化してからクラウド保存します。</p><p><b>このKEYは必ずスクショやメモで保管してください。</b><br>KEYを失うと、運営側でも交換内容を復元できません。</p><input class="keyValue" id="keyValue" autocomplete="off" autocapitalize="characters" spellcheck="false"><div class="keyActions"><button id="keyCopy" type="button">コピー</button><button class="primary" id="keyUse" type="button">このKEYを使う</button></div><button class="keyNew" id="keyNew" type="button">新しいMUZE KEYを発行</button><a class="keyHelp" href="../muze-key/"><span>MUZE KEYとは？ 仕組みと使い方を見る →</span></a></div></dialog>
 </div>
-<script src="../assets/muze-key.js"></script>
+<script src="../assets/muze-key.js"></script><script src="../muze-day/events.js?v=2026.10.16-1"></script>
 <script>
 (function(){
 "use strict";
@@ -400,10 +400,15 @@ function init(){
  $("#sort").addEventListener("change",()=>{sortMode=$("#sort").value;try{localStorage.setItem(SORT_KEY,sortMode)}catch(e){}render()});
 }
 /* 終わったイベントの取引は薄く表示して、リストの下に回す（イベントが終わったらここに足す） */
-const ENDED_EVENTS=[{label:"BMSG FES ’26",series:"BMSG FES ’26",re:/BMSG\s*FES/i}];
+/* 最後の公演日がすぎたイベントを自動で拾う（イベント一覧は muze-day/events.js） */
+const ENDED_EVENTS=(function(){
+ const d=new Date(),today=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+ const groups=window.MUZE_EVENT_GROUPS||[{label:"BMSG FES ’26",series:"BMSG FES ’26",match:"BMSG\\s*FES",lastDate:"2026-10-12"}];
+ return groups.filter(g=>g.lastDate&&g.lastDate<today).map(g=>({label:g.label,series:g.series||"",re:new RegExp(g.match,"i")}));
+})();
 function endedEvent(r){
  const items=(r.giveItems||[]).concat(r.getItems||[]);
- return ENDED_EVENTS.find(e=>items.some(it=>it.series===e.series)||e.re.test(r.event||""))||null;
+ return ENDED_EVENTS.find(e=>(e.series&&items.some(it=>it.series===e.series))||e.re.test(r.event||""))||null;
 }
 function getVisibleRows(){
  const q=$("#search").value.trim().toLowerCase();

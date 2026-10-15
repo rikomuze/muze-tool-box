@@ -2,7 +2,7 @@
    kind: "LIVE"（ファンミ・単独）| "OTHER"（フェスなど、その他のイベント）
    official: 公式の時間（開場・開演）。今後は自動取得にしたい。
    終わった公演は自動でかくれる。時間や会場は必ず公式サイトでも確認すること。
-   最終更新: 2026-10-15 */
+   最終更新: 2026-10-16 */
 window.MUZE_DAY_EVENTS = (function () {
   var FM = "MAZZEL 2nd Fan Meeting -Play at the MUZEUM Vol.2-";
   function fm(id, date, city, venue, open, start, part) {
@@ -73,3 +73,20 @@ window.MUZE_DAY_EVENTS = (function () {
     }
   ];
 })();
+
+/* イベントのまとまり（交換ログで「終わったイベント」を自動で薄くするのに使う）
+   ids: そのまとまりに入る公演IDの頭文字。いちばん遅い日付がすぎたら「終了」あつかい。
+   series: 交換ログのグッズのシリーズ名（あれば）。match: 交換ログの会場・イベント欄で拾う言葉。
+   新しいイベントを足したら、ここにも1行足す。 */
+window.MUZE_EVENT_GROUPS = [
+  { label: "BMSG FES ’26", ids: "bmsg26-", series: "BMSG FES ’26", match: "BMSG\\s*FES" },
+  { label: "マグロック 2026", ids: "magurock26", match: "マグロック" },
+  { label: "2nd Fan Meeting", ids: "fm2-", series: "Play at the MUZEUM vol.2", match: "2nd\\s*Fan\\s*Meeting|MUZEUM" },
+  { label: "MTV VMAJ 2026", ids: "vmaj26", match: "VMAJ" },
+  { label: "ドリームフェスティバル2026", ids: "dreamfes26", match: "ドリーム\\s*フェス|ドリフェス|Dream\\s*Fes" },
+  { label: "COUNTDOWN JAPAN 26/27", ids: "cdj2627", match: "COUNTDOWN\\s*JAPAN|CDJ|カウントダウン\\s*ジャパン" }
+].map(function (g) {
+  var dates = (window.MUZE_DAY_EVENTS || []).filter(function (e) { return e.id.indexOf(g.ids) === 0; }).map(function (e) { return e.date; }).sort();
+  g.lastDate = dates[dates.length - 1] || "";
+  return g;
+});
