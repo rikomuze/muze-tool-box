@@ -2,7 +2,7 @@
    kind: "LIVE"（ファンミ・単独）| "OTHER"（フェスなど、その他のイベント）
    official: 公式の時間（開場・開演）。今後は自動取得にしたい。
    終わった公演は自動でかくれる。時間や会場は必ず公式サイトでも確認すること。
-   最終更新: 2026-10-01 */
+   最終更新: 2026-10-15 */
 window.MUZE_DAY_EVENTS = (function () {
   var FM = "MAZZEL 2nd Fan Meeting -Play at the MUZEUM Vol.2-";
   function fm(id, date, city, venue, open, start, part) {
@@ -64,6 +64,12 @@ window.MUZE_DAY_EVENTS = (function () {
     fm("fm2-kagawa", "2026-12-15", "香川", "レクザムホール", "17:00", "18:00"),
     fm("fm2-kochi", "2026-12-16", "高知", "新来島高知重工ホール", "17:00", "18:00"),
     fm("fm2-shizuoka", "2026-12-21", "静岡", "アクトシティ浜松", "17:00", "18:00"),
-    fm("fm2-kumamoto", "2026-12-23", "熊本", "熊本城ホール", "15:30", "16:30")
+    fm("fm2-kumamoto", "2026-12-23", "熊本", "熊本城ホール", "15:30", "16:30"),
+    {
+      id: "cdj2627-1", date: "2026-12-26", kind: "OTHER", tag: "その他",
+      name: "COUNTDOWN JAPAN 26/27 DAY1", title: "COUNTDOWN JAPAN 26/27 DAY1",
+      venue: "幕張メッセ国際展示場1〜11ホール・イベントホール", official: [],
+      note: "MAZZEL出演日"
+    }
   ];
 })();

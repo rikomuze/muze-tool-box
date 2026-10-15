@@ -34,6 +34,7 @@ button,input,select,textarea{font-family:inherit;color:inherit;font-size:16px}
 button{cursor:pointer}
 a{color:inherit}
 :focus-visible{outline:2.5px solid var(--berry);outline-offset:3px}
+.pastdays{margin-top:14px}.pastdays summary{cursor:pointer;list-style:none;font-size:14px;color:var(--faded);padding:8px 2px;border-top:1px dashed rgba(64,56,47,.2)}.pastdays summary::-webkit-details-marker{display:none}.pastdays summary:before{content:"▸ ";}.pastdays[open] summary:before{content:"▾ ";}.daycard.past{opacity:.55}
 .hidden{display:none!important}
 .wrap{max-width:560px;margin:0 auto}
 
@@ -482,12 +483,12 @@ button.cloudstat{background:none;border:0;padding:4px 0;font-size:11.5px;color:v
   </div>
 </nav>
 <main class="wrap" id="app" aria-live="polite"></main>
-<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">ver 2026.10.02-8</span><br>MUZE DAY はテスト版です。予定はこの端末に保存され、MUZE KEYを入れると暗号化してクラウドにも保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
+<div class="foot"><span class="en" style="font-size:10px;letter-spacing:.1em">ver 2026.10.15-1</span><br>MUZE DAY はテスト版です。予定はこの端末に保存され、MUZE KEYを入れると暗号化してクラウドにも保存されます。時間や会場は必ず公式サイトでも確認してね。<br>MAZZEL・BMSG公式とは関係のない非公式ファンメイドツールです。</div>
 <div id="dock"></div>
 <div id="sheet" class="sheet hidden" role="dialog" aria-modal="true"></div>
 <div id="toast" class="toast hidden" role="status"></div>
 
-<script src="./events.js?v=2026.10.02-8"></script>
+<script src="./events.js?v=2026.10.15-1"></script>
 <script>
 (function () {
 "use strict";
@@ -736,15 +737,22 @@ function homeCloud() {
   if (cloudKey()) return '<div class="cloudbox"><span class="cloudstat">' + esc(cloudStatusText()) + '</span><button type="button" class="link" style="min-height:36px;padding:0 4px" data-act="key">KEY</button></div>';
   return '<div class="cloudbox"><span>☁ MUZE KEY で予定を暗号化してクラウド保存。別の端末でも復元できるよ（交換約束ログを使っていなくてもOK）</span><button type="button" class="link" style="min-height:36px;padding:0 4px;white-space:nowrap" data-act="key">KEYを入れる</button></div>';
 }
+function dayCard(d, past) {
+  var n = daysUntil(d.date), when = n > 0 ? "あと" + n + "日" : n === 0 ? "当日" : "おわった日";
+  return '<div class="daycard' + (past ? ' past' : '') + '"><button type="button" class="dc-main" data-act="open-day" data-id="' + d.id + '"><span class="en dc-date">' + md(d.date) + '</span><span class="dc-t"><b>' + esc(d.title) + '</b><span class="hint">' + KIND_LABEL[d.kind] + (d.venue ? ' ・ ' + esc(d.venue) : "") + ' ・ ' + when + '</span></span><span class="dc-go">' + (past ? '見る ›' : '編集する ›') + '</span></button>' +
+    '<div class="dc-acts"><button type="button" class="seebtn" data-act="see-day" data-id="' + d.id + '">しおりを見る</button><button type="button" class="dc-del" data-act="del-day" data-id="' + d.id + '" aria-label="' + esc(d.title) + 'を消す">✕ 消す</button></div></div>';
+}
+/* 終わった日のしおりは「過去のしおり」にたたんでしまう */
 function savedDays() {
   if (!db.days.length) return "";
+  var t = todayISO();
   var list = db.days.slice().sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
-  return '<div style="margin-top:22px"><div class="lbl" style="font-size:16px;margin-bottom:6px">つくった日</div>' +
-    list.map(function (d) {
-      var n = daysUntil(d.date), when = n > 0 ? "あと" + n + "日" : n === 0 ? "当日" : "おわった日";
-      return '<div class="daycard"><button type="button" class="dc-main" data-act="open-day" data-id="' + d.id + '"><span class="en dc-date">' + md(d.date) + '</span><span class="dc-t"><b>' + esc(d.title) + '</b><span class="hint">' + KIND_LABEL[d.kind] + (d.venue ? ' ・ ' + esc(d.venue) : "") + ' ・ ' + when + '</span></span><span class="dc-go">編集する ›</span></button>' +
-        '<div class="dc-acts"><button type="button" class="seebtn" data-act="see-day" data-id="' + d.id + '">しおりを見る</button><button type="button" class="dc-del" data-act="del-day" data-id="' + d.id + '" aria-label="' + esc(d.title) + 'を消す">✕ 消す</button></div></div>';
-    }).join("") + '</div>';
+  var upcoming = list.filter(function (d) { return d.date >= t; });
+  var past = list.filter(function (d) { return d.date < t; }).reverse();
+  var html = '<div style="margin-top:22px">';
+  if (upcoming.length) html += '<div class="lbl" style="font-size:16px;margin-bottom:6px">つくった日</div>' + upcoming.map(function (d) { return dayCard(d, false); }).join("");
+  if (past.length) html += '<details class="pastdays"' + (ui.pastOpen ? ' open' : '') + '><summary>過去のしおり <span class="hint">' + past.length + '件</span></summary>' + past.map(function (d) { return dayCard(d, true); }).join("") + '</details>';
+  return html + '</div>';
 }
 function renderStart() {
   var p = draft.presetId ? presetById(draft.presetId) : null;
@@ -1301,6 +1309,7 @@ document.addEventListener("change", function (e) {
 document.addEventListener("input", function (e) { if (e.target.hasAttribute && e.target.hasAttribute("data-draft")) draft[e.target.getAttribute("data-draft")] = e.target.value; });
 document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("#sheet").classList.contains("hidden")) closeSheet(); if (e.key === "Enter" && e.target.id === "ck-new" && !e.isComposing) { e.preventDefault(); addCheck(); } });
 $("#sheet").addEventListener("click", function (e) { if (e.target.id === "sheet") closeSheet(); });
+document.addEventListener("toggle", function (e) { if (e.target.classList && e.target.classList.contains("pastdays")) ui.pastOpen = e.target.open; }, true);
 
 function removeItem(d, k, id) {
   if (k === "trade") { var t = findItem("trade", id); if (t && t.logId) { d.skipLog = d.skipLog || {}; d.skipLog[t.logId] = 1; } d.trades = d.trades.filter(function (x) { return x.id !== id; }); }
