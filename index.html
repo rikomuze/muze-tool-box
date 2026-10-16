@@ -1,392 +1,626 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#ffffff">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="MUZE TOOL BOX">
-<title>MUZE TOOL BOX</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex">
+<meta name="theme-color" content="#f1ebe1">
+<meta name="description" content="MAZZELの応募・当落・視聴期限をカレンダーで確認できる非公式ファンメイドツール">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+<title>締め切りボード｜MUZE TOOL BOX</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Montserrat:wght@500;600;700&display=swap">
 <style>
-/* =====================================================
-   案C「作業机」
-   推し活の手を動かす楽しさをそのまま画面に。
-   机の上に、完成画像がプリント写真として置かれている。
-   影は“物が机に落とす影”だけ。マステと手書き注釈で温度を出し、
-   下段は素っ気ないほど整った道具一覧で大人に締める。
-   ===================================================== */
+/* Layout: MUZE TOOL BOX の「作業机の上の紙もの」。机ベージュ＋ドットの上に白い半券を1件1行で並べ、決めたものにはマステを貼る。下のドックで リスト⇄カレンダー。単一ライトテーマで固定 */
 :root{
-  --desk:#f1ebe1;          /* 生成りの机 */
-  --paper:#ffffff;         /* 写真の白フチ */
-  --pencil:#40382f;        /* 鉛筆の字 */
-  --faded:#8f8577;
-  --tape-berry:rgba(226,122,148,.8);  /* いちごマステ */
-  --tape-mint:rgba(164,197,175,.8);   /* ミントマステ */
-  --hand:"Klee One","Yu Gothic",cursive;
-  --gothic:"Zen Kaku Gothic New","Hiragino Sans",sans-serif;
-  --obj-shadow:0 10px 24px rgba(64,56,47,.18); /* 物理の影(ここ以外で影は使わない) */
+  color-scheme:light;
+  --desk:#f1ebe1; --paper:#ffffff; --pencil:#40382f; --faded:#6f6456;
+  --line:rgba(64,56,47,.2); --line2:rgba(64,56,47,.35);
+  --berry:#e27a94; --berry-ink:#a8445f; --berry-soft:#f7dde3;
+  --mint:#a4c5af; --mint-ink:#3d6a4c; --mint-soft:#e2eee5;
+  --lav:#bfaee3; --lav-ink:#5b4a8a; --lav-soft:#efe5ff;
+  --red:#c0472f; --red-soft:#f6dcd6;
+  --shadow:0 4px 12px rgba(64,56,47,.14);
+  --f-hand:"Klee One","Zen Kaku Gothic New","Hiragino Sans",sans-serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
+  --f-num:"Montserrat","Helvetica Neue",Arial,sans-serif;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;max-width:100%;overflow-x:hidden}
-body{max-width:100%;overflow-x:hidden}
-body{
-  background:
-    /* 紙の繊維をドットで薄く(グラデ禁止に近い装飾を点で代替) */
-    radial-gradient(rgba(64,56,47,.05) 1px, transparent 1px) 0 0/22px 22px,
-    var(--desk);
-  color:var(--pencil);
-  font-family:var(--gothic);
-  line-height:1.9;
-  -webkit-text-size-adjust:100%;
-}
-img{display:block;max-width:100%}
-a{color:inherit;text-decoration:none}
-.desk{max-width:720px;margin:0 auto;padding:0 16px}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{background:radial-gradient(rgba(64,56,47,.07) 1px,transparent 1px) 0 0/22px 22px,var(--desk);color:var(--pencil);font-family:var(--f-body);font-size:15px;line-height:1.55;font-feature-settings:"palt" 1}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--desk)}
+button{font:inherit;color:inherit;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:2px solid var(--berry-ink);outline-offset:2px}
+.wrap{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 12px;display:flex;flex-direction:column;gap:14px}
+
+/* header */
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.label{position:relative;display:inline-block;background:var(--paper);padding:3px 12px 4px;transform:rotate(-2deg);box-shadow:var(--shadow);font-family:var(--f-num);font-weight:700;font-size:10px;letter-spacing:.18em}
+.label::before{content:"";position:absolute;top:-6px;left:-10px;width:34px;height:12px;background:rgba(226,122,148,.85);transform:rotate(-12deg)}
+h1{font-family:var(--f-hand);font-weight:600;font-size:26px;line-height:1.2;margin:8px 0 0}
+.addbtn{flex:none;width:48px;height:48px;border-radius:50%;border:1.5px solid var(--pencil);background:var(--paper);font-size:24px;line-height:1;cursor:pointer;box-shadow:var(--shadow);transform:rotate(3deg)}
+
+/* next slip */
+.next{position:relative;background:var(--paper);box-shadow:0 10px 24px rgba(64,56,47,.16);padding:14px 16px 12px;transform:rotate(-.6deg);display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:baseline;cursor:pointer;border:none;text-align:left;width:100%}
+.next::before{content:"";position:absolute;top:-8px;right:22px;width:56px;height:16px;background:rgba(164,197,175,.85);transform:rotate(6deg)}
+.next .k{font-family:var(--f-hand);font-weight:600;font-size:13px;color:var(--faded);grid-column:1/-1}
+.next .t{font-weight:700;font-size:16px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.next .cd{font-family:var(--f-num);font-weight:700;font-size:16px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.next .cd.u{color:var(--red)}
+.next .w{font-family:var(--f-num);font-size:12px;color:var(--faded);grid-column:1/-1;font-variant-numeric:tabular-nums}
+.nudge{display:flex;gap:8px;flex-wrap:wrap}
+.nudge button{border:1.5px dashed var(--line2);background:rgba(255,255,255,.6);padding:8px 12px;font-size:13px;font-weight:700;cursor:pointer;min-height:40px}
+.nudge button b{font-family:var(--f-num)}
+
+/* index tabs */
+.tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;padding:3px;background:rgba(255,255,255,.6);box-shadow:inset 0 0 0 1px var(--line)}
+.tab{border:none;background:none;min-height:44px;padding:0 2px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;font-weight:700;font-size:13px;color:var(--faded);white-space:nowrap}
+.tab .n{font-family:var(--f-num);font-weight:700;font-size:11.5px;min-width:20px;padding:1px 6px;border-radius:999px;background:var(--desk);color:var(--pencil);font-variant-numeric:tabular-nums}
+.tab[aria-selected="true"]{background:var(--pencil);color:var(--paper)}
+.tab[aria-selected="true"] .n{background:rgba(255,255,255,.22);color:var(--paper)}
 
 
-/* ---------- 共通ヘッダー(紙もの風ナビ) ---------- */
-.tool-nav{
-  max-width:720px;
-  margin:0 auto;
-  padding:14px 16px 0;
-  position:relative;
-  z-index:10;
-}
-.tool-nav-inner{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:14px;
-  background:rgba(255,255,255,.74);
-  border:1px solid rgba(64,56,47,.14);
-  padding:8px 10px;
-  transform:rotate(-.3deg);
-}
-.tool-nav-brand{
-  font-family:var(--hand);
-  font-size:14px;
-  font-weight:600;
-  color:var(--pencil);
-  white-space:nowrap;
-}
-.tool-nav-links{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  overflow-x:auto;
-  -webkit-overflow-scrolling:touch;
-  scrollbar-width:none;
-}
-.tool-nav-links::-webkit-scrollbar{display:none}
-.tool-nav-links a{
-  font-size:11px;
-  font-weight:700;
-  letter-spacing:.06em;
-  color:var(--faded);
-  white-space:nowrap;
-  border-bottom:1px dashed rgba(64,56,47,.28);
-  line-height:1.6;
-}
-.tool-nav-links a:hover,.tool-nav-links a:active{color:var(--pencil);border-bottom-color:var(--pencil)}
-@media(max-width:520px){
-  .tool-nav{padding-top:10px}
-  .tool-nav-inner{align-items:flex-start;flex-direction:column;gap:6px}
-  .tool-nav-links{width:100%;padding-bottom:2px}
-}
+/* chips (pen-circled ellipses) */
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-inline:-16px;padding-inline:16px;padding-block:2px}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1.5px solid var(--line2);background:transparent;border-radius:50%;padding:6px 14px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;min-height:36px}
+.chip:nth-child(odd){transform:rotate(-1.5deg)}.chip:nth-child(even){transform:rotate(1.2deg)}
+.chip[aria-pressed="true"]{background:var(--pencil);color:var(--paper);border-color:var(--pencil)}
 
-/* ---------- 机の上(ファーストビュー) ---------- */
-.board{position:relative;padding:30px 0 8px}
-.sticker-logo{
-  width:min(250px,62vw);
-  margin:0 auto;
-  background:var(--paper);
-  padding:14px 20px;
-  transform:rotate(-2.4deg);
-  box-shadow:var(--obj-shadow);
-  position:relative;
-  z-index:3;
-}
-.sticker-logo::before,.sticker-logo::after{ /* マステ */
-  content:"";
-  position:absolute;
-  width:64px;height:20px;
-  background:var(--tape-berry);
-  top:-9px;left:-18px;
-  transform:rotate(-14deg);
-}
-.sticker-logo::after{
-  left:auto;right:-16px;top:auto;bottom:-8px;
-  background:var(--tape-mint);
-  transform:rotate(10deg);
-}
-.board .note{
-  font-family:var(--hand);
-  text-align:center;
-  font-size:14px;
-  color:var(--faded);
-  margin-top:14px;
-  letter-spacing:.06em;
-}
+/* sections */
+.sec{display:flex;flex-direction:column;gap:8px}
+.sec h2{font-family:var(--f-hand);font-weight:600;font-size:15px;margin:6px 2px 0;display:flex;gap:8px;align-items:baseline}
+.sec h2 .n{font-family:var(--f-num);font-size:12px;color:var(--faded);font-weight:600}
+.empty{border:1.5px dashed var(--line2);background:rgba(255,255,255,.45);padding:18px 16px;text-align:center;font-family:var(--f-hand);font-weight:600;font-size:14px;color:var(--faded)}
 
-/* 散らばった写真 */
-.photos{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:6px 14px;
-  margin-top:26px;
-}
-.photo{
-  background:var(--paper);
-  padding:8px 8px 34px;             /* プリント写真の余白 */
-  box-shadow:var(--obj-shadow);
-  position:relative;
-  transition:transform .25s ease;
-}
-.photo img{
-  width:100%;
-  aspect-ratio:1/1;
-  object-fit:cover;
-  object-position:center top;
-}
-.photo .cap{
-  position:absolute;
-  left:0;right:0;bottom:7px;
-  text-align:center;
-  font-family:var(--hand);
-  font-size:13px;
-  font-weight:600;
-  letter-spacing:.04em;
-}
-.photo .tape{
-  position:absolute;
-  width:56px;height:18px;
-  top:-8px;left:50%;
-  transform:translateX(-50%) rotate(-3deg);
-  background:var(--tape-berry);
-}
-.photo:nth-child(2n) .tape{background:var(--tape-mint);transform:translateX(-50%) rotate(4deg)}
-.photo:nth-child(1){transform:rotate(-2.2deg)}
-.photo:nth-child(2){transform:rotate(1.8deg);margin-top:22px}
-.photo:nth-child(3){transform:rotate(1.4deg);margin-top:-8px}
-.photo:nth-child(4){transform:rotate(-1.6deg);margin-top:14px}
-.photo:active,.photo:hover{transform:rotate(0deg) scale(1.015);z-index:4}
+/* card = 1行の半券 */
+.card{position:relative;display:grid;grid-template-columns:58px minmax(0,1fr) auto;align-items:center;background:var(--paper);box-shadow:var(--shadow);min-height:68px}
+.card:nth-child(odd){transform:rotate(-.25deg)}.card:nth-child(even){transform:rotate(.2deg)}
+.card .tape{position:absolute;top:-6px;left:10px;width:38px;height:12px;transform:rotate(-8deg);z-index:2}
+.st-go .tape{background:rgba(226,122,148,.85)}
+.st-wait .tape{background:rgba(191,174,227,.9)}
+.st-won .tape{background:rgba(164,197,175,.9)}
+.st-miss .tape{background:rgba(192,71,47,.7)}
+.st-undecided{box-shadow:none;background:rgba(255,255,255,.7);outline:1.5px dashed var(--line2);outline-offset:-1.5px}
+.st-off{background:rgba(255,255,255,.5);box-shadow:none}
+.st-off .stub,.st-off .ttl{opacity:.55}
+.st-pass .ttl{text-decoration:line-through;text-decoration-color:var(--line2)}
+.card.urgent .stub b{color:var(--red)}
+.stub{align-self:stretch;display:flex;flex-direction:column;align-items:center;justify-content:center;border-right:1.5px dashed var(--line);padding:8px 2px;font-family:var(--f-num);font-variant-numeric:tabular-nums;line-height:1.1;text-align:center}
+.stub .kd{font-family:var(--f-hand);font-weight:600;font-size:11px;color:var(--faded)}
+.stub b{font-size:17px;font-weight:700}
+.stub .wd{font-family:var(--f-body);font-size:11px;color:var(--faded);font-weight:700}
+.stub .tm{font-size:12px;font-weight:600;margin-top:2px}
+.mid{min-width:0;padding:10px 8px 10px 12px;cursor:pointer;background:none;border:none;text-align:left;align-self:stretch;display:flex;flex-direction:column;justify-content:center;gap:3px}
+.more-l{font-size:12px;font-weight:700;color:var(--pencil);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line2);margin-top:1px}
+.mid:active{background:rgba(64,56,47,.05)}
+.ttl{font-weight:700;font-size:15px;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:keep-all;overflow-wrap:anywhere}
+.sub{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--faded);white-space:nowrap;overflow:hidden;font-variant-numeric:tabular-nums}
+.sub .cd{font-family:var(--f-num);font-weight:700;color:var(--pencil)}
+.sub .cd.u{color:var(--red)}
+.sub .rs{font-family:var(--f-num);font-weight:600;color:var(--lav-ink)}
+.sub .tg{font-weight:700;color:var(--faded);overflow:hidden;text-overflow:ellipsis}
+.act{display:flex;flex-direction:column;gap:6px;padding:8px 10px 8px 0;align-items:stretch}
+.pb{border:1.5px solid var(--berry-ink);background:var(--berry-ink);color:#fff;font-weight:700;font-size:13px;padding:0 12px;min-height:40px;min-width:76px;cursor:pointer;white-space:nowrap;border-radius:999px}
+.pb.ghost{background:var(--paper);color:var(--pencil);border-color:var(--line2)}
+.pb.berry{background:var(--berry-ink);border-color:var(--berry-ink)}
+.act .pb{min-height:34px;font-size:12.5px}
+.act.two .pb{min-height:32px}
 
-/* 手書きの矢印注釈(SVG) = この案の署名 */
-.scribble{
-  position:absolute;
-  z-index:5;
-  font-family:var(--hand);
-  font-size:13.5px;
-  font-weight:600;
-  color:var(--pencil);
-  pointer-events:none;
-}
-.scribble svg{display:block;width:52px;height:36px;stroke:var(--pencil);fill:none;stroke-width:1.8;stroke-linecap:round}
-.scribble.fav{left:2%;bottom:34%;transform:rotate(-5deg)}
-@media(max-width:420px){.scribble.fav{display:none}}
+.steps{display:flex;align-items:center;gap:2px;font-size:11px;font-weight:700;color:var(--faded);white-space:nowrap;overflow:hidden}
+.stp{padding:1px 5px;border-radius:999px;border:1px solid transparent}
+.stp.ok{color:var(--pencil)}
+.stp.cur{border-color:var(--pencil);color:var(--pencil)}
+.steps.wait .stp.cur{border-color:var(--lav-ink);color:var(--lav-ink);background:var(--lav-soft)}
+.steps .sep{font-style:normal;color:var(--line2);font-size:11px}
+.steps.big .sep{font-size:13px}
+.steps.big{font-size:13px;gap:4px}.steps.big .stp{padding:3px 10px}
+.card>.steps.row{grid-column:2/4;padding:0 10px 9px 12px;margin-top:-2px}
+.card .stub{grid-row:1/span 2}
+.card.has-steps .mid{padding-bottom:4px}
+.dhead{font-family:var(--f-num);font-weight:700;font-size:13px;color:var(--faded);margin:6px 2px -2px}
+/* calendar */
+.cal{background:var(--paper);box-shadow:var(--shadow)}
+.cal-head{display:flex;align-items:center;gap:6px;padding:10px 10px 8px;border-bottom:1.5px dashed var(--line)}
+.cal-head h2{flex:1;margin:0;font-family:var(--f-num);font-weight:700;font-size:18px;text-align:center;font-variant-numeric:tabular-nums}
+.cal-head h2 small{font-family:var(--f-hand);font-weight:600;font-size:13px;margin-left:2px}
+.nav{width:44px;height:44px;border:none;background:none;font-size:22px;cursor:pointer;border-radius:50%}
+.today-b{border:1.5px solid var(--line2);background:none;border-radius:50%;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;min-height:34px}
+.legend{display:flex;justify-content:center;flex-wrap:wrap;gap:4px 12px;padding:8px 8px 4px;font-size:11px;color:var(--faded);font-weight:700}
+.legend span{display:inline-flex;align-items:center;gap:4px}
+.grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));padding:0 4px 8px}
+.dow{text-align:center;font-size:11px;font-weight:700;color:var(--faded);padding:4px 0}
+.dow.sun{color:var(--red)}.dow.sat{color:var(--lav-ink)}
+.day{border:none;background:none;min-height:46px;padding:4px 0 2px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;min-width:0}
+.day .dn{font-family:var(--f-num);font-weight:600;font-size:14px;width:30px;height:30px;display:grid;place-items:center;border-radius:50%;font-variant-numeric:tabular-nums}
+.day.out .dn{opacity:.3}
+.day.sun .dn{color:var(--red)}.day.sat .dn{color:var(--lav-ink)}
+.day.today .dn{box-shadow:inset 0 0 0 1.5px var(--pencil)}
+.day.sel .dn{background:var(--pencil);color:var(--paper)}
+.dots{display:flex;gap:3px;justify-content:center;flex-wrap:wrap;max-width:34px;min-height:7px}
+.dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+.d-go{background:var(--berry)}.d-undecided{box-shadow:inset 0 0 0 1.5px var(--faded)}.d-wait{background:var(--lav)}.d-won{background:var(--mint)}.d-off{background:var(--line2)}
+.d-result{border-radius:1px;transform:rotate(45deg) scale(.9)}
+.daylist{display:flex;flex-direction:column;gap:8px}
+.daylist h3{font-family:var(--f-hand);font-weight:600;font-size:16px;margin:4px 2px 0}
 
-/* ---------- 道具一覧(実用の顔) ---------- */
-.inventory{margin-top:44px;padding-bottom:10px}
-.inventory>h2{
-  font-family:var(--hand);
-  font-weight:600;
-  font-size:22px;
-  letter-spacing:.08em;
-  border-bottom:2px solid var(--pencil);
-  display:inline-block;
-  padding:0 2px 2px;
-  transform:rotate(-.6deg);
-}
-.inv-group{margin-top:20px}
-.inv-group>h3{
-  font-size:11.5px;
-  font-weight:700;
-  letter-spacing:.26em;
-  color:var(--faded);
-  margin-bottom:2px;
-}
-.inv-item{
-  display:grid;
-  grid-template-columns:44px 1fr auto;
-  align-items:center;
-  gap:12px;
-  padding:12px 0;
-  border-bottom:1px dashed rgba(64,56,47,.28); /* 点線=ノートの罫 */
-}
-.inv-item img{
-  width:44px;height:44px;
-  object-fit:cover;object-position:center top;
-  background:var(--paper);
-  padding:3px;                 /* 小さな白フチ */
-}
-.inv-item .t{font-weight:700;font-size:15.5px;letter-spacing:.02em;line-height:1.5}
-.inv-item .d{font-size:11.5px;color:var(--faded);line-height:1.7}
-.inv-item .v{
-  font-family:var(--hand);
-  font-size:13px;
-  font-weight:600;
-  white-space:nowrap;
-  border:1.5px solid var(--pencil);
-  border-radius:50%;           /* 丸は“手で描いた囲み”として1種だけ */
-  padding:8px 9px;
-  transform:rotate(3deg);
-}
-.inv-item:active .v,.inv-item:hover .v{background:var(--pencil);color:var(--desk)}
-/* おわったイベント：折りたたみ・うすく表示（ページは残す） */
-.inv-past>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;min-height:44px}
-.inv-past>summary::-webkit-details-marker{display:none}
-.inv-past>summary>h3{margin:0;font-size:11.5px;font-weight:700;letter-spacing:.26em;color:var(--faded)}
-.inv-past>summary::after{content:"＋";font-size:12px;color:var(--faded)}
-.inv-past[open]>summary::after{content:"－"}
-.inv-past .inv-item{opacity:.6}
+/* dock */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:8;background:rgba(241,235,225,.96);backdrop-filter:blur(6px);border-top:1.5px dashed var(--line2);padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.dock-in{max-width:560px;margin:0 auto;display:flex;gap:10px;align-items:center}
+.seg{flex:1;display:grid;grid-template-columns:1fr 1fr;background:rgba(255,255,255,.6);box-shadow:inset 0 0 0 1px var(--line);padding:3px;gap:3px}
+.seg button{border:none;background:none;min-height:42px;font-weight:700;font-size:14px;color:var(--faded);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--pencil);color:var(--paper)}
 
-/* ---------- メモ(このサイトについて) ---------- */
-.memo{
-  margin:40px auto 52px;
-  max-width:520px;
-  background:var(--paper);
-  padding:20px 20px 22px;
-  transform:rotate(.8deg);
-  box-shadow:var(--obj-shadow);
-  position:relative;
-  font-size:12.5px;
-  line-height:2;
-}
-.memo::before{
-  content:"";
-  position:absolute;
-  width:70px;height:20px;
-  background:var(--tape-mint);
-  top:-10px;left:50%;
-  transform:translateX(-50%) rotate(-2deg);
-}
-.memo h2{font-family:var(--hand);font-size:16px;margin-bottom:6px}
-.memo .hand-img{width:110px;margin-top:10px;opacity:.9}
-.memo small{display:block;margin-top:8px;color:var(--faded)}
+/* sheets */
+dialog{border:none;padding:0;background:var(--paper);color:var(--pencil);width:100%;max-width:560px;max-height:88vh;margin:auto auto 0;box-shadow:0 -10px 30px rgba(64,56,47,.2)}
+dialog::backdrop{background:rgba(64,56,47,.45)}
+@media (min-width:640px){dialog{margin:auto;max-height:84vh}}
+.sheet{padding:18px 18px calc(18px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:14px;position:relative}
+.grab{width:40px;height:4px;border-radius:2px;background:var(--line2);margin:-6px auto 0}
+.sheet h3{font-family:var(--f-hand);font-weight:600;font-size:19px;line-height:1.4;margin:0}
+.meta-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.stamp{font-size:12px;font-weight:700;padding:2px 10px;border:1.5px solid currentColor;border-radius:50%;transform:rotate(-2deg)}
+.stamp.go{color:var(--pencil)}.stamp.wait{color:var(--lav-ink)}.stamp.won{color:var(--mint-ink)}.stamp.undecided,.stamp.off{color:var(--faded)}.stamp.miss{color:var(--red)}
+.tagt{font-size:12px;font-weight:700;color:var(--faded)}
+.tl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;border-left:1.5px dashed var(--line2);margin-left:6px}
+.tl li{display:grid;grid-template-columns:52px 1fr;gap:8px;padding:6px 0 6px 14px;position:relative;align-items:baseline}
+.tl li::before{content:"";position:absolute;left:-5px;top:13px;width:8px;height:8px;border-radius:50%;background:var(--paper);box-shadow:inset 0 0 0 1.5px var(--line2)}
+.tl li.now::before{background:var(--berry)}
+.tl li.done{color:var(--faded)}
+.tl .k{font-family:var(--f-hand);font-weight:600;font-size:13px}
+.tl .v{font-family:var(--f-num);font-weight:600;font-size:15px;font-variant-numeric:tabular-nums}
+.tl .rn{display:block;font-family:var(--f-body);font-weight:500;font-size:12px;color:var(--faded)}
+.tl li.now .v{color:var(--pencil)}
+.desc{font-size:13.5px;line-height:1.7;margin:0;overflow-wrap:anywhere}
+.src{font-size:11.5px;color:var(--faded)}
+.linkb{display:flex;align-items:center;justify-content:center;min-height:44px;border:1.5px solid var(--line2);font-weight:700;font-size:14px;text-decoration:none;color:var(--pencil);background:var(--paper)}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.acts .pb{flex:1;min-height:46px;font-size:14px}
+.minor{display:flex;justify-content:space-between;gap:8px;border-top:1.5px dashed var(--line);padding-top:10px}
+.txtb{border:none;background:none;font-size:13px;font-weight:700;color:var(--faded);text-decoration:underline;text-underline-offset:3px;cursor:pointer;min-height:40px;padding:0 4px}
+.txtb.red{color:var(--red)}
+.x{position:absolute;top:8px;right:8px;width:44px;height:44px;border:none;background:none;font-size:20px;cursor:pointer;color:var(--faded)}
 
-@media(prefers-reduced-motion:no-preference){
-  .settle{opacity:0;transform:translateY(12px) rotate(0deg)!important;transition:opacity .6s ease,transform .6s ease}
-  .settle.in{opacity:1;transform:none!important}
-  /* 写真は各自の傾きへ“置かれる” */
-  .photo.settle.in:nth-child(1){transform:rotate(-2.2deg)!important}
-  .photo.settle.in:nth-child(2){transform:rotate(1.8deg)!important}
-  .photo.settle.in:nth-child(3){transform:rotate(1.4deg)!important}
-  .photo.settle.in:nth-child(4){transform:rotate(-1.6deg)!important}
-}
-:focus-visible{outline:2.5px solid var(--tape-berry);outline-offset:3px}
+/* form */
+label{font-size:12px;font-weight:700;color:var(--faded);display:flex;flex-direction:column;gap:4px}
+input,select,textarea{font:inherit;font-size:16px;border:1.5px solid var(--line);border-radius:0;padding:9px 10px;background:var(--desk);color:var(--pencil);width:100%}
+textarea{min-height:130px;resize:vertical}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.msg{font-size:13px;color:var(--faded)}
+.msg.err{color:var(--red)}
+.cand{display:flex;gap:10px;align-items:flex-start;border:1.5px dashed var(--line2);padding:10px;flex-direction:row;color:var(--pencil);font-weight:500}
+.cand input{width:auto;margin-top:4px}
+.cand b{display:block;font-size:14px}
+details summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--faded);min-height:36px;display:flex;align-items:center}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--pencil);color:var(--paper);padding:10px 16px;font-size:14px;font-weight:700;z-index:20;display:flex;gap:14px;align-items:center;max-width:calc(100vw - 32px);box-shadow:var(--shadow)}
+.toast button{background:none;border:none;color:var(--berry);font-weight:700;cursor:pointer;min-height:32px}
+@media (prefers-reduced-motion:no-preference){.toast{animation:up .18s ease-out}@keyframes up{from{opacity:0;transform:translate(-50%,8px)}}}
+@media (prefers-reduced-motion:reduce){.card,.chip,.tab,.next,.label,.addbtn{transform:none!important}}
+.foot{max-width:560px;margin:0 auto;padding:8px max(16px,env(safe-area-inset-right,0px)) calc(100px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));font-size:11.5px;color:var(--faded);line-height:1.8;text-align:center}
+.foot p{margin:0 0 6px}
+.foot .home{display:inline-block;padding:10px 6px;margin-bottom:6px;font-weight:700;font-size:14px;color:var(--pencil);text-decoration:none}
 </style>
+
 </head>
 <body>
+<div class="wrap">
+  <header class="top">
+    <div><span class="label">MUZE TOOL BOX</span><h1>締め切りボード</h1></div>
+    <button class="addbtn" id="addBtn" type="button" aria-label="自分で締め切りを追加">＋</button>
+  </header>
 
-<nav class="tool-nav" aria-label="共通ナビゲーション">
-  <div class="tool-nav-inner">
-    <a class="tool-nav-brand" href="https://rikomuze.github.io/muze-tool-box/">Muze Tool Box</a>
-    <div class="tool-nav-links">
-      <a href="https://rikomuze.github.io/muze-tool-box/">MUZE TOOL BOXのトップ</a>
-<a href="./exchange-log/">交換約束ログ</a>
-      <a href="./muze-day/">MUZE DAY</a>
-      <a href="https://rikomuze.github.io/mazzel-touch-campaign/">新曲キャンペーン</a>
+  <button class="next" id="next" type="button" hidden>
+    <span class="k" id="nextK">次の〆</span>
+    <span class="t" id="nextT"></span>
+    <span class="cd" id="nextCd"></span>
+    <span class="w" id="nextW"></span>
+  </button>
+  <div class="nudge" id="nudge" hidden></div>
+
+  <div id="listView">
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="tabs" role="tablist" aria-label="自分の予定" id="tabs"></div>
+      <div id="list" style="display:flex;flex-direction:column;gap:14px"></div>
+    </div>
+  </div>
+
+  <div id="calView" hidden>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="cal">
+        <div class="cal-head">
+          <button class="nav" id="prevM" type="button" aria-label="前の月">‹</button>
+          <h2 id="calTitle"></h2>
+          <button class="today-b" id="todayBtn" type="button">今日</button>
+          <button class="nav" id="nextM" type="button" aria-label="次の月">›</button>
+        </div>
+        <div class="legend">
+          <span><i class="dot d-go"></i>応募する</span>
+          <span><i class="dot d-undecided"></i>未定</span>
+          <span><i class="dot d-wait d-result"></i>当落</span>
+        </div>
+        <div class="grid" id="calGrid"></div>
+      </div>
+      <div class="daylist" id="dayList"></div>
+    </div>
+  </div>
+</div>
+
+<footer class="foot">
+  <a class="home" href="../">← ホームに戻る</a>
+  <p>応募するかどうか・応募済みなどの記録は、この端末のブラウザにだけ保存されます。</p>
+  <p>MAZZELの締め切りを整理する非公式ファンメイドツールです。BMSG・MAZZEL公式とは関係ありません。日時は公式の告知をもとにしていますが、変わることがあるので応募前に必ず公式ページを確認してね。</p>
+  <p id="dataDate"></p>
+</footer>
+
+<nav class="dock" aria-label="表示の切りかえ">
+  <div class="dock-in">
+    <div class="seg">
+      <button type="button" id="vCal" aria-pressed="true">カレンダー</button>
+      <button type="button" id="vList" aria-pressed="false">リスト</button>
     </div>
   </div>
 </nav>
 
-<header class="board desk">
-  <div class="sticker-logo">
-    <img src="assets/images/muze-tool-box-logo.png" alt="MUZE TOOL BOX">
-  </div>
-  <p class="note">現場で使うもの、管理するものをまとめています。</p>
-</header>
+<dialog id="detail"><div class="sheet" id="detailBody"></div></dialog>
 
-<main class="inventory desk">
-  <h2>道具いちらん</h2>
-
-  <div class="inv-group settle">
-    <h3>べんり</h3>
-    <a class="inv-item" href="./muzeum-vol2-venue/">
-      <img src="assets/images/goods-muzeum-venue.webp" alt="" loading="lazy">
-      <span><span class="t">グッズ計算機 会場（MUZEUM vol.2）</span><br><span class="d">ファンミ会場の合計・ショッパー特典・レジで見せる注文リスト</span></span>
-      <span class="v">使う</span>
-    </a>
-    <a class="inv-item" href="./muze-day/">
-      <span style="width:44px;height:44px;background:#fff0b8;display:grid;place-items:center;font-family:var(--hand);font-size:12px;font-weight:700">DAY</span>
-      <span><span class="t">MUZE DAY</span><br><span class="d">現場の日の予定や交換・会う約束をゆるくまとめて管理</span></span>
-      <span class="v">使う</span>
-    </a>
-   <a class="inv-item" href="https://rikomuze.github.io/mazzel-muzeum-vol2-goods-calculator/" target="_blank" rel="noopener">
-      <img src="assets/images/goods-ec.jpeg" alt="" loading="lazy">
-      <span><span class="t">グッズ計算機 EC</span><br><span class="d">オンラインストアの合計金額をその場で</span></span>
-      <span class="v">使う</span>
-    </a>
-    <a class="inv-item" href="https://rikomuze.github.io/settlement-maker/" target="_blank" rel="noopener">
-      <img src="assets/images/payment-tool.jpeg" alt="" loading="lazy">
-      <span><span class="t">立替精算ツール</span><br><span class="d">みんなの立替をまとめて精算</span></span>
-      <span class="v">使う</span>
-    </a>
-    <a class="inv-item" href="./photo/">
-      <span style="width:44px;height:44px;background:#f8e8ee;display:grid;place-items:center;font-size:21px">💖</span>
-      <span><span class="t">MUZE PHOTO</span><br><span class="d">写真をふわっと加工して、ファンマで顔かくし</span></span>
-      <span class="v">使う</span>
-    </a>
-    <a class="inv-item" href="./exchange-log/">
-      <span style="width:44px;height:44px;background:#efe5ff;display:grid;place-items:center;font-size:21px">⇄</span>
-      <span><span class="t">交換約束ログ</span><br><span class="d">誰と何を交換するか、発送・受取までまとめて管理</span></span>
-      <span class="v">使う</span>
-    </a>
-    <a class="inv-item" href="https://rikomuze.github.io/mazzel-touch-campaign/" target="_blank" rel="noopener">
-      <img src="assets/images/touch-campaign-card-20260918.jpg" alt="" loading="lazy">
-      <span><span class="t">新曲キャンペーン</span><br><span class="d">応募・DL・締切をまとめて確認</span></span>
-      <span class="v">見る</span>
-    </a>
-    <a class="inv-item" href="https://rikomuze.github.io/mazzel-touch-guide/" target="_blank" rel="noopener">
-      <span style="width:44px;height:44px;background:#eaf0fb;display:grid;place-items:center;font-family:var(--hand);font-size:13px;font-weight:600">Touch</span>
-      <span><span class="t">Touch 4形態まとめ</span><br><span class="d">4形態の違い・特典を比較して、購入枚数と合計金額もシミュレーション</span></span>
-      <span class="v">見る</span>
-    </a>
-  </div>
-
-<div class="inv-group settle">
-    <h3>よむ</h3>
-    <a class="inv-item" href="./anypass-guide/">
-      <span style="width:44px;height:44px;background:#f8e8ee;display:grid;place-items:center;font-family:var(--hand);font-size:11px;font-weight:700">PASS</span>
-      <span><span class="t">AnyPASSガイド</span><br><span class="d">発券・同行者への分配・SS本人確認・当日の入場まで</span></span>
-      <span class="v">読む</span>
-    </a>
-    <a class="inv-item" href="https://abaft-conga-f54.notion.site/fanmeating?pvs=74" target="_blank" rel="noopener">
-      <img src="assets/images/fanmi-guide.png" alt="" loading="lazy">
-      <span><span class="t">ファンミ申込ガイド</span><br><span class="d">名義・同行者・重複申込、迷いやすい所を整理</span></span>
-      <span class="v">読む</span>
-    </a>
-  </div>
-
-  <details class="inv-group inv-past settle">
-    <summary><h3>おわったイベント</h3></summary>
-    <a class="inv-item" href="https://rikomuze.github.io/bmsg-fes26-goods-calculator-venue/" target="_blank" rel="noopener">
-      <img src="assets/images/goods-live.png" alt="" loading="lazy">
-      <span><span class="t">BMSG FES 2026 会場グッズ計算機</span><br><span class="d">2026.10.10〜10.12 開催分・終了しました</span></span>
-      <span class="v">見る</span>
-    </a>
-  </details>
-
-  <aside class="memo settle">
-    <h2>このサイトについて</h2>
-    MAZZELが好きで、推し活に「あったら便利かも」と思ったものを作っています。紹介やシェアは許可なくどうぞ。
-    <img class="hand-img" src="assets/images/share-free.png" alt="share free">
-    <small>MAZZEL・BMSG公式とは関係のない非公式ファンメイドサイトです。</small>
-  </aside>
-</main>
+<dialog id="dlg">
+  <form class="sheet" id="form" method="dialog">
+    <div class="grab"></div>
+    <button type="button" class="x" id="cancelBtn" aria-label="閉じる">✕</button>
+    <h3 id="dlgTitle">自分で追加</h3>
+    <div id="manualPane" style="display:flex;flex-direction:column;gap:12px">
+      <label for="fShort">なまえ（短く）<input id="fShort" required placeholder="例：ファンミ追加 FC先行"></label>
+      <div class="g2">
+        <label for="fEnd">〆 締め切り<input type="datetime-local" id="fEnd" required></label>
+        <label for="fResult">当落（任意）<input type="datetime-local" id="fResult"></label>
+      </div>
+      <div class="g2">
+        <label for="fDecision">自分の予定<select id="fDecision"><option value="">未定</option><option value="yes">応募する</option><option value="no">応募しない</option></select></label>
+        <label for="fFlow">形式<select id="fFlow"></select></label>
+      </div>
+      <details>
+        <summary>くわしく（任意）</summary>
+        <div style="display:flex;flex-direction:column;gap:12px;padding-top:6px">
+          <label for="fTitle">正式なタイトル<input id="fTitle"></label>
+          <div class="g2">
+            <label for="fStart">受付開始<input type="datetime-local" id="fStart"></label>
+            <label for="fResultNote">当落メモ<input id="fResultNote" placeholder="頃・メールで通知"></label>
+          </div>
+          <div class="g2">
+            <label for="fTag">関連<input id="fTag" list="tagList" placeholder="ワンダンス"></label>
+            <label for="fStatus">進み具合<select id="fStatus"></select></label>
+          </div>
+          <div class="g2">
+            <label for="fCat">種類<select id="fCat"></select></label>
+          </div>
+          <datalist id="tagList"></datalist>
+          <label for="fUrl">リンク<input type="url" id="fUrl" placeholder="https://"></label>
+          <label for="fNote">メモ<textarea id="fNote" style="min-height:70px"></textarea></label>
+        </div>
+      </details>
+    </div>
+    <div class="acts">
+      <button type="button" class="pb" id="saveBtn">登録する</button>
+    </div>
+    <div class="minor" id="delRow" hidden></div>
+  </form>
+</dialog>
 
 <script>
-const io=new IntersectionObserver(es=>es.forEach(e=>{
-  if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}
-}),{threshold:.1});
-document.querySelectorAll(".settle").forEach(el=>io.observe(el));
+const CATS={ticket:"チケット",serial:"シリアル",payment:"入金・発券",stream:"配信・視聴",goods:"グッズ",event:"イベント"};
+const STATUS={todo:"まだ",applied:"応募済み（結果待ち）",won:"当選",lost:"当落確認済",paid:"入金・完了",watched:"視聴済み",skip:"見送り"};
+const LOTTERY=new Set(["ticket","serial","event"]);
+const VERB={
+  ticket:{yes:"応募する",no:"しない",did:"応募した"},serial:{yes:"応募する",no:"しない",did:"応募した"},event:{yes:"応募する",no:"しない",did:"応募した"},
+  payment:{yes:"払う",no:"払わない",did:"払った",fin:"paid"},stream:{yes:"見る",no:"見ない",did:"見た",fin:"watched"},goods:{yes:"買う",no:"買わない",did:"買った",fin:"paid"}
+};
+const TABS=[["go","応募する","rgba(226,122,148,.85)"],["undecided","未定","rgba(64,56,47,.25)"],["pass","しない","rgba(64,56,47,.25)"],["done","終わった","rgba(164,197,175,.9)"]];
+const WD=["日","月","火","水","木","金","土"],DAY=864e5;
+const KEY="muze-deadline-board:v1";
+let catalog=[],store={state:{},custom:[]},items=[],loaded=false,dataDate="";
+function loadStore(){try{const v=JSON.parse(localStorage.getItem(KEY)||"{}");store={state:v.state||{},custom:Array.isArray(v.custom)?v.custom:[]}}catch(e){}}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(store));return true}catch(e){return false}}
+function rebuild(){items=catalog.map(c=>({...c,...(store.state[c.id]||{})})).concat(store.custom.map(c=>({...c,_custom:true})))}
+let view="cal",tab="go",filter="all",calY=0,calM=0,selDay="",userTab=false;
+let mode="paste",editing=null,candidates=[];
+const $=id=>document.getElementById(id);
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
+
+/* time */
+const isD=s=>/^\d{4}-\d{2}-\d{2}$/.test(s||"");
+const ts=s=>s?new Date(isD(s)?s+"T00:00:00+09:00":s).getTime():NaN;
+function jst(ms){const t=new Date(ms+9*3600e3);return{y:t.getUTCFullYear(),m:t.getUTCMonth()+1,d:t.getUTCDate(),wi:t.getUTCDay(),w:WD[t.getUTCDay()],h:String(t.getUTCHours()).padStart(2,"0"),mi:String(t.getUTCMinutes()).padStart(2,"0")}}
+const md=s=>{const j=jst(ts(s));return`${j.m}/${j.d}`};
+function fmt(s){const ms=ts(s);if(isNaN(ms))return"";const j=jst(ms);return`${j.m}/${j.d}(${j.w})`+(isD(s)?"":` ${j.h}:${j.mi}`)}
+function dayKey(ms){const j=jst(ms);return`${j.y}-${String(j.m).padStart(2,"0")}-${String(j.d).padStart(2,"0")}`}
+function left(ms){const d=ms-Date.now();if(isNaN(d)||d<0)return{t:"",u:false,d};const h=Math.floor(d/3600e3),dd=Math.floor(h/24);return{t:dd>=1?`あと${dd}日`:h>=1?`あと${h}時間`:`あと${Math.max(1,Math.floor(d/60e3))}分`,long:dd>=1?`あと${dd}日${h%24}時間`:h>=1?`あと${h}時間${Math.floor(d/60e3)%60}分`:`あと${Math.max(1,Math.floor(d/60e3))}分`,u:d<=DAY,d}}
+const toIn=s=>{const ms=ts(s);if(isNaN(ms))return"";const j=jst(ms);return`${dayKey(ms)}T${j.h}:${j.mi}`};
+const fromIn=v=>v?v+":00+09:00":"";
+const nameOf=it=>it.short||it.title||"(無題)";
+
+/* state */
+function info(it){
+  const now=Date.now(),end=ts(it.end),st=it.status||"todo",dec=it.decision||"";
+  if(st==="lost")return{ph:"done",sub:"lost"};
+  if(st==="paid"||st==="watched")return{ph:"done",sub:"fin"};
+  if(st==="skip"&&dec==="yes")return{ph:"done",sub:"closed"};
+  if(st==="skip"||dec==="no")return{ph:"pass",sub:"pass"};
+  if(st==="won")return{ph:"go",sub:"won"};
+  if(st==="applied")return isLot(it)?{ph:"go",sub:"applied"}:{ph:"done",sub:"fin"};
+  if(dec==="yes")return{ph:"go",sub:end<now?"missed":"before"};
+  if(end<now)return{ph:"done",sub:"expired"};
+  return{ph:"undecided",sub:"undecided"};
+}
+const FLOW={lottery:{yes:"応募する",no:"しない",did:"応募した",steps:["応募する","応募した","当落確認"]},entry:{yes:"応募する",no:"しない",did:"応募した",fin:"paid",steps:["応募する","応募した"]},buy:{yes:"買う",no:"買わない",did:"買った",fin:"paid",steps:["買う","買った"]},watch:{yes:"見る",no:"見ない",did:"見た",fin:"watched",steps:["見る","見た"]},pay:{yes:"払う",no:"払わない",did:"払った",fin:"paid",steps:["払う","払った"]}};
+const FLOWNAME={lottery:"抽選（当落あり）",entry:"全員もらえる",buy:"先着・購入",watch:"視聴",pay:"支払い"};
+const flowOf=it=>FLOW[it.flow]?it.flow:({stream:"watch",payment:"pay",goods:"buy"}[it.category]||"lottery");
+const isLot=it=>flowOf(it)==="lottery";
+const vb=it=>FLOW[flowOf(it)];
+function stepBar(it,i,big){
+  const S=vb(it).steps.slice();let n=0;
+  if(i.sub==="before"||i.sub==="missed")n=1;else if(i.sub==="applied")n=2;else if(["won","lost","fin"].includes(i.sub))n=S.length;
+  if(S.length===3&&(i.sub==="won"||i.sub==="fin"))S[2]="当選";if(i.sub==="lost")S[2]="当落確認済";
+  const w=el("span","steps"+(big?" big":"")+(i.sub==="applied"?" wait":""));
+  S.forEach((l,k)=>{if(k)w.append(el("i","sep","›"));w.append(el("span","stp"+(k<n?" ok":k===n?" cur":""),(k<n?"✓ ":"")+l))});
+  return w;
+}
+function look(it,i){ // [card class, stamp class, label]
+  const v=vb(it);
+  return{before:["st-go","go",v.yes],missed:["st-miss","miss","〆すぎた"],applied:["st-wait","wait","結果待ち"],won:["st-won","won","当選"],undecided:["st-undecided","undecided","未定"],
+    pass:["st-off st-pass","off",v.no==="しない"?"応募しない":v.no],lost:["st-off","off","当落確認済"],fin:["st-off","off",it.status==="watched"?"視聴済み":"完了"],closed:["st-off","off","間に合わず"],expired:["st-off","off","期限切れ"]}[i.sub];
+}
+function actionsFor(it,i){ // [{label,cls,patch,msg}]
+  const v=vb(it),fin=v.fin?{status:v.fin}:{status:"applied"};
+  switch(i.sub){
+    case"undecided":return[{l:v.yes,c:"berry",p:{decision:"yes"},m:`「応募する」に入れたよ`},{l:v.no,c:"ghost",p:{decision:"no",status:"skip"},m:`「しない」に移したよ`}];
+    case"before":return[{l:v.did,c:"",p:fin,m:v.fin?"完了にしたよ":"結果待ちにしたよ"}];
+    case"missed":return[{l:v.did,c:"",p:fin,m:"記録したよ"},{l:"無理だった",c:"ghost",p:{status:"skip"},m:"終わったに移したよ"}];
+    case"applied":return[{l:"当落確認した",c:"",p:{status:"lost"},m:"当落確認済にしたよ"}];
+    case"won":return[{l:isLot(it)?"入金した":"完了",c:"",p:{status:"paid"},m:"完了にしたよ"}];
+  }
+  return[];
+}
+function undoOf(i,it){
+  if(i.sub==="lost")return{status:"applied"};
+  if(i.sub==="fin")return isLot(it)?{status:"won"}:{status:"todo",decision:"yes"};
+  if(i.sub==="closed")return{status:"todo"};
+  if(i.sub==="pass")return{status:"todo",decision:""};
+  if(i.sub==="before")return{decision:""};
+  if(i.sub==="applied")return{status:"todo"};
+  if(i.sub==="won")return{status:"applied"};
+  return null;
+}
+const matches=it=>filter==="all"||(it.tag||"")===filter;
+
+/* writes */
+let tTimer=null;
+function save(id,patch,undo,msg){
+  const cu=store.custom.find(x=>x.id===id);
+  if(cu)Object.assign(cu,patch);
+  else store.state[id]={...(store.state[id]||{}),...(patch.status!==undefined?{status:patch.status}:{}),...(patch.decision!==undefined?{decision:patch.decision}:{})};
+  const ok=persist();rebuild();render();
+  if(!ok){toast("この端末に保存できなかった（プライベートモードかも）");return}
+  if(msg)toast(msg,undo?()=>save(id,undo):null);
+}
+const snap=it=>({status:it.status||"todo",decision:it.decision||""});
+function toast(text,undo){
+  document.querySelectorAll(".toast").forEach(t=>t.remove());clearTimeout(tTimer);
+  const t=el("div","toast");t.setAttribute("role","status");t.append(el("span",null,text));
+  if(undo){const b=el("button",null,"もどす");b.type="button";b.onclick=()=>{t.remove();undo()};t.append(b)}
+  document.body.append(t);tTimer=setTimeout(()=>t.remove(),4500);
+}
+function pbtn(a,it){const b=el("button","pb "+a.c,a.l);b.type="button";b.onclick=e=>{e.stopPropagation();save(it.id,a.p,snap(it),a.m)};return b}
+
+/* card */
+function card(it,kind){
+  const i=info(it),[cc]=look(it,i),now=Date.now();
+  const endMs=ts(it.end),resMs=ts(it.resultAt),startMs=ts(it.start);
+  const c=el("article","card "+cc);
+  if(/st-go|st-wait|st-won|st-miss/.test(cc))c.append(el("span","tape"));
+  const active=i.sub==="before"||i.sub==="undecided";
+  const L=left(endMs);if(active&&L.u)c.classList.add("urgent");
+  // stub
+  let sMs=endMs,k="〆",sIsD=false;
+  if(kind==="result"||(!kind&&i.sub==="applied"&&!isNaN(resMs))){sMs=resMs;k="当落";sIsD=isD(it.resultAt)}
+  const st=el("div","stub");
+  if(!isNaN(sMs)){const j=jst(sMs);st.append(el("span","kd",k),el("b",null,`${j.m}/${j.d}`),el("span","wd",j.w));if(!sIsD)st.append(el("span","tm",`${j.h}:${j.mi}`))}
+  else st.append(el("b",null,"?"));
+  // middle
+  const m=el("button","mid");m.type="button";m.setAttribute("aria-label",`${nameOf(it)} の詳細`);
+  m.append(el("span","ttl",nameOf(it)));
+  const sub=el("span","sub");
+  if(active){
+    if(!isNaN(startMs)&&startMs>now)sub.append(el("span","cd",`${md(it.start)}から`));
+    else if(L.t)sub.append(el("span","cd"+(L.u?" u":""),L.t));
+  }
+  if(isLot(it)&&it.resultAt&&!isNaN(resMs)&&k!=="当落"&&i.ph!=="done"&&i.ph!=="pass")sub.append(el("span","rs",`当落 ${md(it.resultAt)}`));
+  if(i.sub==="applied"&&k==="当落"&&resMs<now)sub.append(el("span","cd u","結果出たかも"));
+  if(!active&&i.ph!=="go")sub.append(el("span",null,look(it,i)[2]));
+  if(it.tag&&filter==="all"&&!nameOf(it).includes(it.tag))sub.append(el("span","tg",it.tag));
+  if(sub.childNodes.length)m.append(sub);
+  m.append(el("span","more-l","くわしく ›"));
+  m.onclick=()=>openDetail(it);
+  c.append(st,m);
+  const sb=null;
+  const acts=actionsFor(it,i);
+  if(acts.length){const a=el("div","act"+(acts.length>1?" two":""));acts.forEach(x=>a.append(pbtn(x,it)));c.append(a)}
+  else c.append(el("span"));
+  if(sb){sb.classList.add("row");c.append(sb);c.classList.add("has-steps")}
+  return c;
+}
+
+/* list */
+const by=k=>(a,b)=>(ts(a[k])||9e15)-(ts(b[k])||9e15);
+function sec(title,arr,empty){
+  if(!arr.length&&!empty)return null;
+  const s=el("section","sec");if(title){const h=el("h2",null,title);if(arr.length)h.append(el("span","n",`${arr.length}`));s.append(h)}
+  if(!arr.length)s.append(el("div","empty",empty));arr.forEach(x=>s.append(card(x)));return s;
+}
+function renderList(all){
+  const L=$("list");L.textContent="";
+  if(!loaded){L.append(el("div","empty","よみこみ中…"));return}
+  const vis=all.filter(x=>matches(x)&&x._i.ph===tab),s=k=>vis.filter(x=>x._i.sub===k);
+  let out=[];
+  if(tab==="go"){
+    const miss=s("missed"),bef=s("before").sort(by("end")),wait=s("applied").sort(by("resultAt")),won=s("won").sort(by("end"));
+    out=[sec("〆すぎ・記録してね",miss.sort(by("end"))),sec("これから応募",bef,(miss.length+wait.length+won.length)?null:"まだないよ。「未定」で「応募する」を押すとここに入るよ"),sec("結果待ち",wait),sec("当選",won)];
+  }else if(tab==="undecided")out=[sec(null,vis.sort(by("end")),"未定はないよ")];
+  else if(tab==="pass")out=[sec(null,vis.sort(by("end")),"応募しないものはないよ")];
+  else out=[sec(null,vis.sort((a,b)=>by("end")(b,a)),"終わったものはまだないよ")];
+  out.forEach(x=>x&&L.append(x));
+}
+
+/* calendar */
+function renderCal(all){
+  const vis=all.filter(x=>matches(x)&&x._i.ph!=="pass");
+  const map=new Map(),add=(k,o)=>{if(!map.has(k))map.set(k,[]);map.get(k).push(o)};
+  vis.forEach(it=>{
+    const i=it._i,cls=i.sub==="applied"?"d-wait":i.sub==="won"?"d-won":i.ph==="go"?"d-go":i.ph==="undecided"?"d-undecided":"d-off";
+    if(!isNaN(ts(it.end)))add(dayKey(ts(it.end)),{it,kind:"end",ms:ts(it.end),cls});
+    if(isLot(it)&&it.resultAt&&!isNaN(ts(it.resultAt))&&(i.ph==="go"||i.sub==="lost"||i.sub==="fin"))add(dayKey(ts(it.resultAt)),{it,kind:"result",ms:ts(it.resultAt),cls:(i.ph==="done"?"d-off":"d-wait")+" d-result"});
+  });
+  for(const a of map.values())a.sort((x,y)=>x.ms-y.ms);
+  const t=$("calTitle");t.textContent=`${calY}.${calM}`;t.append(el("small",null,"月"));
+  const g=$("calGrid");g.textContent="";
+  WD.forEach((w,i)=>g.append(el("div","dow"+(i===0?" sun":i===6?" sat":""),w)));
+  const first=Date.UTC(calY,calM-1,1)-9*3600e3,fwd=jst(first).wi,start=first-fwd*DAY,todayK=dayKey(Date.now());
+  const last=new Date(Date.UTC(calY,calM,0)).getUTCDate(),cells=Math.ceil((fwd+last)/7)*7;
+  for(let n=0;n<cells;n++){
+    const ms=start+n*DAY+12*3600e3,j=jst(ms),k=dayKey(ms),evs=map.get(k)||[];
+    const b=el("button","day");b.type="button";
+    if(j.m!==calM)b.classList.add("out");if(j.wi===0)b.classList.add("sun");if(j.wi===6)b.classList.add("sat");
+    if(k===todayK)b.classList.add("today");if(k===selDay)b.classList.add("sel");
+    b.setAttribute("aria-label",`${j.m}月${j.d}日 ${evs.length?evs.length+"件":"なし"}`);
+    b.append(el("span","dn",String(j.d)));const d=el("span","dots");evs.slice(0,4).forEach(e=>d.append(el("i","dot "+e.cls)));b.append(d);
+    b.onclick=()=>{selDay=k;render()};g.append(b);
+  }
+  const dl=$("dayList");dl.textContent="";const sj=jst(ts(selDay));
+  dl.append(el("h3",null,`${sj.m}/${sj.d}（${sj.w}）${selDay===todayK?" 今日":""}`));
+  const evs=map.get(selDay)||[];
+  if(!evs.length)dl.append(el("div","empty","この日はなにもないよ"));
+  evs.forEach(e=>dl.append(card(e.it,e.kind)));
+}
+
+/* chrome */
+function renderTabs(all){
+  const t=$("tabs");t.textContent="";const cnt={go:0,undecided:0,pass:0,done:0};
+  all.filter(matches).forEach(x=>cnt[x._i.ph]++);
+  TABS.forEach(([k,l,tape])=>{
+    const b=el("button","tab");b.type="button";b.dataset.k=k;b.setAttribute("role","tab");b.setAttribute("aria-selected",String(tab===k));b.style.setProperty("--tabtape",tape);
+    const n=el("span","n",String(cnt[k]));if(k==="undecided"&&cnt[k])n.classList.add("hot");
+    b.append(el("span","l",l),n);b.onclick=()=>{tab=k;userTab=true;remember();render()};t.append(b);
+  });
+}
+function renderChips(){
+  filter="all";
+  const tags=[...new Set(items.map(i=>i.tag).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"ja"));
+  const dl=$("tagList");dl.textContent="";tags.forEach(x=>{const o=el("option");o.value=x;dl.append(o)});
+}
+function renderNext(all){
+  const now=Date.now(),nx=$("next"),nu=$("nudge");nu.textContent="";
+  if(!loaded){nx.hidden=true;nu.hidden=true;return}
+  const act=all.filter(x=>(x._i.sub==="before"||x._i.sub==="undecided")&&ts(x.end)>=now).sort(by("end"));
+  const it=act.find(x=>x._i.sub==="before")||act[0];
+  if(it){
+    const L=left(ts(it.end));nx.hidden=false;
+    $("nextK").textContent=it._i.sub==="before"?"次の〆（応募する）":"次の〆（未定）";
+    $("nextT").textContent=nameOf(it);$("nextCd").textContent=L.long;$("nextCd").className="cd"+(L.u?" u":"");
+    $("nextW").textContent=fmt(it.end)+" まで";nx.onclick=()=>openDetail(it);
+  }else nx.hidden=true;
+  const res=all.filter(x=>x._i.sub==="applied"&&ts(x.resultAt)>=now-DAY/2).sort(by("resultAt"))[0];
+  if(res){const b=el("button");b.type="button";b.append(document.createTextNode("次の当落 "),el("b",null,md(res.resultAt)),document.createTextNode(` ${nameOf(res)}`));b.onclick=()=>openDetail(res);nu.append(b)}
+  nu.hidden=!nu.childNodes.length||view==="cal";
+}
+function render(){
+  const all=items.map(it=>({...it,_i:info(it)}));
+  renderChips();renderNext(all);
+  $("vList").setAttribute("aria-pressed",String(view==="list"));$("vCal").setAttribute("aria-pressed",String(view==="cal"));
+  $("listView").hidden=view!=="list";$("calView").hidden=view!=="cal";
+  if(view==="list"){renderTabs(all);renderList(all)}else renderCal(all);
+  if($("detail").open&&openId){const cur=items.find(x=>x.id===openId);if(cur)fillDetail(cur);else $("detail").close()}
+}
+function remember(){try{localStorage.setItem("muze-deadline-board:ui",JSON.stringify({view,tab,filter}))}catch(e){}}
+
+/* detail sheet */
+let openId=null;
+function openDetail(it){openId=it.id;fillDetail(it);if(!$("detail").open)$("detail").showModal()}
+function fillDetail(it){
+  const i=info(it),[,sc,lab]=look(it,i),B=$("detailBody"),now=Date.now();B.textContent="";
+  B.append(el("div","grab"));
+  const x=el("button","x","✕");x.type="button";x.setAttribute("aria-label","閉じる");x.onclick=()=>$("detail").close();B.append(x);
+  const mr=el("div","meta-row");mr.append(el("span","stamp "+sc,lab));if(it.tag)mr.append(el("span","tagt",it.tag));mr.append(el("span","tagt",flowOf(it)==="entry"?"全員もらえる（抽選なし）":flowOf(it)==="buy"&&it.category==="ticket"?"先着（抽選なし）":CATS[it.category]||""));if(it._custom)mr.append(el("span","tagt","・自分で追加"));B.append(mr);
+  B.append(el("h3",null,it.title||nameOf(it)));
+  if(i.ph!=="pass")B.append(stepBar(it,i,true));
+  const tl=el("ol","tl"),steps=[];
+  if(it.start)steps.push(["受付",it.start]);steps.push(["〆",it.end]);if(it.resultAt||it.resultNote)steps.push([isLot(it)?"当落":"特典",it.resultAt,it.resultNote]);
+  let cur=-1;if(i.ph==="go"||i.ph==="undecided"){cur=(i.sub==="applied"||i.sub==="won")?steps.findIndex(s=>s[0]==="当落"):steps.findIndex(s=>ts(s[1])>now)}
+  steps.forEach((s,n)=>{const li=el("li");if(n===cur)li.classList.add("now");else if(ts(s[1])<now)li.classList.add("done");
+    li.append(el("span","k",s[0]));const v=el("span","v",s[1]?fmt(s[1]):"未定");if(n===cur&&s[0]!=="当落"){const L=left(ts(s[1]));if(L.long)v.append(el("span","rn",L.long))}if(s[2])v.append(el("span","rn",s[2]));li.append(v);tl.append(li)});
+  B.append(tl);
+  if(it.note)B.append(el("p","desc",it.note));
+  if(it.url){const a=el("a","linkb","公式ページをひらく ↗");a.href=it.url;a.target="_blank";a.rel="noopener";B.append(a)}
+  const acts=actionsFor(it,i);
+  if(acts.length){const r=el("div","acts");acts.forEach(a=>r.append(pbtn(a,it)));B.append(r)}
+  const mn=el("div","minor");
+  const u=undoOf(i,it);
+  if(u){const b=el("button","txtb",i.ph==="pass"||i.ph==="done"?"もとに戻す":"ひとつ前に戻す");b.type="button";b.onclick=()=>save(it.id,u,snap(it),"戻したよ");mn.append(b)}else mn.append(el("span"));
+  if(it._custom){const e=el("button","txtb","編集");e.type="button";e.onclick=()=>{$("detail").close();openForm(it)};mn.append(e)}
+  B.append(mn);
+  if(it.source)B.append(el("div","src","出典："+it.source));
+}
+
+/* form */
+function fill(id,o){const s=$(id);Object.entries(o).forEach(([k,v])=>{const op=el("option",null,v);op.value=k;s.append(op)})}
+function showMode(m){mode=m}
+function openForm(it){
+  editing=it||null;$("dlgTitle").textContent=it?"編集":"自分で入力";$("saveBtn").textContent=it?"保存する":"登録する";
+  $("fShort").value=it?nameOf(it):"";$("fTitle").value=it?.title||"";$("fCat").value=it?.category||"ticket";$("fFlow").value=it?flowOf(it):"lottery";$("fTag").value=it?.tag||"";
+  $("fStart").value=toIn(it?.start);$("fEnd").value=toIn(it?.end);$("fResult").value=toIn(it?.resultAt);$("fResultNote").value=it?.resultNote||"";
+  $("fDecision").value=it?.decision||(it?.status==="skip"?"no":"");$("fStatus").value=it?.status||"todo";$("fUrl").value=it?.url||"";$("fNote").value=it?.note||"";
+  const dr=$("delRow");dr.textContent="";dr.hidden=!it;
+  if(it){const d=el("button","txtb red","削除");d.type="button";d.onclick=()=>{dr.textContent="";dr.append(el("span","msg","本当に削除する？"));const y=el("button","txtb red","削除する");y.type="button";y.onclick=()=>{store.custom=store.custom.filter(x=>x.id!==it.id);persist();rebuild();render();$("dlg").close();toast("削除したよ")};const n=el("button","txtb","やめる");n.type="button";n.onclick=()=>openForm(it);dr.append(y,n)};dr.append(el("span"),d)}
+  showMode("manual");if(!$("dlg").open)$("dlg").showModal();
+}
+function commit(){
+  if(!$("fShort").value.trim()){$("fShort").reportValidity();return}
+  if(!$("fEnd").value){$("fEnd").reportValidity();return}
+  const dec=$("fDecision").value;let status=$("fStatus").value;
+  if(dec==="no"&&status==="todo")status="skip";if(dec!=="no"&&status==="skip"&&editing?.status==="skip")status="todo";
+  const short=$("fShort").value.trim();
+  const data={short,title:$("fTitle").value.trim()||short,category:$("fCat").value,flow:$("fFlow").value,tag:$("fTag").value.trim(),status,decision:dec,start:fromIn($("fStart").value),end:fromIn($("fEnd").value),resultAt:fromIn($("fResult").value),resultNote:$("fResultNote").value.trim(),url:$("fUrl").value.trim(),note:$("fNote").value.trim()};
+  if(editing){const cu=store.custom.find(x=>x.id===editing.id);if(cu)Object.assign(cu,data)}else store.custom.push({id:"my-"+Date.now().toString(36),...data});
+  const ok=persist();rebuild();render();$("dlg").close();toast(ok?(editing?"保存したよ":"追加したよ"):"この端末に保存できなかった");
+}
+
+/* boot */
+(function(){
+  try{const s=JSON.parse(localStorage.getItem("muze-deadline-board:ui")||"{}");if(s.view)view=s.view;if(s.tab){tab=s.tab;userTab=true}if(s.filter)filter=s.filter}catch(e){}
+  if(location.hash==="#calendar")view="cal";
+  const j=jst(Date.now());calY=j.y;calM=j.m;selDay=dayKey(Date.now());
+  fill("fCat",CATS);fill("fStatus",STATUS);fill("fFlow",FLOWNAME);
+  $("vList").onclick=()=>{view="list";remember();render();scrollTo(0,0)};
+  $("vCal").onclick=()=>{view="cal";remember();render();scrollTo(0,0)};
+  $("prevM").onclick=()=>{if(--calM<1){calM=12;calY--}render()};
+  $("nextM").onclick=()=>{if(++calM>12){calM=1;calY++}render()};
+  $("todayBtn").onclick=()=>{const t=jst(Date.now());calY=t.y;calM=t.m;selDay=dayKey(Date.now());render()};
+  $("addBtn").onclick=()=>openForm(null);
+  $("cancelBtn").onclick=()=>$("dlg").close();$("saveBtn").onclick=commit;
+  $("detail").addEventListener("click",e=>{if(e.target===$("detail"))$("detail").close()});
+  $("dlg").addEventListener("click",e=>{if(e.target===$("dlg"))$("dlg").close()});
+  $("detail").addEventListener("close",()=>{openId=null});
+  render();setInterval(render,60e3);
+})();
+(async()=>{
+  loadStore();
+  try{const r=await fetch("deadlines.json",{cache:"no-cache"});const j=await r.json();catalog=Array.isArray(j.items)?j.items:[];dataDate=j.updatedAt||""}
+  catch(e){toast("締め切りデータを読み込めなかった。開き直してね")}
+  loaded=true;rebuild();
+  if(!userTab){const ph=items.map(info);if(!ph.some(x=>x.ph==="go")&&ph.some(x=>x.ph==="undecided"))tab="undecided"}
+  if(dataDate)$("dataDate").textContent=`データ更新：${dataDate.replace(/-/g,"/")}`;
+  render();
+})();
 </script>
+
 </body>
 </html>
