@@ -396,10 +396,18 @@ function buildIcs(it){
 }
 function addToCalendar(it){
   const ics=buildIcs(it),ios=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
-  if(ios){location.href="data:text/calendar;charset=utf-8,"+encodeURIComponent(ics);return}
+  if(ios){location.href=icsUrl(it);return} // iPhoneは data: を開けないので、.ics を返すURLを開く
   const url=URL.createObjectURL(new Blob([ics],{type:"text/calendar;charset=utf-8"}));
   const a=document.createElement("a");a.href=url;a.download="deadline-"+String(it.id).replace(/[^\w.-]/g,"")+".ics";document.body.append(a);a.click();a.remove();
   setTimeout(()=>URL.revokeObjectURL(url),4000);toast("カレンダー用のファイルを保存したよ。開くと追加できるよ");
+}
+const ICS_API="https://muze-toolbox-api.logical-bear-ishi.workers.dev/api/ics";
+function icsUrl(it){
+  const now=Date.now(),due=dueMs(it);
+  const al=getAlarms().map(k=>alarmMs(it,k)).filter(a=>a>now&&a<due).map(a=>new Date(a).toISOString());
+  const q={t:"〆 "+nameOf(it),s:isD(it.end)?it.end:new Date(due).toISOString(),d:calText(it).slice(0,1400),id:String(it.id).replace(/[^\w.-]/g,"").slice(0,64)};
+  if(it.url)q.u=it.url;if(al.length)q.a=al.join(",");
+  return ICS_API+"?"+new URLSearchParams(q).toString();
 }
 function googleUrl(it){
   const due=dueMs(it),d=isD(it.end)?ymd(ts(it.end))+"/"+ymd(ts(it.end)+DAY):utcStamp(due)+"/"+utcStamp(due);
