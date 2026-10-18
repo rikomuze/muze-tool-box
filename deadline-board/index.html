@@ -12,6 +12,19 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="締め切り">
 <meta name="description" content="MAZZELの応募・当落・視聴期限をカレンダーで確認できる非公式ファンメイドツール">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MUZE TOOL BOX">
+<meta property="og:title" content="締め切りボード｜MUZE TOOL BOX">
+<meta property="og:description" content="MAZZELの応募・当落・視聴期限をカレンダーでまとめて確認。締め切り前の通知もカレンダーに入れられる非公式ファンメイドツール">
+<meta property="og:url" content="https://rikomuze.github.io/muze-tool-box/deadline-board/">
+<meta property="og:image" content="https://rikomuze.github.io/muze-tool-box/deadline-board/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="締め切りボード 応募・当落・視聴期限をカレンダーでまとめて確認">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://rikomuze.github.io/muze-tool-box/deadline-board/og.jpg">
+<meta name="twitter:title" content="締め切りボード｜MUZE TOOL BOX">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
 <title>締め切りボード｜MUZE TOOL BOX</title>
 
@@ -187,6 +200,16 @@ dialog::backdrop{background:rgba(64,56,47,.45)}
 .txtb{border:none;background:none;font-size:13px;font-weight:700;color:var(--faded);text-decoration:underline;text-underline-offset:3px;cursor:pointer;min-height:40px;padding:0 4px}
 .txtb.red{color:var(--red)}
 .x{position:absolute;top:8px;right:8px;width:44px;height:44px;border:none;background:none;font-size:20px;cursor:pointer;color:var(--faded)}
+/* カレンダーに追加 */
+.calbox{display:flex;flex-direction:column;gap:8px;border-top:1.5px dashed var(--line);padding-top:12px}
+.calbox .cap{font-size:12px;font-weight:700;color:var(--faded)}
+.calrow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.calrow .linkb{font-size:13.5px;cursor:pointer;text-align:center;padding:4px 8px;line-height:1.35}
+.calrow .linkb.main{border-color:var(--pencil)}
+.alarm-line{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12.5px;color:var(--faded)}
+.alarm-opts{display:flex;flex-wrap:wrap;gap:6px}
+.alarm-opts button{min-height:40px;padding:4px 12px;border:1.5px solid var(--line2);background:var(--paper);color:var(--pencil);font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.alarm-opts button[aria-pressed="true"]{background:var(--pencil);color:var(--paper);border-color:var(--pencil)}
 
 /* form */
 label{font-size:12px;font-weight:700;color:var(--faded);display:flex;flex-direction:column;gap:4px}
@@ -344,6 +367,62 @@ function left(ms){const d=ms-Date.now();if(isNaN(d)||d<0)return{t:"",u:false,d};
 const toIn=s=>{const ms=ts(s);if(isNaN(ms))return"";const j=jst(ms);return`${dayKey(ms)}T${j.h}:${j.mi}`};
 const fromIn=v=>v?v+":00+09:00":"";
 const nameOf=it=>it.short||it.title||"(無題)";
+
+/* カレンダーに追加（.ics / Googleカレンダー） */
+const ALARMS={eve20:"前日20時",morn9:"当日の朝9時",h3:"3時間前",h1:"1時間前"};
+const ALARM_KEY="muze-deadline-board:alarms";
+function getAlarms(){try{const v=JSON.parse(localStorage.getItem(ALARM_KEY)||"null");if(Array.isArray(v))return v.filter(k=>ALARMS[k]).slice(0,2)}catch(e){}return["eve20","h3"]}
+function setAlarms(v){try{localStorage.setItem(ALARM_KEY,JSON.stringify(v))}catch(e){}}
+// 締め切りの時刻。日付だけのものはその日の23:59とみなす
+const dueMs=it=>isD(it.end)?ts(it.end)+DAY-60e3:ts(it.end);
+function alarmMs(it,k){
+  const due=dueMs(it),j=jst(due),day0=Date.UTC(j.y,j.m-1,j.d)-9*3600e3; // その日の0:00(JST)
+  return{eve20:day0-4*3600e3,morn9:day0+9*3600e3,h3:due-3*3600e3,h1:due-3600e3}[k];
+}
+const utcStamp=ms=>new Date(ms).toISOString().replace(/[-:]/g,"").replace(/\.\d{3}/,"");
+const ymd=ms=>dayKey(ms).replace(/-/g,"");
+const icsEsc=t=>String(t||"").replace(/\\/g,"\\\\").replace(/\r?\n/g,"\\n").replace(/([,;])/g,"\\$1");
+function icsFold(line){const out=[];let cur="";for(const ch of line){if(new TextEncoder().encode(cur+ch).length>73){out.push(cur);cur=" "+ch}else cur+=ch}out.push(cur);return out.join("\r\n")}
+function calText(it){return[it.title&&it.title!==nameOf(it)?it.title:"",it.note||"",it.url||"","MUZE TOOL BOX 締め切りボードより https://rikomuze.github.io/muze-tool-box/deadline-board/"].filter(Boolean).join("\n")}
+function buildIcs(it){
+  const now=Date.now(),due=dueMs(it),L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//MUZE TOOL BOX//Deadline Board//JA","CALSCALE:GREGORIAN","METHOD:PUBLISH","BEGIN:VEVENT",
+    "UID:"+String(it.id).replace(/[^\w.-]/g,"")+"@muze-tool-box","DTSTAMP:"+utcStamp(now),"SUMMARY:"+icsEsc("〆 "+nameOf(it)),"DESCRIPTION:"+icsEsc(calText(it))];
+  if(isD(it.end)){L.push("DTSTART;VALUE=DATE:"+ymd(ts(it.end)),"DTEND;VALUE=DATE:"+ymd(ts(it.end)+DAY))}
+  else{L.push("DTSTART:"+utcStamp(due),"DTEND:"+utcStamp(due))}
+  if(it.url)L.push("URL:"+it.url);
+  getAlarms().forEach(k=>{const a=alarmMs(it,k);if(a>now&&a<due)L.push("BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:"+icsEsc("〆 "+nameOf(it)+"（"+ALARMS[k]+"）"),"TRIGGER;VALUE=DATE-TIME:"+utcStamp(a),"END:VALARM")});
+  L.push("END:VEVENT","END:VCALENDAR");
+  return L.map(icsFold).join("\r\n")+"\r\n";
+}
+function addToCalendar(it){
+  const ics=buildIcs(it),ios=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+  if(ios){location.href="data:text/calendar;charset=utf-8,"+encodeURIComponent(ics);return}
+  const url=URL.createObjectURL(new Blob([ics],{type:"text/calendar;charset=utf-8"}));
+  const a=document.createElement("a");a.href=url;a.download="deadline-"+String(it.id).replace(/[^\w.-]/g,"")+".ics";document.body.append(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),4000);toast("カレンダー用のファイルを保存したよ。開くと追加できるよ");
+}
+function googleUrl(it){
+  const due=dueMs(it),d=isD(it.end)?ymd(ts(it.end))+"/"+ymd(ts(it.end)+DAY):utcStamp(due)+"/"+utcStamp(due);
+  return"https://calendar.google.com/calendar/render?"+new URLSearchParams({action:"TEMPLATE",text:"〆 "+nameOf(it),dates:d,details:calText(it),ctz:"Asia/Tokyo"}).toString();
+}
+function calBox(it){
+  const box=el("div","calbox");box.append(el("span","cap","カレンダーに入れて、締め切り前に通知"));
+  const row=el("div","calrow");
+  const a=el("button","linkb main","カレンダーに追加");a.type="button";a.onclick=()=>addToCalendar(it);
+  const g=el("a","linkb","Googleカレンダー ↗");g.href=googleUrl(it);g.target="_blank";g.rel="noopener";
+  row.append(a,g);box.append(row);
+  const line=el("div","alarm-line"),lab=el("span"),ch=el("button","txtb","変える");ch.type="button";
+  const opts=el("div","alarm-opts");opts.hidden=true;
+  const paint=()=>{const cur=getAlarms();lab.textContent="通知："+(cur.length?cur.map(k=>ALARMS[k]).join("・"):"なし");
+    opts.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(cur.includes(b.dataset.k))))};
+  Object.entries(ALARMS).forEach(([k,v])=>{const b=el("button",null,v);b.type="button";b.dataset.k=k;b.onclick=()=>{
+    let cur=getAlarms();if(cur.includes(k))cur=cur.filter(x=>x!==k);else{if(cur.length>=2){toast("通知は2つまで選べるよ");return}cur=cur.concat(k)}
+    setAlarms(Object.keys(ALARMS).filter(x=>cur.includes(x)));paint()};opts.append(b)});
+  ch.onclick=()=>{opts.hidden=!opts.hidden;ch.textContent=opts.hidden?"変える":"とじる"};
+  line.append(lab,ch);box.append(line,opts);
+  box.append(el("span","src","通知はカレンダーアプリが出します（2つまで）。Googleカレンダーは、そちらの通知設定になります。"));
+  paint();return box;
+}
 
 /* state */
 function info(it){
@@ -566,6 +645,7 @@ function fillDetail(it){
   B.append(tl);
   if(it.note)B.append(el("p","desc",it.note));
   if(it.url){const a=el("a","linkb","公式ページをひらく ↗");a.href=it.url;a.target="_blank";a.rel="noopener";B.append(a)}
+  if(!isNaN(ts(it.end))&&dueMs(it)>now&&i.ph!=="done"&&i.ph!=="pass")B.append(calBox(it));
   const acts=actionsFor(it,i);
   if(acts.length){const r=el("div","acts");acts.forEach(a=>r.append(pbtn(a,it)));B.append(r)}
   const mn=el("div","minor");
