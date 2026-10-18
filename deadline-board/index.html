@@ -383,13 +383,11 @@ const utcStamp=ms=>new Date(ms).toISOString().replace(/[-:]/g,"").replace(/\.\d{
 const ymd=ms=>dayKey(ms).replace(/-/g,"");
 const icsEsc=t=>String(t||"").replace(/\\/g,"\\\\").replace(/\r?\n/g,"\\n").replace(/([,;])/g,"\\$1");
 function icsFold(line){const out=[];let cur="";for(const ch of line){if(new TextEncoder().encode(cur+ch).length>73){out.push(cur);cur=" "+ch}else cur+=ch}out.push(cur);return out.join("\r\n")}
-function calText(it){return[it.title&&it.title!==nameOf(it)?it.title:"",it.note||"",it.url||"","MUZE TOOL BOX 締め切りボードより https://rikomuze.github.io/muze-tool-box/deadline-board/"].filter(Boolean).join("\n")}
 function buildIcs(it){
   const now=Date.now(),due=dueMs(it),L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//MUZE TOOL BOX//Deadline Board//JA","CALSCALE:GREGORIAN","METHOD:PUBLISH","BEGIN:VEVENT",
-    "UID:"+String(it.id).replace(/[^\w.-]/g,"")+"@muze-tool-box","DTSTAMP:"+utcStamp(now),"SUMMARY:"+icsEsc("〆 "+nameOf(it)),"DESCRIPTION:"+icsEsc(calText(it))];
+    "UID:"+String(it.id).replace(/[^\w.-]/g,"")+"@muze-tool-box","DTSTAMP:"+utcStamp(now),"SUMMARY:"+icsEsc("〆 "+nameOf(it))];
   if(isD(it.end)){L.push("DTSTART;VALUE=DATE:"+ymd(ts(it.end)),"DTEND;VALUE=DATE:"+ymd(ts(it.end)+DAY))}
   else{L.push("DTSTART:"+utcStamp(due),"DTEND:"+utcStamp(due))}
-  if(it.url)L.push("URL:"+it.url);
   getAlarms().forEach(k=>{const a=alarmMs(it,k);if(a>now&&a<due)L.push("BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:"+icsEsc("〆 "+nameOf(it)+"（"+ALARMS[k]+"）"),"TRIGGER;VALUE=DATE-TIME:"+utcStamp(a),"END:VALARM")});
   L.push("END:VEVENT","END:VCALENDAR");
   return L.map(icsFold).join("\r\n")+"\r\n";
@@ -405,13 +403,13 @@ const ICS_API="https://muze-toolbox-api.logical-bear-ishi.workers.dev/api/ics";
 function icsUrl(it){
   const now=Date.now(),due=dueMs(it);
   const al=getAlarms().map(k=>alarmMs(it,k)).filter(a=>a>now&&a<due).map(a=>new Date(a).toISOString());
-  const q={t:"〆 "+nameOf(it),s:isD(it.end)?it.end:new Date(due).toISOString(),d:calText(it).slice(0,1400),id:String(it.id).replace(/[^\w.-]/g,"").slice(0,64)};
-  if(it.url)q.u=it.url;if(al.length)q.a=al.join(",");
+  const q={t:"〆 "+nameOf(it),s:isD(it.end)?it.end:new Date(due).toISOString(),id:String(it.id).replace(/[^\w.-]/g,"").slice(0,64)};
+  if(al.length)q.a=al.join(",");
   return ICS_API+"?"+new URLSearchParams(q).toString();
 }
 function googleUrl(it){
   const due=dueMs(it),d=isD(it.end)?ymd(ts(it.end))+"/"+ymd(ts(it.end)+DAY):utcStamp(due)+"/"+utcStamp(due);
-  return"https://calendar.google.com/calendar/render?"+new URLSearchParams({action:"TEMPLATE",text:"〆 "+nameOf(it),dates:d,details:calText(it),ctz:"Asia/Tokyo"}).toString();
+  return"https://calendar.google.com/calendar/render?"+new URLSearchParams({action:"TEMPLATE",text:"〆 "+nameOf(it),dates:d,ctz:"Asia/Tokyo"}).toString();
 }
 function calBox(it){
   const box=el("div","calbox");box.append(el("span","cap","カレンダーに入れて、締め切り前に通知"));
