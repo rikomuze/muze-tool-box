@@ -175,8 +175,134 @@ async function handleEncrypted(request, env) {
   );
 }
 
+// ---------- 締め切りボード：カレンダー用ファイル（.ics）を返す ----------
+// 送られてきた予定の情報から .ics を作って返すだけ。何も保存しない。
+// 例: /api/ics?t=〆 応募&s=2026-10-26T23:59:00%2B09:00&a=2026-10-25T11:00:00Z,2026-10-26T11:59:00Z&id=auto-1
+
+const ICS_LIMITS = { t: 120, d: 1500, u: 500 };
+
+function icsEscape(text) {
+  return String(text || "")
+    .replace(/\\/g, "\\\\")
+    .replace(/\r?\n/g, "\\n")
+    .replace(/([,;])/g, "\\$1");
+}
+
+// 1行75バイト以内に折り返す（RFC 5545）
+function icsFold(line) {
+  const enc = new TextEncoder();
+  const out = [];
+  let cur = "";
+  for (const ch of line) {
+    if (enc.encode(cur + ch).length > 73) {
+      out.push(cur);
+      cur = " " + ch;
+    } else {
+      cur += ch;
+    }
+  }
+  out.push(cur);
+  return out.join("\r\n");
+}
+
+function icsUtc(ms) {
+  return new Date(ms).toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+}
+
+function icsDate(ymd) {
+  return ymd.replace(/-/g, "");
+}
+
+function nextDay(ymd) {
+  const d = new Date(ymd + "T00:00:00Z");
+  d.setUTCDate(d.getUTCDate() + 1);
+  return d.toISOString().slice(0, 10);
+}
+
+function icsError(message) {
+  return new Response(message, {
+    status: 400,
+    headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store" }
+  });
+}
+
+function handleIcs(request) {
+  if (request.method !== "GET") {
+    return icsError("GET only");
+  }
+
+  const q = new URL(request.url).searchParams;
+  const title = (q.get("t") || "").trim().slice(0, ICS_LIMITS.t);
+  const start = (q.get("s") || "").trim();
+  const desc = (q.get("d") || "").slice(0, ICS_LIMITS.d);
+  const link = (q.get("u") || "").trim().slice(0, ICS_LIMITS.u);
+  const uid = (q.get("id") || "event").replace(/[^\w.-]/g, "").slice(0, 64) || "event";
+
+  if (!title) return icsError("title is required");
+
+  const allDay = /^\d{4}-\d{2}-\d{2}$/.test(start);
+  const startMs = allDay ? Date.parse(start + "T00:00:00Z") : Date.parse(start);
+  if (!start || Number.isNaN(startMs)) return icsError("invalid start");
+
+  const now = Date.now();
+  const alarms = (q.get("a") || "")
+    .split(",")
+    .map((s) => Date.parse(s.trim()))
+    .filter((ms) => !Number.isNaN(ms) && ms > now - 60000)
+    .slice(0, 2);
+
+  const lines = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//MUZE TOOL BOX//Deadline Board//JA",
+    "CALSCALE:GREGORIAN",
+    "METHOD:PUBLISH",
+    "BEGIN:VEVENT",
+    "UID:" + uid + "@muze-tool-box",
+    "DTSTAMP:" + icsUtc(now),
+    "SUMMARY:" + icsEscape(title)
+  ];
+
+  if (allDay) {
+    lines.push("DTSTART;VALUE=DATE:" + icsDate(start), "DTEND;VALUE=DATE:" + icsDate(nextDay(start)));
+  } else {
+    lines.push("DTSTART:" + icsUtc(startMs), "DTEND:" + icsUtc(startMs));
+  }
+
+  if (desc) lines.push("DESCRIPTION:" + icsEscape(desc));
+  if (/^https?:\/\/[^\s]+$/.test(link)) lines.push("URL:" + link);
+
+  for (const ms of alarms) {
+    lines.push(
+      "BEGIN:VALARM",
+      "ACTION:DISPLAY",
+      "DESCRIPTION:" + icsEscape(title),
+      "TRIGGER;VALUE=DATE-TIME:" + icsUtc(ms),
+      "END:VALARM"
+    );
+  }
+
+  lines.push("END:VEVENT", "END:VCALENDAR");
+
+  return new Response(lines.map(icsFold).join("\r\n") + "\r\n", {
+    status: 200,
+    headers: {
+      "Content-Type": "text/calendar; charset=utf-8",
+      "Content-Disposition": 'inline; filename="deadline-' + uid + '.ics"',
+      "Cache-Control": "no-store",
+      "X-Content-Type-Options": "nosniff"
+    }
+  });
+}
+
 export default {
   async fetch(request, env) {
+    const icsPath = new URL(request.url).pathname;
+    if (icsPath === "/api/ics") {
+      // カレンダー追加はページ遷移で開くので、DB も CORS も使わない
+      return handleIcs(request);
+    }
+
     if (request.method === "OPTIONS") {
       return new Response(null, {
         status: 204,
