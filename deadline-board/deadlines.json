@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-10-19",
+ "updatedAt": "2026-10-20",
  "items": [
   {
    "id": "auto-20261013-01",
@@ -260,6 +260,15 @@
    "tag": "KAIRYU",
    "end": "2026-10-26T18:00:00+09:00",
    "url": "https://mazzel.tokyo/media/5668/"
+  },
+  {
+   "id": "auto-20261020-01",
+   "short": "VS.超特急 TVer",
+   "title": "VS.超特急 ついにスタジオ初登場!MAZZELと遊び開発ガチ夢中!! TVer配信期限",
+   "category": "stream",
+   "tag": "TVer",
+   "end": "2026-10-27T00:58:00+09:00",
+   "url": "https://mazzel.tokyo/media/5666/"
   }
  ]
 }
