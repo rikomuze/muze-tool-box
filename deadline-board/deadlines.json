@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-10-16",
+ "updatedAt": "2026-10-19",
  "items": [
   {
    "id": "auto-20261013-01",
@@ -251,6 +251,15 @@
    "resultNote": "夕方ごろ・当選者のみメールで連絡",
    "note": "10/30(金)19:00の回、上映前舞台挨拶。RYUKI(MAZZEL)登壇。招待5名（応募多数は抽選）。1会員1回まで・応募した本人のみ入場。イベント当日までMUZEUM会員であること。B with Uの記事内エントリーフォームから応募",
    "source": "B with U（MUZEUM）"
+  },
+  {
+   "id": "auto-20261019-01",
+   "short": "ラブJ TVer（KAIRYU）",
+   "title": "ラブ!!Jリーグ MAZZEL KAIRYU 推しからサプライズ！ TVer配信期限",
+   "category": "stream",
+   "tag": "KAIRYU",
+   "end": "2026-10-26T18:00:00+09:00",
+   "url": "https://mazzel.tokyo/media/5668/"
   }
  ]
 }
