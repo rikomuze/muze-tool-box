@@ -483,6 +483,15 @@ function undoOf(i,it){
   return null;
 }
 const matches=it=>filter==="all"||(it.tag||"")===filter;
+// 「しない」は締め切りを過ぎたら、「終わった」は当落（当落なしは締め切り・視聴/購入期間の終わり）を過ぎたらタブから外す。記録とカレンダーは残す
+const endOfS=x=>isD(x)?ts(x)+DAY-60e3:ts(x);
+function retired(it){
+  const ph=it._i.ph,now=Date.now();
+  if(ph==="pass")return endOfS(it.end)<now;
+  if(ph==="done"){const last=isLot(it)&&!isNaN(ts(it.resultAt))?endOfS(it.resultAt):endOfS(it.end);return last<now}
+  return false;
+}
+const shown=it=>matches(it)&&!retired(it);
 
 /* writes */
 let tTimer=null;
@@ -551,7 +560,7 @@ function sec(title,arr,empty){
 function renderList(all){
   const L=$("list");L.textContent="";
   if(!loaded){L.append(el("div","empty","よみこみ中…"));return}
-  const vis=all.filter(x=>matches(x)&&x._i.ph===tab),s=k=>vis.filter(x=>x._i.sub===k);
+  const vis=all.filter(x=>shown(x)&&x._i.ph===tab),s=k=>vis.filter(x=>x._i.sub===k);
   let out=[];
   if(tab==="go"){
     const miss=s("missed"),bef=s("before").sort(by("end")),wait=s("applied").sort(by("resultAt")),won=s("won").sort(by("end"));
@@ -559,6 +568,8 @@ function renderList(all){
   }else if(tab==="undecided")out=[sec(null,vis.sort(by("end")),"未定はないよ")];
   else if(tab==="pass")out=[sec(null,vis.sort(by("end")),"応募しないものはないよ")];
   else out=[sec(null,vis.sort((a,b)=>by("end")(b,a)),"終わったものはまだないよ")];
+  if(tab==="pass")out.push(el("p","src","締め切りを過ぎたものは自動で外れるよ"));
+  if(tab==="done")out.push(el("p","src","当落（当落がないものは視聴・購入などの期限）を過ぎたら自動で外れるよ"));
   out.forEach(x=>x&&L.append(x));
 }
 
@@ -596,7 +607,7 @@ function renderCal(all){
 /* chrome */
 function renderTabs(all){
   const t=$("tabs");t.textContent="";const cnt={go:0,undecided:0,pass:0,done:0};
-  all.filter(matches).forEach(x=>cnt[x._i.ph]++);
+  all.filter(shown).forEach(x=>cnt[x._i.ph]++);
   TABS.forEach(([k,l,tape])=>{
     const b=el("button","tab");b.type="button";b.dataset.k=k;b.setAttribute("role","tab");b.setAttribute("aria-selected",String(tab===k));b.style.setProperty("--tabtape",tape);
     const n=el("span","n",String(cnt[k]));if(k==="undecided"&&cnt[k])n.classList.add("hot");
