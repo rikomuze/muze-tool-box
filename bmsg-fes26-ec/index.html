@@ -262,7 +262,7 @@ footer p{margin:0 0 6px}
   <header class="intro">
     <div class="eyebrow">BMSG SHOP / 2026.10.23 20:00〜</div>
     <h1>BMSG FES’26<span class="jp">グッズ計算機 EC</span></h1>
-    <p class="lede">BMSG SHOP（オンライン）で買うFES’26グッズを入れると、送料込みの合計金額・点数・内訳をその場で計算します。入力は自動で保存されます。</p>
+    <p class="lede">BMSG SHOP（オンライン）で買うFES’26グッズを入れると、合計金額・点数・内訳をその場で計算します。送料（1回の注文ごとに¥770）は合計に含めず、別に表示します。入力は自動で保存されます。</p>
     <div class="links">
       <a class="pill-link" href="https://bmsg.shop/collections/bmsg?filter.v.availability=1" target="_blank" rel="noopener noreferrer">BMSG SHOP ↗</a>
     </div>
@@ -286,7 +286,7 @@ footer p{margin:0 0 6px}
             <div class="rows" id="rows"></div>
             <div class="totals">
               <div class="tr"><span class="lb">合計点数</span><span class="cnt" id="tCount">0点</span></div>
-              <div class="tr"><span class="lb">合計金額<small class="lb-sub">送料込み</small></span><span class="yen" id="tYen">¥0</span></div>
+              <div class="tr"><span class="lb">合計金額<small class="lb-sub">送料別</small></span><span class="yen" id="tYen">¥0</span></div>
             </div>
             <div class="ship" id="ship" hidden></div>
             <div class="warn" id="warn" hidden></div>
@@ -415,8 +415,8 @@ function unit(g){return g.unit||'点'}
 function rows(){
   var out=[];
   G.forEach(function(g){
-    if(g.variants){ g.variants.forEach(function(v){var c=Q[g.id][v]; if(c>0) out.push({g:g,label:g.name+' / '+v+' × '+c,count:c,sub:g.price*c}) }); }
-    else if(Q[g.id]>0) out.push({g:g,label:g.name+' × '+Q[g.id]+(g.unit?g.unit:''),count:Q[g.id],sub:g.price*Q[g.id]});
+    if(g.variants){ g.variants.forEach(function(v){var c=Q[g.id][v]; if(c>0) out.push({g:g,label:g.name+' / '+v+'\u00a0×\u00a0'+c,count:c,sub:g.price*c}) }); }
+    else if(Q[g.id]>0) out.push({g:g,label:g.name+'\u00a0×\u00a0'+Q[g.id]+(g.unit?g.unit:''),count:Q[g.id],sub:g.price*Q[g.id]});
   });
   return out;
 }
@@ -427,10 +427,10 @@ function shipInfo(){
 }
 function shipHtml(si){
   if(!si.any) return '';
-  if(si.both) return '<b>送料 '+yen(SHIP_FEE)+'（1回の注文ごと）</b>受注販売の商品と一緒に注文すると、<b>全部まとめて12/15(火)以降の発送</b>になります。'+
+  if(si.both) return '<b>送料 '+yen(SHIP_FEE)+'（1回の注文ごと・合計とは別）</b>受注販売の商品と一緒に注文すると、<b>全部まとめて12/15(火)以降の発送</b>になります。'+
     '<span class="alt">通常販売の商品を先に受け取りたい場合は注文を分けると送料は'+yen(SHIP_FEE*2)+'（+'+yen(SHIP_FEE)+'）。</span>';
-  if(si.onlyOrder) return '<b>送料 '+yen(SHIP_FEE)+'（1回の注文ごと）</b>受注販売は10/29(木) 23:59まで。12/15(火)から順次発送です。';
-  return '<b>送料 '+yen(SHIP_FEE)+'（1回の注文ごと・全国一律）</b>';
+  if(si.onlyOrder) return '<b>送料 '+yen(SHIP_FEE)+'（1回の注文ごと・合計とは別）</b>受注販売は10/29(木) 23:59まで。12/15(火)から順次発送です。';
+  return '<b>送料 '+yen(SHIP_FEE)+'（1回の注文ごと・全国一律・合計とは別）</b>';
 }
 function warnings(){
   var w=[];
@@ -514,7 +514,6 @@ var lastTotal=null;
 function renderReceipt(){
   var rs=rows(), total=0, count=0, si=shipInfo();
   rs.forEach(function(r){total+=r.sub;count+=r.count});
-  total+=si.fee;
   var rowsEl=document.getElementById('rows');
   if(!rs.length){ rowsEl.innerHTML='<div class="r empty"><span>まだ商品が選ばれていません</span><span>—</span></div>'; }
   else{
@@ -580,10 +579,10 @@ function disarm(){clearTimeout(armTimer);resetBtn.classList.remove('armed');rese
 /* コピー */
 var copyBtn=document.getElementById('copyBtn');
 copyBtn.addEventListener('click',function(){
-  var rs=rows(), total=0, count=0, si=shipInfo(); rs.forEach(function(r){total+=r.sub;count+=r.count}); total+=si.fee;
+  var rs=rows(), total=0, count=0, si=shipInfo(); rs.forEach(function(r){total+=r.sub;count+=r.count});
   var text=['【BMSG FES’26 グッズ購入メモ（BMSG SHOP）】'].concat(rs.map(function(r){return '・'+r.label+' = '+yen(r.sub)}))
-    .concat(si.any?['・送料 = '+yen(si.fee)]:[])
-    .concat(['合計点数：'+count+'点','合計金額（送料込み）：'+yen(total)])
+    .concat(['合計点数：'+count+'点','合計金額（送料別）：'+yen(total)])
+    .concat(si.any?['※送料 '+yen(si.fee)+'（1回の注文ごと）が別にかかります']:[])
     .concat(si.both?['※受注販売と一緒に注文すると全部12/15以降の発送']:[]).join('\n');
   function ok(){copyBtn.textContent='コピーしました';setTimeout(function(){copyBtn.textContent='テキストでコピー'},1600)}
   function fallback(){
@@ -614,7 +613,6 @@ function drawReceipt(){
   var MONO='"IBM Plex Mono",ui-monospace,Menlo,monospace';
   var DISP='"Unbounded","Hiragino Sans",sans-serif';
   var rs=rows(), total=0, count=0, si=shipInfo(); rs.forEach(function(r){total+=r.sub;count+=r.count});
-  if(si.any){ total+=si.fee; rs=rs.concat([{g:{cat:'_fee'},label:'送料（1回の注文）',count:0,sub:si.fee}]); }
   var c=document.createElement('canvas'), ctx=c.getContext('2d');
   // 1回目:高さを測る / 2回目:描く
   function layout(draw){
@@ -639,7 +637,7 @@ function drawReceipt(){
       ctx.fillStyle='#0b0f15';ctx.fillRect(TX+IN,y,TW-IN*2,2);
       ctx.font='700 12px '+BODY;ctx.fillText('合計点数',TX+IN,y+30);
       ctx.font='600 16px '+MONO;ctx.textAlign='right';ctx.fillText(count+'点',TX+TW-IN,y+30);ctx.textAlign='left';
-      ctx.font='700 12px '+BODY;ctx.fillText('合計金額',TX+IN,y+70);
+      ctx.font='700 12px '+BODY;ctx.fillText('合計金額（送料別）',TX+IN,y+70);
       ctx.font='600 32px '+MONO;ctx.textAlign='right';ctx.fillText(yen(total),TX+TW-IN,y+72);ctx.textAlign='left';
       // バーコード
       var bx=TX+IN, by=y+92, seed=total+count*7+1;
