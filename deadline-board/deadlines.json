@@ -299,6 +299,19 @@
    "tag": "TVer",
    "end": "2026-10-28T23:55:00+09:00",
    "url": "https://mazzel.tokyo/media/5701/"
+  },
+  {
+   "id": "auto-20261023-02",
+   "short": "FES'26 受注グッズ",
+   "title": "BMSG FES'26 受注販売グッズ（缶バッジ・フォトカードセット／ラゲッジタグ・フォトカードセット）BMSG SHOP 注文締切",
+   "category": "goods",
+   "flow": "buy",
+   "tag": "BMSG FES",
+   "start": "2026-10-23T20:00:00+09:00",
+   "end": "2026-10-29T23:59:00+09:00",
+   "url": "https://bmsg.shop/collections/bmsg",
+   "note": "各¥1,400・お一人様3点まで。12/15〜順次発送。通常販売の商品と同じ注文に入れると全部12/15以降の発送になる。合計はグッズ計算機 EC で計算できる",
+   "source": "BMSG SHOP"
   }
  ]
 }
