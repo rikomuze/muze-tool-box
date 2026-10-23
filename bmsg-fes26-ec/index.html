@@ -124,6 +124,7 @@ a{color:inherit}
 .info{min-width:0}
 .item-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
 .name{font-size:14px;font-weight:700;line-height:1.5;min-width:0;overflow-wrap:anywhere}
+.ys{font-family:var(--body);font-weight:700;margin-right:-.1em}
 .price{font-family:var(--mono);font-weight:600;font-size:14.5px;white-space:nowrap;font-variant-numeric:tabular-nums}
 .badges{display:flex;flex-wrap:wrap;gap:5px;margin:4px 0 2px}
 .badge{font-size:10px;font-weight:700;letter-spacing:.06em;padding:1px 8px;border-radius:999px;border:1px solid var(--line);color:var(--mist)}
@@ -405,6 +406,8 @@ G.forEach(function(g){ if(g.groups) g.groups.forEach(function(gr){ if(gr.members
 
 /* ---------- ユーティリティ ---------- */
 function yen(n){return '¥'+Number(n).toLocaleString('ja-JP')}
+/* 等幅フォントの ¥ は字形が詰まって見えるので、¥ だけ本文フォントで表示する */
+function yenH(n){return '<span class="ys">¥</span>'+Number(n).toLocaleString('ja-JP')}
 function maxOf(g){return g.limit||NOLIMIT_MAX}
 function clamp(v,g){var n=Math.floor(Number(v)||0);return Math.max(0,Math.min(maxOf(g),n))}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
@@ -463,7 +466,7 @@ function renderItem(g){
   var badges=(g.tags||[]).map(function(t){return '<span class="badge '+t[0]+'">'+esc(t[1])+'</span>'}).join('');
   var c=Q[g.id], hit=!g.variants&&g.limit&&c>=g.limit;
   var h='<div class="item" data-item="'+g.id+'">'+((g.file||T[g.img])?'<img class="thumb" src="'+(g.file||T[g.img])+'" data-fallback="'+(g.img||'')+'" alt="" loading="lazy">':'<div class="thumb ph" aria-hidden="true">NO<br>IMAGE</div>')+'<div class="info">'+
-    '<div class="item-head"><div class="name">'+esc(g.name)+'</div><div class="price">'+yen(g.price)+'</div></div>'+
+    '<div class="item-head"><div class="name">'+esc(g.name)+'</div><div class="price">'+yenH(g.price)+'</div></div>'+
     (badges?'<div class="badges">'+badges+'</div>':'')+
     '<div class="note">'+esc(noteLine(g))+(hit?'<span class="limit-hit">上限に達しました</span>':'')+'</div>'+
     (g.url?'<a class="shop-link" href="'+esc(g.url)+'" target="_blank" rel="noopener noreferrer">商品ページ ↗</a>':'');
@@ -520,13 +523,13 @@ function renderReceipt(){
     var html='', last='';
     rs.forEach(function(r){
       if(r.g.cat!==last){ last=r.g.cat; html+='<div class="r grp"><span>'+esc(catName[last].toUpperCase())+'</span><span></span></div>'; }
-      html+='<div class="r"><span>'+esc(r.label)+'</span><span>'+yen(r.sub)+'</span></div>';
+      html+='<div class="r"><span>'+esc(r.label)+'</span><span>'+yenH(r.sub)+'</span></div>';
     });
     rowsEl.innerHTML=html;
   }
   var shipEl=document.getElementById('ship'); shipEl.hidden=!si.any; shipEl.innerHTML=shipHtml(si);
   ['tCount','dCount'].forEach(function(id){document.getElementById(id).textContent=count+'点'});
-  ['tYen','dYen'].forEach(function(id){document.getElementById(id).textContent=yen(total)});
+  ['tYen','dYen'].forEach(function(id){document.getElementById(id).innerHTML=yenH(total)});
   var d=document.getElementById('dYen');
   if(lastTotal!==null&&lastTotal!==total){d.classList.remove('pop');void d.offsetWidth;d.classList.add('pop')}
   lastTotal=total;
@@ -612,6 +615,12 @@ function drawReceipt(){
   var BODY='"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif';
   var MONO='"IBM Plex Mono",ui-monospace,Menlo,monospace';
   var DISP='"Unbounded","Hiragino Sans",sans-serif';
+  function drawYen(ctx,n,x,y,px){
+    var num=Number(n).toLocaleString('ja-JP');
+    ctx.textAlign='right';ctx.font='600 '+px+'px '+MONO;ctx.fillText(num,x,y);
+    var w=ctx.measureText(num).width;
+    ctx.font='700 '+px+'px '+BODY;ctx.fillText("¥",x-w+px*.1,y);ctx.textAlign='left';
+  }
   var rs=rows(), total=0, count=0, si=shipInfo(); rs.forEach(function(r){total+=r.sub;count+=r.count});
   var c=document.createElement('canvas'), ctx=c.getContext('2d');
   // 1回目:高さを測る / 2回目:描く
@@ -627,7 +636,7 @@ function drawReceipt(){
       if(draw){
         ctx.fillStyle='#0b0f15';
         lines.forEach(function(l,i){ctx.fillText(l,TX+IN,y+15+i*19)});
-        ctx.font='600 13px '+MONO;ctx.textAlign='right';ctx.fillText(yen(r.sub),TX+TW-IN,y+15);ctx.textAlign='left';
+        drawYen(ctx,r.sub,TX+TW-IN,y+15,13);
         ctx.strokeStyle='rgba(11,15,21,.22)';ctx.setLineDash([1.5,2.5]);ctx.beginPath();ctx.moveTo(TX+IN,y+lines.length*19+8.5);ctx.lineTo(TX+TW-IN,y+lines.length*19+8.5);ctx.stroke();ctx.setLineDash([]);
       }
       y+=lines.length*19+12;
@@ -638,7 +647,7 @@ function drawReceipt(){
       ctx.font='700 12px '+BODY;ctx.fillText('合計点数',TX+IN,y+30);
       ctx.font='600 16px '+MONO;ctx.textAlign='right';ctx.fillText(count+'点',TX+TW-IN,y+30);ctx.textAlign='left';
       ctx.font='700 12px '+BODY;ctx.fillText('合計金額（送料別）',TX+IN,y+70);
-      ctx.font='600 32px '+MONO;ctx.textAlign='right';ctx.fillText(yen(total),TX+TW-IN,y+72);ctx.textAlign='left';
+      drawYen(ctx,total,TX+TW-IN,y+72,32);
       // バーコード
       var bx=TX+IN, by=y+92, seed=total+count*7+1;
       ctx.globalAlpha=.75;
