@@ -240,7 +240,7 @@ a{color:inherit}
 .ship{margin-top:10px;padding:9px 11px;border:1px solid rgba(11,15,21,.18);border-radius:4px;font-size:11.5px;line-height:1.8;color:var(--ink)}
 .ship b{font-weight:700}
 .ship .alt{display:block;color:var(--ink-dim)}
-.r.fee span:first-child{color:var(--ink-dim)}
+.lb-sub{display:block;margin-top:2px;font-size:10px;font-weight:500;color:var(--ink-dim);letter-spacing:.04em}
 .notice{margin:14px 0 0;padding:12px 14px;border:1px solid var(--line);border-left:3px solid var(--ice);background:var(--panel-2);border-radius:10px;font-size:12.5px;line-height:1.8;color:var(--mist)}
 .notice b{color:var(--chrome)}
 
@@ -286,7 +286,7 @@ footer p{margin:0 0 6px}
             <div class="rows" id="rows"></div>
             <div class="totals">
               <div class="tr"><span class="lb">合計点数</span><span class="cnt" id="tCount">0点</span></div>
-              <div class="tr"><span class="lb">合計金額</span><span class="yen" id="tYen">¥0</span></div>
+              <div class="tr"><span class="lb">合計金額<small class="lb-sub">送料込み</small></span><span class="yen" id="tYen">¥0</span></div>
             </div>
             <div class="ship" id="ship" hidden></div>
             <div class="warn" id="warn" hidden></div>
@@ -523,7 +523,6 @@ function renderReceipt(){
       if(r.g.cat!==last){ last=r.g.cat; html+='<div class="r grp"><span>'+esc(catName[last].toUpperCase())+'</span><span></span></div>'; }
       html+='<div class="r"><span>'+esc(r.label)+'</span><span>'+yen(r.sub)+'</span></div>';
     });
-    html+='<div class="r fee"><span>送料（1回の注文）</span><span>'+yen(si.fee)+'</span></div>';
     rowsEl.innerHTML=html;
   }
   var shipEl=document.getElementById('ship'); shipEl.hidden=!si.any; shipEl.innerHTML=shipHtml(si);
