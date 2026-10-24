@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-10-24",
+ "updatedAt": "2026-10-25",
  "items": [
   {
    "id": "auto-20261013-01",
@@ -312,6 +312,15 @@
    "url": "https://bmsg.shop/collections/bmsg",
    "note": "各¥1,400・お一人様3点まで。12/15〜順次発送。通常販売の商品と同じ注文に入れると全部12/15以降の発送になる。合計はグッズ計算機 EC で計算できる",
    "source": "BMSG SHOP"
+  },
+  {
+   "id": "auto-20261025-01",
+   "short": "沼ハマ NHK ONE",
+   "title": "沼にハマってきいてみた（MAZZEL出演）NHK ONE 見逃し配信期限",
+   "category": "stream",
+   "tag": "TVer",
+   "end": "2026-10-31T20:29:00+09:00",
+   "url": "https://www.web.nhk/tv/an/hamatta/pl/series-tep-KNY2YKWLG9/ep/YCWBRIRTKS"
   }
  ]
 }
