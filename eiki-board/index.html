@@ -153,7 +153,9 @@ h1{font-family:var(--f-hand);font-weight:600;font-size:26px;line-height:1.2;marg
 
 /* dialog 自体はスクロールさせない。UA の overflow:auto のまま高さだけ画面いっぱいにすると、
    動ける量がほぼ 0 のスクロールになり、下スワイプが背面のページへ伝わって一瞬固まる。 */
-dialog{border:none;padding:0;background:var(--paper);color:var(--pencil);width:100%;max-width:560px;max-height:88vh;margin:auto auto 0;box-shadow:0 -10px 30px rgba(64,56,47,.2);top:auto;bottom:0;height:auto;overflow:hidden;overscroll-behavior:none;display:flex;flex-direction:column}
+dialog{border:none;padding:0;background:var(--paper);color:var(--pencil);width:100%;max-width:560px;max-height:88vh;margin:auto auto 0;box-shadow:0 -10px 30px rgba(64,56,47,.2);top:auto;bottom:0;height:auto;overflow:hidden;overscroll-behavior:none}
+/* 開いているときだけ flex にする。dialog 全体に display を書くと、閉じたダイアログを隠す UA の display:none より優先されて常に表示されてしまう。 */
+dialog[open]{display:flex;flex-direction:column}
 dialog::backdrop{background:rgba(64,56,47,.45);overflow:hidden;overscroll-behavior:none}
 html.modal-open,html.modal-open body{overscroll-behavior:none}
 .sheet{padding:8px 18px calc(18px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:14px;position:relative;flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y}
