@@ -885,5 +885,44 @@ function bindSheetSwipe(dialog){
   render();
 })();
 </script>
+<script>
+/* 新しい版が出ていたら読み込み直す。ホーム画面に追加したアプリは開きっぱなしで再読み込みされないため。
+   版番号は持たず、サーバーのページとデータを取り直して前回と比べるので、更新時に手で書き換えるものはない。
+   - 起動時：取り直したページに、いま動いている style/script がそのまま入っていなければ古い版なので読み込み直す
+   - 画面に戻ったとき：ページか出演データが起動時から変わっていれば読み込み直す
+   シートを開いて入力している間は読み込み直さず、閉じてから確かめる。 */
+(()=>{
+  const SELF=["eiki-board/","eiki-board/index.html"].some(p=>location.pathname.endsWith(p))?location.pathname:null;
+  if(!SELF)return;
+  const GUARD="eiki-board-reloaded-at";
+  const own=[...document.querySelectorAll("style,script:not([src])")].map(n=>n.textContent).filter(t=>t.trim().length>40);
+  let base=null,checking=false,lastCheck=0;
+  const get=async url=>{const r=await fetch(url,{cache:"no-store"});if(!r.ok)throw new Error("bad status");return r.text()};
+  const snapshot=async()=>{const[page,data]=await Promise.all([get(SELF),get("appearances.json")]);return{page,data}};
+  const busy=()=>[...document.querySelectorAll("dialog")].some(d=>d.open);
+  const reload=()=>{
+    try{const t=Number(sessionStorage.getItem(GUARD)||0);if(Date.now()-t<30e3)return;sessionStorage.setItem(GUARD,String(Date.now()))}catch(e){}
+    location.reload();
+  };
+  const check=async()=>{
+    if(checking||document.visibilityState!=="visible"||Date.now()-lastCheck<20e3)return;
+    checking=true;lastCheck=Date.now();
+    try{
+      const now=await snapshot();
+      if(!base){
+        if(!own.every(t=>now.page.includes(t))){if(!busy())reload();return}
+        base=now;return;
+      }
+      if(now.page!==base.page||now.data!==base.data){if(busy())lastCheck=0;else reload()}
+    }catch(e){/* 電波がないときなどは次の機会に */}
+    finally{checking=false}
+  };
+  document.addEventListener("visibilitychange",check);
+  addEventListener("pageshow",e=>{if(e.persisted)check()});
+  addEventListener("focus",check);
+  document.querySelectorAll("dialog").forEach(d=>d.addEventListener("close",()=>{if(!base||lastCheck===0)check()}));
+  check();
+})();
+</script>
 </body>
 </html>
