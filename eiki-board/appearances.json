@@ -1,0 +1,61 @@
+{
+  "updatedAt": "2026-10-26",
+  "items": [
+    {
+      "id": "eiki-20261024-hamatta-catchup",
+      "short": "沼ハマ 見逃し",
+      "title": "沼にハマってきいてみた 白熱！ドッジボール沼（EIKI・RYUKI）NHK ONE 見逃し配信",
+      "category": "stream",
+      "flow": "watch",
+      "tag": "沼ハマ",
+      "start": "2026-10-24T20:30:00+09:00",
+      "end": "2026-10-31T20:29:00+09:00",
+      "url": "https://www.web.nhk/tv/an/hamatta/pl/series-tep-KNY2YKWLG9/ep/YCWBRIRTKS",
+      "source": "mazzel_official / NHK",
+      "note": "本放送は10/24(土)20:00-20:30終了済み。公式Xが見逃し配信URLを案内。視聴期限は公式X本文に明記がないため、本放送終了から約7日で仮置き",
+      "xUrl": "https://x.com/mazzel_official/status/2113961016166162643"
+    },
+    {
+      "id": "eiki-20261028-dayday",
+      "short": "DayDay. 生出演",
+      "title": "日本テレビ「DayDay.」EIKI 生出演",
+      "category": "tv",
+      "flow": "watch",
+      "tag": "DayDay.",
+      "start": "2026-10-28T09:00:00+09:00",
+      "end": "2026-10-28T11:10:00+09:00",
+      "url": "https://www.ntv.co.jp/dayday/",
+      "source": "mazzel_official / 日本テレビ",
+      "note": "EIKI 生出演。出演枠の詳細時刻は公式投稿に記載なし",
+      "xUrl": "https://x.com/mazzel_official/status/2113570627508744249"
+    },
+    {
+      "id": "eiki-20261030-chinmoku",
+      "short": "沈黙の金曜日 生出演",
+      "title": "FM FUJI「沈黙の金曜日」HAYATO・EIKI 生出演",
+      "category": "radio",
+      "flow": "watch",
+      "tag": "沈黙の金曜日",
+      "start": "2026-10-30T21:00:00+09:00",
+      "end": "2026-10-30T23:00:00+09:00",
+      "url": "https://www.fmfuji.jp/",
+      "source": "mazzel_official / FM FUJI",
+      "note": "HAYATO・EIKI 生出演。※22時台出演（番組全体は21:00-23:00）",
+      "xUrl": "https://x.com/mazzel_official/status/2113900412667588797"
+    },
+    {
+      "id": "eiki-20261031-ariya",
+      "short": "有野屋書店2号店 第2回",
+      "title": "FOD「有野屋書店 2号店」第2回配信開始（EIKIレギュラー／ゲストRYUKI）",
+      "category": "stream",
+      "flow": "watch",
+      "tag": "有野屋書店",
+      "start": "2026-10-31T12:00:00+09:00",
+      "end": "2026-10-31T23:59:00+09:00",
+      "url": "https://fod.fujitv.co.jp/title/502r/",
+      "source": "mazzel_official / FOD",
+      "note": "EIKIは副店長としてレギュラー。第2回ゲストにRYUKI。10/31 12:00配信開始のオンデマンド。FODでの視聴期限は公式投稿に記載なし（終了日時は配信日の終わりで仮置き）",
+      "xUrl": "https://x.com/mazzel_official/status/2114533355597508669"
+    }
+  ]
+}

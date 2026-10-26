@@ -1,0 +1,736 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#f1ebe1">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="EIKI出演">
+<meta name="description" content="MAZZEL EIKIのテレビ・ラジオ出演予定をカレンダーで確認できる非公式ファンメイドツール">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MUZE TOOL BOX">
+<meta property="og:title" content="EIKI出演ボード｜MUZE TOOL BOX">
+<meta property="og:description" content="MAZZEL EIKIのテレビ・ラジオ出演予定をカレンダーで確認できる非公式ファンメイドツール">
+<meta property="og:url" content="https://rikomuze.github.io/muze-tool-box/eiki-board/">
+<meta property="og:image" content="https://rikomuze.github.io/muze-tool-box/eiki-board/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="EIKI出演ボード テレビ・ラジオ出演をカレンダーで追う">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://rikomuze.github.io/muze-tool-box/eiki-board/og.jpg">
+<meta name="twitter:title" content="EIKI出演ボード｜MUZE TOOL BOX">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+<title>EIKI出演ボード｜MUZE TOOL BOX</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Montserrat:wght@500;600;700&display=swap">
+<style>
+/* Layout: MUZE TOOL BOX の「作業机の上の紙もの」。締め切りボードと同じ机の上で、EIKIの出演を1件1枚の半券にする。 */
+:root{
+  color-scheme:light;
+  --desk:#f1ebe1; --paper:#ffffff; --pencil:#40382f; --faded:#6f6456;
+  --line:rgba(64,56,47,.2); --line2:rgba(64,56,47,.35);
+  --berry:#e27a94; --berry-ink:#a8445f; --berry-soft:#f7dde3;
+  --mint:#a4c5af; --mint-ink:#3d6a4c; --mint-soft:#e2eee5;
+  --lav:#bfaee3; --lav-ink:#5b4a8a; --lav-soft:#efe5ff;
+  --red:#c0472f; --red-soft:#f6dcd6;
+  --shadow:0 4px 12px rgba(64,56,47,.14);
+  --f-hand:"Klee One","Zen Kaku Gothic New","Hiragino Sans",sans-serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
+  --f-num:"Montserrat","Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{background:radial-gradient(rgba(64,56,47,.07) 1px,transparent 1px) 0 0/22px 22px,var(--desk);color:var(--pencil);font-family:var(--f-body);font-size:15px;line-height:1.55;font-feature-settings:"palt" 1}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--desk)}
+button{font:inherit;color:inherit;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:2px solid var(--berry-ink);outline-offset:2px}
+.wrap{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 12px;display:flex;flex-direction:column;gap:14px}
+
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.label{position:relative;display:inline-block;background:var(--paper);padding:3px 12px 4px;transform:rotate(-2deg);box-shadow:var(--shadow);font-family:var(--f-num);font-weight:700;font-size:10px;letter-spacing:.18em}
+.label::before{content:"";position:absolute;top:-6px;left:-10px;width:34px;height:12px;background:rgba(226,122,148,.85);transform:rotate(-12deg)}
+h1{font-family:var(--f-hand);font-weight:600;font-size:26px;line-height:1.2;margin:8px 0 0}
+.addbtn{flex:none;width:48px;height:48px;border-radius:50%;border:1.5px solid var(--pencil);background:var(--paper);font-size:24px;line-height:1;cursor:pointer;box-shadow:var(--shadow);transform:rotate(3deg)}
+
+.next{position:relative;background:var(--paper);box-shadow:0 10px 24px rgba(64,56,47,.16);padding:14px 16px 12px;transform:rotate(-.6deg);display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:baseline;cursor:pointer;border:none;text-align:left;width:100%}
+.next::before{content:"";position:absolute;top:-8px;right:22px;width:56px;height:16px;background:rgba(164,197,175,.85);transform:rotate(6deg)}
+.next .k{font-family:var(--f-hand);font-weight:600;font-size:13px;color:var(--faded);grid-column:1/-1}
+.next .t{font-weight:700;font-size:16px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.next .cd{font-family:var(--f-num);font-weight:700;font-size:16px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.next .cd.u{color:var(--red)}
+.next .w{font-family:var(--f-num);font-size:12px;color:var(--faded);grid-column:1/-1;font-variant-numeric:tabular-nums}
+
+.tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;padding:3px;background:rgba(255,255,255,.6);box-shadow:inset 0 0 0 1px var(--line)}
+.tab{border:none;background:none;min-height:44px;padding:0 2px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;font-weight:700;font-size:13px;color:var(--faded);white-space:nowrap}
+.tab .n{font-family:var(--f-num);font-weight:700;font-size:11.5px;min-width:20px;padding:1px 6px;border-radius:999px;background:var(--desk);color:var(--pencil);font-variant-numeric:tabular-nums}
+.tab[aria-selected="true"]{background:var(--pencil);color:var(--paper)}
+.tab[aria-selected="true"] .n{background:rgba(255,255,255,.22);color:var(--paper)}
+
+.sec{display:flex;flex-direction:column;gap:8px}
+.sec h2{font-family:var(--f-hand);font-weight:600;font-size:15px;margin:6px 2px 0;display:flex;gap:8px;align-items:baseline}
+.sec h2 .n{font-family:var(--f-num);font-size:12px;color:var(--faded);font-weight:600}
+.empty{border:1.5px dashed var(--line2);background:rgba(255,255,255,.45);padding:18px 16px;text-align:center;font-family:var(--f-hand);font-weight:600;font-size:14px;color:var(--faded)}
+
+.card{position:relative;display:grid;grid-template-columns:58px minmax(0,1fr) auto;align-items:center;background:var(--paper);box-shadow:var(--shadow);min-height:68px}
+.card:nth-child(odd){transform:rotate(-.25deg)}.card:nth-child(even){transform:rotate(.2deg)}
+.card .tape{position:absolute;top:-6px;left:10px;width:38px;height:12px;transform:rotate(-8deg);z-index:2}
+.st-go .tape{background:rgba(226,122,148,.85)}
+.st-wait .tape{background:rgba(191,174,227,.9)}
+.st-won .tape{background:rgba(164,197,175,.9)}
+.st-miss .tape{background:rgba(192,71,47,.7)}
+.st-undecided{box-shadow:none;background:rgba(255,255,255,.7);outline:1.5px dashed var(--line2);outline-offset:-1.5px}
+.st-off{background:rgba(255,255,255,.5);box-shadow:none}
+.st-off .stub,.st-off .ttl{opacity:.55}
+.st-pass .ttl{text-decoration:line-through;text-decoration-color:var(--line2)}
+.card.urgent .stub b{color:var(--red)}
+.stub{grid-column:1;grid-row:1;align-self:stretch;display:flex;flex-direction:column;align-items:center;justify-content:center;border-right:1.5px dashed var(--line);padding:8px 2px;font-family:var(--f-num);font-variant-numeric:tabular-nums;line-height:1.1;text-align:center}
+.card.has-links .stub{grid-row:1/span 2}
+.stub .kd{font-family:var(--f-hand);font-weight:600;font-size:11px;color:var(--faded)}
+.stub b{font-size:17px;font-weight:700}
+.stub .wd{font-family:var(--f-body);font-size:11px;color:var(--faded);font-weight:700}
+.stub .tm{font-size:12px;font-weight:600;margin-top:2px}
+.mid{grid-column:2;grid-row:1;min-width:0;padding:10px 8px 8px 12px;cursor:pointer;background:none;border:none;text-align:left;align-self:stretch;display:flex;flex-direction:column;justify-content:center;gap:3px}
+.card.has-links .mid{padding-bottom:2px}
+.more-l{font-size:12px;font-weight:700;color:var(--pencil);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line2);margin-top:1px}
+.mid:active{background:rgba(64,56,47,.05)}
+.ttl{font-weight:700;font-size:15px;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:keep-all;overflow-wrap:anywhere}
+.sub{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--faded);white-space:nowrap;overflow:hidden;font-variant-numeric:tabular-nums}
+.sub .cd{font-family:var(--f-num);font-weight:700;color:var(--pencil)}
+.sub .cd.u{color:var(--red)}
+.sub .tg{font-weight:700;color:var(--faded);overflow:hidden;text-overflow:ellipsis}
+.links{grid-column:2;grid-row:2;display:flex;flex-wrap:wrap;gap:2px 12px;align-items:center;padding:0 8px 8px 12px}
+.ext{font-size:12px;font-weight:700;color:var(--pencil);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line2);min-height:32px;display:inline-flex;align-items:center}
+.act{grid-column:3;grid-row:1;display:flex;flex-direction:column;gap:6px;padding:8px 10px 8px 0;align-items:stretch;align-self:center}
+.card.has-links .act{grid-row:1/span 2}
+.pb{border:1.5px solid var(--berry-ink);background:var(--berry-ink);color:#fff;font-weight:700;font-size:13px;padding:0 12px;min-height:40px;min-width:76px;cursor:pointer;white-space:nowrap;border-radius:999px}
+.pb.ghost{background:var(--paper);color:var(--pencil);border-color:var(--line2)}
+.pb.berry{background:var(--berry-ink);border-color:var(--berry-ink)}
+.act .pb{min-height:34px;font-size:12.5px}
+.act.two .pb{min-height:32px}
+
+.steps{display:flex;align-items:center;gap:4px;font-size:13px;font-weight:700;color:var(--faded);white-space:nowrap;overflow:hidden}
+.stp{padding:3px 10px;border-radius:999px;border:1px solid transparent}
+.stp.ok{color:var(--pencil)}
+.stp.cur{border-color:var(--pencil);color:var(--pencil)}
+.steps .sep{font-style:normal;color:var(--line2);font-size:13px}
+
+.cal{background:var(--paper);box-shadow:var(--shadow)}
+.cal-head{display:flex;align-items:center;gap:6px;padding:10px 10px 8px;border-bottom:1.5px dashed var(--line)}
+.cal-head h2{flex:1;margin:0;font-family:var(--f-num);font-weight:700;font-size:18px;text-align:center;font-variant-numeric:tabular-nums}
+.cal-head h2 small{font-family:var(--f-hand);font-weight:600;font-size:13px;margin-left:2px}
+.nav{width:44px;height:44px;border:none;background:none;font-size:22px;cursor:pointer;border-radius:50%}
+.today-b{border:1.5px solid var(--line2);background:none;border-radius:50%;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;min-height:34px}
+.legend{display:flex;justify-content:center;flex-wrap:wrap;gap:4px 12px;padding:8px 8px 4px;font-size:11px;color:var(--faded);font-weight:700}
+.legend span{display:inline-flex;align-items:center;gap:4px}
+.grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));padding:0 4px 8px}
+.dow{text-align:center;font-size:11px;font-weight:700;color:var(--faded);padding:4px 0}
+.dow.sun{color:var(--red)}.dow.sat{color:var(--lav-ink)}
+.day{border:none;background:none;min-height:46px;padding:4px 0 2px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;min-width:0}
+.day .dn{font-family:var(--f-num);font-weight:600;font-size:14px;width:30px;height:30px;display:grid;place-items:center;border-radius:50%;font-variant-numeric:tabular-nums}
+.day.out .dn{opacity:.3}
+.day.sun .dn{color:var(--red)}.day.sat .dn{color:var(--lav-ink)}
+.day.today .dn{box-shadow:inset 0 0 0 1.5px var(--pencil)}
+.day.sel .dn{background:var(--pencil);color:var(--paper)}
+.dots{display:flex;gap:3px;justify-content:center;flex-wrap:wrap;max-width:34px;min-height:7px}
+.dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+.d-go{background:var(--berry)}.d-undecided{box-shadow:inset 0 0 0 1.5px var(--faded)}.d-won{background:var(--mint)}.d-off{background:var(--line2)}.d-due{background:var(--red)}
+.d-result{border-radius:1px;transform:rotate(45deg) scale(.9)}
+.daylist{display:flex;flex-direction:column;gap:8px}
+.daylist h3{font-family:var(--f-hand);font-weight:600;font-size:16px;margin:4px 2px 0}
+
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:8;background:rgba(241,235,225,.96);backdrop-filter:blur(6px);border-top:1.5px dashed var(--line2);padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.dock-in{max-width:560px;margin:0 auto;display:flex;gap:10px;align-items:center}
+.seg{flex:1;display:grid;grid-template-columns:1fr 1fr;background:rgba(255,255,255,.6);box-shadow:inset 0 0 0 1px var(--line);padding:3px;gap:3px}
+.seg button{border:none;background:none;min-height:42px;font-weight:700;font-size:14px;color:var(--faded);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--pencil);color:var(--paper)}
+
+dialog{border:none;padding:0;background:var(--paper);color:var(--pencil);width:100%;max-width:560px;max-height:88vh;margin:auto auto 0;box-shadow:0 -10px 30px rgba(64,56,47,.2)}
+dialog::backdrop{background:rgba(64,56,47,.45)}
+@media (min-width:640px){dialog{margin:auto;max-height:84vh}}
+.sheet{padding:18px 18px calc(18px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:14px;position:relative}
+.grab{width:40px;height:4px;border-radius:2px;background:var(--line2);margin:-6px auto 0}
+.sheet h3{font-family:var(--f-hand);font-weight:600;font-size:19px;line-height:1.4;margin:0}
+.meta-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.stamp{font-size:12px;font-weight:700;padding:2px 10px;border:1.5px solid currentColor;border-radius:50%;transform:rotate(-2deg)}
+.stamp.go{color:var(--pencil)}.stamp.wait{color:var(--lav-ink)}.stamp.won{color:var(--mint-ink)}.stamp.undecided,.stamp.off{color:var(--faded)}.stamp.miss{color:var(--red)}
+.tagt{font-size:12px;font-weight:700;color:var(--faded)}
+.tl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;border-left:1.5px dashed var(--line2);margin-left:6px}
+.tl li{display:grid;grid-template-columns:52px 1fr;gap:8px;padding:6px 0 6px 14px;position:relative;align-items:baseline}
+.tl li::before{content:"";position:absolute;left:-5px;top:13px;width:8px;height:8px;border-radius:50%;background:var(--paper);box-shadow:inset 0 0 0 1.5px var(--line2)}
+.tl li.now::before{background:var(--berry)}
+.tl li.done{color:var(--faded)}
+.tl .k{font-family:var(--f-hand);font-weight:600;font-size:13px}
+.tl .v{font-family:var(--f-num);font-weight:600;font-size:15px;font-variant-numeric:tabular-nums}
+.tl .rn{display:block;font-family:var(--f-body);font-weight:500;font-size:12px;color:var(--faded)}
+.desc{font-size:13.5px;line-height:1.7;margin:0;overflow-wrap:anywhere}
+.src{font-size:11.5px;color:var(--faded)}
+.linkb{display:flex;align-items:center;justify-content:center;min-height:44px;border:1.5px solid var(--line2);font-weight:700;font-size:14px;text-decoration:none;color:var(--pencil);background:var(--paper)}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.acts .pb{flex:1;min-height:46px;font-size:14px}
+.minor{display:flex;justify-content:space-between;gap:8px;border-top:1.5px dashed var(--line);padding-top:10px}
+.txtb{border:none;background:none;font-size:13px;font-weight:700;color:var(--faded);text-decoration:underline;text-underline-offset:3px;cursor:pointer;min-height:40px;padding:0 4px}
+.txtb.red{color:var(--red)}
+.x{position:absolute;top:8px;right:8px;width:44px;height:44px;border:none;background:none;font-size:20px;cursor:pointer;color:var(--faded)}
+.calbox{display:flex;flex-direction:column;gap:8px;border-top:1.5px dashed var(--line);padding-top:12px}
+.calbox .cap{font-size:12px;font-weight:700;color:var(--faded)}
+.calrow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.calrow .linkb{font-size:13.5px;cursor:pointer;text-align:center;padding:4px 8px;line-height:1.35}
+.calrow .linkb.main{border-color:var(--pencil)}
+.alarm-line{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12.5px;color:var(--faded)}
+.alarm-opts{display:flex;flex-wrap:wrap;gap:6px}
+.alarm-opts button{min-height:40px;padding:4px 12px;border:1.5px solid var(--line2);background:var(--paper);color:var(--pencil);font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.alarm-opts button[aria-pressed="true"]{background:var(--pencil);color:var(--paper);border-color:var(--pencil)}
+
+label{font-size:12px;font-weight:700;color:var(--faded);display:flex;flex-direction:column;gap:4px}
+input,select,textarea{font:inherit;font-size:16px;border:1.5px solid var(--line);border-radius:0;padding:9px 10px;background:var(--desk);color:var(--pencil);width:100%}
+textarea{min-height:70px;resize:vertical}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.msg{font-size:13px;color:var(--faded);min-height:1.2em}
+.msg.err{color:var(--red)}
+details summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--faded);min-height:36px;display:flex;align-items:center}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--pencil);color:var(--paper);padding:10px 16px;font-size:14px;font-weight:700;z-index:20;display:flex;gap:14px;align-items:center;max-width:calc(100vw - 32px);box-shadow:var(--shadow)}
+.toast button{background:none;border:none;color:var(--berry);font-weight:700;cursor:pointer;min-height:32px}
+@media (prefers-reduced-motion:no-preference){.toast{animation:up .18s ease-out}@keyframes up{from{opacity:0;transform:translate(-50%,8px)}}}
+@media (prefers-reduced-motion:reduce){.card,.tab,.next,.label,.addbtn{transform:none!important}}
+.foot{max-width:560px;margin:0 auto;padding:8px max(16px,env(safe-area-inset-right,0px)) calc(100px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));font-size:11.5px;color:var(--faded);line-height:1.8;text-align:center}
+.foot p{margin:0 0 6px}
+.foot .home{display:inline-block;padding:10px 6px;margin-bottom:6px;font-weight:700;font-size:14px;color:var(--pencil);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div><span class="label">MUZE TOOL BOX</span><h1>EIKI出演ボード</h1></div>
+    <button class="addbtn" id="addBtn" type="button" aria-label="自分で出演を追加">＋</button>
+  </header>
+
+  <button class="next" id="next" type="button" hidden>
+    <span class="k" id="nextK">次の出演</span>
+    <span class="t" id="nextT"></span>
+    <span class="cd" id="nextCd"></span>
+    <span class="w" id="nextW"></span>
+  </button>
+
+  <div id="listView" hidden>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="tabs" role="tablist" aria-label="自分の視聴予定" id="tabs"></div>
+      <div id="list" style="display:flex;flex-direction:column;gap:14px"></div>
+    </div>
+  </div>
+
+  <div id="calView">
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="cal">
+        <div class="cal-head">
+          <button class="nav" id="prevM" type="button" aria-label="前の月">‹</button>
+          <h2 id="calTitle"></h2>
+          <button class="today-b" id="todayBtn" type="button">今日</button>
+          <button class="nav" id="nextM" type="button" aria-label="次の月">›</button>
+        </div>
+        <div class="legend">
+          <span><i class="dot d-go"></i>見る</span>
+          <span><i class="dot d-undecided"></i>未定</span>
+          <span><i class="dot d-won"></i>見た</span>
+          <span><i class="dot d-due d-result"></i>視聴期限</span>
+        </div>
+        <div class="grid" id="calGrid"></div>
+      </div>
+      <div class="daylist" id="dayList"></div>
+    </div>
+  </div>
+</div>
+
+<footer class="foot">
+  <a class="home" href="https://rikomuze.github.io/muze-tool-box/">← ホームに戻る</a>
+  <p>見る・見ない・見たなどの記録は、この端末のブラウザにだけ保存されます。</p>
+  <p>MAZZEL EIKIのテレビ・ラジオ出演を整理する非公式ファンメイドツールです。BMSG・MAZZEL公式とは関係ありません。日時は公式Xの告知をもとにしていますが、変わることがあるので、視聴の前に必ず公式の発表を確認してね。</p>
+  <p id="dataDate"></p>
+</footer>
+
+<nav class="dock" aria-label="表示の切りかえ">
+  <div class="dock-in">
+    <div class="seg">
+      <button type="button" id="vCal" aria-pressed="true">カレンダー</button>
+      <button type="button" id="vList" aria-pressed="false">リスト</button>
+    </div>
+  </div>
+</nav>
+
+<dialog id="detail"><div class="sheet" id="detailBody"></div></dialog>
+
+<dialog id="dlg">
+  <form class="sheet" id="form">
+    <div class="grab"></div>
+    <button type="button" class="x" id="cancelBtn" aria-label="閉じる">✕</button>
+    <h3 id="dlgTitle">自分で追加</h3>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <label for="fShort">なまえ（短く）<input id="fShort" required placeholder="例：DayDay. 生出演"></label>
+      <div class="g2">
+        <label for="fStart">開始（放送・配信）<input type="datetime-local" id="fStart" required></label>
+        <label for="fEnd">終了・視聴期限（任意）<input type="datetime-local" id="fEnd"></label>
+      </div>
+      <div class="g2">
+        <label for="fDecision">自分の予定<select id="fDecision"><option value="">未定</option><option value="yes">見る</option><option value="no">見ない</option></select></label>
+        <label for="fCat">種類<select id="fCat"><option value="tv">TV</option><option value="radio">ラジオ</option><option value="stream">見逃し・配信</option></select></label>
+      </div>
+      <details>
+        <summary>くわしく（任意）</summary>
+        <div style="display:flex;flex-direction:column;gap:12px;padding-top:6px">
+          <label for="fTitle">正式なタイトル<input id="fTitle"></label>
+          <div class="g2">
+            <label for="fTag">タグ<input id="fTag" list="tagList" placeholder="例：DayDay."></label>
+            <label for="fStatus">進み具合<select id="fStatus"><option value="todo">まだ</option><option value="watched">見た</option><option value="skip">見送り</option></select></label>
+          </div>
+          <datalist id="tagList"></datalist>
+          <label for="fUrl">公式のURL<input type="url" id="fUrl" placeholder="https://"></label>
+          <label for="fXUrl">公式XのURL<input type="url" id="fXUrl" placeholder="https://x.com/"></label>
+          <label for="fNote">メモ<textarea id="fNote"></textarea></label>
+        </div>
+      </details>
+    </div>
+    <p class="msg" id="formMsg"></p>
+    <div class="acts">
+      <button type="submit" class="pb" id="saveBtn">登録する</button>
+    </div>
+    <div class="minor" id="delRow" hidden></div>
+  </form>
+</dialog>
+
+<script>
+const CATS={tv:"TV",radio:"ラジオ",stream:"見逃し・配信"};
+const TABS=[["go","見る"],["undecided","未定"],["pass","見ない"],["done","終わった"]];
+const WD=["日","月","火","水","木","金","土"],DAY=864e5;
+const KEY="muze-eiki-board:v1";
+const UI_KEY="muze-eiki-board:ui";
+const ALARM_KEY="muze-eiki-board:alarms";
+let catalog=[],store={state:{},custom:[]},items=[],loaded=false,dataDate="";
+function loadStore(){try{const v=JSON.parse(localStorage.getItem(KEY)||"{}");store={state:v.state||{},custom:Array.isArray(v.custom)?v.custom:[]}}catch(e){}}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(store));return true}catch(e){return false}}
+function rebuild(){items=catalog.map(c=>({...c,...(store.state[c.id]||{})})).concat(store.custom.map(c=>({...c,_custom:true})))}
+let view="cal",tab="go",calY=0,calM=0,selDay="",userTab=false,editing=null;
+const $=id=>document.getElementById(id);
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
+
+const isD=s=>/^\d{4}-\d{2}-\d{2}$/.test(s||"");
+const ts=s=>s?new Date(isD(s)?s+"T00:00:00+09:00":s).getTime():NaN;
+function jst(ms){const t=new Date(ms+9*3600e3);return{y:t.getUTCFullYear(),m:t.getUTCMonth()+1,d:t.getUTCDate(),wi:t.getUTCDay(),w:WD[t.getUTCDay()],h:String(t.getUTCHours()).padStart(2,"0"),mi:String(t.getUTCMinutes()).padStart(2,"0")}}
+function fmt(s){const ms=ts(s);if(isNaN(ms))return"";const j=jst(ms);return`${j.m}/${j.d}(${j.w})`+(isD(s)?"":` ${j.h}:${j.mi}`)}
+function dayKey(ms){const j=jst(ms);return`${j.y}-${String(j.m).padStart(2,"0")}-${String(j.d).padStart(2,"0")}`}
+function left(ms){const d=ms-Date.now();if(isNaN(d)||d<0)return{t:"",u:false,d};const h=Math.floor(d/3600e3),dd=Math.floor(h/24);return{t:dd>=1?`あと${dd}日`:h>=1?`あと${h}時間`:`あと${Math.max(1,Math.floor(d/60e3))}分`,long:dd>=1?`あと${dd}日${h%24}時間`:h>=1?`あと${h}時間${Math.floor(d/60e3)%60}分`:`あと${Math.max(1,Math.floor(d/60e3))}分`,u:d<=DAY,d}}
+const toIn=s=>{const ms=ts(s);if(isNaN(ms))return"";const j=jst(ms);return`${dayKey(ms)}T${j.h}:${j.mi}`};
+const fromIn=v=>v?v+":00+09:00":"";
+const nameOf=it=>it.short||it.title||"(無題)";
+function safeUrl(u){try{const x=new URL(u);if(x.protocol==="http:"||x.protocol==="https:")return x.href}catch(e){}return""}
+function endOfDay(ms){const j=jst(ms);return Date.UTC(j.y,j.m-1,j.d)-9*3600e3+DAY-60e3}
+/* 終了が空の自分用メモは、開始日の 23:59 まで「放送中」とみなす */
+function untilMs(it){const e=ts(it.end);if(!isNaN(e))return e;const s=ts(it.start);return isNaN(s)?NaN:endOfDay(s)}
+function focusOf(it){
+  const now=Date.now(),start=ts(it.start),until=untilMs(it),stream=it.category==="stream";
+  if(!stream){
+    if(!isNaN(start)&&start>now)return{ms:start,kind:"start"};
+    if(!isNaN(until)&&until>now)return{ms:until,kind:"live"};
+    return{ms:isNaN(until)?start:until,kind:"past"};
+  }
+  if(!isNaN(start)&&start>now)return{ms:start,kind:"start"};
+  if(!isNaN(until)&&until>now)return{ms:until,kind:"end"};
+  return{ms:isNaN(until)?start:until,kind:"past"};
+}
+function countText(it,long){
+  const f=focusOf(it);
+  if(f.kind==="live")return{t:"放送中",u:true};
+  if(f.kind==="past"||isNaN(f.ms))return{t:"",u:false};
+  const L=left(f.ms);if(!L.t)return{t:"",u:false};
+  const base=long?L.long:L.t;
+  return{t:f.kind==="end"?`終了まで${base}`:base,u:!!L.u};
+}
+function whenLine(it){
+  const f=focusOf(it);
+  if(f.kind==="live")return`放送中 · ${fmt(it.end||it.start)} まで`;
+  if(f.kind==="end")return`視聴期限 ${fmt(it.end)} まで`;
+  if(it.start)return`${fmt(it.start)} から`;
+  return fmt(it.end);
+}
+function catKd(it,kind){if(kind==="end")return"期限";return it.category==="radio"?"ラジオ":it.category==="stream"?"配信":"TV"}
+
+const ALARMS={eve20:"前日20時",morn9:"当日の朝9時",h3:"3時間前",h1:"1時間前"};
+function getAlarms(){try{const v=JSON.parse(localStorage.getItem(ALARM_KEY)||"null");if(Array.isArray(v))return v.filter(k=>ALARMS[k]).slice(0,2)}catch(e){}return["eve20","h3"]}
+function setAlarms(v){try{localStorage.setItem(ALARM_KEY,JSON.stringify(v))}catch(e){}}
+function alarmMs(anchor,k){
+  const j=jst(anchor),day0=Date.UTC(j.y,j.m-1,j.d)-9*3600e3;
+  return{eve20:day0-4*3600e3,morn9:day0+9*3600e3,h3:anchor-3*3600e3,h1:anchor-3600e3}[k];
+}
+const utcStamp=ms=>new Date(ms).toISOString().replace(/[-:]/g,"").replace(/\.\d{3}/,"");
+const icsEsc=t=>String(t||"").replace(/\\/g,"\\\\").replace(/\r?\n/g,"\\n").replace(/([,;])/g,"\\$1");
+function icsFold(line){const out=[];let cur="";for(const ch of line){if(new TextEncoder().encode(cur+ch).length>73){out.push(cur);cur=" "+ch}else cur+=ch}out.push(cur);return out.join("\r\n")}
+function eventRange(it){
+  const s=ts(it.start),e=ts(it.end);
+  if(!isNaN(s)&&!isNaN(e)&&e>s)return{start:s,end:e};
+  if(!isNaN(s))return{start:s,end:s+3600e3};
+  if(!isNaN(e))return{start:e-3600e3,end:e};
+  return null;
+}
+function anchorMs(it){const f=focusOf(it);if(f.kind!=="past"&&!isNaN(f.ms))return f.ms;const r=eventRange(it);return r?r.start:NaN}
+function calBody(it){return[it.title&&it.title!==nameOf(it)?it.title:"",it.note||"",it.url||"",it.xUrl||""].filter(Boolean).join("\n")}
+function buildIcs(it){
+  const now=Date.now(),range=eventRange(it),anchor=anchorMs(it);
+  const L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//MUZE TOOL BOX//EIKI Board//JA","CALSCALE:GREGORIAN","METHOD:PUBLISH","BEGIN:VEVENT",
+    "UID:"+String(it.id).replace(/[^\w.-]/g,"")+"@muze-tool-box","DTSTAMP:"+utcStamp(now),"SUMMARY:"+icsEsc("出演 "+nameOf(it))];
+  if(range)L.push("DTSTART:"+utcStamp(range.start),"DTEND:"+utcStamp(range.end));
+  const desc=calBody(it);if(desc)L.push("DESCRIPTION:"+icsEsc(desc));
+  const link=safeUrl(it.url)||safeUrl(it.xUrl);if(link)L.push("URL:"+link);
+  if(!isNaN(anchor))getAlarms().forEach(k=>{const a=alarmMs(anchor,k);if(a>now&&a<anchor)L.push("BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:"+icsEsc("出演 "+nameOf(it)+"（"+ALARMS[k]+"）"),"TRIGGER;VALUE=DATE-TIME:"+utcStamp(a),"END:VALARM")});
+  L.push("END:VEVENT","END:VCALENDAR");
+  return L.map(icsFold).join("\r\n")+"\r\n";
+}
+function addToCalendar(it){
+  const ics=buildIcs(it),ios=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+  if(ios){location.href=icsUrl(it);return}
+  const url=URL.createObjectURL(new Blob([ics],{type:"text/calendar;charset=utf-8"}));
+  const a=document.createElement("a");a.href=url;a.download="eiki-"+String(it.id).replace(/[^\w.-]/g,"")+".ics";document.body.append(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),4000);toast("カレンダー用のファイルを保存したよ。開くと追加できるよ");
+}
+const ICS_API="https://muze-toolbox-api.logical-bear-ishi.workers.dev/api/ics";
+function icsUrl(it){
+  const now=Date.now(),anchor=anchorMs(it);
+  const al=getAlarms().map(k=>alarmMs(anchor,k)).filter(a=>a>now&&a<anchor).map(a=>new Date(a).toISOString());
+  const q={t:("出演 "+nameOf(it)).slice(0,120),s:new Date(anchor).toISOString(),id:String(it.id).replace(/[^\w.-]/g,"").slice(0,64)};
+  const desc=calBody(it).slice(0,1500);if(desc)q.d=desc;
+  const link=safeUrl(it.url)||safeUrl(it.xUrl);if(link)q.u=link.slice(0,500);
+  if(al.length)q.a=al.join(",");
+  return ICS_API+"?"+new URLSearchParams(q).toString();
+}
+function googleUrl(it){
+  const range=eventRange(it);if(!range)return"https://calendar.google.com/calendar/render?action=TEMPLATE";
+  const d=utcStamp(range.start)+"/"+utcStamp(range.end);
+  return"https://calendar.google.com/calendar/render?"+new URLSearchParams({action:"TEMPLATE",text:"出演 "+nameOf(it),dates:d,ctz:"Asia/Tokyo",details:calBody(it)}).toString();
+}
+function calBox(it){
+  const box=el("div","calbox");
+  const f=focusOf(it);
+  box.append(el("span","cap",f.kind==="end"?"カレンダーに入れて、視聴期限の前に通知":"カレンダーに入れて、放送の前に通知"));
+  const row=el("div","calrow");
+  const a=el("button","linkb main","カレンダーに追加");a.type="button";a.onclick=()=>addToCalendar(it);
+  const g=el("a","linkb","Googleカレンダー ↗");g.href=googleUrl(it);g.target="_blank";g.rel="noopener noreferrer";
+  row.append(a,g);box.append(row);
+  const line=el("div","alarm-line"),lab=el("span"),ch=el("button","txtb","変える");ch.type="button";
+  const opts=el("div","alarm-opts");opts.hidden=true;
+  const paint=()=>{const cur=getAlarms();lab.textContent="通知："+(cur.length?cur.map(k=>ALARMS[k]).join("・"):"なし");
+    opts.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(cur.includes(b.dataset.k))))};
+  Object.entries(ALARMS).forEach(([k,v])=>{const b=el("button",null,v);b.type="button";b.dataset.k=k;b.onclick=()=>{
+    let cur=getAlarms();if(cur.includes(k))cur=cur.filter(x=>x!==k);else{if(cur.length>=2){toast("通知は2つまで選べるよ");return}cur=cur.concat(k)}
+    setAlarms(Object.keys(ALARMS).filter(x=>cur.includes(x)));paint()};opts.append(b)});
+  ch.onclick=()=>{opts.hidden=!opts.hidden;ch.textContent=opts.hidden?"変える":"とじる"};
+  line.append(lab,ch);box.append(line,opts);
+  box.append(el("span","src","通知はカレンダーアプリが出します（2つまで）。Googleカレンダーは、そちらの通知設定になります。"));
+  paint();return box;
+}
+
+function info(it){
+  const st=it.status||"todo",dec=it.decision||"";
+  if(st==="watched")return{ph:"done",sub:"fin"};
+  if(st==="skip"&&dec==="yes")return{ph:"done",sub:"closed"};
+  if(st==="skip"||dec==="no")return{ph:"pass",sub:"pass"};
+  const over=focusOf(it).kind==="past";
+  if(dec==="yes")return over?{ph:"go",sub:"missed"}:{ph:"go",sub:"before"};
+  if(over)return{ph:"done",sub:"expired"};
+  return{ph:"undecided",sub:"undecided"};
+}
+function look(it,i){
+  const missed=it.category==="stream"?"配信おわった":"放送おわった";
+  return{before:["st-go","go","見る"],missed:["st-miss","miss",missed],undecided:["st-undecided","undecided","未定"],
+    pass:["st-off st-pass","off","見ない"],fin:["st-off","off","見た"],closed:["st-off","off","見逃した"],expired:["st-off","off","終了"]}[i.sub];
+}
+function actionsFor(it,i){
+  switch(i.sub){
+    case"undecided":return[{l:"見る",c:"berry",p:{decision:"yes",status:"todo"},m:"「見る」に入れたよ"},{l:"見ない",c:"ghost",p:{decision:"no",status:"skip"},m:"「見ない」に移したよ"}];
+    case"before":return[{l:"見た",c:"",p:{status:"watched"},m:"見たにしたよ"}];
+    case"missed":return[{l:"見た",c:"",p:{status:"watched"},m:"見たにしたよ"},{l:"見逃した",c:"ghost",p:{status:"skip",decision:"yes"},m:"終わったに移したよ"}];
+  }
+  return[];
+}
+function undoOf(i){
+  if(i.sub==="fin")return{status:"todo"};
+  if(i.sub==="closed")return{status:"todo",decision:"yes"};
+  if(i.sub==="pass")return{status:"todo",decision:""};
+  if(i.sub==="before")return{decision:"",status:"todo"};
+  return null;
+}
+function stepBar(i){
+  const S=["見る","見た"];let n=0;
+  if(i.sub==="before"||i.sub==="missed")n=1;else if(i.sub==="fin")n=S.length;
+  const w=el("span","steps");
+  S.forEach((l,k)=>{if(k)w.append(el("i","sep","›"));w.append(el("span","stp"+(k<n?" ok":k===n?" cur":""),(k<n?"✓ ":"")+l))});
+  return w;
+}
+const isOver=it=>focusOf(it).kind==="past";
+const retired=it=>it._i.ph==="pass"&&isOver(it);
+const shown=it=>!retired(it);
+
+let tTimer=null;
+function save(id,patch,undo,msg){
+  const cu=store.custom.find(x=>x.id===id);
+  if(cu)Object.assign(cu,patch);
+  else store.state[id]={...(store.state[id]||{}),...(patch.status!==undefined?{status:patch.status}:{}),...(patch.decision!==undefined?{decision:patch.decision}:{})};
+  const ok=persist();rebuild();render();
+  if(!ok){toast("この端末に保存できなかった（プライベートモードかも）");return}
+  if(msg)toast(msg,undo?()=>save(id,undo):null);
+}
+const snap=it=>({status:it.status||"todo",decision:it.decision||""});
+function toast(text,undo){
+  document.querySelectorAll(".toast").forEach(t=>t.remove());clearTimeout(tTimer);
+  const t=el("div","toast");t.setAttribute("role","status");t.append(el("span",null,text));
+  if(undo){const b=el("button",null,"もどす");b.type="button";b.onclick=()=>{t.remove();undo()};t.append(b)}
+  document.body.append(t);tTimer=setTimeout(()=>t.remove(),4500);
+}
+function pbtn(a,it){const b=el("button","pb "+a.c,a.l);b.type="button";b.onclick=e=>{e.stopPropagation();save(it.id,a.p,snap(it),a.m)};return b}
+function extLink(href,label,cls){
+  const a=el("a",cls||"ext",label);a.href=href;a.target="_blank";a.rel="noopener noreferrer";
+  a.addEventListener("click",e=>e.stopPropagation());return a;
+}
+
+function stubEl(it,kind){
+  const st=el("div","stub");
+  const s=kind==="end"?it.end:it.start;
+  const ms=ts(s);
+  if(isNaN(ms)){st.append(el("b",null,"?"));return st}
+  const j=jst(ms);
+  st.append(el("span","kd",catKd(it,kind)),el("b",null,`${j.m}/${j.d}`),el("span","wd",j.w));
+  if(!isD(s))st.append(el("span","tm",`${j.h}:${j.mi}`));
+  return st;
+}
+function card(it,kind){
+  const i=info(it),[cc]=look(it,i);
+  const c=el("article","card "+cc);c.dataset.id=it.id;
+  if(/st-go|st-miss/.test(cc))c.append(el("span","tape"));
+  const active=i.sub==="before"||i.sub==="undecided";
+  const cd=countText(it,false);
+  if(active&&cd.u&&focusOf(it).kind!=="live")c.classList.add("urgent");
+  const m=el("button","mid");m.type="button";m.setAttribute("aria-label",`${nameOf(it)} の詳細`);
+  m.append(el("span","ttl",nameOf(it)));
+  const sub=el("span","sub");
+  if(active&&cd.t)sub.append(el("span","cd"+(cd.u?" u":""),cd.t));
+  else if(!active)sub.append(el("span",null,look(it,i)[2]));
+  if(it.tag&&!nameOf(it).includes(it.tag))sub.append(el("span","tg",it.tag));
+  if(sub.childNodes.length)m.append(sub);
+  m.append(el("span","more-l","くわしく ›"));
+  m.onclick=()=>openDetail(it);
+  c.append(stubEl(it,kind),m);
+  const acts=actionsFor(it,i);
+  if(acts.length){const a=el("div","act"+(acts.length>1?" two":""));acts.forEach(x=>a.append(pbtn(x,it)));c.append(a)}
+  const links=el("div","links");
+  const page=safeUrl(it.url),xurl=safeUrl(it.xUrl);
+  if(page)links.append(extLink(page,"公式 ↗"));
+  if(xurl)links.append(extLink(xurl,"公式X ↗"));
+  if(links.childNodes.length){c.append(links);c.classList.add("has-links")}
+  return c;
+}
+
+const byStart=(a,b)=>(ts(a.start)||9e15)-(ts(b.start)||9e15);
+function sec(title,arr,empty){
+  if(!arr.length&&!empty)return null;
+  const s=el("section","sec");if(title){const h=el("h2",null,title);if(arr.length)h.append(el("span","n",`${arr.length}`));s.append(h)}
+  if(!arr.length)s.append(el("div","empty",empty));arr.forEach(x=>s.append(card(x)));return s;
+}
+function renderList(all){
+  const L=$("list");L.textContent="";
+  if(!loaded){L.append(el("div","empty","よみこみ中…"));return}
+  const vis=all.filter(x=>shown(x)&&x._i.ph===tab),s=k=>vis.filter(x=>x._i.sub===k);
+  let out=[];
+  if(tab==="go"){
+    const miss=s("missed").sort(byStart),bef=s("before").sort(byStart);
+    out=[sec("終わったかも",miss),sec("これから見る",bef,(miss.length)?null:"まだないよ。「未定」で「見る」を押すとここに入るよ")];
+  }else if(tab==="undecided")out=[sec(null,vis.sort(byStart),"未定はないよ")];
+  else if(tab==="pass")out=[sec(null,vis.sort(byStart),"見ないものはないよ")];
+  else out=[sec(null,vis.sort((a,b)=>byStart(b,a)),"終わったものはまだないよ")];
+  if(tab==="pass")out.push(el("p","src","放送や視聴期限を過ぎたものは、自動で外れるよ"));
+  out.forEach(x=>x&&L.append(x));
+}
+function dotCls(it){const i=it._i;if(i.ph==="go")return"d-go";if(i.ph==="undecided")return"d-undecided";if(i.sub==="fin")return"d-won";return"d-off"}
+function renderCal(all){
+  const vis=all.filter(x=>x._i.ph!=="pass");
+  const map=new Map(),add=(k,o)=>{if(!map.has(k))map.set(k,[]);map.get(k).push(o)};
+  vis.forEach(it=>{
+    const start=ts(it.start),end=ts(it.end),cls=dotCls(it);
+    if(!isNaN(start))add(dayKey(start),{it,kind:"start",ms:start,cls});
+    if(!isNaN(end)&&!isNaN(start)&&dayKey(end)!==dayKey(start))add(dayKey(end),{it,kind:"end",ms:end,cls:"d-due d-result"});
+    else if(!isNaN(end)&&isNaN(start))add(dayKey(end),{it,kind:"end",ms:end,cls});
+  });
+  for(const a of map.values())a.sort((x,y)=>x.ms-y.ms||(x.kind==="end")-(y.kind==="end"));
+  const t=$("calTitle");t.textContent=`${calY}.${calM}`;t.append(el("small",null,"月"));
+  const g=$("calGrid");g.textContent="";
+  WD.forEach((w,i)=>g.append(el("div","dow"+(i===0?" sun":i===6?" sat":""),w)));
+  const first=Date.UTC(calY,calM-1,1)-9*3600e3,fwd=jst(first).wi,start=first-fwd*DAY,todayK=dayKey(Date.now());
+  const last=new Date(Date.UTC(calY,calM,0)).getUTCDate(),cells=Math.ceil((fwd+last)/7)*7;
+  for(let n=0;n<cells;n++){
+    const ms=start+n*DAY+12*3600e3,j=jst(ms),k=dayKey(ms),evs=map.get(k)||[];
+    const b=el("button","day");b.type="button";
+    if(j.m!==calM)b.classList.add("out");if(j.wi===0)b.classList.add("sun");if(j.wi===6)b.classList.add("sat");
+    if(k===todayK)b.classList.add("today");if(k===selDay)b.classList.add("sel");
+    b.setAttribute("aria-label",`${j.m}月${j.d}日 ${evs.length?evs.length+"件":"なし"}`);
+    b.append(el("span","dn",String(j.d)));const dots=el("span","dots");evs.slice(0,4).forEach(e=>dots.append(el("i","dot "+e.cls)));b.append(dots);
+    b.onclick=()=>{selDay=k;render()};g.append(b);
+  }
+  const dl=$("dayList");dl.textContent="";const sj=jst(ts(selDay));
+  dl.append(el("h3",null,`${sj.m}/${sj.d}（${sj.w}）${selDay===todayK?" 今日":""}`));
+  if(!loaded){dl.append(el("div","empty","よみこみ中…"));return}
+  const evs=map.get(selDay)||[];
+  if(!evs.length)dl.append(el("div","empty","この日はなにもないよ"));
+  evs.forEach(e=>dl.append(card(e.it,e.kind)));
+}
+function renderTabs(all){
+  const t=$("tabs");t.textContent="";const cnt={go:0,undecided:0,pass:0,done:0};
+  all.filter(shown).forEach(x=>cnt[x._i.ph]++);
+  TABS.forEach(([k,l])=>{
+    const b=el("button","tab");b.type="button";b.setAttribute("role","tab");b.setAttribute("aria-selected",String(tab===k));
+    b.append(el("span",null,l),el("span","n",String(cnt[k])));
+    b.onclick=()=>{tab=k;userTab=true;remember();render()};t.append(b);
+  });
+}
+function bannerRank(it){
+  const f=focusOf(it);
+  if(f.kind==="past"||isNaN(f.ms))return[9,Infinity];
+  if(f.kind==="live")return[0,f.ms];
+  if(f.kind==="start")return[1,f.ms];
+  return[2,f.ms];
+}
+function renderNext(all){
+  const nx=$("next");
+  if(!loaded){nx.hidden=true;return}
+  const pool=all.filter(x=>(x._i.sub==="before"||x._i.sub==="undecided")&&bannerRank(x)[0]<9);
+  const by=(a,b)=>bannerRank(a)[0]-bannerRank(b)[0]||bannerRank(a)[1]-bannerRank(b)[1];
+  const it=pool.filter(x=>x._i.sub==="before").sort(by)[0]||pool.sort(by)[0];
+  if(!it){nx.hidden=true;return}
+  const cd=countText(it,true);
+  nx.hidden=false;
+  $("nextK").textContent=it._i.sub==="before"?"次の出演（見る）":"次の出演（未定）";
+  $("nextT").textContent=nameOf(it);
+  $("nextCd").textContent=cd.t;$("nextCd").className="cd"+(cd.u?" u":"");
+  $("nextW").textContent=whenLine(it);
+  nx.onclick=()=>openDetail(it);
+}
+function render(){
+  const all=items.map(it=>({...it,_i:info(it)}));
+  const tags=[...new Set(items.map(i=>i.tag).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"ja"));
+  const dl=$("tagList");dl.textContent="";tags.forEach(x=>{const o=el("option");o.value=x;dl.append(o)});
+  renderNext(all);
+  $("vList").setAttribute("aria-pressed",String(view==="list"));$("vCal").setAttribute("aria-pressed",String(view==="cal"));
+  $("listView").hidden=view!=="list";$("calView").hidden=view!=="cal";
+  if(view==="list"){renderTabs(all);renderList(all)}else renderCal(all);
+  if($("detail").open&&openId){const cur=items.find(x=>x.id===openId);if(cur)fillDetail(cur);else $("detail").close()}
+}
+function remember(){try{localStorage.setItem(UI_KEY,JSON.stringify({view,tab}))}catch(e){}}
+
+let openId=null;
+function openDetail(it){openId=it.id;fillDetail(it);if(!$("detail").open)$("detail").showModal()}
+function fillDetail(it){
+  const i=info(it),[,sc,lab]=look(it,i),B=$("detailBody"),now=Date.now();B.textContent="";
+  B.append(el("div","grab"));
+  const x=el("button","x","✕");x.type="button";x.setAttribute("aria-label","閉じる");x.onclick=()=>$("detail").close();B.append(x);
+  const mr=el("div","meta-row");
+  mr.append(el("span","stamp "+sc,lab));
+  if(it.tag)mr.append(el("span","tagt",it.tag));
+  mr.append(el("span","tagt",CATS[it.category]||"出演"));
+  if(it._custom)mr.append(el("span","tagt","自分で追加"));
+  B.append(mr);
+  B.append(el("h3",null,it.title||nameOf(it)));
+  if(i.ph==="go"||i.ph==="undecided"||i.sub==="fin")B.append(stepBar(i));
+  const rows=[];
+  if(it.start)rows.push([it.category==="stream"?"配信":"放送",it.start]);
+  if(it.end)rows.push([it.category==="stream"?"期限":"終了",it.end]);
+  if(rows.length){
+    const tl=el("ol","tl");let cur=-1;
+    rows.forEach((s,n)=>{if(cur<0&&ts(s[1])>now)cur=n});
+    rows.forEach((s,n)=>{
+      const li=el("li");if(n===cur)li.classList.add("now");else if(ts(s[1])<now)li.classList.add("done");
+      li.append(el("span","k",s[0]));
+      const v=el("span","v",fmt(s[1]));
+      if(n===cur){const L=left(ts(s[1]));if(L.long)v.append(el("span","rn",L.long))}
+      li.append(v);tl.append(li);
+    });
+    B.append(tl);
+  }
+  if(it.note)B.append(el("p","desc",it.note));
+  const page=safeUrl(it.url),xurl=safeUrl(it.xUrl);
+  if(page)B.append(extLink(page,"公式ページをひらく ↗","linkb"));
+  if(xurl)B.append(extLink(xurl,"公式Xをひらく ↗","linkb"));
+  if(focusOf(it).kind!=="past"&&i.ph!=="done"&&i.ph!=="pass")B.append(calBox(it));
+  const acts=actionsFor(it,i);
+  if(acts.length){const r=el("div","acts");acts.forEach(a=>r.append(pbtn(a,it)));B.append(r)}
+  const mn=el("div","minor");
+  const u=undoOf(i);
+  if(u){const b=el("button","txtb",i.ph==="pass"||i.ph==="done"?"もとに戻す":"未定に戻す");b.type="button";b.onclick=()=>save(it.id,u,snap(it),"戻したよ");mn.append(b)}else mn.append(el("span"));
+  if(it._custom){const e=el("button","txtb","編集");e.type="button";e.onclick=()=>{$("detail").close();openForm(it)};mn.append(e)}
+  B.append(mn);
+  if(it.source)B.append(el("div","src","出典："+it.source));
+}
+function openForm(it){
+  editing=it||null;$("dlgTitle").textContent=it?"編集":"自分で追加";$("saveBtn").textContent=it?"保存する":"登録する";
+  $("formMsg").textContent="";$("formMsg").className="msg";
+  $("fShort").value=it?nameOf(it):"";$("fTitle").value=it?.title||"";$("fCat").value=it?.category||"tv";$("fTag").value=it?.tag||"";
+  $("fStart").value=toIn(it?.start);$("fEnd").value=toIn(it?.end);
+  $("fDecision").value=it?.decision||(it?.status==="skip"&&it?.decision!=="yes"? "no":"");
+  $("fStatus").value=it?.status||"todo";$("fUrl").value=it?.url||"";$("fXUrl").value=it?.xUrl||"";$("fNote").value=it?.note||"";
+  const dr=$("delRow");dr.textContent="";dr.hidden=!it;
+  if(it){const d=el("button","txtb red","削除");d.type="button";d.onclick=()=>{dr.textContent="";dr.append(el("span","msg","本当に削除する？"));const y=el("button","txtb red","削除する");y.type="button";y.onclick=()=>{store.custom=store.custom.filter(x=>x.id!==it.id);persist();rebuild();render();$("dlg").close();toast("削除したよ")};const n=el("button","txtb","やめる");n.type="button";n.onclick=()=>openForm(it);dr.append(y,n)};dr.append(el("span"),d)}
+  if(!$("dlg").open)$("dlg").showModal();
+}
+function commit(ev){
+  if(ev)ev.preventDefault();
+  const msg=$("formMsg");msg.textContent="";msg.className="msg";
+  if(!$("fShort").value.trim()){$("fShort").reportValidity();return}
+  if(!$("fStart").value){$("fStart").reportValidity();return}
+  const start=fromIn($("fStart").value),end=fromIn($("fEnd").value);
+  if(end&&ts(end)<ts(start)){msg.textContent="終了は、開始よりあとにしてね";msg.className="msg err";return}
+  const dec=$("fDecision").value;let status=$("fStatus").value;
+  if(dec==="no"&&status==="todo")status="skip";
+  if(dec==="no"&&status==="watched")status="skip";
+  if(dec!=="no"&&status==="skip")status="todo";
+  if(dec===""&&status==="skip")status="todo";
+  const short=$("fShort").value.trim();
+  const data={short,title:$("fTitle").value.trim()||short,category:$("fCat").value,flow:"watch",tag:$("fTag").value.trim(),status,decision:dec,start,end,url:$("fUrl").value.trim(),xUrl:$("fXUrl").value.trim(),note:$("fNote").value.trim()};
+  if(editing){const cu=store.custom.find(x=>x.id===editing.id);if(cu)Object.assign(cu,data)}
+  else store.custom.push({id:"my-"+Date.now().toString(36),...data});
+  const ok=persist();rebuild();render();$("dlg").close();toast(ok?(editing?"保存したよ":"追加したよ"):"この端末に保存できなかった");
+}
+
+(function(){
+  try{
+    const s=JSON.parse(localStorage.getItem(UI_KEY)||"{}");
+    if(s.view==="list"||s.view==="cal")view=s.view;
+    if(TABS.some(t=>t[0]===s.tab)){tab=s.tab;userTab=true}
+  }catch(e){}
+  if(location.hash==="#list")view="list";
+  if(location.hash==="#calendar")view="cal";
+  const j=jst(Date.now());calY=j.y;calM=j.m;selDay=dayKey(Date.now());
+  $("vList").onclick=()=>{view="list";remember();render();scrollTo(0,0)};
+  $("vCal").onclick=()=>{view="cal";remember();render();scrollTo(0,0)};
+  $("prevM").onclick=()=>{if(--calM<1){calM=12;calY--}render()};
+  $("nextM").onclick=()=>{if(++calM>12){calM=1;calY++}render()};
+  $("todayBtn").onclick=()=>{const t=jst(Date.now());calY=t.y;calM=t.m;selDay=dayKey(Date.now());render()};
+  $("addBtn").onclick=()=>openForm(null);
+  $("cancelBtn").onclick=()=>$("dlg").close();
+  $("form").addEventListener("submit",commit);
+  $("detail").addEventListener("click",e=>{if(e.target===$("detail"))$("detail").close()});
+  $("dlg").addEventListener("click",e=>{if(e.target===$("dlg"))$("dlg").close()});
+  $("detail").addEventListener("close",()=>{openId=null});
+  render();setInterval(render,60e3);
+})();
+(async()=>{
+  loadStore();
+  try{const r=await fetch("appearances.json",{cache:"no-cache"});if(!r.ok)throw new Error("bad status");const j=await r.json();catalog=Array.isArray(j.items)?j.items:[];dataDate=j.updatedAt||""}
+  catch(e){toast("出演データを読み込めなかった。開き直してね")}
+  loaded=true;rebuild();
+  if(!userTab){const ph=items.map(info);if(!ph.some(x=>x.ph==="go")&&ph.some(x=>x.ph==="undecided"))tab="undecided"}
+  if(dataDate)$("dataDate").textContent=`データ更新：${dataDate.replace(/-/g,"/")}`;
+  render();
+})();
+</script>
+</body>
+</html>
