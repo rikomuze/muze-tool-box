@@ -151,11 +151,15 @@ h1{font-family:var(--f-hand);font-weight:600;font-size:26px;line-height:1.2;marg
 .seg button{border:none;background:none;min-height:42px;font-weight:700;font-size:14px;color:var(--faded);cursor:pointer}
 .seg button[aria-pressed="true"]{background:var(--berry-ink);color:var(--paper)}
 
-dialog{border:none;padding:0;background:var(--paper);color:var(--pencil);width:100%;max-width:560px;max-height:88vh;margin:auto auto 0;box-shadow:0 -10px 30px rgba(64,56,47,.2)}
-dialog::backdrop{background:rgba(64,56,47,.45)}
-@media (min-width:640px){dialog{margin:auto;max-height:84vh}}
-.sheet{padding:18px 18px calc(18px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:14px;position:relative}
-.grab{width:40px;height:4px;border-radius:2px;background:var(--line2);margin:-6px auto 0}
+/* dialog 自体はスクロールさせない。UA の overflow:auto のまま高さだけ画面いっぱいにすると、
+   動ける量がほぼ 0 のスクロールになり、下スワイプが背面のページへ伝わって一瞬固まる。 */
+dialog{border:none;padding:0;background:var(--paper);color:var(--pencil);width:100%;max-width:560px;max-height:88vh;margin:auto auto 0;box-shadow:0 -10px 30px rgba(64,56,47,.2);top:auto;bottom:0;height:auto;overflow:hidden;overscroll-behavior:none;display:flex;flex-direction:column}
+dialog::backdrop{background:rgba(64,56,47,.45);overflow:hidden;overscroll-behavior:none}
+html.modal-open,html.modal-open body{overscroll-behavior:none}
+.sheet{padding:8px 18px calc(18px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:14px;position:relative;flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y}
+@media (min-width:640px){dialog{top:0;bottom:0;height:fit-content;margin:auto;max-height:84vh}}
+.grab{width:40px;height:4px;border-radius:2px;background:var(--line2);margin:10px auto 2px;flex:none;touch-action:none;cursor:grab;position:relative}
+.grab::before{content:"";position:absolute;left:-80px;right:-80px;top:-12px;height:36px}
 .sheet h3{font-family:var(--f-hand);font-weight:600;font-size:19px;line-height:1.4;margin:0}
 .meta-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .stamp{font-size:12px;font-weight:700;padding:2px 10px;border:1.5px solid currentColor;border-radius:50%;transform:rotate(-2deg)}
@@ -180,7 +184,7 @@ dialog::backdrop{background:rgba(64,56,47,.45)}
 .minor-l{display:flex;gap:12px;align-items:center}
 .txtb{border:none;background:none;font-size:13px;font-weight:700;color:var(--berry-ink);text-decoration:underline;text-underline-offset:3px;cursor:pointer;min-height:40px;padding:0 4px}
 .txtb.red{color:var(--red)}
-.x{position:absolute;top:8px;right:8px;width:44px;height:44px;border:none;background:none;font-size:20px;cursor:pointer;color:var(--faded)}
+.x{position:absolute;top:8px;right:8px;width:44px;height:44px;border:none;background:none;font-size:20px;cursor:pointer;color:var(--faded);z-index:4}
 .calbox{display:flex;flex-direction:column;gap:8px;border-top:1.5px dashed var(--line);padding-top:12px}
 .calbox .cap{font-size:12px;font-weight:700;color:var(--faded)}
 .calrow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -266,12 +270,16 @@ details summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--faded)
   </div>
 </nav>
 
-<dialog id="detail"><div class="sheet" id="detailBody"></div></dialog>
+<dialog id="detail">
+  <div class="grab"></div>
+  <button type="button" class="x" id="detailX" aria-label="閉じる">✕</button>
+  <div class="sheet" id="detailBody"></div>
+</dialog>
 
 <dialog id="dlg">
+  <div class="grab"></div>
+  <button type="button" class="x" id="cancelBtn" aria-label="閉じる">✕</button>
   <form class="sheet" id="form">
-    <div class="grab"></div>
-    <button type="button" class="x" id="cancelBtn" aria-label="閉じる">✕</button>
     <h3 id="dlgTitle">自分で追加</h3>
     <div style="display:flex;flex-direction:column;gap:12px">
       <label for="fShort">なまえ（短く）<input id="fShort" required placeholder="例：DayDay. 生出演"></label>
@@ -678,11 +686,9 @@ function render(){
 function remember(){try{localStorage.setItem(UI_KEY,JSON.stringify({view,tab}))}catch(e){}}
 
 let openId=null;
-function openDetail(it){openId=it.id;fillDetail(it);if(!$("detail").open)$("detail").showModal()}
+function openDetail(it){openId=it.id;fillDetail(it);if(!$("detail").open)$("detail").showModal();lockPage()}
 function fillDetail(it){
   const i=info(it),[,sc,lab]=look(it,i),B=$("detailBody"),now=Date.now();B.textContent="";
-  B.append(el("div","grab"));
-  const x=el("button","x","✕");x.type="button";x.setAttribute("aria-label","閉じる");x.onclick=()=>$("detail").close();B.append(x);
   const mr=el("div","meta-row");
   mr.append(el("span","stamp "+sc,lab));
   if(it.tag)mr.append(el("span","tagt",it.tag));
@@ -728,6 +734,7 @@ function openForm(it){
   const dr=$("delRow");dr.textContent="";dr.hidden=!it;
   if(it){const d=el("button","txtb red","削除");d.type="button";d.onclick=()=>{dr.textContent="";dr.append(el("span","msg","本当に削除する？"));const y=el("button","txtb red","削除する");y.type="button";y.onclick=()=>{store.custom=store.custom.filter(x=>x.id!==it.id);persist();rebuild();render();$("dlg").close();toast("削除したよ")};const n=el("button","txtb","やめる");n.type="button";n.onclick=()=>openForm(it);dr.append(y,n)};dr.append(el("span"),d)}
   if(!$("dlg").open)$("dlg").showModal();
+  lockPage();
 }
 function commit(ev){
   if(ev)ev.preventDefault();
@@ -748,6 +755,99 @@ function commit(ev){
   const ok=persist();rebuild();render();$("dlg").close();toast(ok?(editing?"保存したよ":"追加したよ"):"この端末に保存できなかった");
 }
 
+/* シートを開いているあいだ、背面をスクロールさせない。position:fixed で戻すのは iOS でも効くため。 */
+function lockPage(){
+  if("lock" in document.body.dataset)return;
+  const y=window.scrollY||0;
+  document.body.dataset.lock=String(y);
+  document.documentElement.classList.add("modal-open");
+  document.body.style.position="fixed";
+  document.body.style.top=-y+"px";
+  document.body.style.left="0";
+  document.body.style.right="0";
+  document.body.style.width="100%";
+}
+function unlockPage(){
+  if($("detail").open||$("dlg").open)return;
+  if(!("lock" in document.body.dataset))return;
+  const y=+document.body.dataset.lock||0;
+  document.documentElement.classList.remove("modal-open");
+  document.body.style.position="";
+  document.body.style.top="";
+  document.body.style.left="";
+  document.body.style.right="";
+  document.body.style.width="";
+  delete document.body.dataset.lock;
+  window.scrollTo(0,y);
+}
+/* 取っ手だけをドラッグで閉じる。シート本体に touchmove の preventDefault は付けない（中のスクロールが主スレッド待ちになるため）。 */
+function bindSheetSwipe(dialog){
+  let pid=null,y0=0,lastY=0,lastT=0,vy=0,drag=false,gen=0;
+  const reduced=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
+  dialog.addEventListener("pointerdown",e=>{
+    if(!dialog.open||!e.target.closest(".grab"))return;
+    if(e.pointerType==="mouse"&&e.button!==0)return;
+    e.preventDefault();
+    gen++;
+    pid=e.pointerId;y0=lastY=e.clientY;lastT=performance.now();vy=0;drag=false;
+    dialog.setPointerCapture(e.pointerId);
+  });
+  dialog.addEventListener("pointermove",e=>{
+    if(e.pointerId!==pid)return;
+    const dy=e.clientY-y0,now=performance.now();
+    vy=(e.clientY-lastY)/Math.max(1,now-lastT);lastY=e.clientY;lastT=now;
+    if(dy<8)return;
+    if(!drag){drag=true;dialog.style.transition="none"}
+    dialog.style.transform="translate3d(0,"+dy+"px,0)";
+  });
+  function end(e){
+    if(e.pointerId!==pid)return;
+    const moved=drag,dy=Math.max(0,e.clientY-y0),v=vy;
+    pid=null;drag=false;
+    if(!moved){dialog.style.transition="";dialog.style.transform="";return}
+    /* ドラッグのあとに出るクリックが、閉じた下の「＋」やリンクに当たらないようにする */
+    const swallow=ev=>{ev.preventDefault();ev.stopPropagation();document.removeEventListener("click",swallow,true)};
+    document.addEventListener("click",swallow,true);
+    setTimeout(()=>document.removeEventListener("click",swallow,true),400);
+    const token=++gen;
+    const finish=()=>{
+      if(token!==gen)return;
+      dialog.removeEventListener("transitionend",finish);
+      dialog.style.transition="";dialog.style.transform="";
+    };
+    if(dy>96||v>0.65){
+      if(reduced()){if(dialog.open)dialog.close();return}
+      dialog.style.transition="transform .2s ease";
+      dialog.style.transform="translate3d(0,110%,0)";
+      const shut=ev=>{
+        if(ev&&ev.propertyName&&ev.propertyName!=="transform")return;
+        dialog.removeEventListener("transitionend",shut);
+        if(token!==gen)return;
+        if(dialog.open)dialog.close();
+      };
+      dialog.addEventListener("transitionend",shut);
+      setTimeout(shut,280);
+      return;
+    }
+    if(reduced()){finish();return}
+    dialog.style.transition="transform .2s ease";
+    dialog.style.transform="translate3d(0,0,0)";
+    dialog.addEventListener("transitionend",finish);
+    setTimeout(finish,280);
+  }
+  dialog.addEventListener("pointerup",end);
+  dialog.addEventListener("pointercancel",e=>{
+    if(e.pointerId!==pid)return;
+    pid=null;drag=false;gen++;
+    dialog.style.transition="";dialog.style.transform="";
+  });
+  dialog.addEventListener("close",()=>{
+    pid=null;drag=false;gen++;
+    dialog.style.transition="";dialog.style.transform="";
+    unlockPage();
+  });
+}
+
 (function(){
   try{
     const s=JSON.parse(localStorage.getItem(UI_KEY)||"{}");
@@ -763,11 +863,14 @@ function commit(ev){
   $("nextM").onclick=()=>{if(++calM>12){calM=1;calY++}render()};
   $("todayBtn").onclick=()=>{const t=jst(Date.now());calY=t.y;calM=t.m;selDay=dayKey(Date.now());render()};
   $("addBtn").onclick=()=>openForm(null);
+  $("detailX").onclick=()=>$("detail").close();
   $("cancelBtn").onclick=()=>$("dlg").close();
   $("form").addEventListener("submit",commit);
   $("detail").addEventListener("click",e=>{if(e.target===$("detail"))$("detail").close()});
   $("dlg").addEventListener("click",e=>{if(e.target===$("dlg"))$("dlg").close()});
   $("detail").addEventListener("close",()=>{openId=null});
+  bindSheetSwipe($("detail"));
+  bindSheetSwipe($("dlg"));
   render();setInterval(render,60e3);
 })();
 (async()=>{
