@@ -582,7 +582,12 @@ function stubEl(it,kind){
   if(!isD(s))st.append(el("span","tm",`${j.h}:${j.mi}`));
   return st;
 }
+/* 放送・配信の開始を過ぎてアーカイブや配信期間に入ったら、カードの日付は期限にする */
+const dueKind=it=>{const k=focusOf(it).kind;return(k==="archive"||k==="end")&&!isNaN(ts(it.end))?"end":"start"};
+const shownMs=it=>ts(dueKind(it)==="end"?it.end:it.start);
+const byShown=(a,b)=>(shownMs(a)||9e15)-(shownMs(b)||9e15);
 function card(it,kind){
+  kind=kind||dueKind(it);
   const i=info(it),[cc]=look(it,i);
   const c=el("article","card "+cc);c.dataset.id=it.id;
   if(/st-go|st-miss/.test(cc))c.append(el("span","tape"));
@@ -619,9 +624,9 @@ function renderList(all){
   const vis=all.filter(x=>shown(x)&&x._i.ph===tab),s=k=>vis.filter(x=>x._i.sub===k);
   let out=[];
   if(tab==="go"){
-    const miss=s("missed").sort(byStart),bef=s("before").sort(byStart);
+    const miss=s("missed").sort(byStart),bef=s("before").sort(byShown);
     out=[sec("終わったかも",miss),sec("これから視聴する",bef,(miss.length)?null:"まだないよ。「未定」で「視聴する」を押すとここに入るよ")];
-  }else if(tab==="undecided")out=[sec(null,vis.sort(byStart),"未定はないよ")];
+  }else if(tab==="undecided")out=[sec(null,vis.sort(byShown),"未定はないよ")];
   else if(tab==="pass")out=[sec(null,vis.sort(byStart),"視聴しないものはないよ")];
   else out=[sec(null,vis.sort((a,b)=>byStart(b,a)),"終わったものはまだないよ")];
   if(tab==="pass")out.push(el("p","src","放送や視聴期限を過ぎたものは、自動で外れるよ"));
