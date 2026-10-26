@@ -805,6 +805,10 @@ function bindSheetSwipe(dialog){
     const moved=drag,dy=Math.max(0,e.clientY-y0),v=vy;
     pid=null;drag=false;
     if(!moved){dialog.style.transition="";dialog.style.transform="";return}
+    /* ドラッグのあとに出るクリックが、閉じた下の「＋」やリンクに当たらないようにする */
+    const swallow=ev=>{ev.preventDefault();ev.stopPropagation();document.removeEventListener("click",swallow,true)};
+    document.addEventListener("click",swallow,true);
+    setTimeout(()=>document.removeEventListener("click",swallow,true),400);
     const token=++gen;
     const finish=()=>{
       if(token!==gen)return;
