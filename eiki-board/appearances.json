@@ -2,6 +2,20 @@
   "updatedAt": "2026-10-26",
   "items": [
     {
+      "id": "eiki-20261022-onemorning-catchup",
+      "short": "ONE MORNING ラジコ",
+      "title": "TOKYO FM「ONE MORNING」NAOYA・EIKI コメント出演（ラジコ聴き逃し）",
+      "category": "stream",
+      "flow": "watch",
+      "tag": "ONE MORNING",
+      "start": "2026-10-22T06:00:00+09:00",
+      "end": "2026-10-29T09:29:00+09:00",
+      "url": "https://radiko.jp/#!/ts/FMT/20261022060000",
+      "source": "mazzel_official / TOKYO FM ONE MORNING",
+      "note": "本放送は10/22(木)6:00-9:30終了済み（※8:38ごろコメント出演）。公式Xは生放送案内と番組URLのみで、ラジコ聴き逃し期限の明記なし。endはradikoタイムフリーの一般的な約7日（放送枠終了目安）の仮置き。URLは放送開始時刻から組み立てたタイムフリーパス（公式が聴き逃し用に貼ったリンクではない）。番組ページ: https://www.tfm.co.jp/one/",
+      "xUrl": "https://x.com/mazzel_official/status/2112879449159143744"
+    },
+    {
       "id": "eiki-20261024-hamatta-catchup",
       "short": "沼ハマ 見逃し",
       "title": "沼にハマってきいてみた 白熱！ドッジボール沼（EIKI・RYUKI）NHK ONE 見逃し配信",
@@ -12,8 +26,36 @@
       "end": "2026-10-31T20:29:00+09:00",
       "url": "https://www.web.nhk/tv/an/hamatta/pl/series-tep-KNY2YKWLG9/ep/YCWBRIRTKS",
       "source": "mazzel_official / NHK",
-      "note": "本放送は10/24(土)20:00-20:30終了済み。公式Xが見逃し配信URLを案内。視聴期限は公式X本文に明記がないため、本放送終了から約7日で仮置き",
+      "note": "本放送は10/24(土)20:00-20:30終了済み。公式Xが見逃し配信URLを案内。視聴期限はdeadline-board同項目に合わせ本放送終了から約7日（公式X本文に期限明記なし）",
       "xUrl": "https://x.com/mazzel_official/status/2113961016166162643"
+    },
+    {
+      "id": "eiki-20261026-musicline",
+      "short": "ミュージックライン 10/26",
+      "title": "NHK-FM「ミュージックライン」DJ NAOYA・EIKI／ゲストWATWING（八村倫太郎・桑山隆太）",
+      "category": "radio",
+      "flow": "watch",
+      "tag": "ミュージックライン",
+      "start": "2026-10-26T21:45:00+09:00",
+      "end": "2026-11-02T22:29:00+09:00",
+      "url": "https://www.nhk.or.jp/radio/ondemand/detail.html?p=Z9WGYY3GP5_01",
+      "source": "mazzel_official (RT nhk_musicjp) / NHK-FM",
+      "note": "10/26-28のDJがMAZZEL（NAOYA・EIKI）であることはmazzel_officialがRTしたnhk_musicjp週間予定に明記。放送時刻21:45-22:30はNHK番組ページのレギュラー枠（X本文に時刻なし）。endはNHKが案内する「放送終了から7日間」聴き逃しに合わせた仮置き。番組HP: https://www.nhk.jp/p/ml/rs/Z9WGYY3GP5/",
+      "xUrl": "https://x.com/mazzel_official/status/2113562100178235407"
+    },
+    {
+      "id": "eiki-20261027-musicline",
+      "short": "ミュージックライン 10/27",
+      "title": "NHK-FM「ミュージックライン」DJ NAOYA・EIKI／ゲストNOA",
+      "category": "radio",
+      "flow": "watch",
+      "tag": "ミュージックライン",
+      "start": "2026-10-27T21:45:00+09:00",
+      "end": "2026-11-03T22:29:00+09:00",
+      "url": "https://www.nhk.or.jp/radio/ondemand/detail.html?p=Z9WGYY3GP5_01",
+      "source": "mazzel_official (RT nhk_musicjp) / NHK-FM",
+      "note": "10/26-28のDJがMAZZEL（NAOYA・EIKI）であることはmazzel_officialがRTしたnhk_musicjp週間予定に明記。放送時刻21:45-22:30はNHK番組ページのレギュラー枠（X本文に時刻なし）。endはNHK「放送終了から7日間」聴き逃しに合わせた仮置き。",
+      "xUrl": "https://x.com/mazzel_official/status/2113562100178235407"
     },
     {
       "id": "eiki-20261028-dayday",
@@ -28,6 +70,20 @@
       "source": "mazzel_official / 日本テレビ",
       "note": "EIKI 生出演。出演枠の詳細時刻は公式投稿に記載なし",
       "xUrl": "https://x.com/mazzel_official/status/2113570627508744249"
+    },
+    {
+      "id": "eiki-20261028-musicline",
+      "short": "ミュージックライン 10/28",
+      "title": "NHK-FM「ミュージックライン」DJ NAOYA・EIKI／ゲストROIROM",
+      "category": "radio",
+      "flow": "watch",
+      "tag": "ミュージックライン",
+      "start": "2026-10-28T21:45:00+09:00",
+      "end": "2026-11-04T22:29:00+09:00",
+      "url": "https://www.nhk.or.jp/radio/ondemand/detail.html?p=Z9WGYY3GP5_01",
+      "source": "mazzel_official (RT nhk_musicjp) / NHK-FM",
+      "note": "10/26-28のDJがMAZZEL（NAOYA・EIKI）であることはmazzel_officialがRTしたnhk_musicjp週間予定に明記（ゲストROIROMも同投稿）。放送時刻21:45-22:30はNHK番組ページのレギュラー枠（X本文に時刻なし）。endはNHK「放送終了から7日間」聴き逃しに合わせた仮置き。",
+      "xUrl": "https://x.com/mazzel_official/status/2113562100178235407"
     },
     {
       "id": "eiki-20261030-chinmoku",
@@ -54,7 +110,7 @@
       "end": "2026-10-31T23:59:00+09:00",
       "url": "https://fod.fujitv.co.jp/title/502r/",
       "source": "mazzel_official / FOD",
-      "note": "EIKIは副店長としてレギュラー。第2回ゲストにRYUKI。10/31 12:00配信開始のオンデマンド。FODでの視聴期限は公式投稿に記載なし（終了日時は配信日の終わりで仮置き）",
+      "note": "EIKIは副店長としてレギュラー。第2回ゲストにRYUKI。10/31 12:00配信開始のオンデマンド。FODでの視聴期限は公式投稿に記載なし（endは配信日終了の仮置き）",
       "xUrl": "https://x.com/mazzel_official/status/2114533355597508669"
     }
   ]
