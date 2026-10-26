@@ -710,11 +710,11 @@ function fillDetail(it){
   const acts=actionsFor(it,i);
   if(acts.length){const r=el("div","acts");acts.forEach(a=>r.append(pbtn(a,it)));B.append(r)}
   if(focusOf(it).kind!=="past"&&i.ph!=="done"&&i.ph!=="pass")B.append(calBox(it));
-  const mn=el("div","minor"),left=el("div","minor-l");
+  const mn=el("div","minor"),side=el("div","minor-l");
   const u=undoOf(i);
-  if(u){const b=el("button","txtb",i.ph==="pass"||i.ph==="done"?"もとに戻す":"ひとつ前に戻す");b.type="button";b.onclick=()=>save(it.id,u,snap(it),"戻したよ");left.append(b)}
-  const sh=el("button","txtb","シェア");sh.type="button";sh.onclick=()=>shareItem(it);left.append(sh);
-  mn.append(left);
+  if(u){const b=el("button","txtb",i.ph==="pass"||i.ph==="done"?"もとに戻す":"ひとつ前に戻す");b.type="button";b.onclick=()=>save(it.id,u,snap(it),"戻したよ");side.append(b)}
+  const sh=el("button","txtb","シェア");sh.type="button";sh.onclick=()=>shareItem(it);side.append(sh);
+  mn.append(side);
   if(it._custom){const e=el("button","txtb","編集");e.type="button";e.onclick=()=>{$("detail").close();openForm(it)};mn.append(e)}
   B.append(mn);
 }
