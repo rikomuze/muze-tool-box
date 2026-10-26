@@ -347,11 +347,22 @@ function safeUrl(u){try{const x=new URL(u);if(x.protocol==="http:"||x.protocol==
 function endOfDay(ms){const j=jst(ms);return Date.UTC(j.y,j.m-1,j.d)-9*3600e3+DAY-60e3}
 /* 終了が空の自分用メモは、開始日の 23:59 まで「放送中」とみなす */
 function untilMs(it){const e=ts(it.end);if(!isNaN(e))return e;const s=ts(it.start);return isNaN(s)?NaN:endOfDay(s)}
+/* TV・ラジオで end が開始から半日以上あとなら、end は放送の終わりではなく聴き逃し・アーカイブの期限。
+   放送の終わりは airEnd に書く。airEnd がない（自分で追加したものなど）ときは開始から1時間を放送とみなす。 */
+const ARCHIVE_GAP=12*3600e3;
+function hasArchive(it){if(it.category==="stream")return false;const s=ts(it.start),e=ts(it.end);return!isNaN(s)&&!isNaN(e)&&e-s>ARCHIVE_GAP}
+function airEndMs(it){
+  if(!hasArchive(it))return untilMs(it);
+  const a=ts(it.airEnd),s=ts(it.start);
+  return!isNaN(a)&&a>s?a:s+3600e3;
+}
 function focusOf(it){
   const now=Date.now(),start=ts(it.start),until=untilMs(it),stream=it.category==="stream";
   if(!stream){
+    const air=airEndMs(it);
     if(!isNaN(start)&&start>now)return{ms:start,kind:"start"};
-    if(!isNaN(until)&&until>now)return{ms:until,kind:"live"};
+    if(!isNaN(air)&&air>now)return{ms:air,kind:"live"};
+    if(hasArchive(it)&&until>now)return{ms:until,kind:"archive"};
     return{ms:isNaN(until)?start:until,kind:"past"};
   }
   if(!isNaN(start)&&start>now)return{ms:start,kind:"start"};
@@ -364,11 +375,13 @@ function countText(it,long){
   if(f.kind==="past"||isNaN(f.ms))return{t:"",u:false};
   const L=left(f.ms);if(!L.t)return{t:"",u:false};
   const base=long?L.long:L.t;
+  if(f.kind==="archive")return{t:long?base:`アーカイブ期間中・${base}`,u:!!L.u};
   return{t:f.kind==="end"?`終了まで${base}`:base,u:!!L.u};
 }
 function whenLine(it){
   const f=focusOf(it);
-  if(f.kind==="live")return`放送中 · ${fmt(it.end||it.start)} まで`;
+  if(f.kind==="live")return`放送中 · ${fmt(hasArchive(it)?new Date(f.ms).toISOString():(it.end||it.start))} まで`;
+  if(f.kind==="archive")return`アーカイブ期間中 · ${fmt(it.end)} まで`;
   if(f.kind==="end")return`視聴期限 ${fmt(it.end)} まで`;
   if(it.start)return`${fmt(it.start)} から`;
   return fmt(it.end);
@@ -386,7 +399,7 @@ const utcStamp=ms=>new Date(ms).toISOString().replace(/[-:]/g,"").replace(/\.\d{
 const icsEsc=t=>String(t||"").replace(/\\/g,"\\\\").replace(/\r?\n/g,"\\n").replace(/([,;])/g,"\\$1");
 function icsFold(line){const out=[];let cur="";for(const ch of line){if(new TextEncoder().encode(cur+ch).length>73){out.push(cur);cur=" "+ch}else cur+=ch}out.push(cur);return out.join("\r\n")}
 function eventRange(it){
-  const s=ts(it.start),e=ts(it.end);
+  const s=ts(it.start),e=hasArchive(it)?airEndMs(it):ts(it.end);
   if(!isNaN(s)&&!isNaN(e)&&e>s)return{start:s,end:e};
   if(!isNaN(s))return{start:s,end:s+3600e3};
   if(!isNaN(e))return{start:e-3600e3,end:e};
@@ -431,7 +444,7 @@ function googleUrl(it){
 function calBox(it){
   const box=el("div","calbox");
   const f=focusOf(it);
-  box.append(el("span","cap",f.kind==="end"?"カレンダーに入れて、視聴期限の前に通知":"カレンダーに入れて、放送の前に通知"));
+  box.append(el("span","cap",f.kind==="end"||f.kind==="archive"?"カレンダーに入れて、視聴期限の前に通知":"カレンダーに入れて、放送の前に通知"));
   const row=el("div","calrow");
   const a=el("button","linkb main","カレンダーに追加");a.type="button";a.onclick=()=>addToCalendar(it);
   const g=el("a","linkb","Googleカレンダー ↗");g.href=googleUrl(it);g.target="_blank";g.rel="noopener noreferrer";
@@ -655,11 +668,13 @@ function renderTabs(all){
     b.onclick=()=>{tab=k;userTab=true;remember();render()};t.append(b);
   });
 }
+/* トップに出す順：いま放送中 → 次のリアタイ放送と、24時間以内に切れるアーカイブ・配信のうち早いほう → そのほかの期限 */
 function bannerRank(it){
   const f=focusOf(it);
   if(f.kind==="past"||isNaN(f.ms))return[9,Infinity];
   if(f.kind==="live")return[0,f.ms];
   if(f.kind==="start")return[1,f.ms];
+  if(f.ms-Date.now()<=DAY)return[1,f.ms];
   return[2,f.ms];
 }
 function renderNext(all){
@@ -703,7 +718,10 @@ function fillDetail(it){
   if(i.ph==="go"||i.ph==="undecided"||i.sub==="fin")B.append(stepBar(i));
   const rows=[];
   if(it.start)rows.push([it.category==="stream"?"配信":"放送",it.start]);
-  if(it.end)rows.push([it.category==="stream"?"期限":"終了",it.end]);
+  if(hasArchive(it)){
+    if(it.airEnd)rows.push(["終了",it.airEnd]);
+    rows.push(["アーカイブ期限",it.end]);
+  }else if(it.end)rows.push([it.category==="stream"?"期限":"終了",it.end]);
   if(rows.length){
     const tl=el("ol","tl");let cur=-1;
     rows.forEach((s,n)=>{if(cur<0&&ts(s[1])>now)cur=n});
