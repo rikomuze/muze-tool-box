@@ -40,7 +40,7 @@
       "end": "2026-11-02T22:29:00+09:00",
       "url": "https://www.nhk.or.jp/radio/ondemand/detail.html?p=Z9WGYY3GP5_01",
       "source": "mazzel_official (RT nhk_musicjp) / NHK-FM",
-      "note": "10/26-28のDJがMAZZEL（NAOYA・EIKI）であることはmazzel_officialがRTしたnhk_musicjp週間予定に明記。放送時刻21:45-22:30はNHK番組ページのレギュラー枠（X本文に時刻なし）。endはNHKが案内する「放送終了から7日間」聴き逃しに合わせた仮置き。番組HP: https://www.nhk.jp/p/ml/rs/Z9WGYY3GP5/",
+      "note": "10/26-28のDJがMAZZEL（NAOYA・EIKI）であることはmazzel_officialがRTしたnhk_musicjp週間予定に明記。放送時刻21:45-22:30はNHK番組ページのレギュラー枠（X本文に時刻なし）。聴き逃しはNHK公式FAQ「放送後7日間」、一覧 https://www.nhk.or.jp/radio/ondemand/detail.html?p=Z9WGYY3GP5_01（urlと同じ）。リアルタイムは https://www.nhk.or.jp/radio/player/?ch=fm 。番組HP: https://www.nhk.jp/p/ml/rs/Z9WGYY3GP5/",
       "xUrl": "https://x.com/mazzel_official/status/2113562100178235407"
     },
     {
@@ -54,7 +54,7 @@
       "end": "2026-11-03T22:29:00+09:00",
       "url": "https://www.nhk.or.jp/radio/ondemand/detail.html?p=Z9WGYY3GP5_01",
       "source": "mazzel_official (RT nhk_musicjp) / NHK-FM",
-      "note": "10/26-28のDJがMAZZEL（NAOYA・EIKI）であることはmazzel_officialがRTしたnhk_musicjp週間予定に明記。放送時刻21:45-22:30はNHK番組ページのレギュラー枠（X本文に時刻なし）。endはNHK「放送終了から7日間」聴き逃しに合わせた仮置き。",
+      "note": "10/26-28のDJがMAZZEL（NAOYA・EIKI）であることはmazzel_officialがRTしたnhk_musicjp週間予定に明記。放送時刻21:45-22:30はNHK番組ページのレギュラー枠（X本文に時刻なし）。聴き逃しはNHK公式FAQ「放送後7日間」、一覧 https://www.nhk.or.jp/radio/ondemand/detail.html?p=Z9WGYY3GP5_01（urlと同じ）。リアルタイムは https://www.nhk.or.jp/radio/player/?ch=fm 。番組HP: https://www.nhk.jp/p/ml/rs/Z9WGYY3GP5/",
       "xUrl": "https://x.com/mazzel_official/status/2113562100178235407"
     },
     {
@@ -68,8 +68,9 @@
       "end": "2026-10-28T11:10:00+09:00",
       "url": "https://www.ntv.co.jp/dayday/",
       "source": "mazzel_official / 日本テレビ",
-      "note": "EIKI 生出演。出演枠の詳細時刻は公式投稿に記載なし",
-      "xUrl": "https://x.com/mazzel_official/status/2113570627508744249"
+      "note": "EIKI 生出演。出演枠の詳細時刻は公式投稿に記載なし。見逃しは日テレ公式がTVerでコーナー単位配信することがある（番組シリーズ: https://tver.jp/series/srblmwjr8c）。10/28放送分のエピソードURLは未公開のためシリーズページを案内。全編配信とは限らない。",
+      "xUrl": "https://x.com/mazzel_official/status/2113570627508744249",
+      "watchUrl": "https://tver.jp/series/srblmwjr8c"
     },
     {
       "id": "eiki-20261028-musicline",
@@ -82,7 +83,7 @@
       "end": "2026-11-04T22:29:00+09:00",
       "url": "https://www.nhk.or.jp/radio/ondemand/detail.html?p=Z9WGYY3GP5_01",
       "source": "mazzel_official (RT nhk_musicjp) / NHK-FM",
-      "note": "10/26-28のDJがMAZZEL（NAOYA・EIKI）であることはmazzel_officialがRTしたnhk_musicjp週間予定に明記（ゲストROIROMも同投稿）。放送時刻21:45-22:30はNHK番組ページのレギュラー枠（X本文に時刻なし）。endはNHK「放送終了から7日間」聴き逃しに合わせた仮置き。",
+      "note": "10/26-28のDJがMAZZEL（NAOYA・EIKI）であることはmazzel_officialがRTしたnhk_musicjp週間予定に明記。放送時刻21:45-22:30はNHK番組ページのレギュラー枠（X本文に時刻なし）。聴き逃しはNHK公式FAQ「放送後7日間」、一覧 https://www.nhk.or.jp/radio/ondemand/detail.html?p=Z9WGYY3GP5_01（urlと同じ）。リアルタイムは https://www.nhk.or.jp/radio/player/?ch=fm 。番組HP: https://www.nhk.jp/p/ml/rs/Z9WGYY3GP5/",
       "xUrl": "https://x.com/mazzel_official/status/2113562100178235407"
     },
     {
@@ -96,8 +97,9 @@
       "end": "2026-10-30T23:00:00+09:00",
       "url": "https://www.fmfuji.jp/",
       "source": "mazzel_official / FM FUJI",
-      "note": "HAYATO・EIKI 生出演。※22時台出演（番組全体は21:00-23:00）",
-      "xUrl": "https://x.com/mazzel_official/status/2113900412667588797"
+      "note": "HAYATO・EIKI 生出演。※22時台出演（番組全体は21:00-23:00）。radiko生放送: https://radiko.jp/#!/live/FM-FUJI（局ID FM-FUJI、番組表で10/30 21:00-23:00確認）。放送回一覧/聴き逃し: https://radiko.jp/r_seasons/10001392。タイムフリー期限は公式投稿に明記なし（一般に約7日）。",
+      "xUrl": "https://x.com/mazzel_official/status/2113900412667588797",
+      "watchUrl": "https://radiko.jp/#!/live/FM-FUJI"
     },
     {
       "id": "eiki-20261031-ariya",

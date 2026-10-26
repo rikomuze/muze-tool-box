@@ -172,6 +172,8 @@ dialog::backdrop{background:rgba(64,56,47,.45)}
 .desc{font-size:13.5px;line-height:1.7;margin:0;overflow-wrap:anywhere}
 .src{font-size:11.5px;color:var(--faded)}
 .linkb{display:flex;align-items:center;justify-content:center;min-height:44px;border:1.5px solid var(--line2);font-weight:700;font-size:14px;text-decoration:none;color:var(--pencil);background:var(--paper)}
+.linkb.watch{border-color:var(--pencil);background:var(--desk)}
+.ext.watch{color:var(--berry-ink)}
 .acts{display:flex;gap:8px;flex-wrap:wrap}
 .acts .pb{flex:1;min-height:46px;font-size:14px}
 .minor{display:flex;justify-content:space-between;gap:8px;border-top:1.5px dashed var(--line);padding-top:10px}
@@ -289,6 +291,7 @@ details summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--faded)
             <label for="fStatus">進み具合<select id="fStatus"><option value="todo">まだ</option><option value="watched">見た</option><option value="skip">見送り</option></select></label>
           </div>
           <datalist id="tagList"></datalist>
+          <label for="fWatchUrl">見る・聴くURL（TVer・ラジコなど）<input type="url" id="fWatchUrl" placeholder="https://"></label>
           <label for="fUrl">公式のURL<input type="url" id="fUrl" placeholder="https://"></label>
           <label for="fXUrl">公式XのURL<input type="url" id="fXUrl" placeholder="https://x.com/"></label>
           <label for="fNote">メモ<textarea id="fNote"></textarea></label>
@@ -377,14 +380,15 @@ function eventRange(it){
   return null;
 }
 function anchorMs(it){const f=focusOf(it);if(f.kind!=="past"&&!isNaN(f.ms))return f.ms;const r=eventRange(it);return r?r.start:NaN}
-function calBody(it){return[it.title&&it.title!==nameOf(it)?it.title:"",it.note||"",it.url||"",it.xUrl||""].filter(Boolean).join("\n")}
+function calBody(it){return[it.title&&it.title!==nameOf(it)?it.title:"",it.note||"",it.watchUrl||"",it.url||"",it.xUrl||""].filter(Boolean).join("\n")}
+function primaryUrl(it){return safeUrl(it.watchUrl)||safeUrl(it.url)||safeUrl(it.xUrl)}
 function buildIcs(it){
   const now=Date.now(),range=eventRange(it),anchor=anchorMs(it);
   const L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//MUZE TOOL BOX//EIKI Board//JA","CALSCALE:GREGORIAN","METHOD:PUBLISH","BEGIN:VEVENT",
     "UID:"+String(it.id).replace(/[^\w.-]/g,"")+"@muze-tool-box","DTSTAMP:"+utcStamp(now),"SUMMARY:"+icsEsc("出演 "+nameOf(it))];
   if(range)L.push("DTSTART:"+utcStamp(range.start),"DTEND:"+utcStamp(range.end));
   const desc=calBody(it);if(desc)L.push("DESCRIPTION:"+icsEsc(desc));
-  const link=safeUrl(it.url)||safeUrl(it.xUrl);if(link)L.push("URL:"+link);
+  const link=primaryUrl(it);if(link)L.push("URL:"+link);
   if(!isNaN(anchor))getAlarms().forEach(k=>{const a=alarmMs(anchor,k);if(a>now&&a<anchor)L.push("BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:"+icsEsc("出演 "+nameOf(it)+"（"+ALARMS[k]+"）"),"TRIGGER;VALUE=DATE-TIME:"+utcStamp(a),"END:VALARM")});
   L.push("END:VEVENT","END:VCALENDAR");
   return L.map(icsFold).join("\r\n")+"\r\n";
@@ -402,7 +406,7 @@ function icsUrl(it){
   const al=getAlarms().map(k=>alarmMs(anchor,k)).filter(a=>a>now&&a<anchor).map(a=>new Date(a).toISOString());
   const q={t:("出演 "+nameOf(it)).slice(0,120),s:new Date(anchor).toISOString(),id:String(it.id).replace(/[^\w.-]/g,"").slice(0,64)};
   const desc=calBody(it).slice(0,1500);if(desc)q.d=desc;
-  const link=safeUrl(it.url)||safeUrl(it.xUrl);if(link)q.u=link.slice(0,500);
+  const link=primaryUrl(it);if(link)q.u=link.slice(0,500);
   if(al.length)q.a=al.join(",");
   return ICS_API+"?"+new URLSearchParams(q).toString();
 }
@@ -490,9 +494,38 @@ function toast(text,undo){
   document.body.append(t);tTimer=setTimeout(()=>t.remove(),4500);
 }
 function pbtn(a,it){const b=el("button","pb "+a.c,a.l);b.type="button";b.onclick=e=>{e.stopPropagation();save(it.id,a.p,snap(it),a.m)};return b}
+function hostKind(href){
+  let u;try{u=new URL(href)}catch(e){return null}
+  const host=u.hostname.replace(/^www\./,"");
+  const path=u.pathname+u.hash;
+  if(host==="tver.jp"||host.endsWith(".tver.jp"))return{label:"TVerで見る"};
+  if(host==="radiko.jp"||host.endsWith(".radiko.jp"))return{label:"ラジコで聴く"};
+  if(host==="web.nhk"||host.endsWith(".web.nhk"))return{label:"NHK ONEで見る"};
+  if(host==="fod.fujitv.co.jp")return{label:"FODで見る"};
+  if((host==="nhk.or.jp"||host.endsWith(".nhk.or.jp"))&&/\/radio\/(?:ondemand|player)/.test(path))return{label:"聴き逃しを聴く"};
+  return null;
+}
+function describeLink(href,role){
+  const safe=safeUrl(href);if(!safe)return null;
+  const k=hostKind(safe);
+  if(k)return{href:safe,label:k.label+" ↗",short:k.label+" ↗",watch:true};
+  if(role==="x")return{href:safe,label:"公式Xをひらく ↗",short:"公式X ↗",watch:false};
+  if(role==="page")return{href:safe,label:"公式ページをひらく ↗",short:"公式 ↗",watch:false};
+  return{href:safe,label:"見る・聴く ↗",short:"見る・聴く ↗",watch:true};
+}
+function linkItems(it){
+  const seen=new Set();
+  return[describeLink(it.watchUrl,"watch"),describeLink(it.url,"page"),describeLink(it.xUrl,"x")].filter(l=>l&&!seen.has(l.href)&&seen.add(l.href));
+}
 function extLink(href,label,cls){
   const a=el("a",cls||"ext",label);a.href=href;a.target="_blank";a.rel="noopener noreferrer";
   a.addEventListener("click",e=>e.stopPropagation());return a;
+}
+function appendLinks(parent,it,mode){
+  linkItems(it).forEach(l=>{
+    const cls=mode==="detail"?"linkb"+(l.watch?" watch":""):"ext"+(l.watch?" watch":"");
+    parent.append(extLink(l.href,mode==="detail"?l.label:l.short,cls));
+  });
 }
 
 function stubEl(it,kind){
@@ -525,9 +558,7 @@ function card(it,kind){
   const acts=actionsFor(it,i);
   if(acts.length){const a=el("div","act"+(acts.length>1?" two":""));acts.forEach(x=>a.append(pbtn(x,it)));c.append(a)}
   const links=el("div","links");
-  const page=safeUrl(it.url),xurl=safeUrl(it.xUrl);
-  if(page)links.append(extLink(page,"公式 ↗"));
-  if(xurl)links.append(extLink(xurl,"公式X ↗"));
+  appendLinks(links,it,"card");
   if(links.childNodes.length){c.append(links);c.classList.add("has-links")}
   return c;
 }
@@ -656,13 +687,11 @@ function fillDetail(it){
     });
     B.append(tl);
   }
-  if(it.note)B.append(el("p","desc",it.note));
-  const page=safeUrl(it.url),xurl=safeUrl(it.xUrl);
-  if(page)B.append(extLink(page,"公式ページをひらく ↗","linkb"));
-  if(xurl)B.append(extLink(xurl,"公式Xをひらく ↗","linkb"));
-  if(focusOf(it).kind!=="past"&&i.ph!=="done"&&i.ph!=="pass")B.append(calBox(it));
+  appendLinks(B,it,"detail");
   const acts=actionsFor(it,i);
   if(acts.length){const r=el("div","acts");acts.forEach(a=>r.append(pbtn(a,it)));B.append(r)}
+  if(focusOf(it).kind!=="past"&&i.ph!=="done"&&i.ph!=="pass")B.append(calBox(it));
+  if(it.note)B.append(el("p","desc",it.note));
   const mn=el("div","minor");
   const u=undoOf(i);
   if(u){const b=el("button","txtb",i.ph==="pass"||i.ph==="done"?"もとに戻す":"未定に戻す");b.type="button";b.onclick=()=>save(it.id,u,snap(it),"戻したよ");mn.append(b)}else mn.append(el("span"));
@@ -676,7 +705,7 @@ function openForm(it){
   $("fShort").value=it?nameOf(it):"";$("fTitle").value=it?.title||"";$("fCat").value=it?.category||"tv";$("fTag").value=it?.tag||"";
   $("fStart").value=toIn(it?.start);$("fEnd").value=toIn(it?.end);
   $("fDecision").value=it?.decision||(it?.status==="skip"&&it?.decision!=="yes"? "no":"");
-  $("fStatus").value=it?.status||"todo";$("fUrl").value=it?.url||"";$("fXUrl").value=it?.xUrl||"";$("fNote").value=it?.note||"";
+  $("fStatus").value=it?.status||"todo";$("fWatchUrl").value=it?.watchUrl||"";$("fUrl").value=it?.url||"";$("fXUrl").value=it?.xUrl||"";$("fNote").value=it?.note||"";
   const dr=$("delRow");dr.textContent="";dr.hidden=!it;
   if(it){const d=el("button","txtb red","削除");d.type="button";d.onclick=()=>{dr.textContent="";dr.append(el("span","msg","本当に削除する？"));const y=el("button","txtb red","削除する");y.type="button";y.onclick=()=>{store.custom=store.custom.filter(x=>x.id!==it.id);persist();rebuild();render();$("dlg").close();toast("削除したよ")};const n=el("button","txtb","やめる");n.type="button";n.onclick=()=>openForm(it);dr.append(y,n)};dr.append(el("span"),d)}
   if(!$("dlg").open)$("dlg").showModal();
@@ -694,7 +723,7 @@ function commit(ev){
   if(dec!=="no"&&status==="skip")status="todo";
   if(dec===""&&status==="skip")status="todo";
   const short=$("fShort").value.trim();
-  const data={short,title:$("fTitle").value.trim()||short,category:$("fCat").value,flow:"watch",tag:$("fTag").value.trim(),status,decision:dec,start,end,url:$("fUrl").value.trim(),xUrl:$("fXUrl").value.trim(),note:$("fNote").value.trim()};
+  const data={short,title:$("fTitle").value.trim()||short,category:$("fCat").value,flow:"watch",tag:$("fTag").value.trim(),status,decision:dec,start,end,watchUrl:$("fWatchUrl").value.trim(),url:$("fUrl").value.trim(),xUrl:$("fXUrl").value.trim(),note:$("fNote").value.trim()};
   if(editing){const cu=store.custom.find(x=>x.id===editing.id);if(cu)Object.assign(cu,data)}
   else store.custom.push({id:"my-"+Date.now().toString(36),...data});
   const ok=persist();rebuild();render();$("dlg").close();toast(ok?(editing?"保存したよ":"追加したよ"):"この端末に保存できなかった");
