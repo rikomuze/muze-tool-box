@@ -177,6 +177,7 @@ dialog::backdrop{background:rgba(64,56,47,.45)}
 .acts{display:flex;gap:8px;flex-wrap:wrap}
 .acts .pb{flex:1;min-height:46px;font-size:14px}
 .minor{display:flex;justify-content:space-between;gap:8px;border-top:1.5px dashed var(--line);padding-top:10px}
+.minor-l{display:flex;gap:12px;align-items:center}
 .txtb{border:none;background:none;font-size:13px;font-weight:700;color:var(--faded);text-decoration:underline;text-underline-offset:3px;cursor:pointer;min-height:40px;padding:0 4px}
 .txtb.red{color:var(--red)}
 .x{position:absolute;top:8px;right:8px;width:44px;height:44px;border:none;background:none;font-size:20px;cursor:pointer;color:var(--faded)}
@@ -380,7 +381,7 @@ function eventRange(it){
   return null;
 }
 function anchorMs(it){const f=focusOf(it);if(f.kind!=="past"&&!isNaN(f.ms))return f.ms;const r=eventRange(it);return r?r.start:NaN}
-function calBody(it){return[it.title&&it.title!==nameOf(it)?it.title:"",it.note||"",it.watchUrl||"",it.url||"",it.xUrl||""].filter(Boolean).join("\n")}
+function calBody(it){return[it.title&&it.title!==nameOf(it)?it.title:"",it.watchUrl||"",it.url||"",it.xUrl||""].filter(Boolean).join("\n")}
 function primaryUrl(it){return safeUrl(it.watchUrl)||safeUrl(it.url)||safeUrl(it.xUrl)}
 function buildIcs(it){
   const now=Date.now(),range=eventRange(it),anchor=anchorMs(it);
@@ -460,10 +461,10 @@ function actionsFor(it,i){
   return[];
 }
 function undoOf(i){
-  if(i.sub==="fin")return{status:"todo"};
-  if(i.sub==="closed")return{status:"todo",decision:"yes"};
+  if(i.sub==="fin")return{status:"todo",decision:"yes"};
+  if(i.sub==="closed")return{status:"todo"};
   if(i.sub==="pass")return{status:"todo",decision:""};
-  if(i.sub==="before")return{decision:"",status:"todo"};
+  if(i.sub==="before"||i.sub==="missed")return{decision:""};
   return null;
 }
 function stepBar(i){
@@ -526,6 +527,24 @@ function appendLinks(parent,it,mode){
     const cls=mode==="detail"?"linkb"+(l.watch?" watch":""):"ext"+(l.watch?" watch":"");
     parent.append(extLink(l.href,mode==="detail"?l.label:l.short,cls));
   });
+}
+function shareTarget(it){
+  return safeUrl(it.watchUrl)||safeUrl(it.url)||location.href.split("#")[0];
+}
+async function shareItem(it){
+  const title=it.title||nameOf(it),url=shareTarget(it),text=title+"\n"+url;
+  if(navigator.share){
+    try{await navigator.share({title,text,url});return}
+    catch(e){if(e&&e.name==="AbortError")return}
+  }
+  try{
+    if(navigator.clipboard&&navigator.clipboard.writeText){await navigator.clipboard.writeText(text);toast("コピーしたよ");return}
+  }catch(e){}
+  const ta=document.createElement("textarea");
+  ta.value=text;ta.setAttribute("readonly","");ta.style.position="fixed";ta.style.left="-9999px";
+  document.body.append(ta);ta.select();
+  let ok=false;try{ok=document.execCommand("copy")}catch(e){}
+  ta.remove();toast(ok?"コピーしたよ":"コピーできなかった");
 }
 
 function stubEl(it,kind){
@@ -691,13 +710,13 @@ function fillDetail(it){
   const acts=actionsFor(it,i);
   if(acts.length){const r=el("div","acts");acts.forEach(a=>r.append(pbtn(a,it)));B.append(r)}
   if(focusOf(it).kind!=="past"&&i.ph!=="done"&&i.ph!=="pass")B.append(calBox(it));
-  if(it.note)B.append(el("p","desc",it.note));
-  const mn=el("div","minor");
+  const mn=el("div","minor"),side=el("div","minor-l");
   const u=undoOf(i);
-  if(u){const b=el("button","txtb",i.ph==="pass"||i.ph==="done"?"もとに戻す":"未定に戻す");b.type="button";b.onclick=()=>save(it.id,u,snap(it),"戻したよ");mn.append(b)}else mn.append(el("span"));
+  if(u){const b=el("button","txtb",i.ph==="pass"||i.ph==="done"?"もとに戻す":"ひとつ前に戻す");b.type="button";b.onclick=()=>save(it.id,u,snap(it),"戻したよ");side.append(b)}
+  const sh=el("button","txtb","シェア");sh.type="button";sh.onclick=()=>shareItem(it);side.append(sh);
+  mn.append(side);
   if(it._custom){const e=el("button","txtb","編集");e.type="button";e.onclick=()=>{$("detail").close();openForm(it)};mn.append(e)}
   B.append(mn);
-  if(it.source)B.append(el("div","src","出典："+it.source));
 }
 function openForm(it){
   editing=it||null;$("dlgTitle").textContent=it?"編集":"自分で追加";$("saveBtn").textContent=it?"保存する":"登録する";
