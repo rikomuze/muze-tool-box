@@ -244,7 +244,7 @@ details summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--faded)
           <button class="nav" id="nextM" type="button" aria-label="次の月">›</button>
         </div>
         <div class="legend">
-          <span><i class="dot d-go"></i>見る</span>
+          <span><i class="dot d-go"></i>視聴する</span>
           <span><i class="dot d-undecided"></i>未定</span>
           <span><i class="dot d-won"></i>見た</span>
           <span><i class="dot d-due d-result"></i>視聴期限</span>
@@ -258,7 +258,7 @@ details summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--faded)
 
 <footer class="foot">
   <a class="home" href="https://rikomuze.github.io/muze-tool-box/">← ホームに戻る</a>
-  <p>見る・見ない・見たなどの記録は、この端末のブラウザにだけ保存されます。</p>
+  <p>視聴する・見ない・見たなどの記録は、この端末のブラウザにだけ保存されます。</p>
   <p>MAZZEL EIKIのテレビ・ラジオ出演を整理する非公式ファンメイドツールです。BMSG・MAZZEL公式とは関係ありません。日時は公式Xの告知をもとにしていますが、変わることがあるので、視聴の前に必ず公式の発表を確認してね。</p>
   <p id="dataDate"></p>
 </footer>
@@ -290,7 +290,7 @@ details summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--faded)
         <label for="fEnd">終了・視聴期限（任意）<input type="datetime-local" id="fEnd"></label>
       </div>
       <div class="g2">
-        <label for="fDecision">自分の予定<select id="fDecision"><option value="">未定</option><option value="yes">見る</option><option value="no">見ない</option></select></label>
+        <label for="fDecision">自分の予定<select id="fDecision"><option value="">未定</option><option value="yes">視聴する</option><option value="no">見ない</option></select></label>
         <label for="fCat">種類<select id="fCat"><option value="tv">TV</option><option value="radio">ラジオ</option><option value="stream">見逃し・配信</option></select></label>
       </div>
       <details>
@@ -302,7 +302,7 @@ details summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--faded)
             <label for="fStatus">進み具合<select id="fStatus"><option value="todo">まだ</option><option value="watched">見た</option><option value="skip">見送り</option></select></label>
           </div>
           <datalist id="tagList"></datalist>
-          <label for="fWatchUrl">見る・聴くURL（TVer・ラジコなど）<input type="url" id="fWatchUrl" placeholder="https://"></label>
+          <label for="fWatchUrl">視聴するURL（TVer・ラジコなど）<input type="url" id="fWatchUrl" placeholder="https://"></label>
           <label for="fUrl">公式のURL<input type="url" id="fUrl" placeholder="https://"></label>
           <label for="fXUrl">公式XのURL<input type="url" id="fXUrl" placeholder="https://x.com/"></label>
           <label for="fNote">メモ<textarea id="fNote"></textarea></label>
@@ -319,7 +319,7 @@ details summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--faded)
 
 <script>
 const CATS={tv:"TV",radio:"ラジオ",stream:"見逃し・配信"};
-const TABS=[["go","見る"],["undecided","未定"],["pass","見ない"],["done","終わった"]];
+const TABS=[["go","視聴する"],["undecided","未定"],["pass","見ない"],["done","終わった"]];
 const WD=["日","月","火","水","木","金","土"],DAY=864e5;
 const KEY="muze-eiki-board:v1";
 const UI_KEY="muze-eiki-board:ui";
@@ -459,12 +459,12 @@ function info(it){
 }
 function look(it,i){
   const missed=it.category==="stream"?"配信おわった":"放送おわった";
-  return{before:["st-go","go","見る"],missed:["st-miss","miss",missed],undecided:["st-undecided","undecided","未定"],
+  return{before:["st-go","go","視聴する"],missed:["st-miss","miss",missed],undecided:["st-undecided","undecided","未定"],
     pass:["st-off st-pass","off","見ない"],fin:["st-off","off","見た"],closed:["st-off","off","見逃した"],expired:["st-off","off","終了"]}[i.sub];
 }
 function actionsFor(it,i){
   switch(i.sub){
-    case"undecided":return[{l:"見る",c:"berry",p:{decision:"yes",status:"todo"},m:"「見る」に入れたよ"},{l:"見ない",c:"ghost",p:{decision:"no",status:"skip"},m:"「見ない」に移したよ"}];
+    case"undecided":return[{l:"視聴する",c:"berry",p:{decision:"yes",status:"todo"},m:"「視聴する」に入れたよ"},{l:"見ない",c:"ghost",p:{decision:"no",status:"skip"},m:"「見ない」に移したよ"}];
     case"before":return[{l:"見た",c:"",p:{status:"watched"},m:"見たにしたよ"}];
     case"missed":return[{l:"見た",c:"",p:{status:"watched"},m:"見たにしたよ"},{l:"見逃した",c:"ghost",p:{status:"skip",decision:"yes"},m:"終わったに移したよ"}];
   }
@@ -478,7 +478,7 @@ function undoOf(i){
   return null;
 }
 function stepBar(i){
-  const S=["見る","見た"];let n=0;
+  const S=["視聴する","見た"];let n=0;
   if(i.sub==="before"||i.sub==="missed")n=1;else if(i.sub==="fin")n=S.length;
   const w=el("span","steps");
   S.forEach((l,k)=>{if(k)w.append(el("i","sep","›"));w.append(el("span","stp"+(k<n?" ok":k===n?" cur":""),(k<n?"✓ ":"")+l))});
@@ -509,10 +509,10 @@ function hostKind(href){
   let u;try{u=new URL(href)}catch(e){return null}
   const host=u.hostname.replace(/^www\./,"");
   const path=u.pathname+u.hash;
-  if(host==="tver.jp"||host.endsWith(".tver.jp"))return{label:"TVerで見る"};
+  if(host==="tver.jp"||host.endsWith(".tver.jp"))return{label:"TVerで視聴する"};
   if(host==="radiko.jp"||host.endsWith(".radiko.jp"))return{label:"ラジコで聴く"};
-  if(host==="web.nhk"||host.endsWith(".web.nhk"))return{label:"NHK ONEで見る"};
-  if(host==="fod.fujitv.co.jp")return{label:"FODで見る"};
+  if(host==="web.nhk"||host.endsWith(".web.nhk"))return{label:"NHK ONEで視聴する"};
+  if(host==="fod.fujitv.co.jp")return{label:"FODで視聴する"};
   if((host==="nhk.or.jp"||host.endsWith(".nhk.or.jp"))&&/\/radio\/(?:ondemand|player)/.test(path))return{label:"聴き逃しを聴く"};
   return null;
 }
@@ -522,7 +522,7 @@ function describeLink(href,role){
   if(k)return{href:safe,label:k.label+" ↗",short:k.label+" ↗",watch:true};
   if(role==="x")return{href:safe,label:"公式Xをひらく ↗",short:"公式X ↗",watch:false};
   if(role==="page")return{href:safe,label:"公式ページをひらく ↗",short:"公式 ↗",watch:false};
-  return{href:safe,label:"見る・聴く ↗",short:"見る・聴く ↗",watch:true};
+  return{href:safe,label:"視聴する ↗",short:"視聴する ↗",watch:true};
 }
 function linkItems(it){
   const seen=new Set();
@@ -605,7 +605,7 @@ function renderList(all){
   let out=[];
   if(tab==="go"){
     const miss=s("missed").sort(byStart),bef=s("before").sort(byStart);
-    out=[sec("終わったかも",miss),sec("これから見る",bef,(miss.length)?null:"まだないよ。「未定」で「見る」を押すとここに入るよ")];
+    out=[sec("終わったかも",miss),sec("これから視聴する",bef,(miss.length)?null:"まだないよ。「未定」で「視聴する」を押すとここに入るよ")];
   }else if(tab==="undecided")out=[sec(null,vis.sort(byStart),"未定はないよ")];
   else if(tab==="pass")out=[sec(null,vis.sort(byStart),"見ないものはないよ")];
   else out=[sec(null,vis.sort((a,b)=>byStart(b,a)),"終わったものはまだないよ")];
@@ -669,7 +669,7 @@ function renderNext(all){
   if(!it){nx.hidden=true;return}
   const cd=countText(it,true);
   nx.hidden=false;
-  $("nextK").textContent=it._i.sub==="before"?"次の出演（見る）":"次の出演（未定）";
+  $("nextK").textContent=it._i.sub==="before"?"次の出演（視聴する）":"次の出演（未定）";
   $("nextT").textContent=nameOf(it);
   $("nextCd").textContent=cd.t;$("nextCd").className="cd"+(cd.u?" u":"");
   $("nextW").textContent=whenLine(it);
@@ -883,6 +883,45 @@ function bindSheetSwipe(dialog){
   if(!userTab){const ph=items.map(info);if(!ph.some(x=>x.ph==="go")&&ph.some(x=>x.ph==="undecided"))tab="undecided"}
   if(dataDate)$("dataDate").textContent=`データ更新：${dataDate.replace(/-/g,"/")}`;
   render();
+})();
+</script>
+<script>
+/* 新しい版が出ていたら読み込み直す。ホーム画面に追加したアプリは開きっぱなしで再読み込みされないため。
+   版番号は持たず、サーバーのページとデータを取り直して前回と比べるので、更新時に手で書き換えるものはない。
+   - 起動時：取り直したページに、いま動いている style/script がそのまま入っていなければ古い版なので読み込み直す
+   - 画面に戻ったとき：ページか出演データが起動時から変わっていれば読み込み直す
+   シートを開いて入力している間は読み込み直さず、閉じてから確かめる。 */
+(()=>{
+  const SELF=["eiki-board/","eiki-board/index.html"].some(p=>location.pathname.endsWith(p))?location.pathname:null;
+  if(!SELF)return;
+  const GUARD="eiki-board-reloaded-at";
+  const own=[...document.querySelectorAll("style,script:not([src])")].map(n=>n.textContent).filter(t=>t.trim().length>40);
+  let base=null,checking=false,lastCheck=0;
+  const get=async url=>{const r=await fetch(url,{cache:"no-store"});if(!r.ok)throw new Error("bad status");return r.text()};
+  const snapshot=async()=>{const[page,data]=await Promise.all([get(SELF),get("appearances.json")]);return{page,data}};
+  const busy=()=>[...document.querySelectorAll("dialog")].some(d=>d.open);
+  const reload=()=>{
+    try{const t=Number(sessionStorage.getItem(GUARD)||0);if(Date.now()-t<30e3)return;sessionStorage.setItem(GUARD,String(Date.now()))}catch(e){}
+    location.reload();
+  };
+  const check=async()=>{
+    if(checking||document.visibilityState!=="visible"||Date.now()-lastCheck<20e3)return;
+    checking=true;lastCheck=Date.now();
+    try{
+      const now=await snapshot();
+      if(!base){
+        if(!own.every(t=>now.page.includes(t))){if(!busy())reload();return}
+        base=now;return;
+      }
+      if(now.page!==base.page||now.data!==base.data){if(busy())lastCheck=0;else reload()}
+    }catch(e){/* 電波がないときなどは次の機会に */}
+    finally{checking=false}
+  };
+  document.addEventListener("visibilitychange",check);
+  addEventListener("pageshow",e=>{if(e.persisted)check()});
+  addEventListener("focus",check);
+  document.querySelectorAll("dialog").forEach(d=>d.addEventListener("close",()=>{if(!base||lastCheck===0)check()}));
+  check();
 })();
 </script>
 </body>
