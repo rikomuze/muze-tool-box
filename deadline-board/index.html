@@ -270,7 +270,7 @@ details summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--faded)
           <button class="nav" id="nextM" type="button" aria-label="次の月">›</button>
         </div>
         <div class="legend">
-          <span><i class="dot d-go"></i>応募する</span>
+          <span><i class="dot d-go"></i>やること</span>
           <span><i class="dot d-undecided"></i>未定</span>
           <span><i class="dot d-wait d-result"></i>当落</span>
         </div>
@@ -354,7 +354,7 @@ const VERB={
   ticket:{yes:"応募する",no:"しない",did:"応募した"},serial:{yes:"応募する",no:"しない",did:"応募した"},event:{yes:"応募する",no:"しない",did:"応募した"},
   payment:{yes:"払う",no:"払わない",did:"払った",fin:"paid"},stream:{yes:"見る",no:"見ない",did:"見た",fin:"watched"},goods:{yes:"買う",no:"買わない",did:"買った",fin:"paid"}
 };
-const TABS=[["go","応募する","rgba(226,122,148,.85)"],["undecided","未定","rgba(64,56,47,.25)"],["pass","しない","rgba(64,56,47,.25)"],["done","終わった","rgba(164,197,175,.9)"]];
+const TABS=[["go","やること","rgba(226,122,148,.85)"],["undecided","未定","rgba(64,56,47,.25)"],["pass","しない","rgba(64,56,47,.25)"],["done","終わった","rgba(164,197,175,.9)"]];
 const WD=["日","月","火","水","木","金","土"],DAY=864e5;
 const KEY="muze-deadline-board:v1";
 let catalog=[],store={state:{},custom:[]},items=[],loaded=false,dataDate="";
