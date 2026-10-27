@@ -377,6 +377,20 @@
       "end": "2026-11-01T23:59:00+09:00",
       "note": "10/25実施の館内放送。RAN・HAYATO出演。FC会員限定。11/1 23:59まで公開。",
       "source": "MUZEUMアーカイブ画面（ユーザー提供）"
+    },
+    {
+      "id": "fukuoka-music-fes-2027-presale-20261108",
+      "short": "福岡 MUSIC FES. 先行抽選",
+      "title": "FUKUOKA MUSIC FES. 2027 supported by Trunk 先行抽選 受付締切",
+      "category": "ticket",
+      "flow": "lottery",
+      "tag": "福岡 MUSIC FES.",
+      "start": "2026-10-27T18:00:00+09:00",
+      "end": "2026-11-08T23:59:00+09:00",
+      "resultAt": "2026-11-12T18:00:00+09:00",
+      "resultNote": "11/12(木)18:00頃から順次",
+      "note": "公演：2027/1/30(土)10:20開演（9:00開場）、みずほPayPayドーム福岡。スクリーンショット記載の先行抽選。申し込み先URL未確認。",
+      "source": "チケット受付画面（ユーザー提供）"
     }
   ]
 }
