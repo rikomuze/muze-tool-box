@@ -1,0 +1,82 @@
+{
+  "updatedAt": "2026-10-27",
+  "note": "MAZZELのテレビ・ラジオ・配信の出演。start=放送・配信の開始、airEnd=放送の終了（なければ放送中の表示はしない）。見逃し・聴き逃しの期限は deadlines.json に入れる。",
+  "items": [
+    {
+      "id": "app-20261027-utacon",
+      "short": "うたコン",
+      "title": "NHK「うたコン」ユーミン特集（「真夏の夜の夢」カバー／「Touch」）",
+      "media": "tv",
+      "station": "NHK総合",
+      "start": "2026-10-27T19:57:00+09:00",
+      "airEnd": "2026-10-27T20:42:00+09:00",
+      "url": "https://www.thefirsttimes.jp/news/0000906212/",
+      "note": "NHKホールから生放送。ユーミン特集で「真夏の夜の夢」を今回のための振り付きでカバー、番組後半で「Touch」も歌唱予定。NHK ONEで同時配信、放送後1週間の見逃し配信あり。",
+      "source": "THE FIRST TIMES"
+    },
+    {
+      "id": "app-20261027-musicline",
+      "short": "ミュージックライン",
+      "title": "NHK-FM「ミュージックライン」DJ NAOYA・EIKI／ゲストNOA",
+      "media": "radio",
+      "station": "NHK-FM",
+      "start": "2026-10-27T21:45:00+09:00",
+      "airEnd": "2026-10-27T22:30:00+09:00",
+      "url": "https://www.nhk.or.jp/radio/ondemand/detail.html?p=Z9WGYY3GP5_01",
+      "note": "10/26-28のDJがMAZZEL（NAOYA・EIKI）であることはmazzel_officialがRTしたnhk_musicjp週間予定に明記。放送時刻21:45-22:30はNHK番組ページのレギュラー枠（X本文に時刻なし）。聴き逃しはNHK公式FAQ「放送後7日間」、一覧 https://www.nhk.or.jp/radio/ondemand/detail.html?p=Z9WGYY3GP5_01（urlと同じ）。リアルタイムは https://www.nhk.or.jp/radio/player/?ch=fm 。番組HP: https://www.nhk.jp/p/ml/rs/Z9WGYY3GP5/",
+      "source": "mazzel_official (RT nhk_musicjp) / NHK-FM",
+      "xUrl": "https://x.com/mazzel_official/status/2113562100178235407"
+    },
+    {
+      "id": "app-20261028-dayday",
+      "short": "DayDay. EIKI 生出演",
+      "title": "日本テレビ「DayDay.」EIKI 生出演",
+      "media": "tv",
+      "station": "日本テレビ",
+      "start": "2026-10-28T09:00:00+09:00",
+      "airEnd": "2026-10-28T11:10:00+09:00",
+      "url": "https://www.ntv.co.jp/dayday/",
+      "note": "EIKI 生出演。出演枠の詳細時刻は公式投稿に記載なし。見逃しは日テレ公式がTVerでコーナー単位配信することがある（番組シリーズ: https://tver.jp/series/srblmwjr8c）。10/28放送分のエピソードURLは未公開のためシリーズページを案内。全編配信とは限らない。",
+      "source": "mazzel_official / 日本テレビ",
+      "xUrl": "https://x.com/mazzel_official/status/2113570627508744249"
+    },
+    {
+      "id": "app-20261028-musicline",
+      "short": "ミュージックライン",
+      "title": "NHK-FM「ミュージックライン」DJ NAOYA・EIKI／ゲストROIROM",
+      "media": "radio",
+      "station": "NHK-FM",
+      "start": "2026-10-28T21:45:00+09:00",
+      "airEnd": "2026-10-28T22:30:00+09:00",
+      "url": "https://www.nhk.or.jp/radio/ondemand/detail.html?p=Z9WGYY3GP5_01",
+      "note": "10/26-28のDJがMAZZEL（NAOYA・EIKI）であることはmazzel_officialがRTしたnhk_musicjp週間予定に明記。放送時刻21:45-22:30はNHK番組ページのレギュラー枠（X本文に時刻なし）。聴き逃しはNHK公式FAQ「放送後7日間」、一覧 https://www.nhk.or.jp/radio/ondemand/detail.html?p=Z9WGYY3GP5_01（urlと同じ）。リアルタイムは https://www.nhk.or.jp/radio/player/?ch=fm 。番組HP: https://www.nhk.jp/p/ml/rs/Z9WGYY3GP5/",
+      "source": "mazzel_official (RT nhk_musicjp) / NHK-FM",
+      "xUrl": "https://x.com/mazzel_official/status/2113562100178235407"
+    },
+    {
+      "id": "app-20261030-chinmoku",
+      "short": "沈黙の金曜日 HAYATO・EIKI",
+      "title": "FM FUJI「沈黙の金曜日」HAYATO・EIKI 生出演",
+      "media": "radio",
+      "station": "FM FUJI",
+      "start": "2026-10-30T21:00:00+09:00",
+      "airEnd": "2026-10-30T23:00:00+09:00",
+      "url": "https://www.fmfuji.jp/",
+      "note": "HAYATO・EIKI 生出演。※22時台出演（番組全体は21:00-23:00）。radiko生放送: https://radiko.jp/#!/live/FM-FUJI（局ID FM-FUJI、番組表で10/30 21:00-23:00確認）。放送回一覧/聴き逃し: https://radiko.jp/r_seasons/10001392。タイムフリー期限は公式投稿に明記なし（一般に約7日）。",
+      "source": "mazzel_official / FM FUJI",
+      "xUrl": "https://x.com/mazzel_official/status/2113900412667588797"
+    },
+    {
+      "id": "app-20261031-ariya",
+      "short": "有野屋書店 2号店 第2回",
+      "title": "FOD「有野屋書店 2号店」第2回配信開始（EIKIレギュラー／ゲストRYUKI）",
+      "media": "stream",
+      "station": "FOD",
+      "start": "2026-10-31T12:00:00+09:00",
+      "url": "https://fod.fujitv.co.jp/title/502r/",
+      "note": "EIKIは副店長としてレギュラー。第2回ゲストにRYUKI。10/31 12:00配信開始のオンデマンド。FODでの視聴期限は公式投稿に記載なし（endは配信日終了の仮置き）",
+      "source": "mazzel_official / FOD",
+      "xUrl": "https://x.com/mazzel_official/status/2114533355597508669"
+    }
+  ]
+}
