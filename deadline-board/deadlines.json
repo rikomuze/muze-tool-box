@@ -392,6 +392,17 @@
       "note": "2027/1/30(土)開催。みずほPayPayドーム福岡。開場9:00／開演10:20。",
       "source": "チケット受付画面（ユーザー提供）",
       "url": "https://t.pia.jp/pia/event/event.do?eventBundleCd=b2671147"
+    },
+    {
+      "id": "utacon-nhk-one-archive-20261103",
+      "short": "うたコン NHK ONE",
+      "title": "NHK「うたコン」MAZZEL出演回 見逃し配信期限",
+      "category": "stream",
+      "tag": "NHK ONE",
+      "end": "2026-11-03T20:42:00+09:00",
+      "url": "https://www.web.nhk/tv/an/utacon/pl/series-tep-1J9MXY5QX2/ep/QD7EMZF1U1",
+      "note": "10/27放送のユーミン特集。MAZZEL出演回の見逃し配信は11/3(火)20:42まで。",
+      "source": "NHK ONE（配信画面）"
     }
   ]
 }
