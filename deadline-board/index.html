@@ -1087,7 +1087,7 @@ function bindSheetSwipe(dialog){
 
 /* boot */
 (function(){
-  try{const s=JSON.parse(localStorage.getItem("muze-deadline-board:ui")||"{}");if(s.view)view=s.view;if(s.tab){tab=s.tab;userTab=true}if(s.filter)filter=s.filter}catch(e){}
+  try{const s=JSON.parse(localStorage.getItem("muze-deadline-board:ui")||"{}");if(s.view)view=s.view;if(s.filter)filter=s.filter /* タブは覚えず、毎回「やること」から始める */}catch(e){}
   if(location.hash==="#calendar")view="cal";
   const j=jst(Date.now());calY=j.y;calM=j.m;selDay=dayKey(Date.now());
   fill("fCat",CATS);fill("fStatus",STATUS);fill("fFlow",FLOWNAME);
