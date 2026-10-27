@@ -41,6 +41,18 @@
       "xUrl": "https://x.com/mazzel_official/status/2113570627508744249"
     },
     {
+      "id": "app-20261028-hirunandes-kairyu",
+      "short": "ヒルナンデス！ KAIRYU",
+      "title": "日本テレビ「ヒルナンデス！」KAIRYU出演",
+      "media": "tv",
+      "station": "日本テレビ",
+      "start": "2026-10-28T11:55:00+09:00",
+      "airEnd": "2026-10-28T13:55:00+09:00",
+      "url": "https://www.ntv.co.jp/hirunan/",
+      "note": "KAIRYUがVTR出演。清澄白河・門前仲町のグルメを紹介。",
+      "source": "MAZZEL公式サイト / 日本テレビ番組情報"
+    },
+    {
       "id": "app-20261028-musicline",
       "short": "ミュージックライン",
       "title": "NHK-FM「ミュージックライン」DJ NAOYA・EIKI／ゲストROIROM",
