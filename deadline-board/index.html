@@ -236,12 +236,12 @@ details summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--faded)
 .foot p{margin:0 0 6px}
 .foot .home{display:inline-block;padding:10px 6px;margin-bottom:6px;font-weight:700;font-size:14px;color:var(--pencil);text-decoration:none}
 
-/* きょう・あしたまで：今日の出演と、明日までの締め切りを近い順に1枚の紙にまとめる */
+/* 今日はこれチェック：今日の出演と、明日までの締め切りを近い順に1枚の紙にまとめる */
 .soon{position:relative;background:var(--paper);box-shadow:0 10px 24px rgba(64,56,47,.16);display:flex;flex-direction:column;margin-top:4px}
 .soon::before{content:"";position:absolute;top:-8px;right:22px;width:56px;height:16px;background:rgba(164,197,175,.85);transform:rotate(6deg)}
 .soon-h{display:flex;align-items:center;gap:8px;padding:10px 10px 6px 16px}
 .soon-h h2{flex:1;min-width:0;margin:0;font-family:var(--f-hand);font-weight:600;font-size:15px;display:flex;flex-wrap:wrap;gap:0 8px;align-items:baseline}
-.soon-h .when{font-family:var(--f-num);font-size:12px;font-weight:600;color:var(--faded);white-space:nowrap}
+.soon-h .when{flex-basis:100%;font-family:var(--f-body);font-size:12px;font-weight:700;color:var(--faded)}
 .shareb{flex:none;display:inline-flex;align-items:center;gap:5px;min-height:40px;padding:0 12px;border:1.5px solid var(--pencil);border-radius:999px;background:var(--paper);font-weight:700;font-size:13px;cursor:pointer}
 .soon-empty{padding:4px 16px 14px;font-family:var(--f-hand);font-weight:600;font-size:13px;color:var(--faded)}
 .onair{display:flex;flex-direction:column;gap:6px;margin:0 10px 6px;padding:10px 12px 12px;border:2px solid var(--red);background:var(--paper);text-align:left;cursor:pointer;width:calc(100% - 20px)}
@@ -284,6 +284,7 @@ details summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--faded)
 .share-pick button[aria-pressed="true"]{background:var(--pencil);color:var(--paper);border-color:var(--pencil)}
 .share-img{display:block;width:100%;max-height:46vh;object-fit:contain;background:var(--desk);min-height:120px}
 .share-acts .wide{grid-column:1/-1}
+.share-msg{margin:0;font-size:13px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere;color:var(--faded);border-left:3px solid var(--line2);padding-left:10px}
 .share-text{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .share-text .src{grid-column:1/-1}
 .share-acts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -302,8 +303,8 @@ details summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--faded)
 
   <section class="soon" id="soon" aria-labelledby="soonH" hidden>
     <div class="soon-h">
-      <h2 id="soonH">きょう・あしたまで<span class="when" id="soonWhen"></span></h2>
-      <button class="shareb" id="shareBtn" type="button" aria-label="きょう・あしたまでの予定をシェア"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>シェア</button>
+      <h2 id="soonH">今日はこれチェック！<span class="when" id="soonWhen">今日の出演＆明日までの締め切り</span></h2>
+      <button class="shareb" id="shareBtn" type="button" aria-label="今日の出演と明日までの締め切りをシェア"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13"/><path d="M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>シェア</button>
     </div>
     <div id="soonBody"></div>
   </section>
@@ -368,14 +369,14 @@ details summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--faded)
   <div class="grab"></div>
   <button type="button" class="x" id="shareX" aria-label="閉じる">✕</button>
   <div class="sheet">
-    <h3 id="shareH">きょう・あしたまでをシェア</h3>
+    <h3 id="shareH">今日のチェックをシェア</h3>
     <div class="share-pick">
       <button type="button" id="shareApp" aria-pressed="true"></button>
       <button type="button" id="shareDue" aria-pressed="true"></button>
       <span class="src">「しない」にしたものは入らないよ</span>
     </div>
-    <img class="share-img" id="shareImg" alt="シェアする画像（きょう・あしたまでの予定）">
-    <p class="src">文は「締め切りチェックしてね」とURLだけ付けるよ</p>
+    <img class="share-img" id="shareImg" alt="シェアする画像（今日の出演と明日までの締め切り）">
+    <p class="share-msg" id="shareMsg"></p>
     <div class="share-acts">
       <button type="button" class="pb dark wide" id="shareNative" hidden>画像つきでシェア</button>
       <button type="button" class="linkb wide" id="shareSave">画像を保存</button>
@@ -741,7 +742,7 @@ const hm=ms=>{const j=jst(ms);return`${+j.h}:${j.mi}`};
 const dayStart=ms=>{const j=jst(ms);return Date.UTC(j.y,j.m-1,j.d)-9*3600e3};
 function dayWord(ms,now){const d=Math.round((dayStart(ms)-dayStart(now))/DAY),j=jst(ms);return d===0?"きょう":d===1?"あした":`${j.m}/${j.d} ${j.w}`}
 const isLive=(a,now)=>ts(a.start)<=now&&ts(a.airEnd)>now;
-// きょう・あしたまでに入れる締め切り：まだ済んでいない「やること」と「未定」で、あしたの終わりまでに〆
+// 今日はこれチェックに入れる締め切り：まだ済んでいない「やること」と「未定」で、あしたの終わりまでに〆
 function soonDues(all,now){
   const lim=dayStart(now)+2*DAY;
   return all.filter(x=>(x._i.sub==="before"||x._i.sub==="undecided")&&dueMs(x)>=now&&dueMs(x)<lim).sort((a,b)=>dueMs(a)-dueMs(b));
@@ -754,7 +755,6 @@ function renderSoon(all){
   const box=$("soon"),body=$("soonBody"),now=Date.now();
   if(!loaded){box.hidden=true;return}
   box.hidden=false;body.textContent="";
-  const n=jst(now);$("soonWhen").textContent=`いま ${n.m}/${n.d}(${n.w}) ${hm(now)}`;
   const live=appearances.filter(a=>isLive(a,now)).sort(by("start"));
   live.forEach(a=>{
     const s0=ts(a.start),s1=ts(a.airEnd),b=el("button","onair");b.type="button";b.setAttribute("aria-label",`放送中 ${a.short||a.title} の詳細`);
@@ -783,7 +783,7 @@ function renderSoon(all){
     }
     body.append(b);
   });
-  if(!live.length&&!rows.length)body.append(el("div","soon-empty","きょう・あしたまでの締め切りと、きょうの出演はないよ"));
+  if(!live.length&&!rows.length)body.append(el("div","soon-empty","今日の出演も、明日までの締め切りもないよ"));
   $("shareBtn").hidden=!rows.length&&!live.length;
 }
 function renderShows(){
@@ -799,10 +799,21 @@ function renderShows(){
   });
 }
 
-/* シェア：「きょう・あしたまで」の枠をそのまま画像にして、短い文と一緒に送る */
+/* シェア：「今日はこれチェック！」の枠をそのまま画像にして、短い文と一緒に送る */
 let shareApp=true,shareDue=true,shareBlob=null,shareUrl="",shareGen=0;
 const SHARE_URL="https://rikomuze.github.io/muze-tool-box/deadline-board/";
-const SHARE_TEXT="締め切りチェックしてね\n#MAZZEL\n"+SHARE_URL;
+// シェアの文。公式のハッシュタグは付けない
+function shareMsg(m){
+  const nApp=m.live.length+m.rows.filter(r=>r.app).length,nDue=m.rows.filter(r=>!r.app).length,parts=[];
+  if(nApp)parts.push(`今日の出演 ${nApp}件`);if(nDue)parts.push(`明日までの締め切り ${nDue}件`);
+  const L=["MUZE、今日はこれチェック！",parts.length?parts.join("・")+"、まとめたよ":"今日の出演も、明日までの締め切りもひと休み"];
+  if(m.live[0])L.push(`いま放送中：${m.live[0].title}`);
+  const due=m.rows.find(r=>!r.app);if(due)L.push(`いちばん近い〆は${dayWord(due.ms,m.now)==="きょう"?"今日":"明日"} ${hm(due.ms)}「${due.title}」`);
+  if(nDue)L.push("見逃し・応募忘れ、みんなで防ごう！");
+  L.push(SHARE_URL);
+  return L.join("\n");
+}
+let shareMsgNow="";
 function shareModel(){
   const now=Date.now(),all=items.map(it=>({...it,_i:info(it)})),rows=[];
   const live=shareApp?appearances.filter(a=>isLive(a,now)).sort(by("start")).map(a=>({title:a.short||a.title,station:a.station||MEDIA[a.media]||"",s0:ts(a.start),s1:ts(a.airEnd)})):[];
@@ -816,10 +827,10 @@ const F={hand:'"Klee One","Zen Kaku Gothic New",sans-serif',body:'"Zen Kaku Goth
 function rr(x,c,y,w,h,r){x.beginPath();x.moveTo(c+r,y);x.arcTo(c+w,y,c+w,y+h,r);x.arcTo(c+w,y+h,c,y+h,r);x.arcTo(c,y+h,c,y,r);x.arcTo(c,y,c+w,y,r);x.closePath()}
 function fit(x,t,max){if(x.measureText(t).width<=max)return t;let s=t;while(s.length>1&&x.measureText(s+"…").width>max)s=s.slice(0,-1);return s+"…"}
 async function drawShare(m){
-  const words=[..."きょう・あしたまでに予定はないよ出演〆ONAIR放送中で終了時点締め切り出演ボード"].join("")+m.rows.map(r=>r.title+r.sub).join("")+m.live.map(l=>l.title+l.station).join("");
+  const words=[..."MUZE今日はこれチェック！の出演＆明日までの締め切りもないよ〆ONAIR放送中で終了時点出演ボード"].join("")+m.rows.map(r=>r.title+r.sub).join("")+m.live.map(l=>l.title+l.station).join("");
   try{await Promise.race([Promise.all([document.fonts.load(`600 15px "Klee One"`,words),document.fonts.load(`700 14px "Zen Kaku Gothic New"`,words),document.fonts.load(`400 12px "Zen Kaku Gothic New"`,words),document.fonts.load(`700 15px Montserrat`,"0123456789:/()ONAIR")]),new Promise(r=>setTimeout(r,2500))])}catch(e){}
   const W=390,S=3,X=16,CW=W-32,ROW=54,LIVE=98;
-  const cardH=46+m.live.length*LIVE+(m.rows.length?m.rows.length*ROW:(m.live.length?0:44))+6;
+  const cardH=62+m.live.length*LIVE+(m.rows.length?m.rows.length*ROW:(m.live.length?0:44))+6;
   const H=24+cardH+56;
   const cv=document.createElement("canvas");cv.width=W*S;cv.height=H*S;
   const x=cv.getContext("2d");x.scale(S,S);x.textBaseline="alphabetic";
@@ -832,10 +843,9 @@ async function drawShare(m){
   x.save();x.translate(X+CW-78,y-8);x.rotate(6*Math.PI/180);x.fillStyle=C.mint;x.fillRect(0,0,56,16);x.restore();
   // 見出し
   const n=jst(m.now);
-  x.fillStyle=C.pencil;x.font=`600 15px ${F.hand}`;x.fillText("きょう・あしたまで",X+16,y+29);
-  const hw=x.measureText("きょう・あしたまで").width;
-  x.fillStyle=C.faded;x.font=`600 12px ${F.num}`;x.fillText(`${n.m}/${n.d}(${n.w}) ${hm(m.now)} 時点`,X+16+hw+10,y+29);
-  y+=46;
+  x.fillStyle=C.pencil;x.font=`600 16px ${F.hand}`;x.fillText("MUZE 今日はこれチェック！",X+16,y+30);
+  x.fillStyle=C.faded;x.font=`600 12px ${F.num}`;x.fillText(fit(x,`今日の出演＆明日までの締め切り ・ ${n.m}/${n.d}(${n.w}) ${hm(m.now)} 時点`,CW-32),X+16,y+50);
+  y+=62;
   // 放送中
   m.live.forEach(l=>{
     const bx=X+10,bw=CW-20,top=y;
@@ -867,7 +877,7 @@ async function drawShare(m){
     y+=ROW;
   });
   x.setLineDash([]);
-  if(!m.rows.length&&!m.live.length){x.fillStyle=C.faded;x.font=`600 13px ${F.hand}`;x.fillText("きょう・あしたまでの予定はないよ",X+16,y+24)}
+  if(!m.rows.length&&!m.live.length){x.fillStyle=C.faded;x.font=`600 13px ${F.hand}`;x.fillText("今日の出演も、明日までの締め切りもないよ",X+16,y+24)}
   // 下の名前
   y=24+cardH+30;x.textAlign="center";
   x.fillStyle=C.pencil;x.font=`700 12px ${F.body}`;x.fillText("MUZE TOOL BOX ｜ 締め切り・出演ボード",W/2,y);
@@ -878,8 +888,9 @@ async function paintShare(){
   const m=shareModel(),gen=++shareGen;
   $("shareApp").textContent=`出演 ${m.na}`;$("shareDue").textContent=`締め切り ${m.nd}`;
   $("shareApp").setAttribute("aria-pressed",String(shareApp));$("shareDue").setAttribute("aria-pressed",String(shareDue));
-  $("shareX2").href="https://x.com/intent/post?text="+encodeURIComponent(SHARE_TEXT);
-  $("shareLine").href="https://line.me/R/share?text="+encodeURIComponent(SHARE_TEXT);
+  shareMsgNow=shareMsg(m);$("shareMsg").textContent=shareMsgNow;
+  $("shareX2").href="https://x.com/intent/post?text="+encodeURIComponent(shareMsgNow);
+  $("shareLine").href="https://line.me/R/share?text="+encodeURIComponent(shareMsgNow);
   const blob=await drawShare(m);if(gen!==shareGen||!blob)return;
   shareBlob=blob;if(shareUrl)URL.revokeObjectURL(shareUrl);shareUrl=URL.createObjectURL(blob);$("shareImg").src=shareUrl;
   const f=shareFile(),can=!!(f&&navigator.canShare&&navigator.canShare({files:[f]}));
@@ -890,7 +901,7 @@ function shareFile(){try{return shareBlob?new File([shareBlob],shareName(),{type
 function openShare(){shareBlob=null;$("shareImg").removeAttribute("src");$("shareNative").hidden=true;paintShare();if(!$("shareDlg").open)$("shareDlg").showModal();lockPage()}
 async function shareNative(){
   const f=shareFile();if(!f)return;
-  try{await navigator.share({files:[f],text:SHARE_TEXT})}catch(e){if(e&&e.name!=="AbortError")toast("シェアできなかった。画像を保存してから送ってね")}
+  try{await navigator.share({files:[f],text:shareMsgNow})}catch(e){if(e&&e.name!=="AbortError")toast("シェアできなかった。画像を保存してから送ってね")}
 }
 function saveShare(){
   if(!shareUrl)return;
