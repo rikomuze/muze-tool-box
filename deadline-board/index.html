@@ -282,7 +282,10 @@ details summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--faded)
 .share-pick{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .share-pick button{min-height:40px;padding:4px 14px;border:1.5px solid var(--line2);background:var(--paper);font-size:13px;font-weight:700;cursor:pointer}
 .share-pick button[aria-pressed="true"]{background:var(--pencil);color:var(--paper);border-color:var(--pencil)}
-.share-pre{background:var(--desk);padding:14px 14px 12px;font-size:14px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.share-img{display:block;width:100%;max-height:46vh;object-fit:contain;background:var(--desk);min-height:120px}
+.share-acts .wide{grid-column:1/-1}
+.share-text{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.share-text .src{grid-column:1/-1}
 .share-acts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .share-acts .pb{display:flex;align-items:center;justify-content:center;min-height:48px;font-size:14px;text-decoration:none}
 .share-acts .pb.dark{background:var(--pencil);border-color:var(--pencil);color:var(--paper)}
@@ -371,12 +374,16 @@ details summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--faded)
       <button type="button" id="shareDue" aria-pressed="true"></button>
       <span class="src">「しない」にしたものは入らないよ</span>
     </div>
-    <div class="share-pre" id="sharePre"></div>
+    <img class="share-img" id="shareImg" alt="シェアする画像（きょう・あしたまでの予定）">
+    <p class="src">文は「締め切りチェックしてね」とURLだけ付けるよ</p>
     <div class="share-acts">
-      <a class="pb dark" id="shareX2" target="_blank" rel="noopener">Xでポスト</a>
-      <a class="pb ghost" id="shareLine" target="_blank" rel="noopener">LINEで送る</a>
-      <button type="button" class="linkb" id="shareCopy">テキストをコピー</button>
-      <button type="button" class="linkb" id="shareOther" hidden>ほかのアプリ</button>
+      <button type="button" class="pb dark wide" id="shareNative" hidden>画像つきでシェア</button>
+      <button type="button" class="linkb wide" id="shareSave">画像を保存</button>
+      <div class="share-text" id="shareTextOnly">
+        <span class="src">X・LINEには、保存した画像を付けて送ってね</span>
+        <a class="pb ghost" id="shareX2" target="_blank" rel="noopener">Xでポスト</a>
+        <a class="pb ghost" id="shareLine" target="_blank" rel="noopener">LINEで送る</a>
+      </div>
     </div>
   </div>
 </dialog>
@@ -792,31 +799,103 @@ function renderShows(){
   });
 }
 
-/* シェア：きょう・あしたまでの中身をそのまま文にする */
-let shareApp=true,shareDue=true;
+/* シェア：「きょう・あしたまで」の枠をそのまま画像にして、短い文と一緒に送る */
+let shareApp=true,shareDue=true,shareBlob=null,shareUrl="",shareGen=0;
 const SHARE_URL="https://rikomuze.github.io/muze-tool-box/deadline-board/";
-function shareText(){
-  const now=Date.now(),all=items.map(it=>({...it,_i:info(it)})),n=jst(now),L=[];
-  if(shareApp)appearances.filter(a=>isLive(a,now)).forEach(a=>L.push({ms:0,t:`いま放送中【出演】${a.short||a.title}（${a.station||MEDIA[a.media]||""}）〜${hm(ts(a.airEnd))}`}));
-  if(shareApp)soonApps(now).forEach(a=>{const ms=ts(a.start);L.push({ms,t:`${dayWord(ms,now)==="きょう"?"":"あした "}${hm(ms)}【出演】${a.short||a.title}（${a.station||MEDIA[a.media]||""}）`})});
-  if(shareDue)soonDues(all,now).forEach(it=>{const ms=dueMs(it);L.push({ms,t:`${dayWord(ms,now)==="きょう"?"":"あした "}${hm(ms)}【〆】${nameOf(it)} ${kindOf(it).l}`})});
-  L.sort((a,b)=>a.ms-b.ms);
-  return[`MAZZEL きょう・あしたまで`,`${n.m}/${n.d}(${n.w}) ${hm(now)}時点`,"",...(L.length?L.map(x=>x.t):["きょう・あしたまでの予定はないよ"]),"","#MAZZEL",SHARE_URL].join("\n");
+const SHARE_TEXT="締め切りチェックしてね\n#MAZZEL\n"+SHARE_URL;
+function shareModel(){
+  const now=Date.now(),all=items.map(it=>({...it,_i:info(it)})),rows=[];
+  const live=shareApp?appearances.filter(a=>isLive(a,now)).sort(by("start")).map(a=>({title:a.short||a.title,station:a.station||MEDIA[a.media]||"",s0:ts(a.start),s1:ts(a.airEnd)})):[];
+  if(shareApp)soonApps(now).forEach(a=>rows.push({ms:ts(a.start),app:true,title:a.short||a.title,sub:[MEDIA[a.media],a.station].filter(Boolean).join(" · ")}));
+  if(shareDue)soonDues(all,now).forEach(it=>{const ms=dueMs(it);rows.push({ms,app:false,title:nameOf(it),sub:kindOf(it).l,urgent:ms-now<=DAY})});
+  rows.sort((x,y)=>x.ms-y.ms);
+  return{now,live,rows,na:appearances.filter(a=>isLive(a,now)).length+soonApps(now).length,nd:soonDues(all,now).length};
 }
-function paintShare(){
-  const now=Date.now(),all=items.map(it=>({...it,_i:info(it)}));
-  const na=appearances.filter(a=>isLive(a,now)).length+soonApps(now).length,nd=soonDues(all,now).length;
-  $("shareApp").textContent=`出演 ${na}`;$("shareDue").textContent=`締め切り ${nd}`;
+const C={desk:"#f1ebe1",paper:"#ffffff",pencil:"#40382f",faded:"#6f6456",line:"rgba(64,56,47,.22)",red:"#c0472f",lav:"#efe5ff",lavInk:"#5b4a8a",berry:"#f7dde3",berryInk:"#a8445f",mint:"rgba(164,197,175,.9)"};
+const F={hand:'"Klee One","Zen Kaku Gothic New",sans-serif',body:'"Zen Kaku Gothic New","Hiragino Sans",sans-serif',num:'Montserrat,"Zen Kaku Gothic New",sans-serif'};
+function rr(x,c,y,w,h,r){x.beginPath();x.moveTo(c+r,y);x.arcTo(c+w,y,c+w,y+h,r);x.arcTo(c+w,y+h,c,y+h,r);x.arcTo(c,y+h,c,y,r);x.arcTo(c,y,c+w,y,r);x.closePath()}
+function fit(x,t,max){if(x.measureText(t).width<=max)return t;let s=t;while(s.length>1&&x.measureText(s+"…").width>max)s=s.slice(0,-1);return s+"…"}
+async function drawShare(m){
+  const words=[..."きょう・あしたまでに予定はないよ出演〆ONAIR放送中で終了時点締め切り出演ボード"].join("")+m.rows.map(r=>r.title+r.sub).join("")+m.live.map(l=>l.title+l.station).join("");
+  try{await Promise.race([Promise.all([document.fonts.load(`600 15px "Klee One"`,words),document.fonts.load(`700 14px "Zen Kaku Gothic New"`,words),document.fonts.load(`400 12px "Zen Kaku Gothic New"`,words),document.fonts.load(`700 15px Montserrat`,"0123456789:/()ONAIR")]),new Promise(r=>setTimeout(r,2500))])}catch(e){}
+  const W=390,S=3,X=16,CW=W-32,ROW=54,LIVE=98;
+  const cardH=46+m.live.length*LIVE+(m.rows.length?m.rows.length*ROW:(m.live.length?0:44))+6;
+  const H=24+cardH+56;
+  const cv=document.createElement("canvas");cv.width=W*S;cv.height=H*S;
+  const x=cv.getContext("2d");x.scale(S,S);x.textBaseline="alphabetic";
+  // 机とドット
+  x.fillStyle=C.desk;x.fillRect(0,0,W,H);x.fillStyle="rgba(64,56,47,.07)";
+  for(let i=0;i<W;i+=22)for(let j=0;j<H;j+=22){x.beginPath();x.arc(i+1,j+1,1,0,7);x.fill()}
+  // 紙
+  let y=24;
+  x.save();x.shadowColor="rgba(64,56,47,.16)";x.shadowBlur=24;x.shadowOffsetY=10;x.fillStyle=C.paper;x.fillRect(X,y,CW,cardH);x.restore();
+  x.save();x.translate(X+CW-78,y-8);x.rotate(6*Math.PI/180);x.fillStyle=C.mint;x.fillRect(0,0,56,16);x.restore();
+  // 見出し
+  const n=jst(m.now);
+  x.fillStyle=C.pencil;x.font=`600 15px ${F.hand}`;x.fillText("きょう・あしたまで",X+16,y+29);
+  const hw=x.measureText("きょう・あしたまで").width;
+  x.fillStyle=C.faded;x.font=`600 12px ${F.num}`;x.fillText(`${n.m}/${n.d}(${n.w}) ${hm(m.now)} 時点`,X+16+hw+10,y+29);
+  y+=46;
+  // 放送中
+  m.live.forEach(l=>{
+    const bx=X+10,bw=CW-20,top=y;
+    x.strokeStyle=C.red;x.lineWidth=2;x.strokeRect(bx+1,top+1,bw-2,LIVE-8);
+    x.font=`700 11px ${F.num}`;const pw=x.measureText("ON AIR").width+26;
+    x.fillStyle=C.red;rr(x,bx+12,top+12,pw,18,9);x.fill();
+    x.fillStyle="#fff";x.beginPath();x.arc(bx+21,top+21,3,0,7);x.fill();x.fillText("ON AIR",bx+28,top+25);
+    x.fillStyle=C.faded;x.font=`700 12px ${F.body}`;x.fillText(l.station,bx+12+pw+8,top+25);
+    const cd=left(l.s1).long+"で終了";x.fillStyle=C.red;x.font=`700 12px ${F.num}`;x.textAlign="right";x.fillText(cd,bx+bw-12,top+25);x.textAlign="left";
+    x.fillStyle=C.pencil;x.font=`700 16px ${F.body}`;x.fillText(fit(x,l.title,bw-24),bx+12,top+50);
+    x.fillStyle="rgba(64,56,47,.12)";rr(x,bx+12,top+60,bw-24,5,2.5);x.fill();
+    const pct=Math.min(1,Math.max(0,(m.now-l.s0)/(l.s1-l.s0)));x.fillStyle=C.red;rr(x,bx+12,top+60,Math.max(5,(bw-24)*pct),5,2.5);x.fill();
+    x.fillStyle=C.faded;x.font=`600 11px ${F.num}`;x.fillText(hm(l.s0),bx+12,top+80);x.textAlign="right";x.fillText(hm(l.s1),bx+bw-12,top+80);x.textAlign="left";
+    y+=LIVE;
+  });
+  // 行
+  x.setLineDash([4,4]);x.lineWidth=1.5;x.strokeStyle=C.line;
+  m.rows.forEach(r=>{
+    x.beginPath();x.moveTo(X,y);x.lineTo(X+CW,y);x.stroke();
+    x.fillStyle=C.faded;x.font=`600 11px ${F.hand}`;x.fillText(dayWord(r.ms,m.now),X+14,y+22);
+    x.fillStyle=C.pencil;x.font=`700 15px ${F.num}`;x.fillText(hm(r.ms),X+14,y+40);
+    x.fillStyle=r.app?C.lav:C.berry;rr(x,X+72,y+18,32,18,9);x.fill();
+    x.fillStyle=r.app?C.lavInk:C.berryInk;x.font=`700 11px ${F.body}`;x.textAlign="center";x.fillText(r.app?"出演":"〆",X+88,y+31);x.textAlign="left";
+    const cd=left(r.ms).t;x.font=`700 12px ${F.num}`;const cw=x.measureText(cd).width;
+    x.fillStyle=r.urgent?C.red:C.pencil;x.textAlign="right";x.fillText(cd,X+CW-16,y+32);x.textAlign="left";
+    const tw=X+CW-16-cw-10-(X+114);
+    x.fillStyle=C.pencil;x.font=`700 14px ${F.body}`;x.fillText(fit(x,r.title,tw),X+114,y+24);
+    x.fillStyle=C.faded;x.font=`400 12px ${F.body}`;x.fillText(fit(x,r.sub,tw),X+114,y+42);
+    y+=ROW;
+  });
+  x.setLineDash([]);
+  if(!m.rows.length&&!m.live.length){x.fillStyle=C.faded;x.font=`600 13px ${F.hand}`;x.fillText("きょう・あしたまでの予定はないよ",X+16,y+24)}
+  // 下の名前
+  y=24+cardH+30;x.textAlign="center";
+  x.fillStyle=C.pencil;x.font=`700 12px ${F.body}`;x.fillText("MUZE TOOL BOX ｜ 締め切り・出演ボード",W/2,y);
+  x.fillStyle=C.faded;x.font=`500 10px ${F.num}`;x.fillText("rikomuze.github.io/muze-tool-box/deadline-board/",W/2,y+16);
+  return new Promise(r=>cv.toBlob(r,"image/png"));
+}
+async function paintShare(){
+  const m=shareModel(),gen=++shareGen;
+  $("shareApp").textContent=`出演 ${m.na}`;$("shareDue").textContent=`締め切り ${m.nd}`;
   $("shareApp").setAttribute("aria-pressed",String(shareApp));$("shareDue").setAttribute("aria-pressed",String(shareDue));
-  const t=shareText();$("sharePre").textContent=t;
-  $("shareX2").href="https://x.com/intent/post?text="+encodeURIComponent(t);
-  $("shareLine").href="https://line.me/R/share?text="+encodeURIComponent(t);
+  $("shareX2").href="https://x.com/intent/post?text="+encodeURIComponent(SHARE_TEXT);
+  $("shareLine").href="https://line.me/R/share?text="+encodeURIComponent(SHARE_TEXT);
+  const blob=await drawShare(m);if(gen!==shareGen||!blob)return;
+  shareBlob=blob;if(shareUrl)URL.revokeObjectURL(shareUrl);shareUrl=URL.createObjectURL(blob);$("shareImg").src=shareUrl;
+  const f=shareFile(),can=!!(f&&navigator.canShare&&navigator.canShare({files:[f]}));
+  $("shareNative").hidden=!can;$("shareTextOnly").hidden=can;
 }
-function openShare(){paintShare();if(!$("shareDlg").open)$("shareDlg").showModal();lockPage()}
-async function copyShare(){
-  const t=shareText();
-  try{await navigator.clipboard.writeText(t);toast("コピーしたよ")}
-  catch(e){const r=document.createRange();r.selectNodeContents($("sharePre"));const sel=getSelection();sel.removeAllRanges();sel.addRange(r);toast("文を選んだよ。コピーしてね")}
+function shareName(){const n=jst(Date.now());return`mazzel-shimekiri-${n.m}${String(n.d).padStart(2,"0")}.png`}
+function shareFile(){try{return shareBlob?new File([shareBlob],shareName(),{type:"image/png"}):null}catch(e){return null}}
+function openShare(){shareBlob=null;$("shareImg").removeAttribute("src");$("shareNative").hidden=true;paintShare();if(!$("shareDlg").open)$("shareDlg").showModal();lockPage()}
+async function shareNative(){
+  const f=shareFile();if(!f)return;
+  try{await navigator.share({files:[f],text:SHARE_TEXT})}catch(e){if(e&&e.name!=="AbortError")toast("シェアできなかった。画像を保存してから送ってね")}
+}
+function saveShare(){
+  if(!shareUrl)return;
+  const a=document.createElement("a");a.href=shareUrl;a.download=shareName();document.body.append(a);a.click();a.remove();
+  toast("画像を保存したよ");
 }
 
 /* 出演のくわしくシート（締め切りと同じシートを使う） */
@@ -1016,8 +1095,7 @@ function bindSheetSwipe(dialog){
   $("shareDlg").addEventListener("click",e=>{if(e.target===$("shareDlg"))$("shareDlg").close()});
   $("shareApp").onclick=()=>{shareApp=!shareApp;if(!shareApp&&!shareDue)shareDue=true;paintShare()};
   $("shareDue").onclick=()=>{shareDue=!shareDue;if(!shareApp&&!shareDue)shareApp=true;paintShare()};
-  $("shareCopy").onclick=copyShare;
-  if(navigator.share){$("shareOther").hidden=false;$("shareOther").onclick=()=>navigator.share({text:shareText()}).catch(()=>{})}
+  $("shareNative").onclick=shareNative;$("shareSave").onclick=saveShare;
   bindSheetSwipe($("detail"));
   bindSheetSwipe($("dlg"));
   bindSheetSwipe($("shareDlg"));
