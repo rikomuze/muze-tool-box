@@ -54,6 +54,18 @@
       "xUrl": "https://x.com/mazzel_official/status/2113562100178235407"
     },
     {
+      "id": "app-20261030-sunnyvibes",
+      "short": "SUNNY VIBES NAOYA・RAN",
+      "title": "J-WAVE「SUNNY VIBES」PODCAST+『offの日、どっちっち？』（NAOYA・RAN）",
+      "media": "radio",
+      "station": "J-WAVE",
+      "start": "2026-10-30T06:45:00+09:00",
+      "airEnd": "2026-10-30T06:55:00+09:00",
+      "url": "https://www.j-wave.co.jp/original/sunnyvibes/",
+      "note": "番組内PODCAST+コーナー（6:45〜6:55）でNAOYA・RAN出演回のダイジェスト。Podcastアーカイブあり。聴き逃し期限は登録しない。",
+      "source": "J-WAVE公式番組ページ・radiko番組表"
+    },
+    {
       "id": "app-20261030-chinmoku",
       "short": "沈黙の金曜日 HAYATO・EIKI",
       "title": "FM FUJI「沈黙の金曜日」HAYATO・EIKI 生出演",
@@ -77,6 +89,18 @@
       "note": "EIKIは副店長としてレギュラー。第2回ゲストにRYUKI。10/31 12:00配信開始のオンデマンド。FODでの視聴期限は公式投稿に記載なし（endは配信日終了の仮置き）",
       "source": "mazzel_official / FOD",
       "xUrl": "https://x.com/mazzel_official/status/2114533355597508669"
+    },
+    {
+      "id": "app-20261031-talkabout",
+      "short": "TALK ABOUT（KAIRYU）",
+      "title": "TBSラジオ「TALK ABOUT」KAIRYU出演（ゲスト：たくろう）",
+      "media": "radio",
+      "station": "TBSラジオ",
+      "start": "2026-10-31T22:00:00+09:00",
+      "airEnd": "2026-10-31T23:30:00+09:00",
+      "url": "https://www.tbsradio.jp/talk/",
+      "note": "10/31の番組表ではMAZZELの出演者はKAIRYU。画像の『たくろう』はゲスト名。YouTubeアーカイブが残るため聴き逃し期限は登録しない。",
+      "source": "TBSラジオ・radiko番組表"
     }
   ]
 }
