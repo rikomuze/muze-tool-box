@@ -367,6 +367,16 @@
       "url": "https://bmsg.to/4lxpVNU",
       "note": "FC会員向け。10/22(木)実施の館内放送。10/29(木)23:59まで公開",
       "source": "MAZZEL公式X"
+    },
+    {
+      "id": "muzeum-broadcast-ran-hayato-20261101",
+      "short": "MUZEUM館内放送（RAN・HAYATO）",
+      "title": "10/25実施 MUZEUM館内放送（RAN・HAYATO）アーカイブ視聴期限",
+      "category": "stream",
+      "tag": "MUZEUM",
+      "end": "2026-11-01T23:59:00+09:00",
+      "note": "10/25実施の館内放送。RAN・HAYATO出演。FC会員限定。11/1 23:59まで公開。",
+      "source": "MUZEUMアーカイブ画面（ユーザー提供）"
     }
   ]
 }
