@@ -70,6 +70,13 @@ window.MUZE_DAY_EVENTS = (function () {
       name: "COUNTDOWN JAPAN 26/27 DAY1", title: "COUNTDOWN JAPAN 26/27 DAY1",
       venue: "幕張メッセ国際展示場1〜11ホール・イベントホール", official: [],
       note: "MAZZEL出演日"
+    },
+    {
+      id: "fukuoka-music-fes27", date: "2027-01-30", kind: "OTHER", tag: "その他",
+      name: "FUKUOKA MUSIC FES. 2027", title: "FUKUOKA MUSIC FES. 2027 supported by Trunk",
+      venue: "みずほPayPayドーム福岡",
+      official: [{ label: "開場", time: "09:00" }, { label: "開演", time: "10:20" }],
+      note: "先行抽選：2026/11/8 23:59まで。MAZZEL出演日は要確認。"
     }
   ];
 })();
