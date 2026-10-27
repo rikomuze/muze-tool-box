@@ -672,7 +672,7 @@ function renderList(all){
   let out=[];
   if(tab==="go"){
     const miss=s("missed"),bef=s("before").sort(by("end")),wait=s("applied").sort(by("resultAt")),won=s("won").sort(by("end"));
-    out=[sec("〆すぎ・記録してね",miss.sort(by("end"))),sec("これから応募",bef,(miss.length+wait.length+won.length)?null:"まだないよ。「未定」で「応募する」を押すとここに入るよ"),sec("結果待ち",wait),sec("当選",won)];
+    out=[sec("〆すぎ・記録してね",miss.sort(by("end"))),sec(miss.length?"これから":null,bef,(miss.length+wait.length+won.length)?null:"まだないよ。「未定」で「応募する」を押すとここに入るよ"),sec("結果待ち",wait),sec("当選",won)];
   }else if(tab==="undecided")out=[sec(null,vis.sort(by("end")),"未定はないよ")];
   else if(tab==="pass")out=[sec(null,vis.sort(by("end")),"応募しないものはないよ")];
   else out=[sec(null,vis.sort((a,b)=>by("end")(b,a)),"終わったものはまだないよ")];
