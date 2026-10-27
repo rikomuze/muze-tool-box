@@ -244,15 +244,15 @@ details summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--faded)
 .soon-h .when{flex-basis:100%;font-family:var(--f-body);font-size:12px;font-weight:700;color:var(--faded)}
 .shareb{flex:none;display:inline-flex;align-items:center;gap:5px;min-height:40px;padding:0 12px;border:1.5px solid var(--pencil);border-radius:999px;background:var(--paper);font-weight:700;font-size:13px;cursor:pointer}
 .soon-empty{padding:4px 16px 14px;font-family:var(--f-hand);font-weight:600;font-size:13px;color:var(--faded)}
-.onair{display:flex;flex-direction:column;gap:6px;margin:0 10px 6px;padding:10px 12px 12px;border:2px solid var(--red);background:var(--paper);text-align:left;cursor:pointer;width:calc(100% - 20px)}
+.onair{display:flex;flex-direction:column;gap:6px;margin:0 10px 6px;padding:10px 12px 12px;border:1.5px solid var(--pencil);background:var(--paper);text-align:left;cursor:pointer;width:calc(100% - 20px)}
 .onair .r1{display:flex;align-items:center;gap:8px}
-.onair .live{display:inline-flex;align-items:center;gap:5px;font-family:var(--f-num);font-weight:700;font-size:11.5px;letter-spacing:.08em;color:#fff;background:var(--red);border-radius:999px;padding:1px 9px}
-.onair .live::before{content:"";width:6px;height:6px;border-radius:50%;background:#fff}
+.onair .live{display:inline-flex;align-items:center;gap:5px;font-family:var(--f-num);font-weight:700;font-size:11.5px;letter-spacing:.08em;color:var(--paper);background:var(--pencil);border-radius:999px;padding:1px 9px}
+.onair .live::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--berry)}
 .onair .st{font-size:12px;font-weight:700;color:var(--faded)}
-.onair .cd{margin-left:auto;font-family:var(--f-num);font-weight:700;font-size:12px;color:var(--red);white-space:nowrap}
+.onair .cd{margin-left:auto;font-family:var(--f-num);font-weight:700;font-size:12px;color:var(--pencil);white-space:nowrap}
 .onair .t{font-weight:700;font-size:16px;line-height:1.35}
 .onair .bar{display:block;position:relative;height:5px;background:rgba(64,56,47,.12);border-radius:3px;overflow:hidden}
-.onair .bar i{position:absolute;left:0;top:0;bottom:0;background:var(--red);border-radius:3px}
+.onair .bar i{position:absolute;left:0;top:0;bottom:0;background:var(--berry);border-radius:3px}
 .onair .ends{display:flex;justify-content:space-between;font-family:var(--f-num);font-size:11.5px;font-weight:600;color:var(--faded);font-variant-numeric:tabular-nums}
 .srow{display:grid;grid-template-columns:52px 30px minmax(0,1fr) auto 8px;align-items:center;gap:8px;padding:9px 12px 9px 14px;border:none;border-top:1.5px dashed var(--line);background:none;text-align:left;cursor:pointer;min-height:52px;width:100%}
 .srow:active,.arow:active{background:rgba(64,56,47,.05)}
@@ -260,7 +260,7 @@ details summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--faded)
 .srow .tm small,.arow .tm small{font-family:var(--f-hand);font-weight:600;font-size:11px;color:var(--faded)}
 .srow .tm b{font-size:15px;font-weight:700}
 .kl{font-size:11px;font-weight:700;text-align:center;padding:1px 0;border-radius:999px}
-.kl.app{background:var(--lav-soft);color:var(--lav-ink)}
+.kl.app{box-shadow:inset 0 0 0 1.5px var(--line2);color:var(--pencil)}
 .kl.due{background:var(--berry-soft);color:var(--berry-ink)}
 .srow .tx,.arow .tx{min-width:0;display:flex;flex-direction:column;gap:1px}
 .srow .tx b,.arow .tx b{font-weight:700;font-size:14px;line-height:1.35;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
@@ -268,9 +268,9 @@ details summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--faded)
 .srow .cd,.arow .cd{font-family:var(--f-num);font-weight:700;font-size:12px;white-space:nowrap}
 .srow .cd.u{color:var(--red)}
 .chev{font-size:16px;font-weight:700;color:var(--faded)}
-/* 種類スタンプ：見る系・応募・購入で色を分ける */
+/* 種類スタンプ：見逃し・応募・購入など。色は付けず、文字で見分ける */
 .ks{font-weight:700;border:1.5px solid currentColor;border-radius:50%;padding:0 7px;font-size:11px;flex:none}
-.ks.watch{color:var(--mint-ink)}.ks.apply{color:var(--berry-ink)}.ks.buy{color:#8a5a12}
+.ks{color:var(--faded)}
 /* これからの出演 */
 .shows{margin-top:6px}
 .shows-box{background:var(--paper);box-shadow:var(--shadow);display:flex;flex-direction:column}
@@ -849,15 +849,15 @@ async function drawShare(m){
   // 放送中
   m.live.forEach(l=>{
     const bx=X+10,bw=CW-20,top=y;
-    x.strokeStyle=C.red;x.lineWidth=2;x.strokeRect(bx+1,top+1,bw-2,LIVE-8);
+    x.strokeStyle=C.pencil;x.lineWidth=1.5;x.strokeRect(bx+1,top+1,bw-2,LIVE-8);
     x.font=`700 11px ${F.num}`;const pw=x.measureText("ON AIR").width+26;
-    x.fillStyle=C.red;rr(x,bx+12,top+12,pw,18,9);x.fill();
-    x.fillStyle="#fff";x.beginPath();x.arc(bx+21,top+21,3,0,7);x.fill();x.fillText("ON AIR",bx+28,top+25);
+    x.fillStyle=C.pencil;rr(x,bx+12,top+12,pw,18,9);x.fill();
+    x.fillStyle="#e27a94";x.beginPath();x.arc(bx+21,top+21,3,0,7);x.fill();x.fillStyle="#fff";x.fillText("ON AIR",bx+28,top+25);
     x.fillStyle=C.faded;x.font=`700 12px ${F.body}`;x.fillText(l.station,bx+12+pw+8,top+25);
-    const cd=left(l.s1).long+"で終了";x.fillStyle=C.red;x.font=`700 12px ${F.num}`;x.textAlign="right";x.fillText(cd,bx+bw-12,top+25);x.textAlign="left";
+    const cd=left(l.s1).long+"で終了";x.fillStyle=C.pencil;x.font=`700 12px ${F.num}`;x.textAlign="right";x.fillText(cd,bx+bw-12,top+25);x.textAlign="left";
     x.fillStyle=C.pencil;x.font=`700 16px ${F.body}`;x.fillText(fit(x,l.title,bw-24),bx+12,top+50);
     x.fillStyle="rgba(64,56,47,.12)";rr(x,bx+12,top+60,bw-24,5,2.5);x.fill();
-    const pct=Math.min(1,Math.max(0,(m.now-l.s0)/(l.s1-l.s0)));x.fillStyle=C.red;rr(x,bx+12,top+60,Math.max(5,(bw-24)*pct),5,2.5);x.fill();
+    const pct=Math.min(1,Math.max(0,(m.now-l.s0)/(l.s1-l.s0)));x.fillStyle="#e27a94";rr(x,bx+12,top+60,Math.max(5,(bw-24)*pct),5,2.5);x.fill();
     x.fillStyle=C.faded;x.font=`600 11px ${F.num}`;x.fillText(hm(l.s0),bx+12,top+80);x.textAlign="right";x.fillText(hm(l.s1),bx+bw-12,top+80);x.textAlign="left";
     y+=LIVE;
   });
@@ -867,8 +867,8 @@ async function drawShare(m){
     x.beginPath();x.moveTo(X,y);x.lineTo(X+CW,y);x.stroke();
     x.fillStyle=C.faded;x.font=`600 11px ${F.hand}`;x.fillText(dayWord(r.ms,m.now),X+14,y+22);
     x.fillStyle=C.pencil;x.font=`700 15px ${F.num}`;x.fillText(hm(r.ms),X+14,y+40);
-    x.fillStyle=r.app?C.lav:C.berry;rr(x,X+72,y+18,32,18,9);x.fill();
-    x.fillStyle=r.app?C.lavInk:C.berryInk;x.font=`700 11px ${F.body}`;x.textAlign="center";x.fillText(r.app?"出演":"〆",X+88,y+31);x.textAlign="left";
+    if(r.app){x.strokeStyle="rgba(64,56,47,.35)";x.setLineDash([]);rr(x,X+72.75,y+18.75,30.5,16.5,8.25);x.stroke();x.setLineDash([4,4]);x.strokeStyle=C.line}else{x.fillStyle=C.berry;rr(x,X+72,y+18,32,18,9);x.fill()}
+    x.fillStyle=r.app?C.pencil:C.berryInk;x.font=`700 11px ${F.body}`;x.textAlign="center";x.fillText(r.app?"出演":"〆",X+88,y+31);x.textAlign="left";
     const cd=left(r.ms).t;x.font=`700 12px ${F.num}`;const cw=x.measureText(cd).width;
     x.fillStyle=r.urgent?C.red:C.pencil;x.textAlign="right";x.fillText(cd,X+CW-16,y+32);x.textAlign="left";
     const tw=X+CW-16-cw-10-(X+114);
@@ -914,7 +914,7 @@ function openApp(a){openId="app:"+a.id;fillApp(a);if(!$("detail").open)$("detail
 function fillApp(a){
   const B=$("detailBody"),now=Date.now(),s0=ts(a.start),s1=ts(a.airEnd);B.textContent="";
   const live=isLive(a,now),mr=el("div","meta-row");
-  mr.append(el("span","stamp "+(live?"miss":"wait"),live?"放送中":"出演"),el("span","tagt",[MEDIA[a.media],a.station].filter(Boolean).join(" · ")));B.append(mr);
+  mr.append(el("span","stamp go",live?"放送中":"出演"),el("span","tagt",[MEDIA[a.media],a.station].filter(Boolean).join(" · ")));B.append(mr);
   B.append(el("h3",null,a.title||a.short));
   const tl=el("ol","tl"),li=el("li");li.classList.add(live||s0>now?"now":"done");
   li.append(el("span","k",a.media==="stream"&&isNaN(s1)?"配信":"放送"));
