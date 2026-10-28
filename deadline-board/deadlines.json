@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-27",
+  "updatedAt": "2026-10-28",
   "items": [
     {
       "id": "auto-20261013-01",
@@ -9,7 +9,6 @@
       "tag": "BMSG FES",
       "end": "2026-10-26T23:59:00+09:00",
       "url": "https://www.thefirsttimes.jp/news/0000891248/",
-      "note": "BMSG FES'26のPPVアーカイブ。",
       "source": "THE FIRST TIMES"
     },
     {
@@ -22,7 +21,7 @@
       "start": "2026-09-15T12:00:00+09:00",
       "end": "2026-10-18T23:59:00+09:00",
       "url": "https://www.universal-music.co.jp/mazzel/news/2026-09-15-2/",
-      "note": "エントリーページでPre-add/Pre-save後、必要事項入力",
+      "note": "Pre-add/Pre-save してから応募",
       "source": "ユニバーサルミュージック"
     },
     {
@@ -34,9 +33,9 @@
       "tag": "Touch",
       "start": "2026-09-15T12:00:00+09:00",
       "end": "2026-10-18T23:59:00+09:00",
-      "resultNote": "全員もらえる。特典は10月以降にメールで届く予定",
+      "resultNote": "全員もらえる・メールで届く",
       "url": "https://www.universal-music.co.jp/mazzel/news/2026-09-15-2/",
-      "note": "iTunes予約後、購入履歴スクショ（トリミング不可）をアップロード",
+      "note": "購入履歴のスクショ（トリミング不可）",
       "source": "ユニバーサルミュージック"
     },
     {
@@ -49,7 +48,7 @@
       "start": "2026-10-19T12:00:00+09:00",
       "end": "2026-10-26T12:00:00+09:00",
       "url": "https://form.universal-music.co.jp/dl_mazzel_touch/page/form.html",
-      "note": "iTunes/Amazon Music/レコチョク/moraでDL後、購入履歴スクショを応募",
+      "note": "購入履歴のスクショで応募",
       "source": "ユニバーサルミュージック"
     },
     {
@@ -62,7 +61,7 @@
       "start": "2026-10-20T17:00:00+09:00",
       "end": "2026-10-29T18:00:00+09:00",
       "url": "https://form.universal-music.co.jp/sns_mazzel_touch/page/form.html",
-      "note": "#MAZZEL_Touch でCanvasをInstagram/Xにシェア→スクショ応募。メンバー別に10/20〜10/27各日17:00開始／EIKI：10/27(火)17:00からCanvas公開・シェア応募可能",
+      "note": "#MAZZEL_Touch でシェア→スクショで応募",
       "source": "ユニバーサルミュージック"
     },
     {
@@ -75,7 +74,6 @@
       "start": "2026-10-05T15:00:00+09:00",
       "end": "2026-10-26T20:00:00+09:00",
       "url": "https://san-tatsu.jp/pressrelease/558761/",
-      "note": "1日ごとに購入（各日¥6,000）。10/10・11・12の3日とも販売終了は同じ10/26 20:00。アーカイブ視聴期限（10/26 23:59）とは別",
       "source": "san-tatsu.jp（プレスリリース）"
     },
     {
@@ -88,7 +86,7 @@
       "start": "2026-10-09T15:00:00+09:00",
       "end": "2026-10-20T23:59:00+09:00",
       "url": "https://www.mtvjapan.com/event/vmaj/2026/ticket/",
-      "note": "プレイガイド先着先行（全席指定¥19,800）。MAZZELはLIVE ACTで出演（公式特設",
+      "note": "全席指定¥19,800",
       "source": "ローチケ / MTV公式"
     },
     {
@@ -101,9 +99,9 @@
       "start": "2026-10-01T12:00:00+09:00",
       "end": "2026-10-14T23:59:00+09:00",
       "resultAt": "2026-10-27T20:00:00+09:00",
-      "resultNote": "当選者のみbcc一斉送信のメール",
+      "resultNote": "当選者のみメール",
       "url": "https://mazzel.tokyo/tour/play_at_the_muzeum2/",
-      "note": "応募条件・方法はMUZEUM（FCサイト）で確認",
+      "note": "条件は MUZEUM で確認",
       "source": "MUZEUM"
     },
     {
@@ -116,7 +114,6 @@
       "start": "2026-10-09T18:00:00+09:00",
       "end": "2026-10-21T23:59:00+09:00",
       "url": "https://www.mtvjapan.com/event/vmaj/2026/ticket/",
-      "note": "プレイガイド先着先行。MAZZELはLIVE ACTで出演",
       "source": "MTV公式"
     },
     {
@@ -129,7 +126,6 @@
       "start": "2026-10-10T12:00:00+09:00",
       "end": "2026-10-22T18:00:00+09:00",
       "url": "https://www.mtvjapan.com/event/vmaj/2026/ticket/",
-      "note": "プレイガイド先着先行。MAZZELはLIVE ACTで出演",
       "source": "MTV公式"
     },
     {
@@ -143,7 +139,7 @@
       "resultAt": "2026-10-24T17:00:00+09:00",
       "resultNote": "メールで通知",
       "url": "https://www.universal-music.co.jp/mazzel/news/2026-10-22/",
-      "note": "初回盤封入の応募抽選券シリアルでchordから応募（要会員登録・写真付き身分証と登録情報一致）。当落10/24 17:00頃。イベントは2027/2/7東京・2/11福岡・2/21大阪・2/28愛知。緊急メンテナンスのため締切を10/23 10:59に変更",
+      "note": "chord で応募（写真付き身分証と登録情報を一致させる）",
       "source": "ユニバーサルミュージック"
     },
     {
@@ -157,7 +153,7 @@
       "resultAt": "2026-11-02T17:00:00+09:00",
       "resultNote": "メールで通知",
       "url": "https://www.universal-music.co.jp/mazzel/news/2026-10-15/",
-      "note": "chordから応募。当落11/2 17:00頃。メンテナンスのため開始を10/23 11:00に変更（締切は変更なし）",
+      "note": "chord で応募",
       "source": "ユニバーサルミュージック"
     },
     {
@@ -171,7 +167,7 @@
       "resultAt": "2026-11-16T17:00:00+09:00",
       "resultNote": "メールで通知",
       "url": "https://www.universal-music.co.jp/mazzel/news/2026-10-15/",
-      "note": "chordから応募。当落11/16 17:00頃",
+      "note": "chord で応募",
       "source": "ユニバーサルミュージック"
     },
     {
@@ -185,7 +181,7 @@
       "resultAt": "2026-11-30T17:00:00+09:00",
       "resultNote": "メールで通知",
       "url": "https://www.universal-music.co.jp/mazzel/news/2026-10-15/",
-      "note": "chordから応募。最終回は10:00締切（10:59ではない）。当落11/30 17:00頃",
+      "note": "最終回は 10:00 締切",
       "source": "ユニバーサルミュージック"
     },
     {
@@ -197,9 +193,9 @@
       "start": "2026-10-15T12:00:00+09:00",
       "end": "2026-10-18T23:59:00+09:00",
       "resultAt": "2026-10-24T15:00:00+09:00",
-      "resultNote": "ローチケで発表。発券も10/24 15:00〜",
+      "resultNote": "ローチケで発表",
       "url": "https://happinet-phantom.com/wandance/news/100/",
-      "note": "10/31(土)9:50の回、上映前に舞台挨拶。1人2枚まで・手数料770円/枚。一般2,400円／プレミアボックス3,500円／プレミアラグジュアリー5,600円。Lコード35576。抽選で完売しなかった場合のみ一般発売 10/27(火)19:00〜",
+      "note": "10/31 9:50の回・舞台挨拶つき。1人2枚まで",
       "source": "映画『ワンダンス』公式サイト"
     },
     {
@@ -210,9 +206,9 @@
       "tag": "ワンダンス",
       "end": "2026-10-22T23:59:00+09:00",
       "resultAt": "2026-10-24",
-      "resultNote": "当選者にだけXのDMで連絡",
+      "resultNote": "当選者のみXのDM",
       "url": "https://happinet-phantom.com/wandance/news/107/",
-      "note": "映画公式Xをフォローしてキャンペーン投稿をリポスト。10/31(土)9:50の回。当選者本人と同行者で来場、顔写真付き身分証が必要",
+      "note": "映画公式Xをフォロー＆リポスト。顔写真付き身分証が必要",
       "source": "映画『ワンダンス』公式サイト"
     },
     {
@@ -223,7 +219,7 @@
       "start": "2026-10-14T12:15:00+09:00",
       "end": "2026-10-20T16:00:00+09:00",
       "url": "https://countdownjapan.jp/",
-      "note": "公演 12/26・27・29・30・31（1日券¥15,000、31日¥16,000、セット券あり）。締切は16:00なので注意",
+      "note": "16:00締切",
       "source": "公式サイト"
     },
     {
@@ -236,7 +232,6 @@
       "end": "2026-10-22T23:59:00+09:00",
       "resultAt": "2026-10-23T18:00:00+09:00",
       "resultNote": "",
-      "note": "舞台挨拶の出演者・詳細はチケットページで確認。",
       "source": "チケットぴあ"
     },
     {
@@ -248,8 +243,8 @@
       "tag": "RYUJI",
       "end": "2026-10-25T23:59:00+09:00",
       "resultAt": "2026-10-28",
-      "resultNote": "夕方ごろ・当選者のみメールで連絡",
-      "note": "10/30(金)19:00の回、上映前舞台挨拶。RYUKI(MAZZEL)登壇。招待5名（応募多数は抽選）。1会員1回まで・応募した本人のみ入場。イベント当日までMUZEUM会員であること。B with Uの",
+      "resultNote": "夕方ごろ・当選者のみメール",
+      "note": "10/30 19:00の回・RYUKI登壇。招待5名",
       "source": "B with U（MUZEUM）"
     },
     {
@@ -282,7 +277,7 @@
       "resultAt": "2026-10-28T18:00:00+09:00",
       "resultNote": "",
       "url": "https://dreamfestival.jp/information/#p10",
-      "note": "同じ公演日の全席指定を購入済みの人だけ申し込める。購入枚数と同じ枚数で申込。MAZZELは11/23(月・祝)出演"
+      "note": "同じ日の全席指定を買った人だけ。MAZZELは11/23"
     },
     {
       "id": "auto-20261021-02",
@@ -312,7 +307,7 @@
       "start": "2026-10-23T20:00:00+09:00",
       "end": "2026-10-29T23:59:00+09:00",
       "url": "https://bmsg.shop/collections/bmsg",
-      "note": "各¥1,400・お一人様3点まで。12/15〜順次発送。通常販売の商品と同じ注文に入れると全部12/15以降の発送になる。合計はグッズ計算機 EC で計算できる",
+      "note": "各¥1,400・3点まで。通常販売と同じ注文だと全部12/15以降の発送",
       "source": "BMSG SHOP"
     },
     {
@@ -332,7 +327,6 @@
       "tag": "TAKUTO",
       "start": "2026-10-25T16:00:00+09:00",
       "end": "2026-11-01T23:59:00+09:00",
-      "note": "10/25の誕生日生配信。11/1 23:59まで視聴可能。",
       "source": "公式告知スクリーンショット（ユーザー提供）"
     },
     {
@@ -343,7 +337,6 @@
       "tag": "TVer",
       "end": "2026-11-02T18:59:00+09:00",
       "url": "https://tver.jp/episodes/eplmnvieem",
-      "note": "2026年10月26日放送分。TVerの配信終了予定は11月2日18:59。",
       "source": "TVer（ユーザー提供の配信画面）"
     },
     {
@@ -354,7 +347,7 @@
       "tag": "MUZEUM",
       "end": "2026-10-29T23:59:00+09:00",
       "url": "https://bmsg.to/4lxpVNU",
-      "note": "Official Fan Club MUZEUM会員向け。10/29(木)23:59まで公開",
+      "note": "FC会員限定",
       "source": "MAZZEL公式X"
     },
     {
@@ -365,7 +358,7 @@
       "tag": "MUZEUM",
       "end": "2026-10-29T23:59:00+09:00",
       "url": "https://bmsg.to/4lxpVNU",
-      "note": "10/22実施の館内放送。SEITO・TAKUTO出演。FC会員限定。10/29 23:59まで公開。",
+      "note": "FC会員限定",
       "source": "MAZZEL公式X"
     },
     {
@@ -375,7 +368,7 @@
       "category": "stream",
       "tag": "MUZEUM",
       "end": "2026-11-01T23:59:00+09:00",
-      "note": "10/25実施の館内放送。RAN・HAYATO出演。FC会員限定。11/1 23:59まで公開。",
+      "note": "FC会員限定",
       "source": "MUZEUMアーカイブ画面（ユーザー提供）"
     },
     {
@@ -389,7 +382,7 @@
       "end": "2026-11-08T23:59:00+09:00",
       "resultAt": "2026-11-12T18:00:00+09:00",
       "resultNote": "11/12(木)18:00頃から順次",
-      "note": "2027/1/30(土)開催。みずほPayPayドーム福岡。開場9:00／開演10:20。",
+      "note": "2027/1/30 みずほPayPayドーム福岡",
       "source": "チケット受付画面（ユーザー提供）",
       "url": "https://t.pia.jp/pia/event/event.do?eventBundleCd=b2671147"
     },
@@ -401,7 +394,6 @@
       "tag": "NHK ONE",
       "end": "2026-11-03T20:42:00+09:00",
       "url": "https://www.web.nhk/tv/an/utacon/pl/series-tep-1J9MXY5QX2/ep/QD7EMZF1U1",
-      "note": "10/27放送のユーミン特集。MAZZEL出演回の見逃し配信は11/3(火)20:42まで。",
       "source": "NHK ONE（配信画面）"
     }
   ]
