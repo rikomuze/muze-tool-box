@@ -397,6 +397,12 @@ function whenLine(it){
   if(it.start)return`${fmt(it.start)} から`;
   return fmt(it.end);
 }
+/* 局名・配信サービス名。station があればそれ、なければタイトル先頭の「〇〇「番組名」」から取り、どちらもなければ TV・ラジオ・配信 */
+function stationOf(it){
+  if(it.station)return String(it.station);
+  const m=String(it.title||"").match(/^([^「」\s]{2,16})「/);
+  return m?m[1]:catKd(it);
+}
 function catKd(it,kind){if(kind==="end")return"期限";return it.category==="radio"?"ラジオ":it.category==="stream"?"配信":"TV"}
 
 const ALARMS={eve20:"前日20時",morn9:"当日の朝9時",h3:"3時間前",h1:"1時間前"};
@@ -705,7 +711,7 @@ function renderNext(all){
   $("nextBar").hidden=!live;$("nextEnds").hidden=!live;$("nextW").hidden=live;
   const K=$("nextK");K.textContent="";
   if(live){
-    const s0=ts(it.start),s1=f.ms,on=el("span","onair");on.append(el("span","live","ON AIR"),el("span",null,catKd(it)));K.append(on);
+    const s0=ts(it.start),s1=f.ms,on=el("span","onair");on.append(el("span","live","ON AIR"),el("span",null,stationOf(it)));K.append(on);
     $("nextCd").textContent=left(s1).long+"で終了";$("nextCd").className="cd";
     $("nextFill").style.width=(isNaN(s0)||s1<=s0?100:Math.min(100,Math.max(0,Math.round((now-s0)/(s1-s0)*100))))+"%";
     const hm=ms=>{const j=jst(ms);return`${+j.h}:${j.mi}`};
