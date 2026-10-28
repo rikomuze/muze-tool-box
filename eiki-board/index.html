@@ -66,6 +66,15 @@ h1{font-family:var(--f-hand);font-weight:600;font-size:26px;line-height:1.2;marg
 .next .cd{font-family:var(--f-num);font-weight:700;font-size:16px;white-space:nowrap;font-variant-numeric:tabular-nums}
 .next .cd.u{color:var(--red)}
 .next .w{font-family:var(--f-num);font-size:12px;color:var(--faded);grid-column:1/-1;font-variant-numeric:tabular-nums}
+/* 放送中：細い枠とON AIRの印、開始から終了までの進みぐあいのバー（締め切り・出演ボードと同じ形） */
+.next.live{box-shadow:0 10px 24px rgba(64,56,47,.16),inset 0 0 0 1.5px var(--pencil);transform:none;gap:6px 12px}
+.next .onair{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-body);font-weight:700;font-size:12px;color:var(--faded)}
+.next .onair .live{display:inline-flex;align-items:center;gap:5px;font-family:var(--f-num);font-weight:700;font-size:11.5px;letter-spacing:.08em;color:var(--paper);background:var(--pencil);border-radius:999px;padding:1px 9px}
+.next .onair .live::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--berry)}
+.next.live .cd{font-size:13px;color:var(--pencil)}
+.next .bar{grid-column:1/-1;display:block;position:relative;height:5px;background:rgba(64,56,47,.12);border-radius:3px;overflow:hidden;margin-top:2px}
+.next .bar i{position:absolute;left:0;top:0;bottom:0;background:var(--berry);border-radius:3px}
+.next .ends{grid-column:1/-1;display:flex;justify-content:space-between;font-family:var(--f-num);font-size:11.5px;font-weight:600;color:var(--faded);font-variant-numeric:tabular-nums}
 
 .tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;padding:3px;background:rgba(255,255,255,.6);box-shadow:inset 0 0 0 1px var(--line)}
 .tab{border:none;background:none;min-height:44px;padding:0 2px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;font-weight:700;font-size:13px;color:var(--faded);white-space:nowrap}
@@ -227,6 +236,8 @@ details summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--faded)
     <span class="t" id="nextT"></span>
     <span class="cd" id="nextCd"></span>
     <span class="w" id="nextW"></span>
+    <span class="bar" id="nextBar" hidden><i id="nextFill"></i></span>
+    <span class="ends" id="nextEnds" hidden><span id="nextFrom"></span><span id="nextTo"></span></span>
   </button>
 
   <div id="listView" hidden>
@@ -689,12 +700,24 @@ function renderNext(all){
   const by=(a,b)=>bannerRank(a)[0]-bannerRank(b)[0]||bannerRank(a)[1]-bannerRank(b)[1];
   const it=pool.filter(x=>x._i.sub==="before").sort(by)[0]||pool.sort(by)[0];
   if(!it){nx.hidden=true;return}
-  const cd=countText(it,true);
-  nx.hidden=false;
-  $("nextK").textContent=it._i.sub==="before"?"次の出演（視聴する）":"次の出演（未定）";
+  const cd=countText(it,true),f=focusOf(it),live=f.kind==="live",now=Date.now();
+  nx.hidden=false;nx.classList.toggle("live",live);
+  $("nextBar").hidden=!live;$("nextEnds").hidden=!live;$("nextW").hidden=live;
+  const K=$("nextK");K.textContent="";
+  if(live){
+    const s0=ts(it.start),s1=f.ms,on=el("span","onair");on.append(el("span","live","ON AIR"),el("span",null,catKd(it)));K.append(on);
+    $("nextCd").textContent=left(s1).long+"で終了";$("nextCd").className="cd";
+    $("nextFill").style.width=(isNaN(s0)||s1<=s0?100:Math.min(100,Math.max(0,Math.round((now-s0)/(s1-s0)*100))))+"%";
+    const hm=ms=>{const j=jst(ms);return`${+j.h}:${j.mi}`};
+    $("nextFrom").textContent=isNaN(s0)?"":hm(s0);$("nextTo").textContent=hm(s1);
+    nx.setAttribute("aria-label",`放送中 ${nameOf(it)} の詳細`);
+  }else{
+    K.textContent=it._i.sub==="before"?"次の出演（視聴する）":"次の出演（未定）";
+    $("nextCd").textContent=cd.t;$("nextCd").className="cd"+(cd.u?" u":"");
+    $("nextW").textContent=whenLine(it);
+    nx.removeAttribute("aria-label");
+  }
   $("nextT").textContent=nameOf(it);
-  $("nextCd").textContent=cd.t;$("nextCd").className="cd"+(cd.u?" u":"");
-  $("nextW").textContent=whenLine(it);
   nx.onclick=()=>openDetail(it);
 }
 function render(){
