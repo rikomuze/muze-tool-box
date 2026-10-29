@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-29",
+  "updatedAt": "2026-10-30",
   "items": [
     {
       "id": "auto-20261013-01",
@@ -408,6 +408,30 @@
       "url": "https://bmsg.shop/collections/mazzel?filter.v.availability=1",
       "note": "Touch記念グッズ・復刻グッズ・まぜべやコラボグッズ第2弾。Touch記念グッズは数量限定。",
       "source": "MAZZEL公式"
+    },
+    {
+      "id": "mazzel-autumn2026-ec-sales-start-20261030",
+      "short": "秋グッズ EC販売開始",
+      "title": "MAZZEL AUTUMN2026 MERCH EC販売開始",
+      "category": "goods",
+      "flow": "buy",
+      "tag": "BMSG SHOP",
+      "end": "2026-10-30T21:30:00+09:00",
+      "url": "https://bmsg.shop/collections/mazzel?filter.v.availability=1",
+      "note": "21:30から販売開始。Touch記念グッズは数量限定。",
+      "source": "MAZZEL公式"
+    },
+    {
+      "id": "treevillage-touch-line-ticket-20261031",
+      "short": "ツリビレ 整理券先着",
+      "title": "ツリービレッジ東京店「Touch」記念グッズ 入場整理券先着受付開始",
+      "category": "goods",
+      "flow": "buy",
+      "tag": "ツリービレッジ",
+      "end": "2026-10-31T07:00:00+09:00",
+      "url": "https://tree-village.jp/shop_tokyo_bmsg.html",
+      "note": "当日7:00受付開始。スカイツリータウン内で申込み。先着順・予定枚数に達し次第終了。グッズ販売は9:00開始。",
+      "source": "ツリービレッジ公式"
     }
   ]
 }
