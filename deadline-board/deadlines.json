@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-28",
+  "updatedAt": "2026-10-29",
   "items": [
     {
       "id": "auto-20261013-01",
@@ -395,6 +395,19 @@
       "end": "2026-11-03T20:42:00+09:00",
       "url": "https://www.web.nhk/tv/an/utacon/pl/series-tep-1J9MXY5QX2/ep/QD7EMZF1U1",
       "source": "NHK ONE（配信画面）"
+    },
+    {
+      "id": "mazzel-autumn2026-merch-ec-20261104",
+      "short": "秋グッズ EC販売",
+      "title": "MAZZEL AUTUMN2026 MERCH EC販売終了",
+      "category": "goods",
+      "flow": "buy",
+      "tag": "BMSG SHOP",
+      "start": "2026-10-30T21:30:00+09:00",
+      "end": "2026-11-04T21:29:00+09:00",
+      "url": "https://mazzel.tokyo/news/5741/",
+      "note": "Touch記念グッズ・復刻グッズ・まぜべやコラボグッズ第2弾。Touch記念グッズは数量限定。",
+      "source": "MAZZEL公式"
     }
   ]
 }
