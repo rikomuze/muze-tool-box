@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-27",
+  "updatedAt": "2026-10-30",
   "note": "MAZZELのテレビ・ラジオ・配信の出演。start=放送・配信の開始、airEnd=放送の終了（なければ放送中の表示はしない）。見逃し・聴き逃しの期限は deadlines.json に入れる。",
   "items": [
     {
@@ -113,6 +113,18 @@
       "url": "https://www.tbsradio.jp/talk/",
       "note": "KAIRYU出演。YouTubeアーカイブあり。",
       "source": "TBSラジオ・radiko番組表"
+    },
+    {
+      "id": "app-20261101-sundayq-naoya",
+      "short": "サンデーQ NAOYA",
+      "title": "TBS「上田晋也のサンデーQ」NAOYA出演",
+      "media": "tv",
+      "station": "TBS",
+      "start": "2026-11-01T11:35:00+09:00",
+      "airEnd": "2026-11-01T12:54:00+09:00",
+      "url": "https://www.tbs.co.jp/tv/20261101_C353.html",
+      "note": "NAOYA出演。",
+      "source": "TBS"
     }
   ]
 }
