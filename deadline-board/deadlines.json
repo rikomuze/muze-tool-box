@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-30",
+  "updatedAt": "2026-10-31",
   "items": [
     {
       "id": "auto-20261013-01",
@@ -432,6 +432,17 @@
       "url": "https://tree-village.jp/shop_tokyo_bmsg.html",
       "note": "当日7:00受付開始。スカイツリータウン内で申込み。先着順・予定枚数に達し次第終了。グッズ販売は9:00開始。",
       "source": "ツリービレッジ公式"
+    },
+    {
+      "id": "chinmoku-radiko-20261030",
+      "short": "沈黙の金曜日 radiko",
+      "title": "FM FUJI「沈黙の金曜日」HAYATO・EIKI出演回 タイムフリー聴取期限",
+      "category": "stream",
+      "tag": "radiko",
+      "end": "2026-11-06T23:00:00+09:00",
+      "url": "https://radiko.jp/mobile/events/14091943",
+      "note": "10/30(金)21:00〜23:00放送、HAYATO・EIKIは22時台出演。通常タイムフリーは放送後7日以内、再生開始から24時間以内・合計3時間まで。無料聴取は対象エリア内のみ。終了時刻は放送終了から7日後の目安。",
+      "source": "radiko番組ページ・radiko公式ヘルプ"
     }
   ]
 }
