@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-26",
+  "updatedAt": "2026-10-30",
   "items": [
     {
       "id": "eiki-20261022-onemorning-catchup",
@@ -94,6 +94,19 @@
       "source": "mazzel_official (RT nhk_musicjp) / NHK-FM",
       "note": "10/26-28のDJがMAZZEL（NAOYA・EIKI）であることはmazzel_officialがRTしたnhk_musicjp週間予定に明記。放送時刻21:45-22:30はNHK番組ページのレギュラー枠（X本文に時刻なし）。聴き逃しはNHK公式FAQ「放送後7日間」、一覧 https://www.nhk.or.jp/radio/ondemand/detail.html?p=Z9WGYY3GP5_01（urlと同じ）。リアルタイムは https://www.nhk.or.jp/radio/player/?ch=fm 。番組HP: https://www.nhk.jp/p/ml/rs/Z9WGYY3GP5/",
       "xUrl": "https://x.com/mazzel_official/status/2113562100178235407"
+    },
+    {
+      "id": "eiki-20261030-instagram-live",
+      "short": "インスタライブ 秋グッズ紹介",
+      "title": "MAZZEL Instagram Live「AUTUMN2026 MERCH」紹介（HAYATO・EIKI）",
+      "category": "stream",
+      "station": "Instagram",
+      "flow": "watch",
+      "tag": "Instagram Live",
+      "start": "2026-10-30T20:30:00+09:00",
+      "url": "https://www.instagram.com/mazzel_official/",
+      "source": "MAZZEL公式",
+      "note": "HAYATO・EIKIが秋グッズを紹介。20:30頃から配信予定。"
     },
     {
       "id": "eiki-20261030-chinmoku",
