@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-30",
+  "updatedAt": "2026-10-31",
   "note": "MAZZELのテレビ・ラジオ・配信の出演。start=放送・配信の開始、airEnd=放送の終了（なければ放送中の表示はしない）。見逃し・聴き逃しの期限は deadlines.json に入れる。",
   "items": [
     {
@@ -218,6 +218,17 @@
       "url": "https://www.1242.com/lucky/",
       "note": "TAKUTO・RYUKIが5日間連続ゲスト出演。放送後はポッドキャストでも配信。",
       "source": "ニッポン放送"
+    },
+    {
+      "id": "app-20261123-dreamfestival-cs",
+      "short": "ドリフェス2026 CS生中継",
+      "title": "テレビ朝日ドリームフェスティバル2026 CS生中継（MAZZEL出演）",
+      "media": "tv",
+      "station": "CSテレ朝チャンネル1",
+      "start": "2026-11-23T15:00:00+09:00",
+      "url": "https://dreamfestival.jp/",
+      "note": "MAZZELは11月23日のヘッドライナー。全演目が放送されるわけではありません。",
+      "source": "テレビ朝日ドリームフェスティバル公式"
     }
   ]
 }
