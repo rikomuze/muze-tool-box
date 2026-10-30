@@ -78,6 +78,17 @@
       "source": "J-WAVE公式番組ページ・radiko番組表"
     },
     {
+      "id": "app-20261030-instagram-live-hayato-eiki",
+      "short": "インスタライブ HAYATO・EIKI",
+      "title": "MAZZEL Instagram Live 秋グッズ紹介（HAYATO・EIKI）",
+      "media": "stream",
+      "station": "Instagram",
+      "start": "2026-10-30T20:30:00+09:00",
+      "url": "https://www.instagram.com/mazzel_official/",
+      "note": "HAYATO・EIKIがAUTUMN2026 MERCHを紹介。20:30頃から。",
+      "source": "MAZZEL公式"
+    },
+    {
       "id": "app-20261030-chinmoku",
       "short": "沈黙の金曜日 HAYATO・EIKI",
       "title": "FM FUJI「沈黙の金曜日」HAYATO・EIKI 生出演",
