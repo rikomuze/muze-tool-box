@@ -149,6 +149,42 @@
       "source": "FOD公式"
     },
     {
+      "id": "app-20261102-lucky7-takuto-ryuki",
+      "short": "LUCKY 7 TAKUTO・RYUKI (2日)",
+      "title": "ニッポン放送「大沢あかね LUCKY 7」TAKUTO・RYUKI ゲスト出演（11/2）",
+      "media": "radio",
+      "station": "ニッポン放送",
+      "start": "2026-11-02T21:50:00+09:00",
+      "airEnd": "2026-11-02T21:57:00+09:00",
+      "url": "https://www.1242.com/lucky/",
+      "note": "TAKUTO・RYUKIが5日間連続ゲスト出演。放送後はポッドキャストでも配信。",
+      "source": "ニッポン放送"
+    },
+    {
+      "id": "app-20261103-lucky7-takuto-ryuki",
+      "short": "LUCKY 7 TAKUTO・RYUKI (3日)",
+      "title": "ニッポン放送「大沢あかね LUCKY 7」TAKUTO・RYUKI ゲスト出演（11/3）",
+      "media": "radio",
+      "station": "ニッポン放送",
+      "start": "2026-11-03T21:50:00+09:00",
+      "airEnd": "2026-11-03T21:57:00+09:00",
+      "url": "https://www.1242.com/lucky/",
+      "note": "TAKUTO・RYUKIが5日間連続ゲスト出演。放送後はポッドキャストでも配信。",
+      "source": "ニッポン放送"
+    },
+    {
+      "id": "app-20261104-lucky7-takuto-ryuki",
+      "short": "LUCKY 7 TAKUTO・RYUKI (4日)",
+      "title": "ニッポン放送「大沢あかね LUCKY 7」TAKUTO・RYUKI ゲスト出演（11/4）",
+      "media": "radio",
+      "station": "ニッポン放送",
+      "start": "2026-11-04T21:50:00+09:00",
+      "airEnd": "2026-11-04T21:57:00+09:00",
+      "url": "https://www.1242.com/lucky/",
+      "note": "TAKUTO・RYUKIが5日間連続ゲスト出演。放送後はポッドキャストでも配信。",
+      "source": "ニッポン放送"
+    },
+    {
       "id": "app-20261105-hyakuyoufu-naoya-hayato",
       "short": "百妖譜 NAOYA・HAYATO",
       "title": "TVアニメ「百妖譜 第3期京師篇」第5話 NAOYA・HAYATO 声優出演",
@@ -158,6 +194,30 @@
       "url": "https://www.fujitv.co.jp/b8station/",
       "note": "11/4(水)深夜25:15〜放送。NAOYA・HAYATOがゲスト声優出演。",
       "source": "番組告知"
+    },
+    {
+      "id": "app-20261105-lucky7-takuto-ryuki",
+      "short": "LUCKY 7 TAKUTO・RYUKI (5日)",
+      "title": "ニッポン放送「大沢あかね LUCKY 7」TAKUTO・RYUKI ゲスト出演（11/5）",
+      "media": "radio",
+      "station": "ニッポン放送",
+      "start": "2026-11-05T21:50:00+09:00",
+      "airEnd": "2026-11-05T21:57:00+09:00",
+      "url": "https://www.1242.com/lucky/",
+      "note": "TAKUTO・RYUKIが5日間連続ゲスト出演。放送後はポッドキャストでも配信。",
+      "source": "ニッポン放送"
+    },
+    {
+      "id": "app-20261106-lucky7-takuto-ryuki",
+      "short": "LUCKY 7 TAKUTO・RYUKI (6日)",
+      "title": "ニッポン放送「大沢あかね LUCKY 7」TAKUTO・RYUKI ゲスト出演（11/6）",
+      "media": "radio",
+      "station": "ニッポン放送",
+      "start": "2026-11-06T21:50:00+09:00",
+      "airEnd": "2026-11-06T21:57:00+09:00",
+      "url": "https://www.1242.com/lucky/",
+      "note": "TAKUTO・RYUKIが5日間連続ゲスト出演。放送後はポッドキャストでも配信。",
+      "source": "ニッポン放送"
     }
   ]
 }
