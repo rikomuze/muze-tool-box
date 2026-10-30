@@ -793,7 +793,7 @@ function renderShows(){
   sec.hidden=!list.length;box.textContent="";$("showsN").textContent=list.length?String(list.length):"";
   list.forEach(a=>{
     const ms=ts(a.start),b=el("button","arow");b.type="button";b.setAttribute("aria-label",`出演 ${a.short||a.title} の詳細`);
-    const tm=el("span","tm");tm.append(el("small",null,dayWord(ms,now)),el("b",null,hm(ms)));
+    const tm=el("span","tm");const j=jst(ms),dayLabel=dayWord(ms,now);tm.append(el("small",null,dayLabel==="あした"?`あした ${j.m}/${j.d}`:dayLabel),el("b",null,hm(ms)));
     const tx=el("span","tx");tx.append(el("b",null,a.short||a.title),el("span",null,[MEDIA[a.media],a.station].filter(Boolean).join(" · ")));
     b.append(tm,tx,el("span","cd",left(ms).t),el("span","chev","›"));b.onclick=()=>openApp(a);box.append(b);
   });
