@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-31",
+  "updatedAt": "2026-11-01",
   "items": [
     {
       "id": "auto-20261013-01",
@@ -373,8 +373,8 @@
     },
     {
       "id": "fukuoka-music-fes-2027-presale-20261108",
-      "short": "福岡 MUSIC FES. 先行抽選",
-      "title": "FUKUOKA MUSIC FES. 2027 supported by Trunk 先行抽選 受付締切",
+      "short": "福フェス 3次先行",
+      "title": "FUKUOKA MUSIC FES. 2027 オフィシャル3次先行 抽選受付締切",
       "category": "ticket",
       "flow": "lottery",
       "tag": "福岡 MUSIC FES.",
@@ -382,7 +382,7 @@
       "end": "2026-11-08T23:59:00+09:00",
       "resultAt": "2026-11-12T18:00:00+09:00",
       "resultNote": "11/12(木)18:00頃から順次",
-      "note": "2027/1/30 みずほPayPayドーム福岡",
+      "note": "MAZZEL出演：2027/1/30(土) みずほPayPayドーム福岡。次回受付・前方エリア抽選も引き続き確認。",
       "source": "チケット受付画面（ユーザー提供）",
       "url": "https://t.pia.jp/pia/event/event.do?eventBundleCd=b2671147"
     },
@@ -453,7 +453,7 @@
       "tag": "ドリフェス",
       "start": "2026-11-01T12:00:00+09:00",
       "end": "2026-11-04T23:59:00+09:00",
-      "url": "https://dreamfestival.jp/",
+      "url": "https://w.pia.jp/v/dreamfestival26upg/",
       "note": "対象：いち早プレリザーブ・オフィシャル最速／2次／3次先行で購入済みの方。MAZZEL出演11/23。",
       "source": "公式X（ユーザー提供画像）"
     },
@@ -478,8 +478,21 @@
       "start": "2026-10-28T12:15:00+09:00",
       "end": "2026-11-02T16:00:00+09:00",
       "url": "https://countdownjapan.jp/2627/ticket/",
-      "note": "申込は公式「Jフェス」アプリのみ。第2次先行で完売する日程は以降の受付なし。",
-      "source": "COUNTDOWN JAPAN 26/27公式"
+      "note": "申込は公式「Jフェス」アプリのみ。第2次先行で完売する日程は以降の受付なし。 当落11/6(金)16:00、入金期限11/9(月)16:00。",
+      "source": "COUNTDOWN JAPAN 26/27公式",
+      "resultAt": "2026-11-06T16:00:00+09:00",
+      "resultNote": "当落発表 11/6(金)16:00／入金締切 11/9(月)16:00"
+    },
+    {
+      "id": "cdj2627-second-payment-20261109",
+      "short": "CDJ 2次 当選入金締切",
+      "title": "COUNTDOWN JAPAN 26/27 第2次抽選先行 当選者入金期限",
+      "category": "ticket",
+      "tag": "CDJ",
+      "end": "2026-11-09T16:00:00+09:00",
+      "url": "https://countdownjapan.jp/2627/ticket/",
+      "note": "第2次抽選の当落発表は11/6(金)16:00。入金期限は11/9(月)16:00。",
+      "source": "COUNTDOWN JAPAN公式チケット案内"
     }
   ]
 }
