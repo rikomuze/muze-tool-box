@@ -220,6 +220,18 @@
       "source": "ニッポン放送"
     },
     {
+      "id": "app-20261107-buzzrhythm02",
+      "short": "バズリズム02 MAZZEL",
+      "title": "日本テレビ「バズリズム02」MAZZEL出演（「Trap」「Touch」披露）",
+      "media": "tv",
+      "station": "日本テレビ",
+      "start": "2026-11-07T01:29:00+09:00",
+      "airEnd": "2026-11-07T02:29:00+09:00",
+      "url": "https://www.ntv.co.jp/buzzrhythm/",
+      "note": "11/6(金)深夜25:29〜26:29。MAZZELが「Trap」「Touch」を披露。放送後TVer見逃し配信の有無・期限を確認予定。",
+      "source": "MAZZEL公式X（ユーザー提供画像）"
+    },
+    {
       "id": "app-20261123-dreamfestival-cs",
       "short": "ドリフェス2026 CS生中継",
       "title": "テレビ朝日ドリームフェスティバル2026 CS生中継（MAZZEL出演）",
