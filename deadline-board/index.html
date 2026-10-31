@@ -246,7 +246,7 @@ details summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--faded)
 .soon-h .when{flex-basis:100%;font-family:var(--f-body);font-size:12px;font-weight:700;color:var(--faded)}
 .shareb{flex:none;display:inline-flex;align-items:center;gap:5px;min-height:40px;padding:0 12px;border:1.5px solid var(--pencil);border-radius:999px;background:var(--paper);font-weight:700;font-size:13px;cursor:pointer}
 .soon-empty{padding:4px 16px 14px;font-family:var(--f-hand);font-weight:600;font-size:13px;color:var(--faded)}
-.onair{display:flex;flex-direction:column;gap:6px;margin:0 10px 6px;padding:10px 12px 12px;border:1.5px solid var(--pencil);background:var(--paper);text-align:left;cursor:pointer;width:calc(100% - 20px)}
+.onair{display:flex;flex-direction:column;gap:6px;margin:2px 10px 8px;padding:10px 12px 12px;border:1.5px solid var(--pencil);background:var(--paper);text-align:left;cursor:pointer;width:calc(100% - 20px)}
 .onair .r1{display:flex;align-items:center;gap:8px}
 .onair .live{display:inline-flex;align-items:center;gap:5px;font-family:var(--f-num);font-weight:700;font-size:11.5px;letter-spacing:.08em;color:var(--paper);background:var(--pencil);border-radius:999px;padding:1px 9px}
 .onair .live::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--berry)}
@@ -258,6 +258,9 @@ details summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--faded)
 .onair .ends{display:flex;justify-content:space-between;font-family:var(--f-num);font-size:11.5px;font-weight:600;color:var(--faded);font-variant-numeric:tabular-nums}
 .srow{display:grid;grid-template-columns:52px 30px minmax(0,1fr) auto 8px;align-items:center;gap:8px;padding:9px 12px 9px 14px;border:none;border-top:1.5px dashed var(--line);background:none;text-align:left;cursor:pointer;min-height:52px;width:100%}
 .srow:active,.arow:active{background:rgba(64,56,47,.05)}
+.srow.first{border-top:none}
+.sday{padding:10px 16px 4px;font-family:var(--f-hand);font-weight:600;font-size:13px;color:var(--faded)}
+.sgap{height:12px;background:var(--desk);box-shadow:inset 0 5px 6px -5px rgba(64,56,47,.18),inset 0 -5px 6px -5px rgba(64,56,47,.18)}
 .srow .tm,.arow .tm{display:flex;flex-direction:column;line-height:1.15;font-family:var(--f-num);font-variant-numeric:tabular-nums}
 .srow .tm small,.arow .tm small{font-family:var(--f-hand);font-weight:600;font-size:11px;color:var(--faded)}
 .srow .tm b{font-size:15px;font-weight:700}
@@ -764,40 +767,47 @@ function soonApps(now){
   const lim=dayStart(now)+DAY;
   return appearances.filter(a=>!isLive(a,now)&&ts(a.start)>now&&ts(a.start)<lim).sort(by("start"));
 }
+function dayHead(ms,now){const j=jst(ms);return`${dayWord(ms,now)} ${j.m}/${j.d}(${j.w})`}
 function renderSoon(all){
   const box=$("soon"),body=$("soonBody"),now=Date.now();
   if(!loaded){box.hidden=true;return}
   box.hidden=false;body.textContent="";
   const live=appearances.filter(a=>isLive(a,now)).sort(by("start"));
-  live.forEach(a=>{
-    const s0=ts(a.start),s1=ts(a.airEnd),b=el("button","onair");b.type="button";b.setAttribute("aria-label",`放送中 ${a.short||a.title} の詳細`);
-    const r1=el("span","r1");r1.append(el("span","live","ON AIR"),el("span","st",a.station||MEDIA[a.media]||""),el("span","cd",left(s1).long+"で終了"));
-    const bar=el("span","bar"),fill=el("i");fill.style.width=Math.min(100,Math.max(0,Math.round((now-s0)/(s1-s0)*100)))+"%";bar.append(fill);
-    const ends=el("span","ends");ends.append(el("span",null,hm(s0)),el("span",null,hm(s1)));
-    b.append(r1,el("span","t",a.short||a.title),bar,ends);b.onclick=()=>openApp(a);body.append(b);
-  });
   const rows=[];
   soonApps(now).forEach(a=>rows.push({ms:ts(a.start),app:a}));
   soonDues(all,now).forEach(it=>rows.push({ms:dueMs(it),it}));
   rows.sort((x,y)=>x.ms-y.ms);
-  rows.forEach(r=>{
-    const b=el("button","srow");b.type="button";
-    const tm=el("span","tm");tm.append(el("small",null,dayWord(r.ms,now)),el("b",null,hm(r.ms)));
-    const tx=el("span","tx"),L=left(r.ms),cd=el("span","cd",L.t);
-    if(r.app){
-      const a=r.app;b.setAttribute("aria-label",`出演 ${a.short||a.title} の詳細`);
-      tx.append(el("b",null,a.short||a.title),el("span",null,[MEDIA[a.media],a.station].filter(Boolean).join(" · ")));
-      b.append(tm,el("span","kl app","出演"),tx,cd,el("span","chev","›"));b.onclick=()=>openApp(a);
-    }else{
-      const it=r.it,kd=kindOf(it);b.setAttribute("aria-label",`締め切り ${nameOf(it)} の詳細`);
-      tx.append(el("b",null,nameOf(it)),el("span",null,kd.l+(it._i.sub==="undecided"?" · 未定":"")));
-      if(L.u)cd.classList.add("u");
-      b.append(tm,el("span","kl due","〆"),tx,cd,el("span","chev","›"));b.onclick=()=>openDetail(it);
-    }
-    body.append(b);
+  // きょう と あした の2つに分け、あいだに机の色の隙間を入れる
+  const t0=dayStart(now),groups=[{ms:now,live,rows:rows.filter(r=>r.ms<t0+DAY)},{ms:t0+DAY+12*3600e3,live:[],rows:rows.filter(r=>r.ms>=t0+DAY)}].filter(g=>g.live.length||g.rows.length);
+  groups.forEach((g,gi)=>{
+    if(gi)body.append(el("div","sgap"));
+    body.append(el("div","sday",dayHead(g.ms,now)));
+    g.live.forEach(a=>{
+      const s0=ts(a.start),s1=ts(a.airEnd),b=el("button","onair");b.type="button";b.setAttribute("aria-label",`放送中 ${a.short||a.title} の詳細`);
+      const r1=el("span","r1");r1.append(el("span","live","ON AIR"),el("span","st",a.station||MEDIA[a.media]||""),el("span","cd",left(s1).long+"で終了"));
+      const bar=el("span","bar"),fill=el("i");fill.style.width=Math.min(100,Math.max(0,Math.round((now-s0)/(s1-s0)*100)))+"%";bar.append(fill);
+      const ends=el("span","ends");ends.append(el("span",null,hm(s0)),el("span",null,hm(s1)));
+      b.append(r1,el("span","t",a.short||a.title),bar,ends);b.onclick=()=>openApp(a);body.append(b);
+    });
+    g.rows.forEach((r,ri)=>{
+      const b=el("button","srow"+(ri===0&&!g.live.length?" first":""));b.type="button";
+      const tm=el("span","tm");tm.append(el("b",null,hm(r.ms)));
+      const tx=el("span","tx"),L=left(r.ms),cd=el("span","cd",L.t);
+      if(r.app){
+        const a=r.app;b.setAttribute("aria-label",`出演 ${a.short||a.title} の詳細`);
+        tx.append(el("b",null,a.short||a.title),el("span",null,[MEDIA[a.media],a.station].filter(Boolean).join(" · ")));
+        b.append(tm,el("span","kl app","出演"),tx,cd,el("span","chev","›"));b.onclick=()=>openApp(a);
+      }else{
+        const it=r.it,kd=kindOf(it);b.setAttribute("aria-label",`締め切り ${nameOf(it)} の詳細`);
+        tx.append(el("b",null,nameOf(it)),el("span",null,kd.l+(it._i.sub==="undecided"?" · 未定":"")));
+        if(L.u)cd.classList.add("u");
+        b.append(tm,el("span","kl due","〆"),tx,cd,el("span","chev","›"));b.onclick=()=>openDetail(it);
+      }
+      body.append(b);
+    });
   });
-  if(!live.length&&!rows.length)body.append(el("div","soon-empty","今日の出演も、明日までの締め切りもないよ"));
-  $("shareBtn").hidden=!rows.length&&!live.length;
+  if(!groups.length)body.append(el("div","soon-empty","今日の出演も、明日までの締め切りもないよ"));
+  $("shareBtn").hidden=!groups.length;
 }
 function renderShows(){
   const sec=$("shows"),box=$("showsBox"),now=Date.now();
@@ -843,7 +853,9 @@ async function drawShare(m){
   const words=[..."MUZE今日はこれチェック！の出演＆明日までの締め切りもないよ〆ONAIR放送中で終了時点出演ボード"].join("")+m.rows.map(r=>r.title+r.sub).join("")+m.live.map(l=>l.title+l.station).join("");
   try{await Promise.race([Promise.all([document.fonts.load(`600 15px "Klee One"`,words),document.fonts.load(`700 14px "Zen Kaku Gothic New"`,words),document.fonts.load(`400 12px "Zen Kaku Gothic New"`,words),document.fonts.load(`700 15px Montserrat`,"0123456789:/()ONAIR")]),new Promise(r=>setTimeout(r,2500))])}catch(e){}
   const W=390,S=3,X=16,CW=W-32,ROW=54,LIVE=98;
-  const cardH=62+m.live.length*LIVE+(m.rows.length?m.rows.length*ROW:(m.live.length?0:44))+6;
+  const t0=dayStart(m.now),G=[{ms:m.now,live:m.live,rows:m.rows.filter(r=>r.ms<t0+DAY)},{ms:t0+DAY+12*3600e3,live:[],rows:m.rows.filter(r=>r.ms>=t0+DAY)}].filter(g=>g.live.length||g.rows.length);
+  const GAP=12,HEAD=30;
+  const cardH=62+(G.length?G.length*HEAD+(G.length-1)*GAP:44)+m.live.length*LIVE+m.rows.length*ROW+6;
   const H=24+cardH+56;
   const cv=document.createElement("canvas");cv.width=W*S;cv.height=H*S;
   const x=cv.getContext("2d");x.scale(S,S);x.textBaseline="alphabetic";
@@ -859,35 +871,37 @@ async function drawShare(m){
   x.fillStyle=C.pencil;x.font=`600 16px ${F.hand}`;x.fillText("MUZE 今日はこれチェック！",X+16,y+30);
   x.fillStyle=C.faded;x.font=`600 12px ${F.num}`;x.fillText(fit(x,`今日の出演＆明日までの締め切り ・ ${n.m}/${n.d}(${n.w}) ${hm(m.now)} 時点`,CW-32),X+16,y+50);
   y+=62;
-  // 放送中
-  m.live.forEach(l=>{
-    const bx=X+10,bw=CW-20,top=y;
-    x.strokeStyle=C.pencil;x.lineWidth=1.5;x.strokeRect(bx+1,top+1,bw-2,LIVE-8);
-    x.font=`700 11px ${F.num}`;const pw=x.measureText("ON AIR").width+26;
-    x.fillStyle=C.pencil;rr(x,bx+12,top+12,pw,18,9);x.fill();
-    x.fillStyle="#e27a94";x.beginPath();x.arc(bx+21,top+21,3,0,7);x.fill();x.fillStyle="#fff";x.fillText("ON AIR",bx+28,top+25);
-    x.fillStyle=C.faded;x.font=`700 12px ${F.body}`;x.fillText(l.station,bx+12+pw+8,top+25);
-    const cd=left(l.s1).long+"で終了";x.fillStyle=C.pencil;x.font=`700 12px ${F.num}`;x.textAlign="right";x.fillText(cd,bx+bw-12,top+25);x.textAlign="left";
-    x.fillStyle=C.pencil;x.font=`700 16px ${F.body}`;x.fillText(fit(x,l.title,bw-24),bx+12,top+50);
-    x.fillStyle="rgba(64,56,47,.12)";rr(x,bx+12,top+60,bw-24,5,2.5);x.fill();
-    const pct=Math.min(1,Math.max(0,(m.now-l.s0)/(l.s1-l.s0)));x.fillStyle="#e27a94";rr(x,bx+12,top+60,Math.max(5,(bw-24)*pct),5,2.5);x.fill();
-    x.fillStyle=C.faded;x.font=`600 11px ${F.num}`;x.fillText(hm(l.s0),bx+12,top+80);x.textAlign="right";x.fillText(hm(l.s1),bx+bw-12,top+80);x.textAlign="left";
-    y+=LIVE;
-  });
-  // 行
-  x.setLineDash([4,4]);x.lineWidth=1.5;x.strokeStyle=C.line;
-  m.rows.forEach(r=>{
-    x.beginPath();x.moveTo(X,y);x.lineTo(X+CW,y);x.stroke();
-    x.fillStyle=C.faded;x.font=`600 11px ${F.hand}`;x.fillText(dayWord(r.ms,m.now),X+14,y+22);
-    x.fillStyle=C.pencil;x.font=`700 15px ${F.num}`;x.fillText(hm(r.ms),X+14,y+40);
-    if(r.app){x.strokeStyle="rgba(64,56,47,.35)";x.setLineDash([]);rr(x,X+72.75,y+18.75,30.5,16.5,8.25);x.stroke();x.setLineDash([4,4]);x.strokeStyle=C.line}else{x.fillStyle=C.berry;rr(x,X+72,y+18,32,18,9);x.fill()}
-    x.fillStyle=r.app?C.pencil:C.berryInk;x.font=`700 11px ${F.body}`;x.textAlign="center";x.fillText(r.app?"出演":"〆",X+88,y+31);x.textAlign="left";
-    const cd=left(r.ms).t;x.font=`700 12px ${F.num}`;const cw=x.measureText(cd).width;
-    x.fillStyle=r.urgent?C.red:C.pencil;x.textAlign="right";x.fillText(cd,X+CW-16,y+32);x.textAlign="left";
-    const tw=X+CW-16-cw-10-(X+114);
-    x.fillStyle=C.pencil;x.font=`700 14px ${F.body}`;x.fillText(fit(x,r.title,tw),X+114,y+24);
-    x.fillStyle=C.faded;x.font=`400 12px ${F.body}`;x.fillText(fit(x,r.sub,tw),X+114,y+42);
-    y+=ROW;
+  G.forEach((g,gi)=>{
+    if(gi){x.save();x.setLineDash([]);x.fillStyle=C.desk;x.fillRect(X,y,CW,GAP);x.restore();y+=GAP}
+    x.fillStyle=C.faded;x.font=`600 13px ${F.hand}`;x.fillText(dayHead(g.ms,m.now),X+16,y+21);y+=HEAD;
+    g.live.forEach(l=>{
+      const bx=X+10,bw=CW-20,top=y;
+      x.strokeStyle=C.pencil;x.lineWidth=1.5;x.strokeRect(bx+1,top+1,bw-2,LIVE-8);
+      x.font=`700 11px ${F.num}`;const pw=x.measureText("ON AIR").width+26;
+      x.fillStyle=C.pencil;rr(x,bx+12,top+12,pw,18,9);x.fill();
+      x.fillStyle="#e27a94";x.beginPath();x.arc(bx+21,top+21,3,0,7);x.fill();x.fillStyle="#fff";x.fillText("ON AIR",bx+28,top+25);
+      x.fillStyle=C.faded;x.font=`700 12px ${F.body}`;x.fillText(l.station,bx+12+pw+8,top+25);
+      const cd=left(l.s1).long+"で終了";x.fillStyle=C.pencil;x.font=`700 12px ${F.num}`;x.textAlign="right";x.fillText(cd,bx+bw-12,top+25);x.textAlign="left";
+      x.fillStyle=C.pencil;x.font=`700 16px ${F.body}`;x.fillText(fit(x,l.title,bw-24),bx+12,top+50);
+      x.fillStyle="rgba(64,56,47,.12)";rr(x,bx+12,top+60,bw-24,5,2.5);x.fill();
+      const pct=Math.min(1,Math.max(0,(m.now-l.s0)/(l.s1-l.s0)));x.fillStyle="#e27a94";rr(x,bx+12,top+60,Math.max(5,(bw-24)*pct),5,2.5);x.fill();
+      x.fillStyle=C.faded;x.font=`600 11px ${F.num}`;x.fillText(hm(l.s0),bx+12,top+80);x.textAlign="right";x.fillText(hm(l.s1),bx+bw-12,top+80);x.textAlign="left";
+      y+=LIVE;
+    });
+    x.setLineDash([4,4]);x.lineWidth=1.5;x.strokeStyle=C.line;
+    g.rows.forEach((r,ri)=>{
+      if(ri||g.live.length){x.beginPath();x.moveTo(X,y);x.lineTo(X+CW,y);x.stroke()}
+      x.fillStyle=C.pencil;x.font=`700 15px ${F.num}`;x.fillText(hm(r.ms),X+14,y+33);
+      if(r.app){x.strokeStyle="rgba(64,56,47,.35)";x.setLineDash([]);rr(x,X+72.75,y+18.75,30.5,16.5,8.25);x.stroke();x.setLineDash([4,4]);x.strokeStyle=C.line}else{x.fillStyle=C.berry;rr(x,X+72,y+18,32,18,9);x.fill()}
+      x.fillStyle=r.app?C.pencil:C.berryInk;x.font=`700 11px ${F.body}`;x.textAlign="center";x.fillText(r.app?"出演":"〆",X+88,y+31);x.textAlign="left";
+      const cd=left(r.ms).t;x.font=`700 12px ${F.num}`;const cw=x.measureText(cd).width;
+      x.fillStyle=r.urgent?C.red:C.pencil;x.textAlign="right";x.fillText(cd,X+CW-16,y+32);x.textAlign="left";
+      const tw=X+CW-16-cw-10-(X+114);
+      x.fillStyle=C.pencil;x.font=`700 14px ${F.body}`;x.fillText(fit(x,r.title,tw),X+114,y+24);
+      x.fillStyle=C.faded;x.font=`400 12px ${F.body}`;x.fillText(fit(x,r.sub,tw),X+114,y+42);
+      y+=ROW;
+    });
+    x.setLineDash([]);
   });
   x.setLineDash([]);
   if(!m.rows.length&&!m.live.length){x.fillStyle=C.faded;x.font=`600 13px ${F.hand}`;x.fillText("今日の出演も、明日までの締め切りもないよ",X+16,y+24)}
