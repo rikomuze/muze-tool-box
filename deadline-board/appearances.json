@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-31",
+  "updatedAt": "2026-11-01",
   "note": "MAZZELのテレビ・ラジオ・配信の出演。start=放送・配信の開始、airEnd=放送の終了（なければ放送中の表示はしない）。見逃し・聴き逃しの期限は deadlines.json に入れる。",
   "items": [
     {
@@ -252,6 +252,18 @@
       "url": "https://dreamfestival.jp/",
       "note": "MAZZELは11月23日のヘッドライナー。全演目が放送されるわけではありません。",
       "source": "テレビ朝日ドリームフェスティバル公式"
+    },
+    {
+      "id": "app-20261121-inazuma-cs",
+      "short": "イナズマフェス CS放送",
+      "title": "FEST. INAZUMA 2026 DAY1（MAZZEL出演）CS放送",
+      "media": "tv",
+      "station": "フジテレビTWO ドラマ・アニメ",
+      "start": "2026-11-21T20:00:00+09:00",
+      "airEnd": "2026-11-21T23:00:00+09:00",
+      "url": "https://www.skyperfectv.co.jp/program/search/cast/?actorId=TR063493995138",
+      "note": "9/19開催DAY1の後日放送。MAZZEL出演。番組全体の放送時間20:00〜23:00（MAZZEL個別の登場時刻は未公表）。",
+      "source": "スカパー！番組情報"
     }
   ]
 }
