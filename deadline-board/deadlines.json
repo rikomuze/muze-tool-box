@@ -467,6 +467,19 @@
       "url": "https://fod.fujitv.co.jp/title/502r/",
       "note": "第2回（27分）。11月15日23:59まで無料配信。",
       "source": "FOD配信画面"
+    },
+    {
+      "id": "cdj2627-second-lottery",
+      "short": "CDJ 26/27 2次抽選",
+      "title": "COUNTDOWN JAPAN 26/27 第2次抽選先行 受付締切",
+      "category": "ticket",
+      "flow": "lottery",
+      "tag": "CDJ",
+      "start": "2026-10-28T12:15:00+09:00",
+      "end": "2026-11-02T16:00:00+09:00",
+      "url": "https://countdownjapan.jp/2627/ticket/",
+      "note": "申込は公式「Jフェス」アプリのみ。第2次先行で完売する日程は以降の受付なし。",
+      "source": "COUNTDOWN JAPAN 26/27公式"
     }
   ]
 }
