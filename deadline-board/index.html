@@ -545,7 +545,7 @@ function info(it){
   if(end<now)return{ph:"done",sub:"expired"};
   return{ph:"undecided",sub:"undecided"};
 }
-const FLOW={lottery:{yes:"応募する",no:"しない",did:"応募した",steps:["応募する","応募した","当落確認"]},entry:{yes:"応募する",no:"しない",did:"応募した",fin:"paid",steps:["応募する","応募した"]},buy:{yes:"買う",no:"買わない",did:"買った",fin:"paid",steps:["買う","買った"]},watch:{yes:"見る",no:"見ない",did:"見た",fin:"watched",steps:["見る","見た"]},pay:{yes:"払う",no:"払わない",did:"払った",fin:"paid",steps:["払う","払った"]}};
+const FLOW={lottery:{yes:"応募する",no:"しない",did:"応募した",steps:["応募する","応募した","当落確認"]},entry:{yes:"応募する",no:"しない",did:"応募した",fin:"paid",steps:["応募する","応募した"]},buy:{yes:"買う",no:"買わない",did:"買った",fin:"paid",steps:["買う","買った"]},watch:{yes:"見る",no:"見ない",did:"見た",fin:"watched",steps:["見る","見た"]},listen:{yes:"聴く",no:"聴かない",did:"聴いた",fin:"watched",steps:["聴く","聴いた"]},pay:{yes:"払う",no:"払わない",did:"払った",fin:"paid",steps:["払う","払った"]}};
 const FLOWNAME={lottery:"抽選（当落あり）",entry:"全員もらえる",buy:"先着・購入",watch:"視聴",pay:"支払い"};
 const flowOf=it=>FLOW[it.flow]?it.flow:({stream:"watch",payment:"pay",goods:"buy"}[it.category]||"lottery");
 const isLot=it=>flowOf(it)==="lottery";
@@ -559,7 +559,8 @@ function kindOf(it){
 }
 // カレンダーに追加できるか（くわしくシートにカレンダー欄が出るのと同じ条件）
 const canCal=(it,i)=>!isNaN(ts(it.end))&&dueMs(it)>Date.now()&&i.ph!=="done"&&i.ph!=="pass";
-const vb=it=>FLOW[flowOf(it)];
+// ラジオの聴き逃し（radiko など）は「見る」ではなく「聴く」
+const vb=it=>flowOf(it)==="watch"&&kindOf(it).l==="聴き逃し"?FLOW.listen:FLOW[flowOf(it)];
 function stepBar(it,i,big){
   const S=vb(it).steps.slice();let n=0;
   if(i.sub==="before"||i.sub==="missed")n=1;else if(i.sub==="applied")n=2;else if(["won","lost","fin"].includes(i.sub))n=S.length;
@@ -571,7 +572,7 @@ function stepBar(it,i,big){
 function look(it,i){ // [card class, stamp class, label]
   const v=vb(it);
   return{before:["st-go","go",v.yes],missed:["st-miss","miss","〆すぎた"],applied:["st-wait","wait","結果待ち"],won:["st-won","won","当選"],undecided:["st-undecided","undecided","未定"],
-    pass:["st-off st-pass","off",v.no==="しない"?"応募しない":v.no],lost:["st-off","off","当落確認済"],fin:["st-off","off",it.status==="watched"?"視聴済み":"完了"],closed:["st-off","off","間に合わず"],expired:["st-off","off","期限切れ"]}[i.sub];
+    pass:["st-off st-pass","off",v.no==="しない"?"応募しない":v.no],lost:["st-off","off","当落確認済"],fin:["st-off","off",it.status==="watched"?(v===FLOW.listen?"聴いた":"視聴済み"):"完了"],closed:["st-off","off","間に合わず"],expired:["st-off","off","期限切れ"]}[i.sub];
 }
 function actionsFor(it,i){ // [{label,cls,patch,msg}]
   const v=vb(it),fin=v.fin?{status:v.fin}:{status:"applied"};
