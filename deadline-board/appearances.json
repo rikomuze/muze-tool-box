@@ -233,14 +233,14 @@
     },
     {
       "id": "app-20261115-mtv-vmaj2026",
-      "short": "MTV VMAJ 2026 MAZZEL",
-      "title": "MTV JAPAN「MTV VMAJ 2026」MAZZEL出演（20:00〜 LIVE枠／21:30〜 WINNER TALK枠）",
+      "short": "VMAJ 2026【MTV・TELASA配信】",
+      "title": "MTV VMAJ 2026｜MTV放送・TELASAで視聴可能（MAZZEL出演）",
       "media": "tv",
-      "station": "MTV JAPAN",
+      "station": "MTV JAPAN／TELASA",
       "start": "2026-11-15T19:30:00+09:00",
-      "url": "https://www.mtvjapan.com/event/vmaj/",
-      "note": "番組は19:30開始。MAZZELは20:00〜のLIVE枠と21:30〜のWINNER TALK枠に登場予定。各時刻は枠の開始であり、MAZZELの正確な登場時刻ではありません。出演時間は変更の可能性あり。",
-      "source": "MTV VMAJ 2026 タイムテーブル（ユーザー提供画像）"
+      "url": "https://www.telasa.jp/videos/278449",
+      "note": "【TELASAでも視聴可能】視聴リンクはTELASAの番組ページ。MTVでは11/15(日)19:30から放送、TELASAでも配信。MAZZELは20:00〜LIVE枠、21:30〜WINNER TALK枠（正確な登場時刻ではありません）。TELASAの配信終了日時は未確認。",
+      "source": "MAZZEL公式X・MTVタイムテーブル（ユーザー提供画像）・TELASA番組ページ"
     },
     {
       "id": "app-20261123-dreamfestival-cs",
