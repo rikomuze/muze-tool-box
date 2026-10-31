@@ -112,20 +112,22 @@ h1{font-family:var(--f-hand);font-weight:600;font-size:26px;line-height:1.2;marg
 .stub .wd{font-family:var(--f-body);font-size:11px;color:var(--faded);font-weight:700}
 .stub .tm{font-size:12px;font-weight:600;margin-top:2px}
 .mid{min-width:0;padding:10px 8px 10px 12px;cursor:pointer;background:none;border:none;text-align:left;align-self:stretch;display:flex;flex-direction:column;justify-content:center;gap:3px}
-.more-l{font-size:12px;font-weight:700;color:var(--pencil);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line2);margin-top:1px}
 .mid:active{background:rgba(64,56,47,.05)}
 .ttl{font-weight:700;font-size:15px;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:keep-all;overflow-wrap:anywhere}
-.sub{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--faded);white-space:nowrap;overflow:hidden;font-variant-numeric:tabular-nums}
-.sub .cd{font-family:var(--f-num);font-weight:700;color:var(--pencil)}
+.sub{display:flex;flex-wrap:wrap;gap:0 8px;align-items:baseline;font-size:12px;color:var(--faded);white-space:nowrap;font-variant-numeric:tabular-nums}
+.sub .cd{font-family:var(--f-num);font-weight:700;font-size:13px;color:var(--pencil)}
 .sub .cd.u{color:var(--red)}
-.sub .rs{font-family:var(--f-num);font-weight:600;color:var(--lav-ink)}
-.sub .tg{font-weight:700;color:var(--faded);overflow:hidden;text-overflow:ellipsis}
-.act{display:flex;flex-direction:column;gap:6px;padding:8px 10px 8px 0;align-items:stretch}
+.sub .rs{font-weight:500;color:var(--faded)}
+.sub .tg{font-weight:500;color:var(--faded);overflow:hidden;text-overflow:ellipsis}
+.side{display:flex;align-items:center;gap:6px;padding:8px 10px 8px 0}
+.calb{flex:none;width:40px;height:40px;border-radius:50%;border:1.5px solid var(--line2);background:var(--paper);color:var(--pencil);display:grid;place-items:center;padding:0;cursor:pointer}
+.calb:active{background:var(--desk)}
+.act{display:flex;flex-direction:column;gap:6px;align-items:stretch}
 .pb{border:1.5px solid var(--berry-ink);background:var(--berry-ink);color:#fff;font-weight:700;font-size:13px;padding:0 12px;min-height:40px;min-width:76px;cursor:pointer;white-space:nowrap;border-radius:999px}
 .pb.ghost{background:var(--paper);color:var(--pencil);border-color:var(--line2)}
 .pb.berry{background:var(--berry-ink);border-color:var(--berry-ink)}
-.act .pb{min-height:34px;font-size:12.5px}
-.act.two .pb{min-height:32px}
+.act .pb{min-height:40px;min-width:72px;font-size:12.5px}
+.act.two .pb{min-height:36px}
 
 .steps{display:flex;align-items:center;gap:2px;font-size:11px;font-weight:700;color:var(--faded);white-space:nowrap;overflow:hidden}
 .stp{padding:1px 5px;border-radius:999px;border:1px solid transparent}
@@ -268,9 +270,11 @@ details summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--faded)
 .srow .cd,.arow .cd{font-family:var(--f-num);font-weight:700;font-size:12px;white-space:nowrap}
 .srow .cd.u{color:var(--red)}
 .chev{font-size:16px;font-weight:700;color:var(--faded)}
-/* 種類スタンプ：見逃し・応募・購入など。色は付けず、文字で見分ける */
-.ks{font-weight:700;border:1.5px solid currentColor;border-radius:50%;padding:0 7px;font-size:11px;flex:none}
-.ks{color:var(--faded)}
+/* 種類：見逃し・応募・購入など。タイトルに同じ言葉があれば出さない */
+.ks{font-weight:500;color:var(--faded)}
+/* 2行目は「あと1日 · 応募 · 当落 11/16」のように点で区切る */
+.sub{column-gap:6px}
+.sub>*+*::before{content:"·";margin-right:6px;color:var(--faded);font-weight:500}
 /* これからの出演 */
 .shows{margin-top:6px}
 .shows-box{background:var(--paper);box-shadow:var(--shadow);display:flex;flex-direction:column}
@@ -632,29 +636,37 @@ function card(it,kind){
   let sMs=endMs,k="〆",sIsD=false;
   if(kind==="result"||(!kind&&i.sub==="applied"&&!isNaN(resMs))){sMs=resMs;k="当落";sIsD=isD(it.resultAt)}
   const st=el("div","stub");
-  if(!isNaN(sMs)){const j=jst(sMs);st.append(el("span","kd",k),el("b",null,`${j.m}/${j.d}`),el("span","wd",j.w));if(!sIsD)st.append(el("span","tm",`${j.h}:${j.mi}`))}
+  if(!isNaN(sMs)){const j=jst(sMs);if(k!=="〆")st.append(el("span","kd",k));st.append(el("b",null,`${j.m}/${j.d}`),el("span","wd",j.w));if(!sIsD)st.append(el("span","tm",`${j.h}:${j.mi}`))}
   else st.append(el("b",null,"?"));
   // middle
   const m=el("button","mid");m.type="button";m.setAttribute("aria-label",`${nameOf(it)} の詳細`);
   m.append(el("span","ttl",nameOf(it)));
   const sub=el("span","sub");
-  const kd=kindOf(it);sub.append(el("span","ks "+kd.c,kd.l));
   if(active){
     if(!isNaN(startMs)&&startMs>now)sub.append(el("span","cd",`${md(it.start)}から`));
     else if(L.t)sub.append(el("span","cd"+(L.u?" u":""),L.t));
   }
-  if(isLot(it)&&it.resultAt&&!isNaN(resMs)&&k!=="当落"&&i.ph!=="done"&&i.ph!=="pass")sub.append(el("span","rs",`当落 ${md(it.resultAt)}`));
+  // 種類：タイトルに同じ言葉があるとき、当落日を出すとき（＝応募だとわかる）は省く
+  const kd=kindOf(it),showRes=isLot(it)&&it.resultAt&&!isNaN(resMs)&&k!=="当落"&&i.ph!=="done"&&i.ph!=="pass";
+  if(!nameOf(it).includes(kd.l)&&!showRes)sub.append(el("span","ks",kd.l));
+  if(showRes)sub.append(el("span","rs",`当落 ${md(it.resultAt)}`));
   if(i.sub==="applied"&&k==="当落"&&resMs<now)sub.append(el("span","cd u","結果出たかも"));
   if(!active&&i.ph!=="go")sub.append(el("span",null,look(it,i)[2]));
   if(it.tag&&filter==="all"&&!nameOf(it).includes(it.tag))sub.append(el("span","tg",it.tag));
   if(sub.childNodes.length)m.append(sub);
-  m.append(el("span","more-l",canCal(it,i)?"カレンダーに追加 ›":"くわしく ›"));
   m.onclick=()=>openDetail(it);
   c.append(st,m);
   const sb=null;
-  const acts=actionsFor(it,i);
-  if(acts.length){const a=el("div","act"+(acts.length>1?" two":""));acts.forEach(x=>a.append(pbtn(x,it)));c.append(a)}
-  else c.append(el("span"));
+  // 右側：カレンダーの印（押すと今と同じくわしくシートを開いて、カレンダー欄まで送る）と、記録のボタン
+  const acts=actionsFor(it,i),side=el("div","side");
+  if(canCal(it,i)){
+    const cb=el("button","calb");cb.type="button";cb.setAttribute("aria-label",`${nameOf(it)} をカレンダーに追加`);
+    cb.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4M12 13.2v4.6M9.7 15.5h4.6"/></svg>';
+    cb.onclick=e=>{e.stopPropagation();openDetail(it);requestAnimationFrame(()=>{const b=$("detailBody").querySelector(".calbox");if(b)b.scrollIntoView({block:"center"})})};
+    side.append(cb);
+  }
+  if(acts.length){const a=el("div","act"+(acts.length>1?" two":""));acts.forEach(x=>a.append(pbtn(x,it)));side.append(a)}
+  c.append(side);
   if(sb){sb.classList.add("row");c.append(sb);c.classList.add("has-steps")}
   return c;
 }
