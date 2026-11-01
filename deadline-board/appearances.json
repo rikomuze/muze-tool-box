@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-01",
+  "updatedAt": "2026-11-02",
   "note": "MAZZELのテレビ・ラジオ・配信の出演。start=放送・配信の開始、airEnd=放送の終了（なければ放送中の表示はしない）。見逃し・聴き逃しの期限は deadlines.json に入れる。",
   "items": [
     {
@@ -250,8 +250,9 @@
       "station": "CSテレ朝チャンネル1",
       "start": "2026-11-23T15:00:00+09:00",
       "url": "https://dreamfestival.jp/",
-      "note": "MAZZELは11月23日のヘッドライナー。全演目が放送されるわけではありません。",
-      "source": "テレビ朝日ドリームフェスティバル公式"
+      "note": "15:00〜21:30独占生中継。MAZZELは11月23日のヘッドライナー。全演目が放送されるわけではありません。スカパー！番組配信の対象外。",
+      "source": "テレビ朝日ドリームフェスティバル公式・スカパー！番組表",
+      "airEnd": "2026-11-23T21:30:00+09:00"
     },
     {
       "id": "app-20261121-inazuma-cs",
@@ -273,8 +274,69 @@
       "station": "CS・TBSチャンネル1",
       "start": "2026-11-22T21:00:00+09:00",
       "url": "https://www.tbs.co.jp/tbs-ch/",
-      "note": "MAZZEL出演のDAY3をテレビ初独占放送。21:00は番組開始時刻で、MAZZELの登場時刻ではありません。",
-      "source": "TBSチャンネル公式X（ユーザー提供画像）"
+      "note": "MAZZEL出演のDAY3をテレビ初独占放送（21:00〜23:40）。MAZZEL個別の登場時刻は未公表。",
+      "source": "TBSチャンネル公式X（ユーザー提供画像）・公式番組表",
+      "airEnd": "2026-11-22T23:40:00+09:00"
+    },
+    {
+      "id": "app-20261107-talkabout-kairyu",
+      "short": "TALK ABOUT KAIRYU",
+      "title": "TBSラジオ「TALK ABOUT」KAIRYU出演（11月7日）",
+      "media": "radio",
+      "station": "TBSラジオ",
+      "start": "2026-11-07T22:00:00+09:00",
+      "airEnd": "2026-11-07T23:30:00+09:00",
+      "url": "https://www.tbsradio.jp/talk/",
+      "note": "KAIRYU出演予定。番組放送枠22:00〜23:30。",
+      "source": "BMSG公式カレンダー"
+    },
+    {
+      "id": "app-20261114-talkabout-kairyu",
+      "short": "TALK ABOUT KAIRYU",
+      "title": "TBSラジオ「TALK ABOUT」KAIRYU出演（11月14日）",
+      "media": "radio",
+      "station": "TBSラジオ",
+      "start": "2026-11-14T22:00:00+09:00",
+      "airEnd": "2026-11-14T23:30:00+09:00",
+      "url": "https://www.tbsradio.jp/talk/",
+      "note": "KAIRYU出演予定。番組放送枠22:00〜23:30。",
+      "source": "BMSG公式カレンダー"
+    },
+    {
+      "id": "app-20261121-talkabout-kairyu",
+      "short": "TALK ABOUT KAIRYU",
+      "title": "TBSラジオ「TALK ABOUT」KAIRYU出演（11月21日）",
+      "media": "radio",
+      "station": "TBSラジオ",
+      "start": "2026-11-21T22:00:00+09:00",
+      "airEnd": "2026-11-21T23:30:00+09:00",
+      "url": "https://www.tbsradio.jp/talk/",
+      "note": "KAIRYU出演予定。番組放送枠22:00〜23:30。",
+      "source": "BMSG公式カレンダー"
+    },
+    {
+      "id": "app-20261128-talkabout-kairyu",
+      "short": "TALK ABOUT KAIRYU",
+      "title": "TBSラジオ「TALK ABOUT」KAIRYU出演（11月28日）",
+      "media": "radio",
+      "station": "TBSラジオ",
+      "start": "2026-11-28T22:00:00+09:00",
+      "airEnd": "2026-11-28T23:30:00+09:00",
+      "url": "https://www.tbsradio.jp/talk/",
+      "note": "KAIRYU出演予定。番組放送枠22:00〜23:30。",
+      "source": "BMSG公式カレンダー"
+    },
+    {
+      "id": "app-20261108-mazzel-videoselects",
+      "short": "MAZZEL VideoSelects【MV特集】",
+      "title": "MTV「MAZZEL VideoSelects」ミュージックビデオ特集",
+      "media": "tv",
+      "station": "CS・MTV",
+      "start": "2026-11-08T19:30:00+09:00",
+      "airEnd": "2026-11-08T20:30:00+09:00",
+      "url": "https://www.mtvjapan.com/",
+      "note": "MAZZELのミュージックビデオ特集。本人の新規スタジオ出演・ライブ出演ではありません。",
+      "source": "スカパー！番組表"
     }
   ]
 }
