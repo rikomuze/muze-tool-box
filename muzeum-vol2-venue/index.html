@@ -480,9 +480,9 @@
         <li><b>8,000円（税込）以上</b>のお会計で LIMITED SHOPPING BAG を1枚（数量限定・1会計1枚まで）。<b>LIGHT BAND S+ は対象外</b>。会計を分けた後のレシート合算は不可。</li>
         <li>お支払いは現金・クレジットカード・QRコード決済（一括のみ）。<b>現金とカード／QRの併用はできません</b>。</li>
         <li>MZ Mate TIN（各地方）は各会場の先行販売。ツアー後に数量限定でEC・ツリービレッジ販売予定。</li>
-        <li>先行販売時間はLINE整理券（抽選）。申込 10/9(金)20:00〜10/12(月・祝)23:59、結果 10/14(水)15:00予定。整理券の案内後は当日チケットをお持ちの方、開演後はチケットなしでも購入可。終演後の販売もあり。</li>
+        <li>先行販売は公演ごとのLINE整理券（無料・抽選）を確認してください。神奈川公演は11/1(日)18:00〜11/3(火)23:59受付、11/5(木)15:00当落予定。開演後、チケットをお持ちでない方の購入はMUZEUM会員限定です。</li>
       </ul>
-      <p class="src">出典：<a href="https://mazzel.tokyo/tour/play_at_the_muzeum2/news/68/" target="_blank" rel="noopener noreferrer">公式NEWS（2026.10.08）</a>。当日の状況で制限が変わる場合があります。</p>
+      <p class="src">出典：<a href="https://mazzel.tokyo/tour/play_at_the_muzeum2/news/83/" target="_blank" rel="noopener noreferrer">公式NEWS（会場販売ルール変更 2026.11.01）</a>。当日の状況で制限が変わる場合があります。</p>
     </details>
   </section>
 
@@ -605,7 +605,7 @@
 (function () {
 "use strict";
 
-/* ---------- 公演（公式NEWS 2026.10.08 / 10月〜11月前半） ---------- */
+/* ---------- 公演（2026.11.01現在。販売開始時刻が未発表の会場は空欄） ---------- */
 var REGIONS = [
   { id:'kanto',    label:'KANTO',    ja:'関東' },
   { id:'hokkaido', label:'HOKKAIDO', ja:'北海道' },
@@ -617,13 +617,23 @@ var REGIONS = [
   { id:'kyusyu',   label:'KYUSYU',   ja:'九州' }
 ];
 var VENUES = [
-  { id:'tokyo',    date:'2026-10-22', dow:'木', pref:'東京',   hall:'LINE CUBE SHIBUYA', open:'13:00', region:'kanto' },
-  { id:'sapporo',  date:'2026-10-24', dow:'土', pref:'札幌',   hall:'カナモトホール', open:'13:00', region:'hokkaido' },
-  { id:'hakodate', date:'2026-10-25', dow:'日', pref:'函館',   hall:'函館サーモン・まるなまホール（函館市民会館）', open:'12:00', region:'hokkaido' },
-  { id:'fukushima',date:'2026-11-02', dow:'月', pref:'福島',   hall:'とうほう・みんなの文化センター 大ホール', open:'13:00', region:'tohoku' },
-  { id:'miyagi',   date:'2026-11-03', dow:'火・祝', pref:'宮城', hall:'東京エレクトロンホール宮城', open:'12:00', region:'tohoku' },
-  { id:'niigata',  date:'2026-11-07', dow:'土', pref:'新潟',   hall:'新潟テルサ', open:'12:00', region:'chubu' },
-  { id:'other',    date:'', dow:'', pref:'その他', hall:'11月後半以降の公演（販売時間は未発表）', open:'', region:null }
+  { id:'fukushima', date:'2026-11-02', dow:'月', pref:'福島', hall:'とうほう・みんなの文化センター 大ホール', open:'13:00', region:'tohoku' },
+  { id:'miyagi', date:'2026-11-03', dow:'火・祝', pref:'宮城', hall:'東京エレクトロンホール宮城', open:'12:00', region:'tohoku' },
+  { id:'niigata', date:'2026-11-07', dow:'土', pref:'新潟', hall:'新潟テルサ', open:'12:00', region:'chubu' },
+  { id:'kanagawa', date:'2026-11-10', dow:'火', pref:'神奈川', hall:'パシフィコ横浜 国立大ホール', open:'11:00', region:'kanto' },
+  { id:'okayama', date:'2026-11-17', dow:'火', pref:'岡山', hall:'倉敷市民会館', open:'', region:'chugoku' },
+  { id:'hiroshima', date:'2026-11-18', dow:'水', pref:'広島', hall:'広島文化学園HBGホール', open:'', region:'chugoku' },
+  { id:'hyogo', date:'2026-11-25', dow:'水', pref:'兵庫', hall:'神戸国際会館 こくさいホール', open:'', region:'kinki' },
+  { id:'osaka', date:'2026-11-26', dow:'木', pref:'大阪', hall:'大阪国際会議場 メインホール', open:'', region:'kinki' },
+  { id:'saitama', date:'2026-12-01', dow:'火', pref:'埼玉', hall:'大宮ソニックシティ 大ホール', open:'', region:'kanto' },
+  { id:'gunma', date:'2026-12-03', dow:'木', pref:'群馬', hall:'Gメッセ群馬 展示ホールA・B', open:'', region:'kanto' },
+  { id:'tochigi', date:'2026-12-04', dow:'金', pref:'栃木', hall:'宇都宮市文化会館 大ホール', open:'', region:'kanto' },
+  { id:'fukuoka', date:'2026-12-07', dow:'月', pref:'福岡', hall:'福岡サンパレス', open:'', region:'kyusyu' },
+  { id:'aichi', date:'2026-12-11', dow:'金', pref:'愛知', hall:'愛知県芸術劇場 大ホール', open:'', region:'chubu' },
+  { id:'kagawa', date:'2026-12-15', dow:'火', pref:'香川', hall:'レクザムホール 大ホール', open:'', region:'shikoku' },
+  { id:'kochi', date:'2026-12-16', dow:'水', pref:'高知', hall:'新来島高知重工ホール・オレンジホール', open:'', region:'shikoku' },
+  { id:'shizuoka', date:'2026-12-21', dow:'月', pref:'静岡', hall:'アクトシティ浜松 大ホール', open:'', region:'chubu' },
+  { id:'kumamoto', date:'2026-12-23', dow:'水', pref:'熊本', hall:'熊本城ホール メインホール', open:'', region:'kyusyu' }
 ];
 var TIN_REGION_NOTE = {
   kanto:'東京・神奈川・埼玉・群馬・栃木公演', hokkaido:'北海道（札幌・函館）公演', tohoku:'福島・宮城公演',
