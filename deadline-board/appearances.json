@@ -264,6 +264,17 @@
       "url": "https://www.skyperfectv.co.jp/program/search/cast/?actorId=TR063493995138",
       "note": "9/19開催DAY1の後日放送。MAZZEL出演。番組全体の放送時間20:00〜23:00（MAZZEL個別の登場時刻は未公表）。",
       "source": "スカパー！番組情報"
+    },
+    {
+      "id": "app-20261122-cdtv-thanksfes-day3",
+      "short": "CDTV秋の大感謝祭 DAY3",
+      "title": "CDTVライブ！ライブ！秋の大感謝祭2026 DAY3（MAZZEL出演）",
+      "media": "tv",
+      "station": "CS・TBSチャンネル1",
+      "start": "2026-11-22T21:00:00+09:00",
+      "url": "https://www.tbs.co.jp/tbs-ch/",
+      "note": "MAZZEL出演のDAY3をテレビ初独占放送。21:00は番組開始時刻で、MAZZELの登場時刻ではありません。",
+      "source": "TBSチャンネル公式X（ユーザー提供画像）"
     }
   ]
 }
