@@ -396,6 +396,18 @@
       "url": "https://mazzel.tokyo/",
       "note": "出演メンバーは未発表。終了時刻未発表。ファンクラブ会員向けの館内放送。",
       "source": "FC館内放送告知（ユーザー提供画像）"
+    },
+    {
+      "id": "app-20261109-cdtv-livelive",
+      "short": "CDTVライブ！ライブ！",
+      "title": "TBS「CDTVライブ！ライブ！」MAZZEL出演",
+      "media": "tv",
+      "station": "TBS系",
+      "start": "2026-11-09T19:00:00+09:00",
+      "airEnd": "2026-11-09T20:55:00+09:00",
+      "url": "https://www.tbs.co.jp/cdtv_livelive/",
+      "note": "MAZZEL出演は11/2放送内の次週予告で確認（ユーザー視聴情報）。歌唱曲・登場時刻は未発表。19:00〜20:55は番組放送枠。",
+      "source": "11/2放送内の次週予告（ユーザー確認）・J:COM番組表"
     }
   ]
 }
