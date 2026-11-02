@@ -748,7 +748,11 @@ function renderNext(all){
   const now=Date.now(),nu=$("nudge");nu.textContent="";
   if(!loaded){nu.hidden=true;return}
   const res=all.filter(x=>x._i.sub==="applied"&&ts(x.resultAt)>=now-DAY/2).sort(by("resultAt"))[0];
-  if(res){const b=el("button");b.type="button";b.append(document.createTextNode("次の当落 "),el("b",null,md(res.resultAt)),document.createTextNode(` ${nameOf(res)}`));b.onclick=()=>openDetail(res);nu.append(b)}
+  // 発表時刻を過ぎたら「次の当落」ではなく「当落出たよ」にする（「当落確認した」を押すか、発表から12時間で消える）
+  if(res){const b=el("button");b.type="button";const out=ts(res.resultAt)<=now;
+    if(out)b.append(document.createTextNode("当落出たよ "),el("b",null,nameOf(res)),document.createTextNode(" 確認した？"));
+    else b.append(document.createTextNode("次の当落 "),el("b",null,md(res.resultAt)),document.createTextNode(` ${nameOf(res)}`));
+    b.onclick=()=>openDetail(res);nu.append(b)}
   nu.hidden=!nu.childNodes.length||view==="cal";
 }
 
