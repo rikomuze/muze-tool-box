@@ -388,13 +388,13 @@
     },
     {
       "id": "app-20261103-fc-kannai-live",
-      "short": "FC館内放送（生放送）",
-      "title": "MAZZEL FC館内放送 生放送（出演者未発表）",
+      "short": "MUZEUM 館内放送",
+      "title": "MUZEUM 館内放送（生放送／出演者未発表）",
       "media": "stream",
-      "station": "MAZZELファンクラブ",
+      "station": "MUZEUM（FC）",
       "start": "2026-11-03T15:30:00+09:00",
       "url": "https://mazzel.tokyo/",
-      "note": "出演メンバーは未発表。終了時刻未発表。ファンクラブ会員向けの館内放送。",
+      "note": "MUZEUM内の館内放送。出演メンバー・終了時刻は未発表。",
       "source": "FC館内放送告知（ユーザー提供画像）"
     },
     {
