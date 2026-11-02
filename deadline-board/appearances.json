@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-02",
+  "updatedAt": "2026-11-03",
   "note": "MAZZELのテレビ・ラジオ・配信の出演。start=放送・配信の開始、airEnd=放送の終了（なければ放送中の表示はしない）。見逃し・聴き逃しの期限は deadlines.json に入れる。",
   "items": [
     {
@@ -156,9 +156,9 @@
       "station": "ニッポン放送",
       "start": "2026-11-02T21:50:00+09:00",
       "airEnd": "2026-11-02T21:57:00+09:00",
-      "url": "https://www.1242.com/lucky/",
-      "note": "TAKUTO・RYUKIが5日間連続ゲスト出演。放送後はポッドキャストでも配信。",
-      "source": "ニッポン放送"
+      "url": "https://radiko.jp/share/?t=20261102215000&sid=LFR",
+      "note": "TAKUTO・RYUKI出演。11/2放送回のradikoシェアリンク確認済み。無料聴取終了日時は未確認のため締切登録は保留。放送後はポッドキャストでも配信。",
+      "source": "ニッポン放送・radikoシェアリンク（ユーザー提供）"
     },
     {
       "id": "app-20261103-lucky7-takuto-ryuki",
