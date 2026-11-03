@@ -497,6 +497,17 @@
       "url": "https://mazzel.tokyo/tour/play_at_the_muzeum2/",
       "note": "神奈川・パシフィコ横浜 国立大ホール公演。LINE「BMSG 整理券」から無料抽選申込。1公演につき複数枠申込可、当選は各公演1枚まで。整理券があっても公演チケットがない場合は先行販売時間に購入不可。",
       "source": "MAZZEL公式サイト（ユーザー提供画像）"
+    },
+    {
+      "id": "muzeum-broadcast-naoya-ryuki-20261110",
+      "short": "MUZEUM館内放送（NAOYA・RYUKI）",
+      "title": "11/3実施 MUZEUM館内放送（NAOYA・RYUKI）アーカイブ視聴期限",
+      "category": "stream",
+      "tag": "MUZEUM",
+      "end": "2026-11-10T23:59:00+09:00",
+      "url": "https://mazzel.tokyo/",
+      "note": "FC会員限定。11/3(火)15:30〜の館内放送。",
+      "source": "MUZEUMアーカイブ画面（ユーザー提供・11/3）"
     }
   ]
 }
