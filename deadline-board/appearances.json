@@ -388,14 +388,14 @@
     },
     {
       "id": "app-20261103-fc-kannai-live",
-      "short": "MUZEUM 館内放送",
-      "title": "MUZEUM 館内放送（生放送／出演者未発表）",
+      "short": "MUZEUM 館内放送（NAOYA・RYUKI）",
+      "title": "MUZEUM 館内放送（NAOYA・RYUKI出演）",
       "media": "stream",
       "station": "MUZEUM（FC）",
       "start": "2026-11-03T15:30:00+09:00",
       "url": "https://mazzel.tokyo/",
-      "note": "MUZEUM内の館内放送。出演メンバー・終了時刻は未発表。",
-      "source": "FC館内放送告知（ユーザー提供画像）"
+      "note": "11/3 15:30〜の館内放送。NAOYA・RYUKI出演。アーカイブは11/10(火)23:59まで。FC会員限定。",
+      "source": "MUZEUMアーカイブ画面（ユーザー提供・11/3）"
     },
     {
       "id": "app-20261109-cdtv-livelive",
