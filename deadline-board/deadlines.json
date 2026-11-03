@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-03",
+  "updatedAt": "2026-11-04",
   "items": [
     {
       "id": "auto-20261013-01",
@@ -519,6 +519,19 @@
       "url": "https://tver.jp/episodes/epifg41wne",
       "note": "11/1(日)放送分。「マネー白井に聞け！今週の“マネーニュース”は違和感あり？」。",
       "source": "TVer配信画面（ユーザー提供・11/3）"
+    },
+    {
+      "id": "cdj2627-second-payment-20261109",
+      "short": "CDJ 2次先行 入金",
+      "title": "COUNTDOWN JAPAN 26/27 第2次抽選先行 当選者入金締切",
+      "category": "ticket",
+      "flow": "buy",
+      "tag": "CDJ",
+      "start": "2026-11-06T16:00:00+09:00",
+      "end": "2026-11-09T16:00:00+09:00",
+      "url": "https://countdownjapan.jp/2627/ticket/",
+      "note": "11/6(金)16:00当落発表。第2次抽選先行の当選者のみ対象。11/9(月)16:00までに入金。",
+      "source": "COUNTDOWN JAPAN 26/27公式"
     }
   ]
 }
