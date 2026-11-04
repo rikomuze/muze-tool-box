@@ -615,6 +615,11 @@ function save(id,patch,undo,msg){
   const cu=store.custom.find(x=>x.id===id);
   if(cu)Object.assign(cu,patch);
   else store.state[id]={...(store.state[id]||{}),...(patch.status!==undefined?{status:patch.status}:{}),...(patch.decision!==undefined?{decision:patch.decision}:{})};
+  // 子の入金を完了したら、元の抽選も完了扱いに揃える。
+  const linked=items.find(x=>x.id===id);
+  if(linked?.parentId && patch.status==="paid"){
+    store.state[linked.parentId]={...(store.state[linked.parentId]||{}),status:"paid"};
+  }
   const ok=persist();rebuild();render();
   if(!ok){toast("この端末に保存できなかった（プライベートモードかも）");return}
   if(msg)toast(msg,undo?()=>save(id,undo):null);
@@ -958,8 +963,15 @@ function fillApp(a){
   if(s0>now)B.append(calBox({id:a.id,short:a.short||a.title,end:a.start,_to:a.airEnd,_pre:"出演 "}));
   if(a.source)B.append(el("div","src","出典："+a.source));
 }
+// 関連する入金期限は、親の抽選で「当選」と記録した人だけに表示する。
+// 各端末の応募・当落状態は既存のローカル保存データを参照する。
+function linkedVisible(it){
+  if(!it.parentId)return true;
+  const parent=items.find(x=>x.id===it.parentId);
+  return !!parent && (parent.status==="won" || parent.status==="paid");
+}
 function render(){
-  const all=items.map(it=>({...it,_i:info(it)}));
+  const all=items.filter(linkedVisible).map(it=>({...it,_i:info(it)}));
   renderChips();renderNext(all);renderSoon(all);renderShows();
   $("vList").setAttribute("aria-pressed",String(view==="list"));$("vCal").setAttribute("aria-pressed",String(view==="cal"));
   $("listView").hidden=view!=="list";$("calView").hidden=view!=="cal";
