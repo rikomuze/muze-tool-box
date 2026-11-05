@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-04",
+  "updatedAt": "2026-11-05",
   "items": [
     {
       "id": "auto-20261013-01",
@@ -535,6 +535,19 @@
       "note": "11/6(金)16:00当落発表。第2次抽選先行の当選者のみ対象。11/9(月)16:00までに入金。 応募項目で「当選」にした人のボードに表示されます。",
       "source": "COUNTDOWN JAPAN 26/27公式",
       "parentId": "cdj2627-second-lottery"
+    },
+    {
+      "id": "hyakuyoufu-ep5-tver-20261112",
+      "short": "百妖譜5話 TVer",
+      "title": "「百妖譜 第3期京師篇」第5話「雲陽（上）」NAOYA・HAYATO出演回 TVer見逃し配信期限",
+      "category": "stream",
+      "flow": "watch",
+      "tag": "TVer",
+      "start": "2026-11-05T00:00:00+09:00",
+      "end": "2026-11-12T11:59:00+09:00",
+      "url": "https://tver.jp/episodes/epyonzccu0",
+      "note": "11/4(水)放送分。TVer表示の配信終了日時は11/12(木)11:59。NAOYA・HAYATOがゲスト声優出演。",
+      "source": "TVer配信画面（ユーザー提供・2026/11/5）"
     }
   ]
 }
