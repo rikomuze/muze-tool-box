@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-06",
+  "updatedAt": "2026-11-07",
   "items": [
     {
       "id": "auto-20261013-01",
@@ -574,6 +574,18 @@
       "source": "ユーザー提供のDL期限案内（2026/11/6）",
       "parentId": "auto-20261013-04",
       "parentVisibility": "participated"
+    },
+    {
+      "id": "buzzrhythm02-mazzel-tver-20261114",
+      "short": "バズリズム02 TVer",
+      "title": "「バズリズム02」MAZZEL出演回 TVer見逃し配信期限",
+      "category": "stream",
+      "flow": "watch",
+      "tag": "TVer",
+      "end": "2026-11-14T00:58:00+09:00",
+      "url": "https://tver.jp/episodes/epqcdhnr56",
+      "note": "11/6(金)放送「MAZZEL 直筆履歴書で深掘り」。TVerの無料配信は11/14(土)0:58まで。",
+      "source": "TVer配信画面（ユーザー提供・2026/11/7）"
     }
   ]
 }
