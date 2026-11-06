@@ -968,7 +968,9 @@ function fillApp(a){
 function linkedVisible(it){
   if(!it.parentId)return true;
   const parent=items.find(x=>x.id===it.parentId);
-  return !!parent && (parent.status==="won" || parent.status==="paid");
+  if(!parent)return false;
+  if(it.parentVisibility==="participated")return ["applied","won","paid","watched"].includes(parent.status);
+  return parent.status==="won" || parent.status==="paid";
 }
 function render(){
   const all=items.filter(linkedVisible).map(it=>({...it,_i:info(it)}));
