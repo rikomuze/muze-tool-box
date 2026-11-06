@@ -563,7 +563,8 @@ function kindOf(it){
 // カレンダーに追加できるか（くわしくシートにカレンダー欄が出るのと同じ条件）
 const canCal=(it,i)=>!isNaN(ts(it.end))&&dueMs(it)>Date.now()&&i.ph!=="done"&&i.ph!=="pass";
 // ラジオの聴き逃し（radiko など）は「見る」ではなく「聴く」
-const vb=it=>flowOf(it)==="watch"&&kindOf(it).l==="聴き逃し"?FLOW.listen:FLOW[flowOf(it)];
+const FLOW_DOWNLOAD={yes:"DLする",no:"しない",did:"DLした",fin:"watched",steps:["DLする","DLした"]};
+const vb=it=>it.id==="touch-dl-campaign-reward-download-20261130"?FLOW_DOWNLOAD:flowOf(it)==="watch"&&kindOf(it).l==="聴き逃し"?FLOW.listen:FLOW[flowOf(it)];
 function stepBar(it,i,big){
   const S=vb(it).steps.slice();let n=0;
   if(i.sub==="before"||i.sub==="missed")n=1;else if(i.sub==="applied")n=2;else if(["won","lost","fin"].includes(i.sub))n=S.length;
