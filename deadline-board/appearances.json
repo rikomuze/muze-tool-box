@@ -431,6 +431,78 @@
       "url": "https://www.tokai-tv.com/saiseinouzume/",
       "note": "最終回にEIKIがカメオ出演。放送終了時刻・出演時間帯は未発表。",
       "source": "MAZZEL公式X（ユーザー提供画像・2026/11/7）"
+    },
+    {
+      "id": "app-20261109-musicline",
+      "short": "ミュージックライン TAKUTO・HAYATO",
+      "title": "NHK-FM「ミュージックライン」DJ TAKUTO・HAYATO／ゲスト sanetii",
+      "media": "radio",
+      "station": "NHK-FM",
+      "start": "2026-11-09T21:45:00+09:00",
+      "airEnd": "2026-11-09T22:30:00+09:00",
+      "url": "https://www.nhk.jp/p/ml/",
+      "note": "DJはMAZZELのTAKUTO・HAYATO。ゲスト：sanetii。",
+      "source": "NHK MUSIC公式X（ユーザー提供画像・2026/11/7）"
+    },
+    {
+      "id": "app-20261110-musicline",
+      "short": "ミュージックライン TAKUTO・HAYATO",
+      "title": "NHK-FM「ミュージックライン」DJ TAKUTO・HAYATO／ゲスト 森大翔",
+      "media": "radio",
+      "station": "NHK-FM",
+      "start": "2026-11-10T21:45:00+09:00",
+      "airEnd": "2026-11-10T22:30:00+09:00",
+      "url": "https://www.nhk.jp/p/ml/",
+      "note": "DJはMAZZELのTAKUTO・HAYATO。ゲスト：森大翔。",
+      "source": "NHK MUSIC公式X（ユーザー提供画像・2026/11/7）"
+    },
+    {
+      "id": "app-20261111-musicline",
+      "short": "ミュージックライン TAKUTO・HAYATO",
+      "title": "NHK-FM「ミュージックライン」DJ TAKUTO・HAYATO／ゲスト 原因は自分にある。／小泉光咲・吉澤要人",
+      "media": "radio",
+      "station": "NHK-FM",
+      "start": "2026-11-11T21:45:00+09:00",
+      "airEnd": "2026-11-11T22:30:00+09:00",
+      "url": "https://www.nhk.jp/p/ml/",
+      "note": "DJはMAZZELのTAKUTO・HAYATO。ゲスト：原因は自分にある。／小泉光咲・吉澤要人。",
+      "source": "NHK MUSIC公式X（ユーザー提供画像・2026/11/7）"
+    },
+    {
+      "id": "app-20261112-musicline",
+      "short": "ミュージックライン NAOYA・RYUKI",
+      "title": "NHK-FM「ミュージックライン」DJ NAOYA・RYUKI／ゲスト Kroi／内田怜央・長谷部悠生",
+      "media": "radio",
+      "station": "NHK-FM",
+      "start": "2026-11-12T21:45:00+09:00",
+      "airEnd": "2026-11-12T22:30:00+09:00",
+      "url": "https://www.nhk.jp/p/ml/",
+      "note": "DJはMAZZELのNAOYA・RYUKI。ゲスト：Kroi／内田怜央・長谷部悠生。",
+      "source": "NHK MUSIC公式X（ユーザー提供画像・2026/11/7）"
+    },
+    {
+      "id": "app-20261113-musicline",
+      "short": "ミュージックライン NAOYA・RYUKI",
+      "title": "NHK-FM「ミュージックライン」DJ NAOYA・RYUKI／ゲスト Billyrrom／Mol・Yuta Hara",
+      "media": "radio",
+      "station": "NHK-FM",
+      "start": "2026-11-13T21:45:00+09:00",
+      "airEnd": "2026-11-13T22:30:00+09:00",
+      "url": "https://www.nhk.jp/p/ml/",
+      "note": "DJはMAZZELのNAOYA・RYUKI。ゲスト：Billyrrom／Mol・Yuta Hara。",
+      "source": "NHK MUSIC公式X（ユーザー提供画像・2026/11/7）"
+    },
+    {
+      "id": "app-20261126-mazzel-switch-m-on",
+      "short": "MAZZEL SWITCH",
+      "title": "MUSIC ON! TV「MAZZEL SWITCH」",
+      "media": "tv",
+      "station": "MUSIC ON! TV（エムオン!）",
+      "start": "2026-11-26T23:00:00+09:00",
+      "airEnd": "2026-11-27T00:00:00+09:00",
+      "url": "https://www.skyperfectv.co.jp/",
+      "note": "11/26(木)23:00〜24:00。スカパー！番組表掲載。初回／再放送の区別は未確認。",
+      "source": "スカパー！番組検索（ユーザー提供画像・2026/11/7）"
     }
   ]
 }
