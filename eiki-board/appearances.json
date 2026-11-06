@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-30",
+  "updatedAt": "2026-11-07",
   "items": [
     {
       "id": "eiki-20261022-onemorning-catchup",
@@ -138,6 +138,33 @@
       "source": "mazzel_official / FOD",
       "note": "EIKIは副店長としてレギュラー。第2回ゲストにRYUKI。10/31 12:00配信開始のオンデマンド。FODでの視聴期限は公式投稿に記載なし（endは配信日終了の仮置き）",
       "xUrl": "https://x.com/mazzel_official/status/2114533355597508669"
+    },
+    {
+      "id": "eiki-20261112-dayday-eiki",
+      "short": "DayDay. EIKI 生出演",
+      "title": "日本テレビ「DayDay.」EIKI 生出演",
+      "station": "日本テレビ",
+      "start": "2026-11-12T09:00:00+09:00",
+      "airEnd": "2026-11-12T11:10:00+09:00",
+      "url": "https://www.ntv.co.jp/dayday/",
+      "note": "EIKI生出演決定。番組放送枠9:00〜11:10。出演する時間帯は未発表。",
+      "source": "MAZZEL公式X（ユーザー提供画像・2026/11/7）",
+      "category": "tv",
+      "flow": "watch",
+      "tag": "DayDay. EIKI 生出演"
+    },
+    {
+      "id": "eiki-20261205-saiseinouzume-eiki",
+      "short": "再生のウズメ EIKI カメオ",
+      "title": "東海テレビ・フジテレビ系全国ネット「再生のウズメ」最終回 EIKI カメオ出演",
+      "station": "東海テレビ・フジテレビ系全国ネット",
+      "start": "2026-12-05T23:40:00+09:00",
+      "url": "https://www.tokai-tv.com/saiseinouzume/",
+      "note": "最終回にEIKIがカメオ出演。放送終了時刻・出演時間帯は未発表。",
+      "source": "MAZZEL公式X（ユーザー提供画像・2026/11/7）",
+      "category": "tv",
+      "flow": "watch",
+      "tag": "再生のウズメ EIKI カメオ"
     }
   ]
 }
