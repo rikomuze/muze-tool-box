@@ -584,7 +584,7 @@ function actionsFor(it,i){ // [{label,cls,patch,msg}]
     case"undecided":return[{l:v.yes,c:"berry",p:{decision:"yes"},m:`「応募する」に入れたよ`},{l:v.no,c:"ghost",p:{decision:"no",status:"skip"},m:`「しない」に移したよ`}];
     case"before":return[{l:v.did,c:"",p:fin,m:v.fin?"完了にしたよ":"結果待ちにしたよ"}];
     case"missed":return[{l:v.did,c:"",p:fin,m:"記録したよ"},{l:"無理だった",c:"ghost",p:{status:"skip"},m:"終わったに移したよ"}];
-    case"applied":return[{l:"当落確認した",c:"",p:{status:"lost"},m:"当落確認済にしたよ"}];
+    case"applied":return isLot(it)&&(!Number.isFinite(ts(it.resultAt))||Date.now()<ts(it.resultAt))?[]:[{l:"当落確認した",c:"",p:{status:"lost"},m:"当落確認済にしたよ"}];
     case"won":return[{l:isLot(it)?"入金した":"完了",c:"",p:{status:"paid"},m:"完了にしたよ"}];
   }
   return[];
@@ -613,6 +613,10 @@ const shown=it=>matches(it)&&!retired(it);
 /* writes */
 let tTimer=null;
 function save(id,patch,undo,msg){
+  const original=items.find(x=>x.id===id);
+  if(original&&isLot(original)&&["lost","won","paid"].includes(patch.status)&&(!Number.isFinite(ts(original.resultAt))||Date.now()<ts(original.resultAt))){
+    toast("当落発表前は結果を確定できないよ");return;
+  }
   const cu=store.custom.find(x=>x.id===id);
   if(cu)Object.assign(cu,patch);
   else store.state[id]={...(store.state[id]||{}),...(patch.status!==undefined?{status:patch.status}:{}),...(patch.decision!==undefined?{decision:patch.decision}:{})};
