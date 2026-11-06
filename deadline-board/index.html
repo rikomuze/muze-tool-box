@@ -176,13 +176,13 @@ h1{font-family:var(--f-hand);font-weight:600;font-size:26px;line-height:1.2;marg
 /* sheets */
 /* dialog 自体はスクロールさせない。UA の overflow:auto のまま高さだけ画面いっぱいにすると、
    動ける量がほぼ 0 のスクロールになり、下スワイプが背面のページへ伝わって一瞬固まる。 */
-dialog{border:none;padding:0;background:var(--paper);color:var(--pencil);width:100%;max-width:560px;max-height:88vh;margin:auto auto 0;box-shadow:0 -10px 30px rgba(64,56,47,.2);top:auto;bottom:0;height:auto;overflow:hidden;overscroll-behavior:none}
+dialog{border:none;padding:0;background:var(--paper);color:var(--pencil);width:100%;max-width:560px;max-height:88vh;max-height:88dvh;margin:auto auto 0;box-shadow:0 -10px 30px rgba(64,56,47,.2);top:auto;bottom:0;height:auto;overflow:hidden;overscroll-behavior:none}
 /* 開いているときだけ flex にする。dialog 全体に display を書くと、閉じたダイアログを隠す UA の display:none より優先されて常に表示されてしまう。 */
 dialog[open]{display:flex;flex-direction:column}
 dialog::backdrop{background:rgba(64,56,47,.45);overflow:hidden;overscroll-behavior:none}
 html.modal-open,html.modal-open body{overscroll-behavior:none}
 .sheet{padding:8px 18px calc(18px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:14px;position:relative;flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y}
-@media (min-width:640px){dialog{top:0;bottom:0;height:fit-content;margin:auto;max-height:84vh}}
+@media (min-width:640px){dialog{top:0;bottom:0;height:fit-content;margin:auto;max-height:84vh;max-height:84dvh}}
 .grab{width:40px;height:4px;border-radius:2px;background:var(--line2);margin:10px auto 2px;flex:none;touch-action:none;cursor:grab;position:relative}
 .grab::before{content:"";position:absolute;left:-80px;right:-80px;top:-12px;height:36px}
 .sheet h3{font-family:var(--f-hand);font-weight:600;font-size:19px;line-height:1.4;margin:0}
@@ -676,7 +676,7 @@ function card(it,kind){
   if(canCal(it,i)){
     const cb=el("button","calb");cb.type="button";cb.setAttribute("aria-label",`${nameOf(it)} をカレンダーに追加`);
     cb.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4M12 13.2v4.6M9.7 15.5h4.6"/></svg>';
-    cb.onclick=e=>{e.stopPropagation();openDetail(it);requestAnimationFrame(()=>{const b=$("detailBody").querySelector(".calbox");if(b)b.scrollIntoView({block:"center"})})};
+    cb.onclick=e=>{e.stopPropagation();openDetail(it);requestAnimationFrame(()=>{const sh=$("detailBody"),b=sh.querySelector(".calbox");$("detail").scrollTop=0;if(b)sh.scrollTop=Math.max(0,b.offsetTop-sh.clientHeight/2+b.offsetHeight/2)})};
     side.append(cb);
   }
   if(acts.length){const a=el("div","act"+(acts.length>1?" two":""));acts.forEach(x=>a.append(pbtn(x,it)));side.append(a)}
@@ -993,7 +993,7 @@ function remember(){try{localStorage.setItem("muze-deadline-board:ui",JSON.strin
 
 /* detail sheet */
 let openId=null;
-function openDetail(it){openId=it.id;fillDetail(it);if(!$("detail").open)$("detail").showModal();lockPage()}
+function openDetail(it){openId=it.id;fillDetail(it);$("detail").scrollTop=0;if(!$("detail").open)$("detail").showModal();lockPage()}
 function fillDetail(it){
   const i=info(it),[,sc,lab]=look(it,i),B=$("detailBody"),now=Date.now();B.textContent="";
   const mr=el("div","meta-row");mr.append(el("span","stamp "+sc,lab));if(it.tag)mr.append(el("span","tagt",it.tag));mr.append(el("span","tagt",flowOf(it)==="entry"?"全員もらえる（抽選なし）":flowOf(it)==="buy"&&it.category==="ticket"?"先着（抽選なし）":CATS[it.category]||""));if(it._custom)mr.append(el("span","tagt","・自分で追加"));B.append(mr);
