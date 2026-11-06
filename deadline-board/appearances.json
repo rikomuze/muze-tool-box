@@ -503,6 +503,18 @@
       "url": "https://www.skyperfectv.co.jp/",
       "note": "11/26(木)23:00〜24:00。スカパー！番組表掲載。初回／再放送の区別は未確認。",
       "source": "スカパー！番組検索（ユーザー提供画像・2026/11/7）"
+    },
+    {
+      "id": "app-20261110-hirunandes-naoya-ran",
+      "short": "ヒルナンデス！ NAOYA・RAN",
+      "title": "日本テレビ「ヒルナンデス！」NAOYA・RAN出演",
+      "media": "tv",
+      "station": "日本テレビ",
+      "start": "2026-11-10T11:55:00+09:00",
+      "airEnd": "2026-11-10T13:55:00+09:00",
+      "url": "https://www.ntv.co.jp/hirunan/",
+      "note": "11/10(火)11:55放送開始。NAOYA・RAN出演。終了時刻は番組通常枠（13:55）。",
+      "source": "出演告知X投稿（ユーザー提供画像・2026/11/7）"
     }
   ]
 }
