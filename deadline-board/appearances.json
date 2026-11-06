@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-03",
+  "updatedAt": "2026-11-07",
   "note": "MAZZELのテレビ・ラジオ・配信の出演。start=放送・配信の開始、airEnd=放送の終了（なければ放送中の表示はしない）。見逃し・聴き逃しの期限は deadlines.json に入れる。",
   "items": [
     {
@@ -408,6 +408,29 @@
       "url": "https://www.tbs.co.jp/cdtv_livelive/",
       "note": "MAZZELが「Touch」をフルサイズ披露。名曲ライブ！ライブ！ではKAIRYU・NAOYAがスキマスイッチ「奏」を披露。19:00〜20:55は番組放送枠で、個別の登場時刻は未発表。",
       "source": "MAZZEL公式X（2026年11月2日投稿・ユーザー提供画像）"
+    },
+    {
+      "id": "app-20261112-dayday-eiki",
+      "short": "DayDay. EIKI 生出演",
+      "title": "日本テレビ「DayDay.」EIKI 生出演",
+      "media": "tv",
+      "station": "日本テレビ",
+      "start": "2026-11-12T09:00:00+09:00",
+      "airEnd": "2026-11-12T11:10:00+09:00",
+      "url": "https://www.ntv.co.jp/dayday/",
+      "note": "EIKI生出演決定。番組放送枠9:00〜11:10。出演する時間帯は未発表。",
+      "source": "MAZZEL公式X（ユーザー提供画像・2026/11/7）"
+    },
+    {
+      "id": "app-20261205-saiseinouzume-eiki",
+      "short": "再生のウズメ EIKI カメオ",
+      "title": "東海テレビ・フジテレビ系全国ネット「再生のウズメ」最終回 EIKI カメオ出演",
+      "media": "tv",
+      "station": "東海テレビ・フジテレビ系全国ネット",
+      "start": "2026-12-05T23:40:00+09:00",
+      "url": "https://www.tokai-tv.com/saiseinouzume/",
+      "note": "最終回にEIKIがカメオ出演。放送終了時刻・出演時間帯は未発表。",
+      "source": "MAZZEL公式X（ユーザー提供画像・2026/11/7）"
     }
   ]
 }
