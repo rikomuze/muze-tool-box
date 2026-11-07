@@ -485,8 +485,9 @@ function info(it){
   if(st==="skip"&&dec==="yes")return{ph:"done",sub:"closed"};
   if(st==="skip"||dec==="no")return{ph:"pass",sub:"pass"};
   const over=focusOf(it).kind==="past";
-  if(dec==="yes")return over?{ph:"go",sub:"missed"}:{ph:"go",sub:"before"};
-  if(over)return{ph:"done",sub:"expired"};
+  // 放送・視聴期限を過ぎた項目は、未視聴でも自動で「終わった」に整理する。
+  if(over)return{ph:"done",sub:dec==="yes"?"closed":"expired"};
+  if(dec==="yes")return{ph:"go",sub:"before"};
   return{ph:"undecided",sub:"undecided"};
 }
 function look(it,i){
@@ -497,7 +498,7 @@ function look(it,i){
 function actionsFor(it,i){
   switch(i.sub){
     case"undecided":return[{l:"視聴する",c:"berry",p:{decision:"yes",status:"todo"},m:"「視聴する」に入れたよ"},{l:"視聴しない",c:"ghost",p:{decision:"no",status:"skip"},m:"「視聴しない」に移したよ"}];
-    case"before":return[{l:"視聴した",c:"",p:{status:"watched"},m:"視聴したにしたよ"}];
+    case"before":return Date.now()<ts(it.start)?[]:[{l:"視聴した",c:"",p:{status:"watched"},m:"視聴したにしたよ"}];
     case"missed":return[{l:"視聴した",c:"",p:{status:"watched"},m:"視聴したにしたよ"},{l:"見逃した",c:"ghost",p:{status:"skip",decision:"yes"},m:"終わったに移したよ"}];
   }
   return[];
@@ -522,6 +523,10 @@ const shown=it=>!retired(it);
 
 let tTimer=null;
 function save(id,patch,undo,msg){
+  const original=items.find(x=>x.id===id);
+  if(original&&patch.status==="watched"&&Number.isFinite(ts(original.start))&&Date.now()<ts(original.start)){
+    toast("放送・配信開始前は「視聴した」にできないよ");return;
+  }
   const cu=store.custom.find(x=>x.id===id);
   if(cu)Object.assign(cu,patch);
   else store.state[id]={...(store.state[id]||{}),...(patch.status!==undefined?{status:patch.status}:{}),...(patch.decision!==undefined?{decision:patch.decision}:{})};
