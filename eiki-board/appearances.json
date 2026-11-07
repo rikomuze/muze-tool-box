@@ -165,6 +165,20 @@
       "category": "tv",
       "flow": "watch",
       "tag": "再生のウズメ EIKI カメオ"
+    },
+    {
+      "id": "eiki-20261113-arinoya2-fuji",
+      "short": "有野屋書店2号店 EIKI 地上波",
+      "title": "フジテレビ「有野屋書店2号店」EIKI出演（副店長）",
+      "category": "tv",
+      "station": "フジテレビ",
+      "flow": "watch",
+      "tag": "有野屋書店",
+      "start": "2026-11-13T02:15:00+09:00",
+      "airEnd": "2026-11-13T02:45:00+09:00",
+      "url": "https://www.fujitv.co.jp/b_hp/arinoya/",
+      "note": "11/12(木)深夜26:15〜26:45＝11/13(金)2:15〜2:45。EIKIが副店長として出演。FOD配信とは別の地上波放送。",
+      "source": "出演告知（ユーザー提供画像・2026/11/7）"
     }
   ]
 }
