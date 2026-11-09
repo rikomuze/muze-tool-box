@@ -129,11 +129,14 @@ textarea.inp{min-height:80px;resize:vertical}
 .added b{flex-shrink:0}
 .choice{padding:16px 14px;background:var(--paper);border:1.5px solid var(--ink);display:flex;flex-direction:column;gap:10px}
 .items{display:flex;flex-direction:column;gap:6px}
-.item{display:flex;align-items:center;gap:8px;padding:8px;background:var(--paper);border:1px dashed rgba(64,56,47,.3)}
+.item{display:flex;flex-direction:column;gap:8px;padding:10px;background:var(--paper);border:1px dashed rgba(64,56,47,.3)}
+.item .itop{display:flex;align-items:center;gap:10px}
+.item .ibot{display:flex;align-items:center;gap:6px}
 .item .t{flex:1;min-width:0}
-.item .t b{font-size:16px}
-.item .t small{display:block;font-size:13px;color:var(--muted);line-height:1.4}
-.item .tg{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.item .t b{font-size:17px}
+.item .t small{display:block;font-size:14px;color:var(--muted);line-height:1.45}
+.item .tg{flex:1;display:flex;flex-wrap:wrap;gap:4px}
+.tent{min-height:36px}
 .qty{width:44px;height:44px;border:1px solid var(--line2);background:var(--paper);font-size:20px}
 .qn{min-width:34px;text-align:center;font-family:var(--hand);font-size:19px;font-weight:600}
 .tent{min-height:30px;padding:0 10px;border:1px dashed var(--line2);background:var(--paper);font-size:13px;color:var(--muted)}
