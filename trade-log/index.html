@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f1ebe1"><meta name="robots" content="noindex">
+<title>取引ログ | MUZE TOOL BOX</title>
+<meta name="description" content="交換・買取・譲渡・譲り受けを、質問に答えるだけで記録して、次にやることを教えてくれる取引ログ。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MUZE TOOL BOX">
+<meta property="og:title" content="取引ログ">
+<meta property="og:description" content="交換・買取・譲渡・譲り受けを、質問に答えるだけで記録できる取引ログ。">
+<meta property="og:url" content="https://rikomuze.github.io/muze-tool-box/trade-log/">
+<meta property="og:image" content="https://rikomuze.github.io/muze-tool-box/trade-log/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="MUZE TOOL BOX 取引ログ">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://rikomuze.github.io/muze-tool-box/trade-log/og.jpg">
+<meta name="twitter:title" content="取引ログ">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="取引ログ">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="styles.css?v=2026.11.09-1">
+<script src="https://rikomuze.github.io/muze-tool-box/assets/app-back.js" defer></script>
+</head><body>
+<nav class="tool-nav" aria-label="共通ナビゲーション">
+  <div class="tool-nav-inner">
+    <a class="tool-nav-brand" href="https://rikomuze.github.io/muze-tool-box/">Muze Tool Box</a>
+    <div class="tool-nav-links">
+      <a href="https://rikomuze.github.io/muze-tool-box/">MUZE TOOL BOXのトップ</a>
+      <a href="https://rikomuze.github.io/muze-tool-box/exchange-log/">前の交換ログ</a>
+    </div>
+  </div>
+</nav>
+<main class="wrap">
+  <div class="head">
+    <h1>取引ログ<span class="beta">おためし版</span></h1>
+    <button class="keychip" id="keyOpen" type="button">KEY ----</button>
+  </div>
+  <div class="sync" id="sync" role="status">この端末に保存</div>
+  <div class="notice" id="importNote" hidden></div>
+  <div class="tabs" role="group" aria-label="表示">
+    <button class="tab" id="tabOpen" type="button" aria-pressed="true">やること</button>
+    <button class="tab" id="tabDone" type="button" aria-pressed="false">履歴</button>
+  </div>
+  <input class="search" id="search" type="search" placeholder="相手・メンバー・グッズでさがす" aria-label="さがす">
+  <div class="list" id="list"></div>
+  <button class="link muted" id="importBtn" type="button">前の交換ログから、新しい記録を読み込む</button>
+</main>
+<button class="fab" id="add" type="button">＋ 取引を追加</button>
+<div class="sheet" id="wiz" hidden role="dialog" aria-modal="true" aria-label="取引を登録"></div>
+<div class="sheet" id="detail" hidden role="dialog" aria-modal="true" aria-label="取引のくわしい内容"></div>
+<div class="keydlg" id="keyDlg" hidden role="dialog" aria-modal="true" aria-label="MUZE KEY">
+  <div class="keybox">
+    <h2>MUZE KEY</h2>
+    <p>MUZE TOOL BOXで使う共通KEYです。取引ログは、このKEYで暗号化してからクラウドに保存します。</p>
+    <p><b style="color:var(--ink)">このKEYはスクショやメモで必ず保管してください。</b>KEYをなくすと、運営側でも記録を戻せません。</p>
+    <input class="keyval" id="keyValue" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="MUZE KEY">
+    <div class="grid2"><button class="btn" id="keyCopy" type="button">コピー</button><button class="btn dark" id="keyUse" type="button">このKEYを使う</button></div>
+    <button class="link" id="keyClose" type="button">閉じる</button>
+  </div>
+</div>
+<div class="toast" id="toast" hidden role="status"></div>
+<input type="file" id="photoInput" accept="image/*" multiple hidden>
+<script src="../assets/muze-key.js"></script>
+<script src="../assets/goods-catalog.js?v=2026.11.09-1"></script>
+<script src="../muze-day/events.js?v=2026.10.16-1"></script>
+<script src="app.js?v=2026.11.09-1"></script>
+</body></html>
