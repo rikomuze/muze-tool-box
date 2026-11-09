@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-07",
+  "updatedAt": "2026-11-09",
   "note": "MAZZELのテレビ・ラジオ・配信の出演。start=放送・配信の開始、airEnd=放送の終了（なければ放送中の表示はしない）。見逃し・聴き逃しの期限は deadlines.json に入れる。",
   "items": [
     {
@@ -239,8 +239,9 @@
       "station": "MTV JAPAN／TELASA",
       "start": "2026-11-15T19:30:00+09:00",
       "url": "https://www.telasa.jp/videos/278449",
-      "note": "【TELASAでも視聴可能】視聴リンクはTELASAの番組ページ。MTVでは11/15(日)19:30から放送、TELASAでも配信。MAZZELは20:00〜LIVE枠、21:30〜WINNER TALK枠（正確な登場時刻ではありません）。TELASAの配信終了日時は未確認。",
-      "source": "MAZZEL公式X・MTVタイムテーブル（ユーザー提供画像）・TELASA番組ページ"
+      "note": "【TELASAでも視聴可能】視聴リンクはTELASAの番組ページ。MTVでは11/15(日)19:30から放送、TELASAでも配信。MAZZELは20:00〜LIVE枠、21:30〜WINNER TALK枠（正確な登場時刻ではありません）。TELASAの配信終了日時は未確認。 MAZZEL公式週間スケジュールでは11/15(日)19:30〜24:00と記載（放送終了時刻は番組表によって差異があるため要確認）。",
+      "source": "MAZZEL公式X・MTVタイムテーブル（ユーザー提供画像）・TELASA番組ページ",
+      "airEnd": "2026-11-16T00:00:00+09:00"
     },
     {
       "id": "app-20261123-dreamfestival-cs",
@@ -527,6 +528,29 @@
       "url": "https://www.fujitv.co.jp/b_hp/arinoya/",
       "note": "11/12(木)深夜26:15〜26:45＝11/13(金)2:15〜2:45。EIKIが副店長として出演。ゲスト：クロちゃん。FOD配信版とは別の地上波放送。",
       "source": "フジテレビ公式番組ページ（2026/11/7）"
+    },
+    {
+      "id": "app-20261114-mazzel-room-premiere",
+      "short": "MAZZEL ROOM プレミア公開",
+      "title": "「MAZZEL ROOM」プレミア公開",
+      "media": "stream",
+      "station": "MAZZEL公式YouTube",
+      "start": "2026-11-14T21:00:00+09:00",
+      "url": "https://www.youtube.com/@MAZZEL_official",
+      "note": "11/14(土)21:00プレミア公開。エピソード個別URLは未確認。",
+      "source": "MAZZEL公式週間スケジュール（ユーザー提供画像・2026/11/9）"
+    },
+    {
+      "id": "app-20261112-mtv-vmaj2026-artists-special",
+      "short": "VMAJ 2026 出演者特集",
+      "title": "MTV「MTV VMAJ 2026 出演者特集」MAZZELを含む出演アーティストMV特集",
+      "media": "tv",
+      "station": "MTV JAPAN",
+      "start": "2026-11-12T20:00:00+09:00",
+      "airEnd": "2026-11-12T23:00:00+09:00",
+      "url": "https://www.mtvjapan.com/music/programs/202611-005",
+      "note": "MTV VMAJ 2026本編とは別番組。MAZZELを含む出演アーティストのMV特集。",
+      "source": "MTV・TELASA公式発表（2026/10/29）"
     }
   ]
 }
