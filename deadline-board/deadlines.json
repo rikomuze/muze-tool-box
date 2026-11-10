@@ -745,6 +745,18 @@
       "url": "https://tver.jp/episodes/epp9ivbbs4",
       "note": "11/9(月)放送、MAZZEL「Touch」、KAIRYU・NAOYA「奏」出演回。ユーザー提供の2つのTVerリンクのうち2件目。スクリーンショットでPart.2の終了予定11/16(月)18:59を確認。どちらのURLがPart.2かは未確認のため、当該リンクの期限は暫定（Part.2の表示を準用）。",
       "source": "TVerユーザー提供リンク・配信画面（2026/11/10）"
+    },
+    {
+      "id": "musicline-20261109-nhk-ondemand",
+      "short": "ミュージックライン 聴き逃し",
+      "title": "NHK-FM「ミュージックライン」11/9放送 TAKUTO・HAYATO出演 聴き逃し期限",
+      "category": "stream",
+      "flow": "watch",
+      "tag": "らじる★らじる",
+      "end": "2026-11-16T22:30:00+09:00",
+      "url": "https://www.nhk.or.jp/radio/player/ondemand.html?p=Z9WGYY3GP5_01_4337766&e-param=WXCD29M3T8&cid=jp-Z9WGYY3GP5",
+      "note": "11/9(月)21:45放送。DJ：TAKUTO・HAYATO（MAZZEL）、ゲスト：sanetii。NHKらじる★らじる聴き逃し配信。11/16(月)22:30終了（公式配信画面で確認済み）。",
+      "source": "NHKらじる★らじる配信画面（ユーザー提供・2026/11/10）"
     }
   ]
 }
