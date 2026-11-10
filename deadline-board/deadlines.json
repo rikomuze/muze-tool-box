@@ -721,6 +721,30 @@
       "url": "https://mazzel.tokyo/tour/play_at_the_muzeum2/",
       "note": "宇都宮市文化会館 大ホール。整理券取得者から案内。公演チケットを持つ方が対象。整理券所持者の案内終了後はチケット所持者向け販売を予定。開演後はMUZEUM会員限定でチケットがない方も購入可能。兵庫の整理券運用詳細は別途案内。",
       "source": "MAZZEL公式サイト（ユーザー提供スクリーンショット・2026/11/10）"
+    },
+    {
+      "id": "cdtv-20261109-tver-1",
+      "short": "CDTV 11/9 TVer 1",
+      "title": "「CDTVライブ！ライブ！」11/9放送回 TVer見逃し配信（リンク1）",
+      "category": "stream",
+      "flow": "watch",
+      "tag": "TVer",
+      "end": "2026-11-16T18:59:00+09:00",
+      "url": "https://tver.jp/episodes/epbc5y1a3l",
+      "note": "11/9(月)放送、MAZZEL「Touch」、KAIRYU・NAOYA「奏」出演回。ユーザー提供の2つのTVerリンクのうち1件目。スクリーンショットでPart.2の終了予定11/16(月)18:59を確認。どちらのURLがPart.2かは未確認のため、当該リンクの期限は暫定（Part.2の表示を準用）。",
+      "source": "TVerユーザー提供リンク・配信画面（2026/11/10）"
+    },
+    {
+      "id": "cdtv-20261109-tver-2",
+      "short": "CDTV 11/9 TVer 2",
+      "title": "「CDTVライブ！ライブ！」11/9放送回 TVer見逃し配信（リンク2）",
+      "category": "stream",
+      "flow": "watch",
+      "tag": "TVer",
+      "end": "2026-11-16T18:59:00+09:00",
+      "url": "https://tver.jp/episodes/epp9ivbbs4",
+      "note": "11/9(月)放送、MAZZEL「Touch」、KAIRYU・NAOYA「奏」出演回。ユーザー提供の2つのTVerリンクのうち2件目。スクリーンショットでPart.2の終了予定11/16(月)18:59を確認。どちらのURLがPart.2かは未確認のため、当該リンクの期限は暫定（Part.2の表示を準用）。",
+      "source": "TVerユーザー提供リンク・配信画面（2026/11/10）"
     }
   ]
 }
