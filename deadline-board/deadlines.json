@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-09",
+  "updatedAt": "2026-11-10",
   "items": [
     {
       "id": "auto-20261013-01",
@@ -610,6 +610,117 @@
       "url": "https://dreamfestival.jp/",
       "note": "11/10(火)12:00一般発売開始。11/21(土)・22(日)・23(月祝)の全日程が対象。MAZZEL出演は11/23(月祝)。先着順・予定枚数に達し次第終了。終了日時の固定設定なし（販売開始を通知）。",
       "source": "テレビ朝日ドリームフェスティバル公式X（ユーザー提供画像・2026/11/9）"
+    },
+    {
+      "id": "fanmeet-vol2-late2026-goods-line-lottery",
+      "short": "ファンミ後半 グッズ整理券",
+      "title": "MAZZEL 2nd Fan Meeting Vol.2 後半公演 グッズ先行販売整理券 抽選申込",
+      "category": "ticket",
+      "flow": "lottery",
+      "tag": "ファンミ",
+      "start": "2026-11-10T14:00:00+09:00",
+      "end": "2026-11-12T23:59:00+09:00",
+      "resultAt": "2026-11-14T15:00:00+09:00",
+      "resultNote": "整理券抽選結果発表（予定）。申し込んだ方のみ確認。",
+      "url": "https://mazzel.tokyo/tour/play_at_the_muzeum2/",
+      "note": "11/17岡山、11/18広島、11/25兵庫（1部・2部）、11/26大阪、12/1埼玉、12/3群馬、12/4栃木が対象。LINE「BMSG 整理券」で無料抽選。公演ごとに複数枠申込可・当選は各公演1枚まで。先行販売は当該公演チケット所持者のみ。兵庫の整理券導入詳細は別途案内予定。",
+      "source": "MAZZEL公式サイト（ユーザー提供スクリーンショット・2026/11/10）"
+    },
+    {
+      "id": "fanmeet-vol2-goods-start-20261117",
+      "short": "岡山 グッズ先行販売",
+      "title": "MAZZEL 2nd Fan Meeting Vol.2 岡山会場グッズ先行販売開始（予定）",
+      "category": "goods",
+      "flow": "buy",
+      "tag": "ファンミ",
+      "end": "2026-11-17T13:00:00+09:00",
+      "url": "https://mazzel.tokyo/tour/play_at_the_muzeum2/",
+      "note": "倉敷市民会館。整理券取得者から案内。公演チケットを持つ方が対象。整理券所持者の案内終了後はチケット所持者向け販売を予定。開演後はMUZEUM会員限定でチケットがない方も購入可能。兵庫の整理券運用詳細は別途案内。",
+      "source": "MAZZEL公式サイト（ユーザー提供スクリーンショット・2026/11/10）"
+    },
+    {
+      "id": "fanmeet-vol2-goods-start-20261118",
+      "short": "広島 グッズ先行販売",
+      "title": "MAZZEL 2nd Fan Meeting Vol.2 広島会場グッズ先行販売開始（予定）",
+      "category": "goods",
+      "flow": "buy",
+      "tag": "ファンミ",
+      "end": "2026-11-18T13:00:00+09:00",
+      "url": "https://mazzel.tokyo/tour/play_at_the_muzeum2/",
+      "note": "広島文化学園HBGホール。整理券取得者から案内。公演チケットを持つ方が対象。整理券所持者の案内終了後はチケット所持者向け販売を予定。開演後はMUZEUM会員限定でチケットがない方も購入可能。兵庫の整理券運用詳細は別途案内。",
+      "source": "MAZZEL公式サイト（ユーザー提供スクリーンショット・2026/11/10）"
+    },
+    {
+      "id": "fanmeet-vol2-goods-start-20261125-1",
+      "short": "兵庫 1部 グッズ先行販売",
+      "title": "MAZZEL 2nd Fan Meeting Vol.2 兵庫 1部会場グッズ先行販売開始（予定）",
+      "category": "goods",
+      "flow": "buy",
+      "tag": "ファンミ",
+      "end": "2026-11-25T11:00:00+09:00",
+      "url": "https://mazzel.tokyo/tour/play_at_the_muzeum2/",
+      "note": "神戸国際会館 こくさいホール。整理券取得者から案内。公演チケットを持つ方が対象。整理券所持者の案内終了後はチケット所持者向け販売を予定。開演後はMUZEUM会員限定でチケットがない方も購入可能。兵庫の整理券運用詳細は別途案内。",
+      "source": "MAZZEL公式サイト（ユーザー提供スクリーンショット・2026/11/10）"
+    },
+    {
+      "id": "fanmeet-vol2-goods-start-20261125-2",
+      "short": "兵庫 2部 グッズ先行販売",
+      "title": "MAZZEL 2nd Fan Meeting Vol.2 兵庫 2部会場グッズ先行販売開始（予定）",
+      "category": "goods",
+      "flow": "buy",
+      "tag": "ファンミ",
+      "end": "2026-11-25T15:00:00+09:00",
+      "url": "https://mazzel.tokyo/tour/play_at_the_muzeum2/",
+      "note": "神戸国際会館 こくさいホール。整理券取得者から案内。公演チケットを持つ方が対象。整理券所持者の案内終了後はチケット所持者向け販売を予定。開演後はMUZEUM会員限定でチケットがない方も購入可能。兵庫の整理券運用詳細は別途案内。",
+      "source": "MAZZEL公式サイト（ユーザー提供スクリーンショット・2026/11/10）"
+    },
+    {
+      "id": "fanmeet-vol2-goods-start-20261126",
+      "short": "大阪 グッズ先行販売",
+      "title": "MAZZEL 2nd Fan Meeting Vol.2 大阪会場グッズ先行販売開始（予定）",
+      "category": "goods",
+      "flow": "buy",
+      "tag": "ファンミ",
+      "end": "2026-11-26T13:00:00+09:00",
+      "url": "https://mazzel.tokyo/tour/play_at_the_muzeum2/",
+      "note": "大阪国際会議場 メインホール。整理券取得者から案内。公演チケットを持つ方が対象。整理券所持者の案内終了後はチケット所持者向け販売を予定。開演後はMUZEUM会員限定でチケットがない方も購入可能。兵庫の整理券運用詳細は別途案内。",
+      "source": "MAZZEL公式サイト（ユーザー提供スクリーンショット・2026/11/10）"
+    },
+    {
+      "id": "fanmeet-vol2-goods-start-20261201",
+      "short": "埼玉 グッズ先行販売",
+      "title": "MAZZEL 2nd Fan Meeting Vol.2 埼玉会場グッズ先行販売開始（予定）",
+      "category": "goods",
+      "flow": "buy",
+      "tag": "ファンミ",
+      "end": "2026-12-01T13:00:00+09:00",
+      "url": "https://mazzel.tokyo/tour/play_at_the_muzeum2/",
+      "note": "大宮ソニックシティ 大ホール。整理券取得者から案内。公演チケットを持つ方が対象。整理券所持者の案内終了後はチケット所持者向け販売を予定。開演後はMUZEUM会員限定でチケットがない方も購入可能。兵庫の整理券運用詳細は別途案内。",
+      "source": "MAZZEL公式サイト（ユーザー提供スクリーンショット・2026/11/10）"
+    },
+    {
+      "id": "fanmeet-vol2-goods-start-20261203",
+      "short": "群馬 グッズ先行販売",
+      "title": "MAZZEL 2nd Fan Meeting Vol.2 群馬会場グッズ先行販売開始（予定）",
+      "category": "goods",
+      "flow": "buy",
+      "tag": "ファンミ",
+      "end": "2026-12-03T13:00:00+09:00",
+      "url": "https://mazzel.tokyo/tour/play_at_the_muzeum2/",
+      "note": "Gメッセ群馬 展示ホールA・B。整理券取得者から案内。公演チケットを持つ方が対象。整理券所持者の案内終了後はチケット所持者向け販売を予定。開演後はMUZEUM会員限定でチケットがない方も購入可能。兵庫の整理券運用詳細は別途案内。",
+      "source": "MAZZEL公式サイト（ユーザー提供スクリーンショット・2026/11/10）"
+    },
+    {
+      "id": "fanmeet-vol2-goods-start-20261204",
+      "short": "栃木 グッズ先行販売",
+      "title": "MAZZEL 2nd Fan Meeting Vol.2 栃木会場グッズ先行販売開始（予定）",
+      "category": "goods",
+      "flow": "buy",
+      "tag": "ファンミ",
+      "end": "2026-12-04T13:00:00+09:00",
+      "url": "https://mazzel.tokyo/tour/play_at_the_muzeum2/",
+      "note": "宇都宮市文化会館 大ホール。整理券取得者から案内。公演チケットを持つ方が対象。整理券所持者の案内終了後はチケット所持者向け販売を予定。開演後はMUZEUM会員限定でチケットがない方も購入可能。兵庫の整理券運用詳細は別途案内。",
+      "source": "MAZZEL公式サイト（ユーザー提供スクリーンショット・2026/11/10）"
     }
   ]
 }
