@@ -562,6 +562,18 @@
       "url": "https://party.spotify.com/",
       "note": "11/13(金)20:00開始。出演：Aile The Shota、RAN・EIKI（MAZZEL）、TAIKI・KANON（STARGLOW）、ふみの。Spotify Premium会員限定。「通知を希望」から参加登録。第2回の詳細は別途確認。個別イベントURLは画像で省略されているため未登録。",
       "source": "Spotify Japan公式X（ユーザー提供画像・2026/11/9）"
+    },
+    {
+      "id": "app-20261118-ueda-onna-naoya",
+      "short": "上田と女 NAOYA",
+      "title": "日本テレビ「上田と女が吠える夜」NAOYA出演",
+      "media": "tv",
+      "station": "日本テレビ",
+      "start": "2026-11-18T21:00:00+09:00",
+      "airEnd": "2026-11-18T21:54:00+09:00",
+      "url": "https://www.ntv.co.jp/hoeruyoru/",
+      "note": "NAOYA出演",
+      "source": "日本テレビ番組情報"
     }
   ]
 }
