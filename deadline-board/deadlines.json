@@ -628,27 +628,27 @@
     },
     {
       "id": "cdtv-20261109-tver-1",
-      "short": "CDTV 11/9 TVer 1",
-      "title": "「CDTVライブ！ライブ！」11/9放送回 TVer見逃し配信（リンク1）",
+      "short": "CDTV「奏」TVer",
+      "title": "CDTVライブ！ライブ！ KAIRYU・NAOYA「奏」TVer見逃し",
       "category": "stream",
       "flow": "watch",
       "tag": "TVer",
       "end": "2026-11-16T18:59:00+09:00",
       "url": "https://tver.jp/episodes/epbc5y1a3l",
-      "note": "11/9(月)放送、MAZZEL「Touch」、KAIRYU・NAOYA「奏」出演回。ユーザー提供の2つのTVerリンクのうち1件目。スクリーンショットでPart.2の終了予定11/16(月)18:59を確認。どちらのURLがPart.2かは未確認のため、当該リンクの期限は暫定（Part.2の表示を準用）。",
-      "source": "TVerユーザー提供リンク・配信画面（2026/11/10）"
+      "note": "KAIRYU・NAOYA「奏」",
+      "source": "TVer"
     },
     {
       "id": "cdtv-20261109-tver-2",
-      "short": "CDTV 11/9 TVer 2",
-      "title": "「CDTVライブ！ライブ！」11/9放送回 TVer見逃し配信（リンク2）",
+      "short": "CDTV「Touch」TVer",
+      "title": "CDTVライブ！ライブ！ MAZZEL「Touch」TVer見逃し",
       "category": "stream",
       "flow": "watch",
       "tag": "TVer",
       "end": "2026-11-16T18:59:00+09:00",
       "url": "https://tver.jp/episodes/epp9ivbbs4",
-      "note": "11/9(月)放送、MAZZEL「Touch」、KAIRYU・NAOYA「奏」出演回。ユーザー提供の2つのTVerリンクのうち2件目。スクリーンショットでPart.2の終了予定11/16(月)18:59を確認。どちらのURLがPart.2かは未確認のため、当該リンクの期限は暫定（Part.2の表示を準用）。",
-      "source": "TVerユーザー提供リンク・配信画面（2026/11/10）"
+      "note": "MAZZEL「Touch」",
+      "source": "TVer"
     },
     {
       "id": "musicline-20261109-nhk-ondemand",
