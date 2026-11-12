@@ -673,6 +673,18 @@
       "url": "https://www.nhk.or.jp/radio/player/ondemand.html?p=Z9WGYY3GP5_01_4338022&e-param=LJT6B8NARG&cid=jp-Z9WGYY3GP5",
       "note": "11/11(水)21:45〜22:30放送。DJ：TAKUTO・HAYATO（MAZZEL）、ゲスト：原因は自分にある。（小泉光咲・吉澤要人）。11/18(水)22:30配信終了（NHKらじる★らじる公式画面で確認済み）。",
       "source": "NHKらじる★らじる当該回配信画面（ユーザー提供・2026/11/13）"
+    },
+    {
+      "id": "musicline-20261112-nhk-ondemand",
+      "short": "ミュージックライン 11/12 聴き逃し",
+      "title": "NHK-FM「ミュージックライン」11/12放送 NAOYA・RYUKI／ゲスト Kroi 聴き逃し期限",
+      "category": "stream",
+      "flow": "watch",
+      "tag": "らじる★らじる",
+      "end": "2026-11-19T22:30:00+09:00",
+      "url": "https://www.nhk.or.jp/radio/player/ondemand.html?p=Z9WGYY3GP5_01_4338191&cid=jp-Z9WGYY3GP5",
+      "note": "11/12(木)21:45〜22:30放送。DJ：NAOYA・RYUKI（MAZZEL）、ゲスト：Kroi（内田怜央・長谷部悠生）。11/19(木)22:30配信終了（NHKらじる★らじる公式画面で確認済み）。",
+      "source": "NHKらじる★らじる当該回配信画面（ユーザー提供・2026/11/13）"
     }
   ]
 }
