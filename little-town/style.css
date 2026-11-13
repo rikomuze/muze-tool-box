@@ -213,3 +213,6 @@ body{background:var(--paper);color:var(--ink);font-size:14px}
 .edit-controls .text-button{justify-self:start;padding-left:0}
 .edit-actions{margin-top:17px;display:flex;flex-wrap:wrap;justify-content:end;gap:8px}
 @media(max-width:480px){.avatar-editor{max-height:92dvh;padding:18px}.edit-preview{height:235px}.avatar-editor h2{font-size:19px}.edit-help{font-size:10px}.edit-actions button{font-size:11px}}
+
+/* hidden属性を確実に優先（画面を開くまではモーダルを非表示） */
+.modal[hidden]{display:none!important}
