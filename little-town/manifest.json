@@ -1,0 +1,22 @@
+{
+  "name": "little town. — 続けたぶんだけ、街になる",
+  "short_name": "little town.",
+  "description": "日々の習慣とともにKenneyの街が少しずつ育つ",
+  "start_url": "./",
+  "scope": "../",
+  "display": "standalone",
+  "background_color": "#f6f5ef",
+  "theme_color": "#f6f5ef",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
