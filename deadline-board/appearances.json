@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-09",
+  "updatedAt": "2026-11-13",
   "note": "MAZZELのテレビ・ラジオ・配信の出演。start=放送・配信の開始、airEnd=放送の終了（なければ放送中の表示はしない）。見逃し・聴き逃しの期限は deadlines.json に入れる。",
   "items": [
     {
@@ -574,6 +574,17 @@
       "url": "https://www.ntv.co.jp/hoeruyoru/",
       "note": "NAOYA出演",
       "source": "日本テレビ番組情報"
+    },
+    {
+      "id": "app-20261112-arinoya-tver",
+      "short": "有野屋書店2号店 TVer見逃し",
+      "title": "「有野屋書店2号店」11/12放送分 EIKI副店長／ゲスト クロちゃん TVer見逃し",
+      "media": "stream",
+      "station": "TVer",
+      "start": "2026-11-12T00:00:00+09:00",
+      "url": "https://tver.jp/episodes/epx4q9bfdy?utm_source=x&utm_medium=social&utm_campaign=official_mp",
+      "source": "TVer当該回ページ（ユーザー提供画像・2026/11/13）",
+      "note": "TVerで見逃し配信中。11/13時点で『配信終了まで1週間以上』と表示。終了日時は未発表のため締切には未登録。startは放送日を表す仮置きで放送時刻ではない。"
     }
   ]
 }
