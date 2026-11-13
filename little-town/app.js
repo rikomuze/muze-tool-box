@@ -22,7 +22,78 @@ function complete(id){if(finished(id))return;let t=state.tasks.find(x=>x.id===id
 const avatarDefault='<img src="default-cat.webp" alt="初期キャラクターの猫">';
 function renderAvatar(){const html=state.avatar?`<img src="${state.avatar}" alt="キャラクター">`:avatarDefault;$('walkerImage').innerHTML=html;$('avatarSample').innerHTML=html;const name=$('avatarName');if(document.activeElement!==name)name.value=state.name}
 $('avatarName').addEventListener('change',e=>{state.name=e.target.value.trim().slice(0,18)||'まる';let ok=persist();renderAvatar();toast(ok?'名前を保存したよ':'名前を変更したよ。保存はできていないよ')});
-$('avatarFile').addEventListener('change',e=>{const f=e.target.files?.[0];e.target.value='';if(!f)return;if(!/^image\/(png|jpeg|webp|gif)$/.test(f.type)){toast('PNG・JPG・WebP・GIFを使ってね');return}if(f.size>5*1024*1024){toast('画像は5MB以下にしてね');return}const reader=new FileReader();reader.onerror=()=>toast('画像を読み込めなかったよ');reader.onload=()=>{const src=String(reader.result||'');if(f.type==='image/gif'){if(f.size>400000){toast('GIFは400KB以下でお願いね');return}state.avatar=src;let ok=persist();renderAvatar();toast(ok?'キャラを保存したよ':'キャラを変更したよ。保存はできていないよ');return}const img=new Image();img.onload=()=>{let scale=Math.min(1,360/Math.max(img.width,img.height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(img.width*scale));c.height=Math.max(1,Math.round(img.height*scale));c.getContext('2d').drawImage(img,0,0,c.width,c.height);state.avatar=c.toDataURL('image/webp',.82);let ok=persist();renderAvatar();toast(ok?'キャラ画像を保存したよ':'キャラを変更したよ。保存はできていないよ')};img.onerror=()=>toast('画像を開けなかったよ');img.src=src};reader.readAsDataURL(f)});
+// キャラクター画像の切り抜きはすべて端末内の Canvas で処理し、保存ボタンまでは既存設定を変更しない。
+let editOriginal=null,editCurrent=null,editorOpened=false,hasEdited=false;
+const editorCanvas=$('avatarEditCanvas'),editorCtx=editorCanvas.getContext('2d',{willReadFrequently:true});
+function canvasCopy(source){const c=document.createElement('canvas');c.width=source.width;c.height=source.height;c.getContext('2d').drawImage(source,0,0);return c}
+function showEditCanvas(source){editorCanvas.width=source.width;editorCanvas.height=source.height;editorCtx.clearRect(0,0,source.width,source.height);editorCtx.drawImage(source,0,0)}
+function openAvatarEditor(source){
+ editOriginal=canvasCopy(source);editCurrent=canvasCopy(source);editorOpened=true;hasEdited=false;
+ $('bgStrength').value='45';$('bgStrengthValue').value='45';
+ showEditCanvas(editCurrent);$('avatarEditor').hidden=false;
+}
+function closeAvatarEditor(){editorOpened=false;editOriginal=null;editCurrent=null;$('avatarEditor').hidden=true}
+function sourceFromFile(file){
+ if(!/^image\/(png|jpeg|webp|gif)$/.test(file.type)){toast('PNG・JPG・WebP・GIFを選んでね');return}
+ if(file.size>5*1024*1024){toast('画像は5MB以下にしてね');return}
+ const reader=new FileReader();reader.onerror=()=>toast('画像を読み込めませんでした');
+ reader.onload=()=>{const img=new Image();img.onerror=()=>toast('画像を開けませんでした');img.onload=()=>{
+   const scale=Math.min(1,520/Math.max(img.naturalWidth,img.naturalHeight));
+   const c=document.createElement('canvas');c.width=Math.max(1,Math.round(img.naturalWidth*scale));c.height=Math.max(1,Math.round(img.naturalHeight*scale));
+   c.getContext('2d').drawImage(img,0,0,c.width,c.height);openAvatarEditor(c);
+   if(file.type==='image/gif')toast('GIFは編集すると静止画像になります');
+ };img.src=String(reader.result||'')};reader.readAsDataURL(file)
+}
+$('avatarFile').addEventListener('change',e=>{const f=e.target.files?.[0];e.target.value='';if(f)sourceFromFile(f)});
+// 画像の外周とつながっている似た色のピクセルだけを消す。キャラ内部の白は消さない。
+function removeFlatBackground(source,threshold){
+ const c=canvasCopy(source),cx=c.getContext('2d',{willReadFrequently:true});
+ const image=cx.getImageData(0,0,c.width,c.height),data=image.data,w=c.width,h=c.height;
+ const cornerPoints=[[0,0],[w-1,0],[0,h-1],[w-1,h-1]];
+ const corners=cornerPoints.map(([x,y])=>{const i=(y*w+x)*4;return [data[i],data[i+1],data[i+2],data[i+3]]}).filter(p=>p[3]>80);
+ if(!corners.length)return c;
+ // もっとも頻出する隅の色を背景とみなす。
+ let best=corners[0],bestVotes=-1;for(const a of corners){const votes=corners.filter(b=>(a[0]-b[0])**2+(a[1]-b[1])**2+(a[2]-b[2])**2<4200).length;if(votes>bestVotes){best=a;bestVotes=votes}}
+ const validCorners=corners.filter(a=>(a[0]-best[0])**2+(a[1]-best[1])**2+(a[2]-best[2])**2<4200);
+ const bg=[0,0,0];validCorners.forEach(v=>{bg[0]+=v[0];bg[1]+=v[1];bg[2]+=v[2]});for(let n=0;n<3;n++)bg[n]/=validCorners.length;
+ const thr2=threshold*threshold*3,seen=new Uint8Array(w*h),queue=new Int32Array(w*h);let head=0,tail=0;
+ function similar(p){const i=p*4;if(data[i+3]<16)return true;const dr=data[i]-bg[0],dg=data[i+1]-bg[1],db=data[i+2]-bg[2];return dr*dr+dg*dg+db*db<=thr2}
+ function seed(p){if(!seen[p]&&similar(p)){seen[p]=1;queue[tail++]=p}}
+ for(let x=0;x<w;x++){seed(x);seed((h-1)*w+x)}
+ for(let y=0;y<h;y++){seed(y*w);seed(y*w+w-1)}
+ while(head<tail){const p=queue[head++],x=p%w,y=(p-x)/w,i=p*4;data[i+3]=0;
+  if(x>0)seed(p-1);if(x<w-1)seed(p+1);if(y>0)seed(p-w);if(y<h-1)seed(p+w)}
+ cx.putImageData(image,0,0);return c
+}
+function trimTransparent(source){
+ const cx=source.getContext('2d',{willReadFrequently:true}),w=source.width,h=source.height,pixels=cx.getImageData(0,0,w,h).data;let minX=w,minY=h,maxX=-1,maxY=-1;
+ for(let y=0;y<h;y++)for(let x=0;x<w;x++){if(pixels[(y*w+x)*4+3]>14){minX=Math.min(minX,x);minY=Math.min(minY,y);maxX=Math.max(maxX,x);maxY=Math.max(maxY,y)}}
+ if(maxX<minX)return canvasCopy(source);
+ const margin=Math.max(4,Math.round(Math.max(maxX-minX+1,maxY-minY+1)*.05));
+ const x=Math.max(0,minX-margin),y=Math.max(0,minY-margin),right=Math.min(w,maxX+margin+1),bottom=Math.min(h,maxY+margin+1);
+ const out=document.createElement('canvas');out.width=right-x;out.height=bottom-y;
+ out.getContext('2d').drawImage(source,x,y,out.width,out.height,0,0,out.width,out.height);return out
+}
+$('removeBgButton').addEventListener('click',()=>{
+ if(!editOriginal)return;
+ // スライダーの値は常に元画像に適用し、何度でも調整できる。
+ editCurrent=removeFlatBackground(editOriginal,Number($('bgStrength').value));
+ hasEdited=true;showEditCanvas(editCurrent);
+});
+$('bgStrength').addEventListener('input',e=>{$('bgStrengthValue').value=e.target.value;if(hasEdited&&editOriginal){editCurrent=removeFlatBackground(editOriginal,Number(e.target.value));showEditCanvas(editCurrent)}});
+$('trimAvatarButton').addEventListener('click',()=>{if(!editCurrent)return;editCurrent=trimTransparent(editCurrent);hasEdited=true;showEditCanvas(editCurrent)});
+$('undoAvatarButton').addEventListener('click',()=>{if(!editOriginal)return;editCurrent=canvasCopy(editOriginal);hasEdited=false;showEditCanvas(editCurrent)});
+$('cancelAvatarEdit').addEventListener('click',closeAvatarEditor);
+$('avatarEditor').addEventListener('click',e=>{if(e.target===$('avatarEditor'))closeAvatarEditor()});
+$('saveAvatarEdit').addEventListener('click',()=>{
+ if(!editCurrent)return;
+ const max=360,scale=Math.min(1,max/Math.max(editCurrent.width,editCurrent.height));
+ const out=document.createElement('canvas');out.width=Math.max(1,Math.round(editCurrent.width*scale));out.height=Math.max(1,Math.round(editCurrent.height*scale));
+ out.getContext('2d').drawImage(editCurrent,0,0,out.width,out.height);
+ const webp=out.toDataURL('image/webp',.86);
+ state.avatar=webp.startsWith('data:image/webp')?webp:out.toDataURL('image/png');
+ const ok=persist();closeAvatarEditor();renderAvatar();toast(ok?'キャラ画像を保存したよ':'画像は表示できますが、保存に失敗しました。記録を書き出してください');
+});
 $('defaultAvatar').addEventListener('click',()=>{state.avatar='';let ok=persist();renderAvatar();toast(ok?'元の子に戻したよ':'表示を元に戻したよ（保存できていません）')});
 // 実際の Kenney Sketch Town の PNG を描画。360度の斜め見下ろしタイルではなく、全てN向きに統一。
 const canvas=$('townCanvas'),ctx=canvas.getContext('2d');const S=.62,W=256*S,H=352*S;
