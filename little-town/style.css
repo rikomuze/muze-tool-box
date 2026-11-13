@@ -197,3 +197,19 @@ body{background:var(--paper);color:var(--ink);font-size:14px}
   .modal-actions{gap:8px}
   .modal-actions button{flex-shrink:0}
 }
+
+
+/* アップロード画像の透過・余白調整（Kenneyカラー） */
+.avatar-editor{max-width:460px;width:100%;max-height:min(94dvh,820px);overflow:auto}
+.avatar-editor h2{font:950 22px/1.25 ui-rounded,system-ui,sans-serif;margin:5px 0 12px}
+.edit-preview{width:min(100%,310px);height:270px;margin:0 auto;background-color:#fbfcf7;background-image:linear-gradient(45deg,#dfe8d6 25%,transparent 25%),linear-gradient(-45deg,#dfe8d6 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#dfe8d6 75%),linear-gradient(-45deg,transparent 75%,#dfe8d6 75%);background-size:24px 24px;background-position:0 0,0 12px,12px -12px,-12px 0;border:2px solid #87ad73;display:flex;align-items:center;justify-content:center;padding:7px}
+.edit-preview canvas{display:block;max-height:100%;max-width:100%;width:auto;height:auto;object-fit:contain}
+.edit-help{font-size:11px;color:#597154;line-height:1.7;margin:12px 0}
+.edit-controls{display:grid;gap:12px}
+.edit-controls>.secondary{justify-self:start}
+.edit-threshold{font-size:12px;font-weight:800;display:grid;gap:5px;color:#3e6748}
+.edit-threshold output{display:inline;color:#3e764b}
+.edit-threshold input{width:100%;accent-color:#4b955d}
+.edit-controls .text-button{justify-self:start;padding-left:0}
+.edit-actions{margin-top:17px;display:flex;flex-wrap:wrap;justify-content:end;gap:8px}
+@media(max-width:480px){.avatar-editor{max-height:92dvh;padding:18px}.edit-preview{height:235px}.avatar-editor h2{font-size:19px}.edit-help{font-size:10px}.edit-actions button{font-size:11px}}
