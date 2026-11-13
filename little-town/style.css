@@ -165,3 +165,35 @@ body{background:var(--paper);color:var(--ink);font-size:14px}
  .modal-card{padding:20px}
  .app footer{flex-direction:row;gap:10px}
 }
+
+
+/* iPhone: キーボード表示中もタスク編集画面を画面幅に収める */
+.modal{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  max-width:100vw;
+  padding:16px;
+  overflow-x:hidden;
+  overflow-y:auto;
+}
+.modal-card{
+  flex:0 1 460px;
+  width:100%;
+  max-width:calc(100vw - 32px);
+  min-width:0;
+  margin:auto;
+}
+.modal-card input{
+  width:100%;
+  min-width:0;
+  font-size:16px;
+}
+.modal-actions{flex-wrap:wrap}
+@media(max-width:480px){
+  .modal{padding:12px}
+  .modal-card{max-width:calc(100vw - 24px);padding:18px}
+  .modal-actions{gap:8px}
+  .modal-actions button{flex-shrink:0}
+}
