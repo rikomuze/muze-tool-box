@@ -58,7 +58,7 @@ let selectedDay=nowDate();
 const dayUTC=day=>Date.parse(day+'T00:00:00Z');
 const isoDay=(y,m,d)=>[y,String(m+1).padStart(2,'0'),String(d).padStart(2,'0')].join('-');
 function historyStats(){
-  const days=[...new Set(state.log.filter(x=>typeof x.day==='string'&&/^\\d{4}-\\d{2}-\\d{2}$/.test(x.day)&&x.day<=nowDate()).map(x=>x.day))].sort();
+  const days=[...new Set(state.log.filter(x=>typeof x.day==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x.day)&&x.day<=nowDate()).map(x=>x.day))].sort();
   let longest=0,chain=0,last=0;
   for(const day of days){const utc=dayUTC(day);chain=last&&utc-last===86400000?chain+1:1;longest=Math.max(longest,chain);last=utc}
   const today=nowDate(),yesterday=new Date(dayUTC(today)-86400000).toISOString().slice(0,10);
@@ -70,7 +70,7 @@ function historyStats(){
 }
 function renderDayLog(){
  const panel=$('selectedDayLog');const entries=state.log.filter(x=>x.day===selectedDay);
- $('selectedDayTitle').textContent=selectedDay.replace(/^(\\d{4})-(\\d{2})-(\\d{2})$/,(_,y,m,d)=>y+' / '+Number(m)+' / '+Number(d));
+ $('selectedDayTitle').textContent=selectedDay.replace(/^(\d{4})-(\d{2})-(\d{2})$/,(_,y,m,d)=>y+' / '+Number(m)+' / '+Number(d));
  if(!entries.length){panel.innerHTML='<p class="log-empty">NO RECORDS</p>';return}
  panel.innerHTML=entries.map((e,i)=>'<div class="day-log-item"><span class="log-check">✓</span><span>'+escaped(e.name||state.tasks.find(t=>t.id===e.id)?.name||'タスク')+'</span></div>').join('');
 }
