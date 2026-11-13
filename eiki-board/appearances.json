@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-07",
+  "updatedAt": "2026-11-13",
   "items": [
     {
       "id": "eiki-20261022-onemorning-catchup",
@@ -179,6 +179,19 @@
       "url": "https://www.fujitv.co.jp/b_hp/arinoya/",
       "note": "11/12(木)深夜26:15〜26:45＝11/13(金)2:15〜2:45。EIKIが副店長として出演。FOD配信とは別の地上波放送。",
       "source": "出演告知（ユーザー提供画像・2026/11/7）"
+    },
+    {
+      "id": "eiki-20261112-arinoya-tver",
+      "short": "有野屋書店2号店 TVer見逃し",
+      "title": "フジテレビ「有野屋書店2号店」11/12放送分 EIKI副店長／ゲスト 安田大サーカス・クロちゃん TVer見逃し",
+      "category": "stream",
+      "station": "TVer",
+      "flow": "watch",
+      "tag": "有野屋書店",
+      "start": "2026-11-12T00:00:00+09:00",
+      "url": "https://tver.jp/episodes/epx4q9bfdy?utm_source=x&utm_medium=social&utm_campaign=official_mp",
+      "source": "TVer当該回ページ（ユーザー提供画像・2026/11/13）",
+      "note": "11/12(木)放送分。EIKI副店長出演、ゲスト：安田大サーカス・クロちゃん。TVerで見逃し配信中。11/13時点の表示は『配信終了まで1週間以上』で、正確な配信終了日時は未確認。開始日時は放送日を示す仮置き（放送開始時刻ではない）。"
     }
   ]
 }
