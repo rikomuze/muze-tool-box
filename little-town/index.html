@@ -105,6 +105,26 @@
       <div class="modal-actions"><button id="deleteTask" class="danger" type="button" hidden>削除</button><button id="cancelModal" class="secondary" type="button">キャンセル</button><button class="primary" type="submit">保存する</button></div>
     </form>
   </div>
+  <div class="modal" id="avatarEditor" hidden>
+    <section class="modal-card avatar-editor" role="dialog" aria-modal="true" aria-labelledby="avatarEditorTitle">
+      <div class="kicker">CHARACTER EDIT</div>
+      <h2 id="avatarEditorTitle">キャラ画像を整える</h2>
+      <div class="edit-preview"><canvas id="avatarEditCanvas" width="340" height="340" role="img" aria-label="キャラクターの切り抜きプレビュー"></canvas></div>
+      <p class="edit-help">背景が白や単色の画像におすすめ。複雑な背景は残ることがあります。画像は外部に送信されません。</p>
+      <div class="edit-controls">
+        <button type="button" class="secondary" id="removeBgButton">背景を消す</button>
+        <label class="edit-threshold" for="bgStrength">切り抜きの強さ <output id="bgStrengthValue">45</output>
+          <input type="range" id="bgStrength" min="15" max="105" step="5" value="45">
+        </label>
+        <button type="button" class="secondary" id="trimAvatarButton">余白を整える</button>
+        <button type="button" class="text-button" id="undoAvatarButton">元画像に戻す</button>
+      </div>
+      <div class="modal-actions edit-actions">
+        <button type="button" class="secondary" id="cancelAvatarEdit">キャンセル</button>
+        <button type="button" class="primary" id="saveAvatarEdit">この画像で保存</button>
+      </div>
+    </section>
+  </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="app.js" defer></script>
 </body>
