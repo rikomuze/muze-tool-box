@@ -697,6 +697,21 @@
       "url": "https://www.nhk.or.jp/radio/player/ondemand.html?p=Z9WGYY3GP5_01_4337880&cid=jp-Z9WGYY3GP5",
       "note": "11/10(火)21:45〜22:30放送。DJ：TAKUTO・HAYATO（MAZZEL）、ゲスト：森大翔。11/17(火)22:30配信終了（NHKらじる★らじる公式画面で確認済み）。",
       "source": "NHKらじる★らじる当該回配信画面（ユーザー提供・2026/11/13）"
+    },
+    {
+      "id": "wandance-ran-stage-20261116",
+      "short": "ワンダンス 舞台挨拶抽選",
+      "title": "映画『ワンダンス』11/28 RAN登壇 公開記念舞台挨拶 プレリク抽選申込締切",
+      "category": "ticket",
+      "flow": "lottery",
+      "tag": "ワンダンス",
+      "start": "2026-11-14T15:00:00+09:00",
+      "end": "2026-11-16T23:59:00+09:00",
+      "resultAt": "2026-11-21T15:00:00+09:00",
+      "resultNote": "ローソンチケットで当落発表",
+      "url": "https://l-tike.com/wamdance/",
+      "note": "11/28(土) TOHOシネマズ六本木ヒルズ、8:55上映後／12:35上映前。RAN登壇予定。一般発売は11/22(日)18:00〜（抽選完売の場合なし）。",
+      "source": "映画『ワンダンス』公式サイト（2026/11/14発表）"
     }
   ]
 }
