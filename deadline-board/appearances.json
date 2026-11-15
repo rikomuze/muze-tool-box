@@ -585,6 +585,17 @@
       "url": "https://tver.jp/episodes/epx4q9bfdy?utm_source=x&utm_medium=social&utm_campaign=official_mp",
       "source": "TVer当該回ページ（ユーザー提供画像・2026/11/13）",
       "note": "TVerで見逃し配信中。11/13時点で『配信終了まで1週間以上』と表示。終了日時は未発表のため締切には未登録。startは放送日を表す仮置きで放送時刻ではない。"
+    },
+    {
+      "id": "app-20261117-muzeum-kannai",
+      "short": "MUZEUM館内放送",
+      "title": "MUZEUM館内放送（FC限定）",
+      "media": "radio",
+      "station": "MUZEUM",
+      "start": "2026-11-17T16:10:00+09:00",
+      "url": "https://mazzel.tokyo/",
+      "note": "ファンミ期間中のFC限定ラジオ生放送",
+      "source": "MUZEUM公式お知らせ"
     }
   ]
 }
