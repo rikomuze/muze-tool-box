@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f6f5ef">
+  <meta name="description" content="毎日の3つの小さな習慣で、Kenneyの街が少しずつ育つ。自分だけのリトルタウン。">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="MUZE TOOL BOX">
+  <meta property="og:title" content="little town. — 続けたぶんだけ、街になる">
+  <meta property="og:description" content="1日1回の小さな習慣で、自分だけの街を育てよう。">
+  <meta property="og:url" content="https://rikomuze.github.io/muze-tool-box/little-town/">
+  <meta property="og:image" content="https://rikomuze.github.io/muze-tool-box/little-town/og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Kenney Sketch Townの街と little town. のタイトル">
+  <meta property="og:locale" content="ja_JP">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://rikomuze.github.io/muze-tool-box/little-town/og.jpg">
+  <meta name="twitter:title" content="little town. — 続けたぶんだけ、街になる">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="../icon-192.png">
+  
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="little town.">
+  <link rel="stylesheet" href="../style.css?v=20261116-preview2"><link rel="stylesheet" href="preview.css?v=2">
+  <title>little town. | CHRISTMAS PREVIEW</title>
+</head>
+<body>
+  <div class="app">
+    <header class="masthead">
+      <div class="brand"><span class="kicker">MY TINY WORLD</span><div class="brand-name">little town<span class="dot">.</span></div></div>
+      <a class="home-link" href="https://rikomuze.github.io/muze-tool-box/">MUZE TOOL BOX に戻る ↗</a>
+    </header>
+
+    <p class="preview-notice"><strong>CHRISTMAS PREVIEW</strong> ｜ これは試作サイトです。本番のタスク・記録には影響しません。飾りの位置は調整中です。</p>
+    <main class="layout">
+      <section class="board panel" aria-label="あなたの街">
+        <div class="board-header">
+          <div><span class="kicker">TOWN MAP</span><h1>MY TOWN</h1></div>
+          <div class="level" aria-label="街のレベル"><small>TOWN LEVEL</small><strong id="level">01</strong></div>
+        </div>
+        <div class="world" id="world">
+          <canvas id="townCanvas" width="960" height="640" role="img" aria-label="習慣の達成回数に応じて建物や木が増えていく立体的な街"></canvas>
+          <div class="world-note" id="worldNote">小さな街のはじまり</div>
+          <div class="christmas-front" id="christmasFront" aria-hidden="true"><span class="decor-item decor-tree" title="ツリー"></span><span class="decor-item decor-gift" title="プレゼント"></span><span class="decor-item decor-snowman" title="雪だるま"></span><span class="decor-item decor-cane" title="キャンディケイン"></span><span class="decor-item decor-wreath" title="リース"></span></div>
+          <div class="walker" id="walker" aria-hidden="true"><div class="walker-image" id="walkerImage"></div></div>
+          <div class="preview-tag" id="previewTag" hidden>未来の街を見学中</div>
+        </div>
+        <div class="world-footer">
+          <div class="next"><strong id="nextTitle">NEXT</strong><span id="nextDescription"></span><div class="progress" aria-hidden="true"><span id="progressFill"></span></div></div>
+          <button class="secondary" type="button" id="previewButton">MAPに戻る</button><button class="secondary" type="button" id="decorToggle" aria-pressed="true">飾り：ON</button>
+        </div>
+        <div class="art-credit">街の素材：<a href="https://kenney.nl/assets/sketch-town" target="_blank" rel="noopener noreferrer">Kenney / Sketch Town</a>（CC0）</div>
+      </section>
+      <aside class="sidebar">
+        <section class="panel tasks-panel">
+          <div class="section-title"><div><span class="kicker">DAILY QUEST</span><h2>TODAY</h2></div><div class="count"><strong id="todayDone">0</strong><span id="todayMax"> / 0</span></div></div>
+          
+          <div class="task-list" id="taskList"></div>
+          <div id="saveStatus" class="status checking" role="status" aria-live="polite">保存先を確認しています…</div>
+          
+        </section>
+        <section class="panel avatar-panel">
+          <div class="section-title"><div><span class="kicker">CHARACTER</span><h2>MY FRIEND</h2></div></div>
+          <div class="avatar-row"><div class="avatar-sample" id="avatarSample"></div><div class="avatar-meta"><label for="avatarName">名前</label><input id="avatarName" maxlength="18" aria-label="キャラクターの名前" value="まる"></div></div>
+          <div class="small-buttons"><label class="secondary upload" for="avatarFile">画像をえらぶ<input id="avatarFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden></label><button type="button" class="text-button" id="defaultAvatar">元の子に戻す</button></div>
+        </section>
+
+      </aside>
+    </main>
+    <section class="history-area" aria-labelledby="historyTitle">
+      <div class="history-head">
+        <div><span class="kicker">YOUR RECORDS</span><h2 id="historyTitle">HISTORY</h2></div>
+        <div class="history-stats" aria-label="継続の記録">
+          <div><strong id="activeDays">0</strong><span>達成日数</span></div>
+          <div><strong id="currentStreak">0</strong><span>連続日数</span></div>
+          <div><strong id="bestStreak">0</strong><span>最長記録</span></div>
+          <div><strong id="totalDone">0</strong><span>合計達成</span></div>
+        </div>
+      </div>
+      <div class="history-grid">
+        <div class="calendar-wrap">
+          <div class="calendar-head"><button type="button" id="prevMonth" aria-label="前の月">‹</button><h3 id="calendarMonth">MONTH</h3><button type="button" id="nextMonth" aria-label="次の月">›</button><button type="button" id="thisMonth" class="calendar-today">TODAY</button></div>
+          <div class="calendar-weekdays" aria-hidden="true"><span>SUN</span><span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span></div>
+          <div class="calendar-days" id="calendarDays" aria-label="日別の達成履歴"></div>
+          <div class="calendar-legend"><span><i></i> 達成した日</span><span>数字はその日の達成タスク数</span></div>
+        </div>
+        <div class="history-detail">
+          <div class="detail-head"><span class="kicker">DAILY LOG</span><strong id="selectedDayTitle">今日の記録</strong></div>
+          <div id="selectedDayLog" class="day-log"></div>
+          <div class="history-bottom"><strong>UNLOCKS</strong><div class="milestones" id="milestones"></div></div>
+        </div>
+      </div>
+      <div class="backup-row"><button type="button" class="secondary" id="backupButton">記録を書き出す</button><label class="secondary upload" for="restoreFile">記録を読み込む<input id="restoreFile" type="file" accept="application/json,.json" hidden></label><span>データはこのブラウザに保存されます。端末間の同期はありません。</span></div>
+    </section>
+    <details class="howto"><summary>HOW TO USE <span>＋</span></summary><ol><li>「＋ タスクを追加する」から毎日のタスクを最大3つ設定します。</li><li>できた日は「できた！」を押します。各タスクは1日に1回記録できます。</li><li>達成が増えると街に木や建物が増えます。お休みしても街は減りません。</li><li>「HISTORY」で過去の達成日と継続記録を確認できます。別の端末で使う場合は記録を書き出し／読み込みしてください。</li><li>キャラクターは自分の画像に差し替えできます。</li></ol></details><footer><span>Design assets: <a href="https://kenney.nl/assets/sketch-town" target="_blank" rel="noopener noreferrer">Kenney Sketch Town (CC0)</a></span><a href="https://rikomuze.github.io/muze-tool-box/">MUZE TOOL BOX ↗</a></footer>
+  </div>
+
+  <div class="modal" id="taskModal" hidden>
+    <form class="modal-card" id="taskForm">
+      <div class="kicker">EDIT QUEST</div><h2 id="modalTitle">タスクを追加</h2>
+      <label for="taskName">毎日続けたいこと</label>
+      <input id="taskName" maxlength="32" required placeholder="例：推しリクをする" autocomplete="off">
+      <div class="modal-actions"><button id="deleteTask" class="danger" type="button" hidden>削除</button><button id="cancelModal" class="secondary" type="button">キャンセル</button><button class="primary" type="submit">保存する</button></div>
+    </form>
+  </div>
+  <div class="modal" id="avatarEditor" hidden>
+    <section class="modal-card avatar-editor" role="dialog" aria-modal="true" aria-labelledby="avatarEditorTitle">
+      <div class="kicker">CHARACTER EDIT</div>
+      <h2 id="avatarEditorTitle">キャラ画像を整える</h2>
+      <div class="edit-preview"><canvas id="avatarEditCanvas" width="340" height="340" role="img" aria-label="キャラクターの切り抜きプレビュー"></canvas></div>
+      <p class="edit-help">背景が白や単色の画像におすすめ。複雑な背景は残ることがあります。画像は外部に送信されません。</p>
+      <div class="edit-controls">
+        <button type="button" class="secondary" id="removeBgButton">背景を消す</button>
+        <label class="edit-threshold" for="bgStrength">切り抜きの強さ <output id="bgStrengthValue">45</output>
+          <input type="range" id="bgStrength" min="15" max="105" step="5" value="45">
+        </label>
+        <button type="button" class="secondary" id="trimAvatarButton">余白を整える</button>
+        <button type="button" class="text-button" id="undoAvatarButton">元画像に戻す</button>
+      </div>
+      <div class="modal-actions edit-actions">
+        <button type="button" class="secondary" id="cancelAvatarEdit">キャンセル</button>
+        <button type="button" class="primary" id="saveAvatarEdit">この画像で保存</button>
+      </div>
+    </section>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js?v=2" defer></script>
+</body>
+</html>
