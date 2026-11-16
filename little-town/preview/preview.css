@@ -10,7 +10,7 @@
  background-repeat:no-repeat;background-size:500% 100%;
  filter:drop-shadow(0 3px 2px #3b4f3560);
 }
-.decor-tree{--decor-size:18%;background-position:0% 0%}
+.decor-tree{--decor-size:21%;background-position:0% 0%}
 .decor-gift{--decor-size:12%;background-position:25% 0%}
 .decor-snowman{--decor-size:14%;background-position:50% 0%}
 .decor-cane{--decor-size:11%;background-position:75% 0%}
