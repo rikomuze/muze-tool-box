@@ -590,11 +590,11 @@
       "id": "app-20261117-muzeum-kannai",
       "short": "MUZEUM館内放送",
       "title": "MUZEUM館内放送（FC限定）",
-      "media": "radio",
-      "station": "MUZEUM",
+      "media": "stream",
+      "station": "MUZEUM（FC）",
       "start": "2026-11-17T16:10:00+09:00",
       "url": "https://mazzel.tokyo/",
-      "note": "FC限定ラジオ生放送",
+      "note": "FC限定・館内放送",
       "source": "MUZEUM公式お知らせ"
     }
   ]
