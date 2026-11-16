@@ -214,7 +214,7 @@ const decorSuggestions=[
 ];
 function getSuggestedDecorPositions(){
  const n=preview?75:count();
- return structuredClone(decorSuggestions.find(entry=>n<=entry.max).positions);
+ return JSON.parse(JSON.stringify(decorSuggestions.find(entry=>n<=entry.max).positions));
 }
 function refreshDecorShelf(){
  for(const [key,element] of Object.entries(decorElements)){
