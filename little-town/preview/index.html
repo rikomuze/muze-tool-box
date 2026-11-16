@@ -26,7 +26,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="little town.">
-  <link rel="stylesheet" href="../style.css?v=20261116-preview2"><link rel="stylesheet" href="preview.css?v=3">
+  <link rel="stylesheet" href="../style.css?v=20261116-preview2"><link rel="stylesheet" href="preview.css?v=4">
   <title>little town. | CHRISTMAS PREVIEW</title>
 </head>
 <body>
@@ -46,14 +46,15 @@
         <div class="world" id="world">
           <canvas id="townCanvas" width="960" height="640" role="img" aria-label="習慣の達成回数に応じて建物や木が増えていく立体的な街"></canvas>
           <div class="world-note" id="worldNote">小さな街のはじまり</div>
-          <div class="christmas-front" id="christmasFront" aria-hidden="true"><span class="decor-item decor-tree" title="ツリー"></span><span class="decor-item decor-gift" title="プレゼント"></span><span class="decor-item decor-snowman" title="雪だるま"></span><span class="decor-item decor-cane" title="キャンディケイン"></span><span class="decor-item decor-wreath" title="リース"></span></div>
+          <div class="christmas-front" id="christmasFront" aria-label="クリスマス装飾"><span class="decor-item decor-tree" title="ツリー"></span><span class="decor-item decor-gift" title="プレゼント"></span><span class="decor-item decor-snowman" title="雪だるま"></span><span class="decor-item decor-cane" title="キャンディケイン"></span><span class="decor-item decor-wreath" title="リース"></span></div>
           <div class="walker" id="walker" aria-hidden="true"><div class="walker-image" id="walkerImage"></div></div>
           <div class="preview-tag" id="previewTag" hidden>未来の街を見学中</div>
         </div>
         <div class="world-footer">
           <div class="next"><strong id="nextTitle">NEXT</strong><span id="nextDescription"></span><div class="progress" aria-hidden="true"><span id="progressFill"></span></div></div>
-          <button class="secondary" type="button" id="previewButton">MAPに戻る</button><button class="secondary" type="button" id="decorToggle" aria-pressed="true">飾り：ON</button>
+          <button class="secondary" type="button" id="previewButton">MAPに戻る</button><button class="secondary" type="button" id="decorToggle" aria-pressed="true">飾り：ON</button><button class="secondary" type="button" id="editDecor" aria-pressed="false">配置を変える</button><button class="text-button" type="button" id="resetDecor">配置をリセット</button>
         </div>
+        <p class="decor-tip" id="decorTip" hidden>飾りを指で動かして、好きな場所に置けるよ。スマホも対応。変更はこのプレビューにだけ保存されます。</p>
         <div class="art-credit">街の素材：<a href="https://kenney.nl/assets/sketch-town" target="_blank" rel="noopener noreferrer">Kenney / Sketch Town</a>（CC0）</div>
       </section>
       <aside class="sidebar">
@@ -129,6 +130,6 @@
     </section>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="app.js?v=2" defer></script>
+  <script src="app.js?v=4" defer></script>
 </body>
 </html>
