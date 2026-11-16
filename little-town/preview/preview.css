@@ -1,0 +1,14 @@
+/* 本番から切り離した装飾位置の試作 */
+.preview-notice{padding:11px 13px;margin:0 0 16px;background:#fff1bb;border-left:5px solid #9f8151;font-size:12px;color:#4e6d45}
+.preview-notice strong{letter-spacing:.12em}
+.christmas-front{position:absolute;inset:0;pointer-events:none;z-index:3}
+.christmas-front.is-hidden{display:none}
+.decor-item{position:absolute;display:block;width:clamp(30px,6vw,66px);height:clamp(30px,6vw,66px);background-image:url('../holiday/christmas-sprites.png');background-repeat:no-repeat;background-size:500% 100%;filter:drop-shadow(0 3px 1px #3b4f3560)}
+.decor-tree{left:9%;bottom:9%;background-position:0% 0%}
+.decor-gift{left:19%;bottom:2%;background-position:25% 0%}
+.decor-snowman{left:83%;bottom:8%;background-position:50% 0%}
+.decor-cane{left:75%;bottom:2%;background-position:75% 0%}
+.decor-wreath{left:91%;bottom:5%;background-position:100% 0%}
+.world-footer{flex-wrap:wrap}
+#decorToggle{flex:0 0 auto}
+@media(max-width:650px){.decor-item{width:clamp(25px,8vw,44px);height:clamp(25px,8vw,44px)}.preview-notice{font-size:11px}}
