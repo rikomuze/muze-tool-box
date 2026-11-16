@@ -1,7 +1,7 @@
 (()=>{'use strict';
 const $=id=>document.getElementById(id), KEY='little-town-rikomuze-v1';
 const tiles=['grass_center_N','grass_path_N','grass_pathCrossing_N','grass_pathBend_N','grass_pathCorner_N','grass_water_N','grass_river_N','grass_riverBridge_N','rocks_grass_N','tree_single_N','tree_multiple_N','building_door_N','building_window_N','building_center_N','building_doorBeige_N','building_windowBeige_N','building_centerBeige_N','roof_gableBrown_N','roof_roundedGreen_N','roof_slantPurple_N','roof_pointPurple_N','roof_gableGreen_N','castle_tower_N','castle_gateOpen_N','castle_wall_N','castle_towerGreen_N','castle_towerBrown_N'];
-let state={tasks:[],log:[],avatar:'',name:'まる'},editing=null,preview=false,storageOK=false,lastDay='',images={};
+let state={tasks:[],log:[],avatar:'',name:'まる',townDecor:{}},editing=null,preview=false,storageOK=false,lastDay='',images={};
 const nowDate=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
 const escaped=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const count=()=>state.log.length,finished=id=>state.log.some(x=>x.id===id&&x.day===nowDate());
@@ -9,7 +9,7 @@ const dayCount=()=>state.tasks.filter(t=>finished(t.id)).length;
 let timer=0;function toast(msg){const e=$('toast');e.textContent=msg;e.classList.add('visible');clearTimeout(timer);timer=setTimeout(()=>e.classList.remove('visible'),3300)}
 function checkStorage(){try{let t=KEY+'-probe';localStorage.setItem(t,'ok');let ok=localStorage.getItem(t)==='ok';localStorage.removeItem(t);return ok}catch{return false}}
 function showSave(ok){const el=$('saveStatus');el.className='status '+(ok?'ok':'error');el.textContent=ok?'✓ このブラウザへの保存を確認できました':'⚠ この表示環境では保存できません。ブラウザで公開URLを開くか、記録を書き出してください。'}
-function load(){storageOK=checkStorage();if(storageOK){try{let j=JSON.parse(localStorage.getItem(KEY)||'null');if(j&&Array.isArray(j.tasks)&&Array.isArray(j.log))state={tasks:j.tasks.slice(0,3),log:j.log,avatar:typeof j.avatar==='string'?j.avatar:'',name:typeof j.name==='string'?(j.name==='まるこ'&&!j.avatar?'まる':j.name):'まる'}}catch(e){console.warn('保存データを読めません',e)}}showSave(storageOK)}
+function load(){storageOK=checkStorage();if(storageOK){try{let j=JSON.parse(localStorage.getItem(KEY)||'null');if(j&&Array.isArray(j.tasks)&&Array.isArray(j.log))state={tasks:j.tasks.slice(0,3),log:j.log,avatar:typeof j.avatar==='string'?j.avatar:'',name:typeof j.name==='string'?(j.name==='まるこ'&&!j.avatar?'まる':j.name):'まる',townDecor:j.townDecor&&typeof j.townDecor==='object'&&!Array.isArray(j.townDecor)?j.townDecor:{}}}catch(e){console.warn('保存データを読めません',e)}}showSave(storageOK)}
 function persist(){if(!storageOK){showSave(false);return false}try{let j=JSON.stringify(state);localStorage.setItem(KEY,j);if(localStorage.getItem(KEY)!==j)throw Error('保存の検証に失敗');showSave(true);return true}catch(e){storageOK=false;showSave(false);console.warn('保存失敗',e);return false}}
 function renderTasks(){const list=$('taskList');list.innerHTML='';state.tasks.forEach((t,i)=>{let done=finished(t.id),el=document.createElement('div');el.className='task'+(done?' done':'');el.innerHTML=`<span class="task-icon">${['✿','♫','✦'][i]}</span><div class="task-title"><strong>${escaped(t.name)}</strong><small>${done?'DONE':'NOT YET'}</small></div><button type="button" class="edit-button" title="編集" aria-label="${escaped(t.name)}を編集" data-edit="${escaped(t.id)}">⋯</button><button type="button" class="complete-button" data-done="${escaped(t.id)}" ${done?'disabled':''}>${done?'✓ 完了':'できた！'}</button>`;list.append(el)});if(state.tasks.length<3){let el=document.createElement('button');el.className='empty-slot';el.textContent='＋ ADD TASK';el.type='button';el.dataset.add='1';list.append(el)}$('todayDone').textContent=dayCount();$('todayMax').textContent=' / '+state.tasks.length}
 function openTask(id){editing=id||null;const t=state.tasks.find(x=>x.id===editing);$('taskName').value=t?t.name:'';$('modalTitle').textContent=t?'タスクを編集':'タスクを追加';$('deleteTask').hidden=!t;$('taskModal').hidden=false;$('taskName').focus()}
@@ -109,19 +109,59 @@ const props=[
  [48,'building_window_N',1,3,'roof_roundedGreen_N'],[55,'castle_towerBrown_N',1,1],
  [65,'tree_multiple_N',4,5],[75,'castle_wall_N',3,3]
 ];
+// 獲得は「累計達成数」のみで判定。配置状態はマップ別、所有権は全マップ共通。
+const holidayItems=[
+ {id:'tree',at:20,name:'クリスマスツリー',index:0,x:254,y:460,size:132},
+ {id:'present',at:30,name:'プレゼント',index:1,x:622,y:475,size:100},
+ {id:'snowman',at:40,name:'雪だるま',index:2,x:511,y:527,size:116},
+ {id:'cane',at:50,name:'キャンディケイン',index:3,x:348,y:530,size:110},
+ {id:'wreath',at:60,name:'クリスマスリース',index:4,x:738,y:417,size:90}
+];
+const holidaySprite=new Image();
+holidaySprite.onload=()=>paint();
+holidaySprite.src='holiday/christmas-sprites.png';
+function itemVisible(map,id){return state.townDecor?.[map]?.[id]!==false}
+function renderHoliday(){
+ const n=count(),owned=holidayItems.filter(x=>n>=x.at).length;
+ $('holidayCount').textContent=owned?owned+' / '+holidayItems.length+' GET':'20 CLEAR から';
+ $('holidayItems').innerHTML=holidayItems.map(item=>{
+  const unlocked=n>=item.at,on=unlocked&&itemVisible('map01',item.id);
+  const style='background-position:-'+(item.index*48)+'px 0';
+  return '<button type="button" class="holiday-item'+(unlocked?' unlocked':' locked')+(on?' is-on':'')+'" data-holiday="'+item.id+'" '+(unlocked?'':'disabled')+' aria-pressed="'+on+'" aria-label="'+escaped(item.name)+(unlocked?(on?'を非表示':'を表示'):'、'+item.at+'回達成で獲得')+'"><span class="holiday-sprite" style="'+style+'"></span><strong>'+escaped(item.name)+'</strong><small>'+(unlocked?(on?'表示中':'非表示'):item.at+' CLEAR')+'</small></button>';
+ }).join('');
+}
+$('holidayItems').addEventListener('click',e=>{
+ const b=e.target.closest('button[data-holiday]');if(!b)return;
+ const item=holidayItems.find(x=>x.id===b.dataset.holiday);if(!item||count()<item.at)return;
+ if(!state.townDecor||typeof state.townDecor!=='object')state.townDecor={};
+ if(!state.townDecor.map01)state.townDecor.map01={};
+ state.townDecor.map01[item.id]=!itemVisible('map01',item.id);
+ persist();renderHoliday();paint()
+});
+// 将来のMAP02以降も mapKey を変えれば、所有済みのアイテムを使える。
+function drawHoliday(mapKey='map01'){
+ if(!holidaySprite.complete||!holidaySprite.naturalWidth)return;
+ const n=preview?75:count();
+ for(const item of holidayItems){
+  if(n<item.at||!itemVisible(mapKey,item.id))continue;
+  const size=item.size,x=item.x-size/2,y=item.y-size;
+  ctx.drawImage(holidaySprite,item.index*64,0,64,64,x,y,size,size)
+ }
+}
 const milestones=[{at:1,label:'ちいさな木'},{at:9,label:'はじめのおうち'},{at:25,label:'街の門'},{at:42,label:'お城のある街'},{at:75,label:'にぎやかな街'}];
 function paint(){const n=preview?75:count();ctx.clearRect(0,0,960,640);let gr=ctx.createLinearGradient(0,0,0,640);gr.addColorStop(0,'#e1e6d8');gr.addColorStop(1,'#f6e9d7');ctx.fillStyle=gr;ctx.fillRect(0,0,960,640);ctx.fillStyle='rgba(140,151,125,.13)';ctx.beginPath();ctx.ellipse(480,555,380,43,0,0,Math.PI*2);ctx.fill();
  const pathSet=new Set(n>=4?['3,5','3,4','3,3','2,3','1,3','3,2','4,3']:[]);
  for(let z=0;z<=10;z++)for(let i=0;i<6;i++){let j=z-i;if(j<0||j>5)continue;let id='grass_center_N';if(n>=12&&i===0&&j===5)id='grass_water_N';else if(n>=18&&i===0&&j===4)id='grass_river_N';else if(pathSet.has(i+','+j))id=(i===3&&j===3)?'grass_pathCrossing_N':'grass_path_N';drawTile(id,i,j)}
  // 奥のタイルにあるオブジェクトから順に描くことで、重なり方が自然になる。
  for(let z=0;z<=10;z++)for(let i=0;i<6;i++){let j=z-i;if(j<0||j>5)continue;for(const p of props){const [at,id,x,y,roof]=p;if(x!==i||y!==j||at>n)continue;drawTile(id,i,j,'prop');if(roof)drawTile(roof,i,j,'prop',54)}}
+ drawHoliday('map01');
 }
 function renderProgress(){const n=count(),next=milestones.find(x=>x.at>n);$('totalDone').textContent=n;$('level').textContent=String(1+Math.floor(n/8)).padStart(2,'0');$('worldNote').textContent=preview?'PREVIEW':n===0?'START':`${n} CLEAR`;if(next){$('nextTitle').textContent=`NEXT：${next.label} まであと ${next.at-n}`;$('nextDescription').textContent='NEW ITEM';const prev=milestones.filter(x=>x.at<=n).at(-1)?.at||0;$('progressFill').style.width=((n-prev)/(next.at-prev)*100)+'%'}else{$('nextTitle').textContent='LEVEL MAX';$('nextDescription').textContent='ALL UNLOCKED';$('progressFill').style.width='100%'}$('milestones').innerHTML=milestones.map(x=>`<div class="milestone ${n>=x.at?'done':''}"><span>${n>=x.at?'✓':'○'} ${x.label}</span><strong>${x.at} 回</strong></div>`).join('');$('previewTag').hidden=!preview}
-function render(){renderTasks();renderProgress();renderAvatar();paint();renderHistory()}
+function render(){renderTasks();renderProgress();renderAvatar();paint();renderHistory();renderHoliday()}
 $('previewButton').addEventListener('click',()=>{preview=!preview;$('previewButton').textContent=preview?'MAP に戻る':'PREVIEW';renderProgress();paint()});
 // 専用の保存データを JSON としてエクスポート/復元できる。
 $('backupButton').addEventListener('click',()=>{const data=JSON.stringify({...state,version:1,exportedAt:new Date().toISOString()},null,2);const blob=new Blob([data],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='little-town-backup-'+nowDate()+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),6000);toast('記録を書き出したよ')});
-$('restoreFile').addEventListener('change',e=>{let f=e.target.files?.[0];e.target.value='';if(!f)return;if(f.size>3*1024*1024)return toast('ファイルは3MB以下にしてね');const fr=new FileReader();fr.onload=()=>{try{const data=JSON.parse(String(fr.result));if(!Array.isArray(data.tasks)||!Array.isArray(data.log))throw Error('形式が違います');if(!confirm('今のタスクと記録をバックアップの内容で置き換える？'))return;const tasks=data.tasks.filter(t=>t&&typeof t.name==='string'&&typeof t.id==='string').slice(0,3).map(t=>({id:t.id.slice(0,64),name:t.name.slice(0,32)}));const log=data.log.filter(x=>x&&typeof x.id==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x.day)).slice(-4000).map(x=>({id:x.id.slice(0,64),name:String(x.name||'').slice(0,32),day:x.day,at:Number(x.at)||0}));state={tasks,log,avatar:typeof data.avatar==='string'&&/^data:image\/(png|jpeg|webp|gif);base64,/.test(data.avatar)?data.avatar:'',name:typeof data.name==='string'?data.name.slice(0,18):'まる'};let ok=persist();preview=false;render();toast(ok?'記録を復元したよ':'復元したよ。ただし保存できない環境です')}catch(err){toast('JSONファイルを確認してね')}};fr.readAsText(f)});
+$('restoreFile').addEventListener('change',e=>{let f=e.target.files?.[0];e.target.value='';if(!f)return;if(f.size>3*1024*1024)return toast('ファイルは3MB以下にしてね');const fr=new FileReader();fr.onload=()=>{try{const data=JSON.parse(String(fr.result));if(!Array.isArray(data.tasks)||!Array.isArray(data.log))throw Error('形式が違います');if(!confirm('今のタスクと記録をバックアップの内容で置き換える？'))return;const tasks=data.tasks.filter(t=>t&&typeof t.name==='string'&&typeof t.id==='string').slice(0,3).map(t=>({id:t.id.slice(0,64),name:t.name.slice(0,32)}));const log=data.log.filter(x=>x&&typeof x.id==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x.day)).slice(-4000).map(x=>({id:x.id.slice(0,64),name:String(x.name||'').slice(0,32),day:x.day,at:Number(x.at)||0}));state={tasks,log,avatar:typeof data.avatar==='string'&&/^data:image\/(png|jpeg|webp|gif);base64,/.test(data.avatar)?data.avatar:'',name:typeof data.name==='string'?data.name.slice(0,18):'まる',townDecor:data.townDecor&&typeof data.townDecor==='object'&&!Array.isArray(data.townDecor)?data.townDecor:{}};let ok=persist();preview=false;render();toast(ok?'記録を復元したよ':'復元したよ。ただし保存できない環境です')}catch(err){toast('JSONファイルを確認してね')}};fr.readAsText(f)});
 function loadImages(){let pending=tiles.length;for(const name of tiles){const img=new Image();img.onload=()=>{images[name]=img;paint()};img.onerror=()=>console.warn('タイルの読み込みに失敗',name);img.src='tiles/'+name+'.png';pending--}}
 
 const monthCursor={year:new Date().getFullYear(),month:new Date().getMonth()};
