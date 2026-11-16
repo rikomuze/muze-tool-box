@@ -176,5 +176,98 @@ $('thisMonth').addEventListener('click',()=>{const d=new Date();monthCursor.year
 // たまに日付が変わると、新しい「今日」を反映する。
 lastDay=nowDate();setInterval(()=>{let d=nowDate();if(d!==lastDay){lastDay=d;renderTasks();renderHistory()}},30000);
 const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;let began=performance.now();function walk(ts){const period=14500,part=((ts-began)%period)/period;const u=part<.5?part*2:(1-part)*2;$('walker').style.left=(23+u*55)+'%';$('walker').classList.toggle('reverse',part>=.5);if(!reduce)requestAnimationFrame(walk)}
-load();preview=true;render();loadImages();$('previewButton').textContent='MAPに戻る';$('decorToggle').addEventListener('click',()=>{const layer=$('christmasFront'),hidden=layer.classList.toggle('is-hidden');$('decorToggle').textContent=hidden?'飾り：OFF':'飾り：ON';$('decorToggle').setAttribute('aria-pressed',String(!hidden))});if(reduce){$('walker').style.left='40%'}else requestAnimationFrame(walk);
+// このプレビュー専用の配置データ。本番サイトやタスク記録に干渉しない。
+const decorDefaults={
+ tree:{x:11,y:48},gift:{x:31,y:73},snowman:{x:76,y:64},
+ cane:{x:67,y:76},wreath:{x:69,y:45}
+};
+const decorStoreKey='little-town-preview-decor-v1';
+const decorLayer=$('christmasFront');
+let decorEditing=false,activePointer=null,decorPositions=JSON.parse(JSON.stringify(decorDefaults));
+const decorElements={
+ tree:decorLayer.querySelector('.decor-tree'),gift:decorLayer.querySelector('.decor-gift'),
+ snowman:decorLayer.querySelector('.decor-snowman'),cane:decorLayer.querySelector('.decor-cane'),
+ wreath:decorLayer.querySelector('.decor-wreath')
+};
+const clamp=(n,min,max)=>Math.max(min,Math.min(max,n));
+try{
+ const stored=JSON.parse(localStorage.getItem(decorStoreKey)||'null');
+ if(stored&&typeof stored==='object'){
+  for(const key of Object.keys(decorDefaults)){
+   if(Number.isFinite(stored[key]?.x)&&Number.isFinite(stored[key]?.y)){
+    decorPositions[key]={x:clamp(stored[key].x,0,90),y:clamp(stored[key].y,5,95)};
+   }
+  }
+ }
+}catch(err){console.warn('プレビューの装飾位置を読み込めませんでした',err)}
+function renderDecorPositions(){
+ for(const [key,element] of Object.entries(decorElements)){
+  const pos=decorPositions[key];element.style.setProperty('--decor-x',pos.x+'%');
+  element.style.setProperty('--decor-y',pos.y+'%');
+ }
+}
+function saveDecorPositions(){
+ try{localStorage.setItem(decorStoreKey,JSON.stringify(decorPositions))}
+ catch(err){toast('この環境では配置を保存できません')}
+}
+function setDecorEditing(editing){
+ decorEditing=editing;decorLayer.classList.toggle('is-editing',editing);
+ $('editDecor').textContent=editing?'配置完了':'配置を変える';
+ $('editDecor').setAttribute('aria-pressed',String(editing));
+ $('decorTip').hidden=!editing;
+ for(const [key,element] of Object.entries(decorElements)){
+  element.setAttribute('role',editing?'button':'img');
+  element.setAttribute('aria-label',key+' の飾り');
+  element.tabIndex=editing?0:-1;
+ }
+}
+function moveDecor(key,x,y){
+ const box=decorElements[key],layerRect=decorLayer.getBoundingClientRect();
+ if(!layerRect.width||!layerRect.height)return;
+ const widthPct=(box.getBoundingClientRect().width/layerRect.width)*100;
+ const heightPct=(box.getBoundingClientRect().height/layerRect.height)*100;
+ decorPositions[key]={x:clamp(x,0,100-widthPct),y:clamp(y,0,100-heightPct)};
+ renderDecorPositions();
+}
+for(const [key,element] of Object.entries(decorElements)){
+ element.addEventListener('pointerdown',event=>{
+  if(!decorEditing||decorLayer.classList.contains('is-hidden')||event.button!==0)return;
+  event.preventDefault();
+  const rect=decorLayer.getBoundingClientRect(),el=element.getBoundingClientRect();
+  activePointer={id:event.pointerId,key,offsetX:event.clientX-el.left,offsetY:event.clientY-el.top};
+  element.classList.add('is-dragging');
+  element.setPointerCapture(event.pointerId);
+ });
+ element.addEventListener('pointermove',event=>{
+  if(!activePointer||activePointer.id!==event.pointerId||activePointer.key!==key)return;
+  const rect=decorLayer.getBoundingClientRect();
+  moveDecor(key,(event.clientX-activePointer.offsetX-rect.left)/rect.width*100,(event.clientY-activePointer.offsetY-rect.top)/rect.height*100);
+ });
+ function finish(event){
+  if(!activePointer||activePointer.id!==event.pointerId||activePointer.key!==key)return;
+  activePointer=null;element.classList.remove('is-dragging');saveDecorPositions();
+ }
+ element.addEventListener('pointerup',finish);
+ element.addEventListener('pointercancel',finish);
+ element.addEventListener('lostpointercapture',finish);
+ element.addEventListener('keydown',event=>{
+  if(!decorEditing||!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key))return;
+  event.preventDefault();const pos=decorPositions[key],d=event.shiftKey?5:1;
+  moveDecor(key,pos.x+(event.key==='ArrowRight'?d:event.key==='ArrowLeft'?-d:0),pos.y+(event.key==='ArrowDown'?d:event.key==='ArrowUp'?-d:0));saveDecorPositions();
+ });
+}
+$('editDecor').addEventListener('click',()=>setDecorEditing(!decorEditing));
+$('resetDecor').addEventListener('click',()=>{
+ decorPositions=JSON.parse(JSON.stringify(decorDefaults));
+ renderDecorPositions();saveDecorPositions();toast('飾りの配置を戻したよ');
+});
+$('decorToggle').addEventListener('click',()=>{
+ const hidden=decorLayer.classList.toggle('is-hidden');
+ $('decorToggle').textContent=hidden?'飾り：OFF':'飾り：ON';
+ $('decorToggle').setAttribute('aria-pressed',String(!hidden));
+ if(hidden&&decorEditing)setDecorEditing(false);
+});
+renderDecorPositions();setDecorEditing(false);
+load();preview=true;render();loadImages();$('previewButton').textContent='MAPに戻る';
+if(reduce){$('walker').style.left='40%'}else requestAnimationFrame(walk);
 })();
