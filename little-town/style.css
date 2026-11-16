@@ -233,7 +233,7 @@ body{background:var(--paper);color:var(--ink);font-size:14px}
 .holiday-note{font:500 10px/1.55 ui-rounded,system-ui,sans-serif;color:#73836d;margin:9px 1px 0}
 @media(max-width:650px){
  .holiday-items{gap:1px}
- .holiday-sprite{width:40px;height:40px;background-size:200px 40px}
+ .holiday-sprite{width:48px;height:48px;background-size:240px 48px}
  .holiday-item strong{font-size:8px}
  .holiday-item small{font-size:8px}
 }
