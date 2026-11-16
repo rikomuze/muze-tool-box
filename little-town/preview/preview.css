@@ -37,7 +37,7 @@
 
 
 /* POSTCARD — Sketchカラーの簡潔な画像保存画面 */
-.postcard-dialog{width:min(100%,680px);max-width:calc(100vw - 24px);max-height:92dvh;overflow-y:auto}
+.postcard-dialog{flex:0 1 680px;width:min(100%,680px);max-width:calc(100vw - 24px);max-height:92dvh;overflow-y:auto}
 .postcard-dialog h2{font:950 23px/1.3 ui-rounded,system-ui,sans-serif;margin:6px 0 12px}
 .postcard-option{display:flex!important;align-items:center;gap:10px;font-size:13px!important;cursor:pointer;margin:0 0 12px!important}
 .postcard-option input[type="checkbox"]{width:20px!important;height:20px;accent-color:#497a51;flex:none;margin:0;padding:0}
