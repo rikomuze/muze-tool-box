@@ -216,24 +216,3 @@ body{background:var(--paper);color:var(--ink);font-size:14px}
 
 /* hidden属性を確実に優先（画面を開くまではモーダルを非表示） */
 .modal[hidden]{display:none!important}
-
-
-/* 共通 HOLIDAY COLLECTION。横並びの棚にしてカード装飾は増やさない */
-.holiday-section{margin-top:16px;border-top:2px dashed #b3c79f;padding:12px 0 4px}
-.holiday-heading{display:flex;justify-content:space-between;gap:10px;align-items:center}
-.holiday-heading>span:last-child{font:800 10px ui-rounded,system-ui,sans-serif;color:#648766}
-.holiday-items{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin-top:11px}
-.holiday-item{min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 2px 7px;border:2px solid transparent;background:transparent;border-radius:3px;color:#446847}
-.holiday-item.unlocked:hover{background:#eaf2db}
-.holiday-item.is-on{border-color:#88aa74;background:#eff5df}
-.holiday-item.locked{opacity:.45;filter:grayscale(1);cursor:default}
-.holiday-sprite{width:48px;height:48px;display:block;background:url('holiday/christmas-sprites.png') no-repeat;background-size:240px 48px;image-rendering:auto}
-.holiday-item strong{font:800 9px/1.25 ui-rounded,system-ui,sans-serif;white-space:normal;overflow-wrap:anywhere;text-align:center}
-.holiday-item small{font:800 8px ui-rounded,system-ui,sans-serif;color:#648866}
-.holiday-note{font:500 10px/1.55 ui-rounded,system-ui,sans-serif;color:#73836d;margin:9px 1px 0}
-@media(max-width:650px){
- .holiday-items{gap:1px}
- .holiday-sprite{width:48px;height:48px;background-size:240px 48px}
- .holiday-item strong{font-size:8px}
- .holiday-item small{font-size:8px}
-}
