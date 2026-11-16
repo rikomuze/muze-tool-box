@@ -8,7 +8,7 @@
   const image = $('postcardImage');
   const status = $('postcardStatus');
   const withAvatar = $('postcardWithAvatar');
-  const save = $('savePostcard'), share = $('sharePostcard');
+  const save = $('savePostcard'), share = $('sharePostcard'), openImage=$('openPostcardImage');
   const W=1200,H=960;
   const scene={x:44,y:122,w:1112,h:1112*2/3};
   let currentBlob=null,previewURL=null,renderSequence=0;
@@ -112,14 +112,14 @@
   }
   async function refresh(){
     const seq=++renderSequence;currentBlob=null;
-    save.disabled=true;share.disabled=true;
+    save.disabled=true;share.disabled=true;openImage.disabled=true;
     status.textContent='画像を準備しています…';
     try{
       const blob=await buildPostcard(withAvatar.checked);
       if(seq!==renderSequence||modal.hidden)return;
       if(previewURL)URL.revokeObjectURL(previewURL);
       currentBlob=blob;previewURL=URL.createObjectURL(blob);image.src=previewURL;
-      save.disabled=false;share.disabled=false;
+      save.disabled=false;share.disabled=false;openImage.disabled=false;
       status.textContent='現在の街・装飾の配置・冬モードが反映されています。';
     }catch(error){
       if(seq!==renderSequence)return;
@@ -149,6 +149,11 @@
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden)close()});
   withAvatar.addEventListener('change',refresh);
   save.addEventListener('click',download);
+  openImage.addEventListener('click',()=>{
+    if(!previewURL)return;
+    const opened=window.open(previewURL,'_blank');
+    if(!opened)status.textContent='画像を開けなかったので「PNGを保存」を試してください。';
+  });
   share.addEventListener('click',async()=>{
     if(!currentBlob)return;
     const file=new File([currentBlob],fileName(),{type:'image/png'});
