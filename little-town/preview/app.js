@@ -178,8 +178,8 @@ lastDay=nowDate();setInterval(()=>{let d=nowDate();if(d!==lastDay){lastDay=d;ren
 const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;let began=performance.now();function walk(ts){const period=14500,part=((ts-began)%period)/period;const u=part<.5?part*2:(1-part)*2;$('walker').style.left=(23+u*55)+'%';$('walker').classList.toggle('reverse',part>=.5);if(!reduce)requestAnimationFrame(walk)}
 // このプレビュー専用の配置データ。本番サイトやタスク記録に干渉しない。
 const decorDefaults={
- tree:{x:11,y:48},gift:{x:31,y:73},snowman:{x:76,y:64},
- cane:{x:67,y:76},wreath:{x:69,y:45}
+ tree:{x:9,y:46},gift:{x:29,y:67},snowman:{x:76,y:62},
+ cane:{x:66,y:68},wreath:{x:69,y:41}
 };
 const decorStoreKey='little-town-preview-decor-v1';
 const decorLayer=$('christmasFront');
@@ -201,8 +201,16 @@ try{
  }
 }catch(err){console.warn('プレビューの装飾位置を読み込めませんでした',err)}
 function renderDecorPositions(){
+ const bounds=decorLayer.getBoundingClientRect();
  for(const [key,element] of Object.entries(decorElements)){
-  const pos=decorPositions[key];element.style.setProperty('--decor-x',pos.x+'%');
+  const pos=decorPositions[key];
+  // 新しい縦長の素材でも、以前に保存した配置が画面外にはみ出さないよう補正。
+  if(bounds.width&&bounds.height){
+   const rect=element.getBoundingClientRect();
+   pos.x=clamp(pos.x,0,Math.max(0,100-rect.width/bounds.width*100));
+   pos.y=clamp(pos.y,0,Math.max(0,100-rect.height/bounds.height*100));
+  }
+  element.style.setProperty('--decor-x',pos.x+'%');
   element.style.setProperty('--decor-y',pos.y+'%');
  }
 }
