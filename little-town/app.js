@@ -122,7 +122,7 @@ function render(){renderTasks();renderProgress();renderAvatar();paint();renderHi
 $('previewButton').addEventListener('click',()=>{preview=!preview;$('previewButton').textContent=preview?'MAP に戻る':'PREVIEW';renderProgress();paint()});
 // 専用の保存データを JSON としてエクスポート/復元できる。
 $('backupButton').addEventListener('click',()=>{const data=JSON.stringify({...state,version:1,exportedAt:new Date().toISOString()},null,2);const blob=new Blob([data],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='little-town-backup-'+nowDate()+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),6000);toast('記録を書き出したよ')});
-$('restoreFile').addEventListener('change',e=>{let f=e.target.files?.[0];e.target.value='';if(!f)return;if(f.size>3*1024*1024)return toast('ファイルは3MB以下にしてね');const fr=new FileReader();fr.onload=()=>{try{const data=JSON.parse(String(fr.result));if(!Array.isArray(data.tasks)||!Array.isArray(data.log))throw Error('形式が違います');if(!confirm('今のタスクと記録をバックアップの内容で置き換える？'))return;const tasks=data.tasks.filter(t=>t&&typeof t.name==='string'&&typeof t.id==='string').slice(0,3).map(t=>({id:t.id.slice(0,64),name:t.name.slice(0,32)}));const log=data.log.filter(x=>x&&typeof x.id==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x.day)).slice(-4000).map(x=>({id:x.id.slice(0,64),name:String(x.name||'').slice(0,32),day:x.day,at:Number(x.at)||0}));state={tasks,log,avatar:typeof data.avatar==='string'&&/^data:image\/(png|jpeg|webp|gif);base64,/.test(data.avatar)?data.avatar:'',name:typeof data.name==='string'?data.name.slice(0,18):'まる',townDecor:data.townDecor&&typeof data.townDecor==='object'&&!Array.isArray(data.townDecor)?data.townDecor:{},settings:data.settings&&typeof data.settings==='object'&&!Array.isArray(data.settings)?data.settings:{}};let ok=persist();preview=false;readSavedDecor();renderDecorPositions();render();toast(ok?'記録を復元したよ':'復元したよ。ただし保存できない環境です')}catch(err){toast('JSONファイルを確認してね')}};fr.readAsText(f)});
+$('restoreFile').addEventListener('change',e=>{let f=e.target.files?.[0];e.target.value='';if(!f)return;if(f.size>3*1024*1024)return toast('ファイルは3MB以下にしてね');const fr=new FileReader();fr.onload=()=>{try{const data=JSON.parse(String(fr.result));if(!Array.isArray(data.tasks)||!Array.isArray(data.log))throw Error('形式が違います');if(!confirm('今のタスクと記録をバックアップの内容で置き換える？'))return;const tasks=data.tasks.filter(t=>t&&typeof t.name==='string'&&typeof t.id==='string').slice(0,3).map(t=>({id:t.id.slice(0,64),name:t.name.slice(0,32)}));const log=data.log.filter(x=>x&&typeof x.id==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x.day)).slice(-4000).map(x=>({id:x.id.slice(0,64),name:String(x.name||'').slice(0,32),day:x.day,at:Number(x.at)||0}));state={tasks,log,avatar:typeof data.avatar==='string'&&/^data:image\/(png|jpeg|webp|gif);base64,/.test(data.avatar)?data.avatar:'',name:typeof data.name==='string'?data.name.slice(0,18):'まる',townDecor:data.townDecor&&typeof data.townDecor==='object'&&!Array.isArray(data.townDecor)?data.townDecor:{},settings:data.settings&&typeof data.settings==='object'&&!Array.isArray(data.settings)?data.settings:{}};let ok=persist();preview=false;readSavedDecor();decorStored=readStoredDecor();renderDecorPositions();render();toast(ok?'記録を復元したよ':'復元したよ。ただし保存できない環境です')}catch(err){toast('JSONファイルを確認してね')}};fr.readAsText(f)});
 function loadImages(){let pending=tiles.length;for(const name of tiles){const img=new Image();img.onload=()=>{images[name]=img;try{winterImages[name]=window.littleTownWinterTile?.(name,img)}catch(error){console.warn('冬用画像の加工に失敗',name,error)}paint()};img.onerror=()=>console.warn('タイルの読み込みに失敗',name);img.src='tiles/'+name+'.png';pending--}}
 
 const monthCursor={year:new Date().getFullYear(),month:new Date().getMonth()};
@@ -208,7 +208,7 @@ const unlocks=[
 ];
 function updateDecorUnlocks(){
  const n=count(),got=unlocks.filter(item=>n>=item.at),upcoming=unlocks.find(item=>n<item.at);
- for(const item of unlocks)decorElements[item.key].hidden=n<item.at;
+ renderDecorShelf();
  const any=got.length>0;
  $('decorToggle').disabled=!any;
  $('editDecor').disabled=!any;
@@ -217,6 +217,59 @@ function updateDecorUnlocks(){
   'HOLIDAY COLLECTION  '+got.length+'/5 GET ・ 次は'+upcoming.name+'（あと'+(upcoming.at-n)+'回）':
   'HOLIDAY COLLECTION  5/5 GET！すべての飾りが解放されました';
 }
+// 街の成長段階に合わせた配置案。本人がボタンを押すまで位置は変わらない。
+const decorSuggestions=[
+ {max:8,positions:{tree:{x:12,y:40},gift:{x:34,y:67},snowman:{x:77,y:53},cane:{x:66,y:72},wreath:{x:47,y:52}}},
+ {max:24,positions:{tree:{x:7,y:43},gift:{x:26,y:72},snowman:{x:79,y:62},cane:{x:65,y:75},wreath:{x:55,y:48}}},
+ {max:41,positions:{tree:{x:5,y:48},gift:{x:25,y:73},snowman:{x:81,y:64},cane:{x:67,y:76},wreath:{x:70,y:43}}},
+ {max:74,positions:{tree:{x:7,y:46},gift:{x:27,y:74},snowman:{x:81,y:64},cane:{x:67,y:77},wreath:{x:72,y:42}}},
+ {max:Infinity,positions:{tree:{x:9,y:46},gift:{x:29,y:67},snowman:{x:76,y:62},cane:{x:66,y:68},wreath:{x:69,y:41}}}
+];
+function getSuggestedDecorPositions(){
+ const n=preview?75:count();
+ return JSON.parse(JSON.stringify(decorSuggestions.find(entry=>n<=entry.max).positions));
+}
+function readStoredDecor(){
+ const saved=state.townDecor?.map01?.stored;
+ return saved&&typeof saved==='object'&&!Array.isArray(saved)?{...saved}:{};
+}
+let decorStored={};
+function renderDecorShelf(){
+ const n=count();
+ for(const item of unlocks){
+  const unlocked=n>=item.at,shown=unlocked&&decorStored[item.key]!==true;
+  decorElements[item.key].hidden=!shown;
+  const button=$('decorShelfItems').querySelector('[data-decor-shelf="'+item.key+'"]');
+  if(!button)continue;
+  button.disabled=!unlocked;
+  button.classList.toggle('is-stored',unlocked&&!shown);
+  button.classList.toggle('is-locked',!unlocked);
+  button.setAttribute('aria-pressed',String(shown));
+  button.querySelector('small').textContent=!unlocked?item.at+'回でGET':shown?'表示中':'収納中';
+ }
+ $('suggestDecor').disabled=n<20;
+}
+function persistStoredDecor(){
+ if(!state.townDecor||typeof state.townDecor!=='object')state.townDecor={};
+ if(!state.townDecor.map01||typeof state.townDecor.map01!=='object')state.townDecor.map01={};
+ state.townDecor.map01.stored={...decorStored};
+ if(!persist())toast('この環境では収納状態を保存できません');
+}
+$('decorShelfItems').addEventListener('click',event=>{
+ const button=event.target.closest('button[data-decor-shelf]');
+ if(!button||button.disabled)return;
+ const key=button.dataset.decorShelf;
+ if(!unlocks.some(item=>item.key===key&&count()>=item.at))return;
+ decorStored[key]=decorStored[key]!==true;
+ persistStoredDecor();renderDecorShelf();
+ toast(decorStored[key]?'飾りをしまったよ':'飾りを出したよ');
+});
+$('suggestDecor').addEventListener('click',()=>{
+ if(count()<20)return;
+ decorPositions=getSuggestedDecorPositions();
+ renderDecorPositions();saveDecorPositions();
+ toast((preview?'完成した街':'現在の街')+'に合わせておすすめ配置にしたよ');
+});
 function renderDecorPositions(){
  const bounds=decorLayer.getBoundingClientRect();
  for(const [key,element] of Object.entries(decorElements)){
@@ -307,7 +360,7 @@ load();preview=false;
 if(state.settings?.theme==='normal')townTheme='normal';
 $('winterToggle').textContent=townTheme==='winter'?'冬モード：ON':'冬モード：OFF';
 $('winterToggle').setAttribute('aria-pressed',String(townTheme==='winter'));
-readSavedDecor();renderDecorPositions();setDecorEditing(false);
+readSavedDecor();decorStored=readStoredDecor();renderDecorPositions();setDecorEditing(false);
 if(state.townDecor?.map01?.visible===false){decorLayer.classList.add('is-hidden');$('decorToggle').textContent='飾り：OFF';$('decorToggle').setAttribute('aria-pressed','false')}
 render();loadImages();
 if(reduce){$('walker').style.left='40%'}else requestAnimationFrame(walk);
