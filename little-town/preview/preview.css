@@ -1,25 +1,36 @@
-/* クリスマス装飾プレビュー v2：街の手前の地面沿いに大きくまとめる */
+/* Christmas preview v4: 大きなツリーとお散歩ルートの自由配置 */
 .preview-notice{padding:11px 13px;margin:0 0 16px;background:#fff1bb;border-left:5px solid #9f8151;font-size:12px;color:#4e6d45}
 .preview-notice strong{letter-spacing:.12em}
 .christmas-front{position:absolute;inset:0;pointer-events:none;z-index:3}
 .christmas-front.is-hidden{display:none}
-.decor-item{position:absolute;display:block;width:12%;aspect-ratio:1 / 1;height:auto;background-image:url('../holiday/christmas-sprites.png');background-repeat:no-repeat;background-size:500% 100%;filter:drop-shadow(0 3px 2px #3b4f3560)}
-/* 全装飾を地面・建物に接する位置へ。ツリーとプレゼント、雪だるまとキャンディケインをセットで見せる */
-.decor-tree{width:14%;left:11%;bottom:15%;background-position:0% 0%}
-.decor-gift{width:11%;left:23%;bottom:12%;background-position:25% 0%}
-.decor-snowman{width:13%;left:76%;bottom:14%;background-position:50% 0%}
-.decor-cane{width:11%;left:67%;bottom:12%;background-position:75% 0%}
-/* リースだけは道に置かず、建物の正面に掛ける */
-.decor-wreath{width:10%;left:70%;bottom:37%;background-position:100% 0%}
-/* まるが飾りより前を通る */
+.decor-item{
+ position:absolute;display:block;top:var(--decor-y);left:var(--decor-x);
+ width:var(--decor-size);aspect-ratio:1;height:auto;
+ background-image:url('../holiday/christmas-sprites.png');
+ background-repeat:no-repeat;background-size:500% 100%;
+ filter:drop-shadow(0 3px 2px #3b4f3560);
+}
+.decor-tree{--decor-size:28%;background-position:0% 0%}
+.decor-gift{--decor-size:12%;background-position:25% 0%}
+.decor-snowman{--decor-size:15%;background-position:50% 0%}
+.decor-cane{--decor-size:12%;background-position:75% 0%}
+.decor-wreath{--decor-size:11%;background-position:100% 0%}
+/* まるは常に飾りよりも前のレイヤーを歩く */
 .world .walker{z-index:6}
 .world-footer{flex-wrap:wrap}
-#decorToggle{flex:0 0 auto}
+#decorToggle,#editDecor{flex:0 0 auto}
+.decor-tip{margin:6px 0 0;padding:8px 10px;border-left:3px solid #7caa67;color:#507353;font-size:11px}
+.christmas-front.is-editing .decor-item{
+ pointer-events:auto;cursor:grab;touch-action:none;
+ outline:2px dashed #f4e4ac;outline-offset:2px;border-radius:7px;
+}
+.christmas-front.is-editing .decor-item:focus-visible{
+ outline:3px solid #4f7b48;
+}
+.christmas-front.is-editing .decor-item.is-dragging{
+ cursor:grabbing;outline-color:#4f7b48;filter:drop-shadow(0 6px 4px #3b4f3580)
+}
 @media(max-width:650px){
  .preview-notice{font-size:11px}
- .decor-tree{width:16%;left:9%;bottom:15%}
- .decor-gift{width:12%;left:23%;bottom:12%}
- .decor-snowman{width:15%;left:76%;bottom:14%}
- .decor-cane{width:12%;left:65%;bottom:12%}
- .decor-wreath{width:10%;left:70%;bottom:37%}
+ .decor-tip{font-size:10px}
 }
