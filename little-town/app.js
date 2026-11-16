@@ -1,7 +1,7 @@
 (()=>{'use strict';
 const $=id=>document.getElementById(id), KEY='little-town-rikomuze-v1';
 const tiles=['grass_center_N','grass_path_N','grass_pathCrossing_N','grass_pathBend_N','grass_pathCorner_N','grass_water_N','grass_river_N','grass_riverBridge_N','rocks_grass_N','tree_single_N','tree_multiple_N','building_door_N','building_window_N','building_center_N','building_doorBeige_N','building_windowBeige_N','building_centerBeige_N','roof_gableBrown_N','roof_roundedGreen_N','roof_slantPurple_N','roof_pointPurple_N','roof_gableGreen_N','castle_tower_N','castle_gateOpen_N','castle_wall_N','castle_towerGreen_N','castle_towerBrown_N'];
-let state={tasks:[],log:[],avatar:'',name:'まる'},editing=null,preview=false,storageOK=false,lastDay='',images={};
+let state={tasks:[],log:[],avatar:'',name:'まる',townDecor:{},settings:{}},editing=null,preview=false,storageOK=false,lastDay='',images={};
 const nowDate=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
 const escaped=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const count=()=>state.log.length,finished=id=>state.log.some(x=>x.id===id&&x.day===nowDate());
@@ -9,7 +9,7 @@ const dayCount=()=>state.tasks.filter(t=>finished(t.id)).length;
 let timer=0;function toast(msg){const e=$('toast');e.textContent=msg;e.classList.add('visible');clearTimeout(timer);timer=setTimeout(()=>e.classList.remove('visible'),3300)}
 function checkStorage(){try{let t=KEY+'-probe';localStorage.setItem(t,'ok');let ok=localStorage.getItem(t)==='ok';localStorage.removeItem(t);return ok}catch{return false}}
 function showSave(ok){const el=$('saveStatus');el.className='status '+(ok?'ok':'error');el.textContent=ok?'✓ このブラウザへの保存を確認できました':'⚠ この表示環境では保存できません。ブラウザで公開URLを開くか、記録を書き出してください。'}
-function load(){storageOK=checkStorage();if(storageOK){try{let j=JSON.parse(localStorage.getItem(KEY)||'null');if(j&&Array.isArray(j.tasks)&&Array.isArray(j.log))state={tasks:j.tasks.slice(0,3),log:j.log,avatar:typeof j.avatar==='string'?j.avatar:'',name:typeof j.name==='string'?(j.name==='まるこ'&&!j.avatar?'まる':j.name):'まる'}}catch(e){console.warn('保存データを読めません',e)}}showSave(storageOK)}
+function load(){storageOK=checkStorage();if(storageOK){try{let j=JSON.parse(localStorage.getItem(KEY)||'null');if(j&&Array.isArray(j.tasks)&&Array.isArray(j.log))state={tasks:j.tasks.slice(0,3),log:j.log,avatar:typeof j.avatar==='string'?j.avatar:'',name:typeof j.name==='string'?(j.name==='まるこ'&&!j.avatar?'まる':j.name):'まる',townDecor:j.townDecor&&typeof j.townDecor==='object'&&!Array.isArray(j.townDecor)?j.townDecor:{},settings:j.settings&&typeof j.settings==='object'&&!Array.isArray(j.settings)?j.settings:{}}}catch(e){console.warn('保存データを読めません',e)}}showSave(storageOK)}
 function persist(){if(!storageOK){showSave(false);return false}try{let j=JSON.stringify(state);localStorage.setItem(KEY,j);if(localStorage.getItem(KEY)!==j)throw Error('保存の検証に失敗');showSave(true);return true}catch(e){storageOK=false;showSave(false);console.warn('保存失敗',e);return false}}
 function renderTasks(){const list=$('taskList');list.innerHTML='';state.tasks.forEach((t,i)=>{let done=finished(t.id),el=document.createElement('div');el.className='task'+(done?' done':'');el.innerHTML=`<span class="task-icon">${['✿','♫','✦'][i]}</span><div class="task-title"><strong>${escaped(t.name)}</strong><small>${done?'DONE':'NOT YET'}</small></div><button type="button" class="edit-button" title="編集" aria-label="${escaped(t.name)}を編集" data-edit="${escaped(t.id)}">⋯</button><button type="button" class="complete-button" data-done="${escaped(t.id)}" ${done?'disabled':''}>${done?'✓ 完了':'できた！'}</button>`;list.append(el)});if(state.tasks.length<3){let el=document.createElement('button');el.className='empty-slot';el.textContent='＋ ADD TASK';el.type='button';el.dataset.add='1';list.append(el)}$('todayDone').textContent=dayCount();$('todayMax').textContent=' / '+state.tasks.length}
 function openTask(id){editing=id||null;const t=state.tasks.find(x=>x.id===editing);$('taskName').value=t?t.name:'';$('modalTitle').textContent=t?'タスクを編集':'タスクを追加';$('deleteTask').hidden=!t;$('taskModal').hidden=false;$('taskName').focus()}
@@ -18,7 +18,7 @@ $('taskList').addEventListener('click',e=>{let btn=e.target.closest('button');if
 $('taskForm').addEventListener('submit',e=>{e.preventDefault();const name=$('taskName').value.trim();if(!name)return;if(editing){let t=state.tasks.find(x=>x.id===editing);if(t)t.name=name}else{if(state.tasks.length===3)return toast('タスクは3つまでだよ');state.tasks.push({id:`t${Date.now()}${Math.random().toString(36).slice(2,6)}`,name})}let ok=persist();closeTask();render();toast(ok?'タスクを保存したよ':'タスクを表示したよ。ただし保存できない環境だよ')});
 $('cancelModal').addEventListener('click',closeTask);$('taskModal').addEventListener('click',e=>{if(e.target===$('taskModal'))closeTask()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeTask()});
 $('deleteTask').addEventListener('click',()=>{if(!editing||!confirm('このタスクを削除しますか？街の成長履歴は残ります。'))return;state.tasks=state.tasks.filter(t=>t.id!==editing);let ok=persist();closeTask();render();toast(ok?'タスクを削除したよ':'削除を表示に反映しました（保存できていません）')});
-function complete(id){if(finished(id))return;let t=state.tasks.find(x=>x.id===id);if(!t)return;state.log.push({id:t.id,name:t.name,day:nowDate(),at:Date.now()});let ok=persist();render();toast(ok?'CLEAR！':'記録しました。保存できないためバックアップしてください')}
+function complete(id){if(finished(id))return;let t=state.tasks.find(x=>x.id===id);if(!t)return;state.log.push({id:t.id,name:t.name,day:nowDate(),at:Date.now()});let ok=persist();render();const reward=unlocks.find(item=>item.at===count());toast(ok?(reward?'🎁 '+reward.name+' GET！':'CLEAR！'):'記録しました。保存できないためバックアップしてください')}
 const avatarDefault='<img src="default-cat.webp" alt="初期キャラクターの猫">';
 function renderAvatar(){const html=state.avatar?`<img src="${state.avatar}" alt="キャラクター">`:avatarDefault;$('walkerImage').innerHTML=html;$('avatarSample').innerHTML=html;const name=$('avatarName');if(document.activeElement!==name)name.value=state.name}
 $('avatarName').addEventListener('change',e=>{state.name=e.target.value.trim().slice(0,18)||'まる';let ok=persist();renderAvatar();toast(ok?'名前を保存したよ':'名前を変更したよ。保存はできていないよ')});
@@ -96,9 +96,10 @@ $('saveAvatarEdit').addEventListener('click',()=>{
 });
 $('defaultAvatar').addEventListener('click',()=>{state.avatar='';let ok=persist();renderAvatar();toast(ok?'元の子に戻したよ':'表示を元に戻したよ（保存できていません）')});
 // 実際の Kenney Sketch Town の PNG を描画。360度の斜め見下ろしタイルではなく、全てN向きに統一。
+let townTheme='winter';const winterImages={};
 const canvas=$('townCanvas'),ctx=canvas.getContext('2d');const S=.62,W=256*S,H=352*S;
 function tilePosition(i,j){return {x:480+(i-j)*75,y:83+(i+j)*37.5}}
-function drawTile(id,i,j,layer='ground',rise=0){const image=images[id];if(!image||!image.complete||!image.naturalWidth)return;const pos=tilePosition(i,j);const top=layer==='ground'?pos.y-38:pos.y-104-rise;ctx.drawImage(image,pos.x-W/2,top,W,H)}
+function drawTile(id,i,j,layer='ground',rise=0){const image=(townTheme==='winter'&&winterImages[id])||images[id];if(!image||(!image.complete&&!image.width)||!(image.naturalWidth||image.width))return;const pos=tilePosition(i,j);const top=layer==='ground'?pos.y-38:pos.y-104-rise;ctx.drawImage(image,pos.x-W/2,top,W,H)}
 const props=[
  [1,'tree_single_N',0,2],[2,'rocks_grass_N',5,0],[3,'tree_multiple_N',1,0],[5,'tree_single_N',0,5],
  [7,'tree_single_N',5,5],[9,'building_door_N',3,1,'roof_gableBrown_N'],[11,'tree_multiple_N',1,4],
@@ -110,19 +111,19 @@ const props=[
  [65,'tree_multiple_N',4,5],[75,'castle_wall_N',3,3]
 ];
 const milestones=[{at:1,label:'ちいさな木'},{at:9,label:'はじめのおうち'},{at:25,label:'街の門'},{at:42,label:'お城のある街'},{at:75,label:'にぎやかな街'}];
-function paint(){const n=preview?75:count();ctx.clearRect(0,0,960,640);let gr=ctx.createLinearGradient(0,0,0,640);gr.addColorStop(0,'#e1e6d8');gr.addColorStop(1,'#f6e9d7');ctx.fillStyle=gr;ctx.fillRect(0,0,960,640);ctx.fillStyle='rgba(140,151,125,.13)';ctx.beginPath();ctx.ellipse(480,555,380,43,0,0,Math.PI*2);ctx.fill();
+function paint(){const n=preview?75:count();ctx.clearRect(0,0,960,640);let gr=ctx.createLinearGradient(0,0,0,640);gr.addColorStop(0,townTheme==='winter'?'#dce8f0':'#e1e6d8');gr.addColorStop(1,townTheme==='winter'?'#f1f5f7':'#f6e9d7');ctx.fillStyle=gr;ctx.fillRect(0,0,960,640);ctx.fillStyle='rgba(140,151,125,.13)';ctx.beginPath();ctx.ellipse(480,555,380,43,0,0,Math.PI*2);ctx.fill();
  const pathSet=new Set(n>=4?['3,5','3,4','3,3','2,3','1,3','3,2','4,3']:[]);
  for(let z=0;z<=10;z++)for(let i=0;i<6;i++){let j=z-i;if(j<0||j>5)continue;let id='grass_center_N';if(n>=12&&i===0&&j===5)id='grass_water_N';else if(n>=18&&i===0&&j===4)id='grass_river_N';else if(pathSet.has(i+','+j))id=(i===3&&j===3)?'grass_pathCrossing_N':'grass_path_N';drawTile(id,i,j)}
  // 奥のタイルにあるオブジェクトから順に描くことで、重なり方が自然になる。
  for(let z=0;z<=10;z++)for(let i=0;i<6;i++){let j=z-i;if(j<0||j>5)continue;for(const p of props){const [at,id,x,y,roof]=p;if(x!==i||y!==j||at>n)continue;drawTile(id,i,j,'prop');if(roof)drawTile(roof,i,j,'prop',54)}}
 }
 function renderProgress(){const n=count(),next=milestones.find(x=>x.at>n);$('totalDone').textContent=n;$('level').textContent=String(1+Math.floor(n/8)).padStart(2,'0');$('worldNote').textContent=preview?'PREVIEW':n===0?'START':`${n} CLEAR`;if(next){$('nextTitle').textContent=`NEXT：${next.label} まであと ${next.at-n}`;$('nextDescription').textContent='NEW ITEM';const prev=milestones.filter(x=>x.at<=n).at(-1)?.at||0;$('progressFill').style.width=((n-prev)/(next.at-prev)*100)+'%'}else{$('nextTitle').textContent='LEVEL MAX';$('nextDescription').textContent='ALL UNLOCKED';$('progressFill').style.width='100%'}$('milestones').innerHTML=milestones.map(x=>`<div class="milestone ${n>=x.at?'done':''}"><span>${n>=x.at?'✓':'○'} ${x.label}</span><strong>${x.at} 回</strong></div>`).join('');$('previewTag').hidden=!preview}
-function render(){renderTasks();renderProgress();renderAvatar();paint();renderHistory()}
+function render(){renderTasks();renderProgress();renderAvatar();paint();renderHistory();updateDecorUnlocks()}
 $('previewButton').addEventListener('click',()=>{preview=!preview;$('previewButton').textContent=preview?'MAP に戻る':'PREVIEW';renderProgress();paint()});
 // 専用の保存データを JSON としてエクスポート/復元できる。
 $('backupButton').addEventListener('click',()=>{const data=JSON.stringify({...state,version:1,exportedAt:new Date().toISOString()},null,2);const blob=new Blob([data],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='little-town-backup-'+nowDate()+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),6000);toast('記録を書き出したよ')});
-$('restoreFile').addEventListener('change',e=>{let f=e.target.files?.[0];e.target.value='';if(!f)return;if(f.size>3*1024*1024)return toast('ファイルは3MB以下にしてね');const fr=new FileReader();fr.onload=()=>{try{const data=JSON.parse(String(fr.result));if(!Array.isArray(data.tasks)||!Array.isArray(data.log))throw Error('形式が違います');if(!confirm('今のタスクと記録をバックアップの内容で置き換える？'))return;const tasks=data.tasks.filter(t=>t&&typeof t.name==='string'&&typeof t.id==='string').slice(0,3).map(t=>({id:t.id.slice(0,64),name:t.name.slice(0,32)}));const log=data.log.filter(x=>x&&typeof x.id==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x.day)).slice(-4000).map(x=>({id:x.id.slice(0,64),name:String(x.name||'').slice(0,32),day:x.day,at:Number(x.at)||0}));state={tasks,log,avatar:typeof data.avatar==='string'&&/^data:image\/(png|jpeg|webp|gif);base64,/.test(data.avatar)?data.avatar:'',name:typeof data.name==='string'?data.name.slice(0,18):'まる'};let ok=persist();preview=false;render();toast(ok?'記録を復元したよ':'復元したよ。ただし保存できない環境です')}catch(err){toast('JSONファイルを確認してね')}};fr.readAsText(f)});
-function loadImages(){let pending=tiles.length;for(const name of tiles){const img=new Image();img.onload=()=>{images[name]=img;paint()};img.onerror=()=>console.warn('タイルの読み込みに失敗',name);img.src='tiles/'+name+'.png';pending--}}
+$('restoreFile').addEventListener('change',e=>{let f=e.target.files?.[0];e.target.value='';if(!f)return;if(f.size>3*1024*1024)return toast('ファイルは3MB以下にしてね');const fr=new FileReader();fr.onload=()=>{try{const data=JSON.parse(String(fr.result));if(!Array.isArray(data.tasks)||!Array.isArray(data.log))throw Error('形式が違います');if(!confirm('今のタスクと記録をバックアップの内容で置き換える？'))return;const tasks=data.tasks.filter(t=>t&&typeof t.name==='string'&&typeof t.id==='string').slice(0,3).map(t=>({id:t.id.slice(0,64),name:t.name.slice(0,32)}));const log=data.log.filter(x=>x&&typeof x.id==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x.day)).slice(-4000).map(x=>({id:x.id.slice(0,64),name:String(x.name||'').slice(0,32),day:x.day,at:Number(x.at)||0}));state={tasks,log,avatar:typeof data.avatar==='string'&&/^data:image\/(png|jpeg|webp|gif);base64,/.test(data.avatar)?data.avatar:'',name:typeof data.name==='string'?data.name.slice(0,18):'まる',townDecor:data.townDecor&&typeof data.townDecor==='object'&&!Array.isArray(data.townDecor)?data.townDecor:{},settings:data.settings&&typeof data.settings==='object'&&!Array.isArray(data.settings)?data.settings:{}};let ok=persist();preview=false;readSavedDecor();renderDecorPositions();render();toast(ok?'記録を復元したよ':'復元したよ。ただし保存できない環境です')}catch(err){toast('JSONファイルを確認してね')}};fr.readAsText(f)});
+function loadImages(){let pending=tiles.length;for(const name of tiles){const img=new Image();img.onload=()=>{images[name]=img;try{winterImages[name]=window.littleTownWinterTile?.(name,img)}catch(error){console.warn('冬用画像の加工に失敗',name,error)}paint()};img.onerror=()=>console.warn('タイルの読み込みに失敗',name);img.src='tiles/'+name+'.png';pending--}}
 
 const monthCursor={year:new Date().getFullYear(),month:new Date().getMonth()};
 let selectedDay=nowDate();
@@ -176,5 +177,138 @@ $('thisMonth').addEventListener('click',()=>{const d=new Date();monthCursor.year
 // たまに日付が変わると、新しい「今日」を反映する。
 lastDay=nowDate();setInterval(()=>{let d=nowDate();if(d!==lastDay){lastDay=d;renderTasks();renderHistory()}},30000);
 const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;let began=performance.now();function walk(ts){const period=14500,part=((ts-began)%period)/period;const u=part<.5?part*2:(1-part)*2;$('walker').style.left=(23+u*55)+'%';$('walker').classList.toggle('reverse',part>=.5);if(!reduce)requestAnimationFrame(walk)}
-load();render();loadImages();if(reduce){$('walker').style.left='40%'}else requestAnimationFrame(walk);
+// このプレビュー専用の配置データ。本番サイトやタスク記録に干渉しない。
+const decorDefaults={
+ tree:{x:9,y:46},gift:{x:29,y:67},snowman:{x:76,y:62},
+ cane:{x:66,y:68},wreath:{x:69,y:41}
+};
+// 装飾の位置は既存の本番データの townDecor.map01 に保存。
+const decorLayer=$('christmasFront');
+let decorEditing=false,activePointer=null,decorPositions=JSON.parse(JSON.stringify(decorDefaults));
+const decorElements={
+ tree:decorLayer.querySelector('.decor-tree'),gift:decorLayer.querySelector('.decor-gift'),
+ snowman:decorLayer.querySelector('.decor-snowman'),cane:decorLayer.querySelector('.decor-cane'),
+ wreath:decorLayer.querySelector('.decor-wreath')
+};
+const clamp=(n,min,max)=>Math.max(min,Math.min(max,n));
+function readSavedDecor(){
+ const saved=state.townDecor?.map01?.positions;
+ if(!saved||typeof saved!=='object')return;
+ for(const key of Object.keys(decorDefaults)){
+  if(Number.isFinite(saved[key]?.x)&&Number.isFinite(saved[key]?.y))
+   decorPositions[key]={x:clamp(saved[key].x,0,90),y:clamp(saved[key].y,5,95)};
+ }
+}
+const unlocks=[
+ {key:'cane',at:20,name:'キャンディケイン'},
+ {key:'gift',at:30,name:'プレゼント'},
+ {key:'wreath',at:40,name:'リース'},
+ {key:'snowman',at:50,name:'雪だるま'},
+ {key:'tree',at:60,name:'クリスマスツリー'}
+];
+function updateDecorUnlocks(){
+ const n=count(),got=unlocks.filter(item=>n>=item.at),upcoming=unlocks.find(item=>n<item.at);
+ for(const item of unlocks)decorElements[item.key].hidden=n<item.at;
+ const any=got.length>0;
+ $('decorToggle').disabled=!any;
+ $('editDecor').disabled=!any;
+ $('resetDecor').disabled=!any;
+ $('decorStatus').textContent=upcoming?
+  'HOLIDAY COLLECTION  '+got.length+'/5 GET ・ 次は'+upcoming.name+'（あと'+(upcoming.at-n)+'回）':
+  'HOLIDAY COLLECTION  5/5 GET！すべての飾りが解放されました';
+}
+function renderDecorPositions(){
+ const bounds=decorLayer.getBoundingClientRect();
+ for(const [key,element] of Object.entries(decorElements)){
+  const pos=decorPositions[key];
+  // 新しい縦長の素材でも、以前に保存した配置が画面外にはみ出さないよう補正。
+  if(bounds.width&&bounds.height){
+   const rect=element.getBoundingClientRect();
+   pos.x=clamp(pos.x,0,Math.max(0,100-rect.width/bounds.width*100));
+   pos.y=clamp(pos.y,0,Math.max(0,100-rect.height/bounds.height*100));
+  }
+  element.style.setProperty('--decor-x',pos.x+'%');
+  element.style.setProperty('--decor-y',pos.y+'%');
+ }
+}
+function saveDecorPositions(){
+ if(!state.townDecor||typeof state.townDecor!=='object')state.townDecor={};
+ if(!state.townDecor.map01||typeof state.townDecor.map01!=='object')state.townDecor.map01={};
+ state.townDecor.map01.positions=JSON.parse(JSON.stringify(decorPositions));
+ if(!persist())toast('この環境では配置を保存できません');
+}
+function setDecorEditing(editing){
+ decorEditing=editing;decorLayer.classList.toggle('is-editing',editing);
+ $('editDecor').textContent=editing?'配置完了':'配置を変える';
+ $('editDecor').setAttribute('aria-pressed',String(editing));
+ $('decorTip').hidden=!editing;
+ for(const [key,element] of Object.entries(decorElements)){
+  element.setAttribute('role',editing?'button':'img');
+  element.setAttribute('aria-label',key+' の飾り');
+  element.tabIndex=editing?0:-1;
+ }
+}
+function moveDecor(key,x,y){
+ const box=decorElements[key],layerRect=decorLayer.getBoundingClientRect();
+ if(!layerRect.width||!layerRect.height)return;
+ const widthPct=(box.getBoundingClientRect().width/layerRect.width)*100;
+ const heightPct=(box.getBoundingClientRect().height/layerRect.height)*100;
+ decorPositions[key]={x:clamp(x,0,100-widthPct),y:clamp(y,0,100-heightPct)};
+ renderDecorPositions();
+}
+for(const [key,element] of Object.entries(decorElements)){
+ element.addEventListener('pointerdown',event=>{
+  if(!decorEditing||decorLayer.classList.contains('is-hidden')||event.button!==0)return;
+  event.preventDefault();
+  const rect=decorLayer.getBoundingClientRect(),el=element.getBoundingClientRect();
+  activePointer={id:event.pointerId,key,offsetX:event.clientX-el.left,offsetY:event.clientY-el.top};
+  element.classList.add('is-dragging');
+  element.setPointerCapture(event.pointerId);
+ });
+ element.addEventListener('pointermove',event=>{
+  if(!activePointer||activePointer.id!==event.pointerId||activePointer.key!==key)return;
+  const rect=decorLayer.getBoundingClientRect();
+  moveDecor(key,(event.clientX-activePointer.offsetX-rect.left)/rect.width*100,(event.clientY-activePointer.offsetY-rect.top)/rect.height*100);
+ });
+ function finish(event){
+  if(!activePointer||activePointer.id!==event.pointerId||activePointer.key!==key)return;
+  activePointer=null;element.classList.remove('is-dragging');saveDecorPositions();
+ }
+ element.addEventListener('pointerup',finish);
+ element.addEventListener('pointercancel',finish);
+ element.addEventListener('lostpointercapture',finish);
+ element.addEventListener('keydown',event=>{
+  if(!decorEditing||!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key))return;
+  event.preventDefault();const pos=decorPositions[key],d=event.shiftKey?5:1;
+  moveDecor(key,pos.x+(event.key==='ArrowRight'?d:event.key==='ArrowLeft'?-d:0),pos.y+(event.key==='ArrowDown'?d:event.key==='ArrowUp'?-d:0));saveDecorPositions();
+ });
+}
+$('editDecor').addEventListener('click',()=>setDecorEditing(!decorEditing));
+$('resetDecor').addEventListener('click',()=>{
+ decorPositions=JSON.parse(JSON.stringify(decorDefaults));
+ renderDecorPositions();saveDecorPositions();toast('飾りの配置を戻したよ');
+});
+$('decorToggle').addEventListener('click',()=>{
+ const hidden=decorLayer.classList.toggle('is-hidden');
+ $('decorToggle').textContent=hidden?'飾り：OFF':'飾り：ON';
+ $('decorToggle').setAttribute('aria-pressed',String(!hidden));
+ if(hidden&&decorEditing)setDecorEditing(false);
+ if(!state.townDecor.map01)state.townDecor.map01={};
+ state.townDecor.map01.visible=!hidden;persist();
+});
+$('winterToggle').addEventListener('click',()=>{
+ townTheme=townTheme==='winter'?'normal':'winter';
+ state.settings.theme=townTheme;persist();
+ $('winterToggle').textContent=townTheme==='winter'?'冬モード：ON':'冬モード：OFF';
+ $('winterToggle').setAttribute('aria-pressed',String(townTheme==='winter'));
+ paint();
+});
+load();preview=false;
+if(state.settings?.theme==='normal')townTheme='normal';
+$('winterToggle').textContent=townTheme==='winter'?'冬モード：ON':'冬モード：OFF';
+$('winterToggle').setAttribute('aria-pressed',String(townTheme==='winter'));
+readSavedDecor();renderDecorPositions();setDecorEditing(false);
+if(state.townDecor?.map01?.visible===false){decorLayer.classList.add('is-hidden');$('decorToggle').textContent='飾り：OFF';$('decorToggle').setAttribute('aria-pressed','false')}
+render();loadImages();
+if(reduce){$('walker').style.left='40%'}else requestAnimationFrame(walk);
 })();

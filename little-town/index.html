@@ -25,7 +25,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="little town.">
-  <link rel="stylesheet" href="style.css?v=20261116-restored">
+  <link rel="stylesheet" href="style.css?v=20261116-season1"><link rel="stylesheet" href="seasonal.css?v=20261116-season1">
   <title>little town. | MY TOWN</title>
 </head>
 <body>
@@ -44,13 +44,23 @@
         <div class="world" id="world">
           <canvas id="townCanvas" width="960" height="640" role="img" aria-label="習慣の達成回数に応じて建物や木が増えていく立体的な街"></canvas>
           <div class="world-note" id="worldNote">小さな街のはじまり</div>
+          <div class="christmas-front" id="christmasFront" aria-label="クリスマス装飾"><span class="decor-item decor-tree" hidden title="ツリー"></span><span class="decor-item decor-gift" hidden title="プレゼント"></span><span class="decor-item decor-snowman" hidden title="雪だるま"></span><span class="decor-item decor-cane" hidden title="キャンディケイン"></span><span class="decor-item decor-wreath" hidden title="リース"></span></div>
           <div class="walker" id="walker" aria-hidden="true"><div class="walker-image" id="walkerImage"></div></div>
           <div class="preview-tag" id="previewTag" hidden>未来の街を見学中</div>
         </div>
         <div class="world-footer">
           <div class="next"><strong id="nextTitle">NEXT</strong><span id="nextDescription"></span><div class="progress" aria-hidden="true"><span id="progressFill"></span></div></div>
-          <button class="secondary" type="button" id="previewButton">未来の街を見る</button>
+          <div class="preview-controls" aria-label="街の操作">
+            <button class="secondary" type="button" id="winterToggle" aria-pressed="true">冬モード：ON</button>
+            <button class="secondary" type="button" id="decorToggle" aria-pressed="true">飾り：ON</button>
+            <button class="secondary" type="button" id="editDecor" aria-pressed="false">配置を変える</button>
+            <button class="secondary" type="button" id="resetDecor">配置をリセット</button>
+            <button class="secondary" type="button" id="previewButton">未来の街を見る</button>
+            <button class="secondary" type="button" id="openPostcard"><span aria-hidden="true">✉</span> ポストカード</button>
+          </div>
         </div>
+        <p class="decor-collection-status" id="decorStatus" aria-live="polite"></p>
+        <p class="decor-tip" id="decorTip" hidden>飾りを指で動かして、好きな場所に置けるよ。スマホも対応。配置はこのブラウザに保存されます。</p>
         <div class="art-credit">街の素材：<a href="https://kenney.nl/assets/sketch-town" target="_blank" rel="noopener noreferrer">Kenney / Sketch Town</a>（CC0）</div>
       </section>
       <aside class="sidebar">
@@ -125,7 +135,23 @@
       </div>
     </section>
   </div>
+  <div class="modal" id="postcardModal" hidden>
+    <section class="modal-card postcard-dialog" role="dialog" aria-modal="true" aria-labelledby="postcardTitle">
+      <div class="kicker">MY TOWN POSTCARD</div>
+      <h2 id="postcardTitle">街をポストカードに</h2>
+      <label class="postcard-option" for="postcardWithAvatar"><input id="postcardWithAvatar" type="checkbox" checked> キャラクターを入れる</label>
+      <div class="postcard-image-area"><img id="postcardImage" alt="街のポストカード画像のプレビュー"></div>
+      <p class="postcard-help" id="postcardStatus" role="status" aria-live="polite">画像を準備しています…</p>
+      <div class="postcard-actions">
+        <button type="button" id="cancelPostcard" class="text-button">閉じる</button>
+        <button type="button" id="savePostcard" class="secondary" disabled>PNGを保存</button><button type="button" id="openPostcardImage" class="secondary" disabled>画像を開く</button>
+        <button type="button" id="sharePostcard" class="primary" disabled>画像を共有</button><button type="button" id="sharePostcardX" class="secondary" disabled>Xで投稿</button>
+      </div>
+    </section>
+  </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="app.js?v=20261116-restored" defer></script>
+  <script src="winter.js?v=20261116-season1"></script>
+  <script src="app.js?v=20261116-season1" defer></script>
+  <script src="postcard.js?v=20261116-season1" defer></script>
 </body>
 </html>
