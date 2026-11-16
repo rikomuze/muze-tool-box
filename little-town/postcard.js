@@ -65,7 +65,7 @@
       const cropW=atlas.naturalWidth/5,cropH=atlas.naturalHeight;
       for(let i=0;i<parts.length;i++){
         const part=deco.querySelector('.decor-'+parts[i]);
-        if(!part)continue;
+        if(!part||part.hidden||getComputedStyle(part).display==='none')continue;
         placeRect(ctx,part,rect,bounds,(x,y,w,h)=>{
           if(w>0&&h>0)ctx.drawImage(atlas,i*cropW,0,cropW,cropH,x,y,w,h);
         });
