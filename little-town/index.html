@@ -25,7 +25,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="little town.">
-  <link rel="stylesheet" href="style.css?v=20261116-season1"><link rel="stylesheet" href="seasonal.css?v=20261116-notice1">
+  <link rel="stylesheet" href="style.css?v=20261116-season1"><link rel="stylesheet" href="seasonal.css?v=20261116-shelf1">
   <title>little town. | MY TOWN</title>
 </head>
 <body>
@@ -61,6 +61,20 @@
         </div>
         <p class="decor-collection-status" id="decorStatus" aria-live="polite"></p>
         <p class="decor-tip" id="decorTip" hidden>飾りを指で動かして、好きな場所に置けるよ。スマホも対応。配置はこのブラウザに保存されます。</p>
+        <section class="decor-shelf" aria-labelledby="decorShelfTitle">
+          <div class="decor-shelf-head">
+            <div><span class="kicker">HOLIDAY COLLECTION</span><h3 id="decorShelfTitle">飾りの収納</h3></div>
+            <button class="secondary" type="button" id="suggestDecor">おすすめ配置</button>
+          </div>
+          <p class="decor-shelf-help">獲得した飾りをタップして、街に出す／しまうを切り替えられます。</p>
+          <div class="decor-shelf-items" id="decorShelfItems" aria-label="飾りの出し入れ">
+            <button type="button" data-decor-shelf="cane" aria-pressed="false"><span class="shelf-thumb shelf-cane"></span><span>ケイン</span><small>未解放</small></button>
+            <button type="button" data-decor-shelf="gift" aria-pressed="false"><span class="shelf-thumb shelf-gift"></span><span>プレゼント</span><small>未解放</small></button>
+            <button type="button" data-decor-shelf="wreath" aria-pressed="false"><span class="shelf-thumb shelf-wreath"></span><span>リース</span><small>未解放</small></button>
+            <button type="button" data-decor-shelf="snowman" aria-pressed="false"><span class="shelf-thumb shelf-snowman"></span><span>雪だるま</span><small>未解放</small></button>
+            <button type="button" data-decor-shelf="tree" aria-pressed="false"><span class="shelf-thumb shelf-tree"></span><span>ツリー</span><small>未解放</small></button>
+          </div>
+        </section>
         <div class="art-credit">街の素材：<a href="https://kenney.nl/assets/sketch-town" target="_blank" rel="noopener noreferrer">Kenney / Sketch Town</a>（CC0）</div>
       </section>
       <aside class="sidebar">
@@ -166,8 +180,8 @@
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="winter.js?v=20261116-season1"></script>
-  <script src="app.js?v=20261116-season1" defer></script>
-  <script src="postcard.js?v=20261116-notice1" defer></script>
+  <script src="app.js?v=20261116-shelf1" defer></script>
+  <script src="postcard.js?v=20261116-shelf1" defer></script>
   <script src="notice.js?v=20261116-notice1" defer></script>
 </body>
 </html>
