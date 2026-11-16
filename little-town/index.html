@@ -25,7 +25,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="little town.">
-  <link rel="stylesheet" href="style.css?v=20261116-season1"><link rel="stylesheet" href="seasonal.css?v=20261116-season1">
+  <link rel="stylesheet" href="style.css?v=20261116-season1"><link rel="stylesheet" href="seasonal.css?v=20261116-notice1">
   <title>little town. | MY TOWN</title>
 </head>
 <body>
@@ -144,14 +144,30 @@
       <p class="postcard-help" id="postcardStatus" role="status" aria-live="polite">画像を準備しています…</p>
       <div class="postcard-actions">
         <button type="button" id="cancelPostcard" class="text-button">閉じる</button>
-        <button type="button" id="savePostcard" class="secondary" disabled>PNGを保存</button><button type="button" id="openPostcardImage" class="secondary" disabled>画像を開く</button>
+        <button type="button" id="openPostcardImage" class="secondary" disabled>画像を開く</button>
         <button type="button" id="sharePostcard" class="primary" disabled>画像を共有</button><button type="button" id="sharePostcardX" class="secondary" disabled>Xで投稿</button>
       </div>
+    </section>
+  </div>
+  <div class="modal" id="updateNotice" hidden>
+    <section class="modal-card update-notice-card" role="dialog" aria-modal="true" aria-labelledby="updateNoticeTitle" aria-describedby="updateNoticeDesc">
+      <span class="kicker">WHAT'S NEW</span>
+      <h2 id="updateNoticeTitle">little town. が新しくなりました！</h2>
+      <p id="updateNoticeDesc">冬の街と、クリスマスの飾り付けが楽しめるようになったよ。</p>
+      <ul>
+        <li>冬モードで街が雪景色に</li>
+        <li>累計20回から、10回ごとに新しい飾りをGET！</li>
+        <li>獲得した飾りは好きな場所に配置できる</li>
+        <li>ポストカードで街を画像にして共有できる</li>
+      </ul>
+      <p class="update-notice-small">今までのタスクと達成記録はそのままです。</p>
+      <button type="button" id="closeUpdateNotice" class="primary update-notice-close">街を見に行く</button>
     </section>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="winter.js?v=20261116-season1"></script>
   <script src="app.js?v=20261116-season1" defer></script>
-  <script src="postcard.js?v=20261116-season1" defer></script>
+  <script src="postcard.js?v=20261116-notice1" defer></script>
+  <script src="notice.js?v=20261116-notice1" defer></script>
 </body>
 </html>
