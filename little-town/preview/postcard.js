@@ -8,9 +8,11 @@
   const image = $('postcardImage');
   const status = $('postcardStatus');
   const withAvatar = $('postcardWithAvatar');
-  const save = $('savePostcard'), share = $('sharePostcard'), openImage=$('openPostcardImage');
-  const W=1200,H=960;
-  const scene={x:44,y:122,w:1112,h:1112*2/3};
+  const save = $('savePostcard'), share = $('sharePostcard'), openImage=$('openPostcardImage'), shareX=$('sharePostcardX');
+  const siteUrl='https://rikomuze.github.io/muze-tool-box/little-town/';
+  const shareText='little town.';
+  const W=1200,H=800;
+  const scene={x:0,y:0,w:1200,h:800};
   let currentBlob=null,previewURL=null,renderSequence=0;
   const assetCache=new Map();
   function getAsset(src){
@@ -41,12 +43,8 @@
   async function buildPostcard(includeCharacter){
     const output=document.createElement('canvas');output.width=W;output.height=H;
     const ctx=output.getContext('2d');
-    // Print-like warm background and a quiet frame. No task names or private history.
+    // 余計なコピーや日付を入れず、街と装飾だけの1枚絵にする。
     ctx.fillStyle='#fffaf0';ctx.fillRect(0,0,W,H);
-    ctx.fillStyle='#426b4b';ctx.font='bold 59px Georgia,serif';
-    ctx.fillText('little town.',51,91);
-    ctx.textAlign='right';ctx.font='800 19px system-ui,sans-serif';
-    ctx.fillText('MY TOWN',1148,84);ctx.textAlign='left';
     const original=$('townCanvas');
     const rect=sceneRect();
     if(!rect.width||!original.width)throw Error('街の画像を取得できませんでした');
@@ -54,7 +52,7 @@
     const sx=scene.x,sy=scene.y,sw=scene.w,sh=scene.h;
     const bg=ctx.createLinearGradient(0,sy,0,sy+sh);
     bg.addColorStop(0,'#dce8df');bg.addColorStop(1,'#f7e9d7');
-    ctx.fillStyle=bg;drawRoundRect(ctx,sx-4,sy-4,sw+8,sh+8,5);
+    ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
     ctx.save();ctx.beginPath();ctx.rect(sx,sy,sw,sh);ctx.clip();
     ctx.drawImage(original,sx,sy,sw,sh);
     const bounds={x:sx,y:sy,w:sw,h:sh};
@@ -91,13 +89,7 @@
       }
     }
     ctx.restore();
-    ctx.strokeStyle='#658e68';ctx.lineWidth=4;ctx.strokeRect(sx,sy,sw,sh);
-    ctx.fillStyle='#55745a';ctx.font='700 18px system-ui,sans-serif';
-    ctx.fillText('A LITTLE WORLD OF MINE',48,907);
-    const today=new Date();
-    const stamp=[today.getFullYear(),String(today.getMonth()+1).padStart(2,'0'),String(today.getDate()).padStart(2,'0')].join('.');
-    ctx.textAlign='right';ctx.fillText(stamp,1148,907);
-    ctx.textAlign='left';
+
     return await new Promise((resolve,reject)=>{
       try {
         if(typeof output.toBlob==='function') output.toBlob(blob=>blob?resolve(blob):reject(new Error('PNGの作成に失敗しました')),'image/png');
@@ -112,14 +104,14 @@
   }
   async function refresh(){
     const seq=++renderSequence;currentBlob=null;
-    save.disabled=true;share.disabled=true;openImage.disabled=true;
+    save.disabled=true;share.disabled=true;openImage.disabled=true;shareX.disabled=true;
     status.textContent='画像を準備しています…';
     try{
       const blob=await buildPostcard(withAvatar.checked);
       if(seq!==renderSequence||modal.hidden)return;
       if(previewURL)URL.revokeObjectURL(previewURL);
       currentBlob=blob;previewURL=URL.createObjectURL(blob);image.src=previewURL;
-      save.disabled=false;share.disabled=false;openImage.disabled=false;
+      save.disabled=false;share.disabled=false;openImage.disabled=false;shareX.disabled=false;
       status.textContent='現在の街・装飾の配置・冬モードが反映されています。';
     }catch(error){
       if(seq!==renderSequence)return;
@@ -158,8 +150,15 @@
     if(!currentBlob)return;
     const file=new File([currentBlob],fileName(),{type:'image/png'});
     if(navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]}))){
-      try{await navigator.share({files:[file],title:'little town.'})}
+      try{await navigator.share({files:[file],title:shareText,text:shareText+'\n'+siteUrl,url:siteUrl})}
       catch(error){if(error.name!=='AbortError')status.textContent='共有できませんでした。PNGを保存して共有してね。'}
     }else download();
+  });
+  // Xの投稿画面はサイト名とURLを確実に入力。画像は端末側から添付してもらう。
+  shareX.addEventListener('click',()=>{
+    const url='https://twitter.com/intent/tweet?text='+encodeURIComponent(shareText)+'&url='+encodeURIComponent(siteUrl);
+    const opened=window.open(url,'_blank','noopener,noreferrer');
+    if(!opened)location.href=url;
+    status.textContent='Xの投稿画面を開きました。画像も載せるときは保存したPNGを添付してね。';
   });
 })();
