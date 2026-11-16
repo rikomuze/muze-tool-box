@@ -8,7 +8,7 @@
   const image = $('postcardImage');
   const status = $('postcardStatus');
   const withAvatar = $('postcardWithAvatar');
-  const save = $('savePostcard'), share = $('sharePostcard'), openImage=$('openPostcardImage'), shareX=$('sharePostcardX');
+  const share = $('sharePostcard'), openImage=$('openPostcardImage'), shareX=$('sharePostcardX');
   const siteUrl='https://rikomuze.github.io/muze-tool-box/little-town/';
   const shareText='little town.';
   const W=1200,H=800;
@@ -104,14 +104,14 @@
   }
   async function refresh(){
     const seq=++renderSequence;currentBlob=null;
-    save.disabled=true;share.disabled=true;openImage.disabled=true;shareX.disabled=true;
+    share.disabled=true;openImage.disabled=true;shareX.disabled=true;
     status.textContent='画像を準備しています…';
     try{
       const blob=await buildPostcard(withAvatar.checked);
       if(seq!==renderSequence||modal.hidden)return;
       if(previewURL)URL.revokeObjectURL(previewURL);
       currentBlob=blob;previewURL=URL.createObjectURL(blob);image.src=previewURL;
-      save.disabled=false;share.disabled=false;openImage.disabled=false;shareX.disabled=false;
+      share.disabled=false;openImage.disabled=false;shareX.disabled=false;
       status.textContent='現在の街・装飾の配置・冬モードが反映されています。';
     }catch(error){
       if(seq!==renderSequence)return;
@@ -128,31 +128,24 @@
     const d=new Date(),date=[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');
     return 'little-town-postcard-'+date+'.png';
   }
-  function download(){
-    if(!currentBlob)return;
-    const url=URL.createObjectURL(currentBlob),a=document.createElement('a');
-    a.href=url;a.download=fileName();document.body.append(a);a.click();a.remove();
-    setTimeout(()=>URL.revokeObjectURL(url),12000);
-    status.textContent='PNGを保存しました。iPhoneでは共有・ファイル保存のメニューが開くことがあります。';
+  function openGeneratedImage(){
+    if(!previewURL)return;
+    const opened=window.open(previewURL,'_blank');
+    if(!opened)status.textContent='画像を開けませんでした。共有するボタンを試してね。';
   }
   $('openPostcard').addEventListener('click',()=>{modal.hidden=false;refresh()});
   $('cancelPostcard').addEventListener('click',close);
   modal.addEventListener('click',e=>{if(e.target===modal)close()});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden)close()});
   withAvatar.addEventListener('change',refresh);
-  save.addEventListener('click',download);
-  openImage.addEventListener('click',()=>{
-    if(!previewURL)return;
-    const opened=window.open(previewURL,'_blank');
-    if(!opened)status.textContent='画像を開けなかったので「PNGを保存」を試してください。';
-  });
+  openImage.addEventListener('click',openGeneratedImage);
   share.addEventListener('click',async()=>{
     if(!currentBlob)return;
     const file=new File([currentBlob],fileName(),{type:'image/png'});
     if(navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]}))){
       try{await navigator.share({files:[file],title:shareText,text:shareText+'\n'+siteUrl,url:siteUrl})}
-      catch(error){if(error.name!=='AbortError')status.textContent='共有できませんでした。PNGを保存して共有してね。'}
-    }else download();
+      catch(error){if(error.name!=='AbortError')status.textContent='共有できませんでした。「画像を開く」から保存して共有してね。'}
+    }else openGeneratedImage();
   });
   // Xの投稿画面はサイト名とURLを確実に入力。画像は端末側から添付してもらう。
   shareX.addEventListener('click',()=>{
