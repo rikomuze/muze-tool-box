@@ -26,7 +26,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="little town.">
-  <link rel="stylesheet" href="../style.css?v=20261116-preview2"><link rel="stylesheet" href="preview.css?v=postcard2">
+  <link rel="stylesheet" href="../style.css?v=20261116-preview2"><link rel="stylesheet" href="preview.css?v=postcard4">
   <title>little town. | CHRISTMAS PREVIEW</title>
 </head>
 <body>
@@ -52,7 +52,14 @@
         </div>
         <div class="world-footer">
           <div class="next"><strong id="nextTitle">NEXT</strong><span id="nextDescription"></span><div class="progress" aria-hidden="true"><span id="progressFill"></span></div></div>
-          <button class="secondary" type="button" id="winterToggle" aria-pressed="true">冬モード：ON</button><button class="secondary" type="button" id="previewButton">MAPに戻る</button><button class="secondary" type="button" id="decorToggle" aria-pressed="true">飾り：ON</button><button class="secondary" type="button" id="editDecor" aria-pressed="false">配置を変える</button><button class="text-button" type="button" id="resetDecor">配置をリセット</button><button class="secondary" type="button" id="openPostcard"><span aria-hidden="true">✉</span> ポストカード</button>
+          <div class="preview-controls" aria-label="街の操作">
+            <button class="secondary" type="button" id="winterToggle" aria-pressed="true">冬モード：ON</button>
+            <button class="secondary" type="button" id="previewButton">MAPに戻る</button>
+            <button class="secondary" type="button" id="decorToggle" aria-pressed="true">飾り：ON</button>
+            <button class="secondary" type="button" id="editDecor" aria-pressed="false">配置を変える</button>
+            <button class="secondary" type="button" id="resetDecor">配置をリセット</button>
+            <button class="secondary" type="button" id="openPostcard"><span aria-hidden="true">✉</span> ポストカード</button>
+          </div>
         </div>
         <p class="decor-tip" id="decorTip" hidden>飾りを指で動かして、好きな場所に置けるよ。スマホも対応。変更はこのプレビューにだけ保存されます。</p>
         <div class="art-credit">街の素材：<a href="https://kenney.nl/assets/sketch-town" target="_blank" rel="noopener noreferrer">Kenney / Sketch Town</a>（CC0）</div>
@@ -139,13 +146,13 @@
       <div class="postcard-actions">
         <button type="button" id="cancelPostcard" class="text-button">閉じる</button>
         <button type="button" id="savePostcard" class="secondary" disabled>PNGを保存</button><button type="button" id="openPostcardImage" class="secondary" disabled>画像を開く</button>
-        <button type="button" id="sharePostcard" class="primary" disabled>共有する</button>
+        <button type="button" id="sharePostcard" class="primary" disabled>画像を共有</button><button type="button" id="sharePostcardX" class="secondary" disabled>Xで投稿</button>
       </div>
     </section>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="winter.js?v=1"></script>
   <script src="app.js?v=winter1" defer></script>
-  <script src="postcard.js?v=3" defer></script>
+  <script src="postcard.js?v=4" defer></script>
 </body>
 </html>
