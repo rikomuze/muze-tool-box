@@ -1,19 +1,19 @@
-/* Christmas preview v4: 大きなツリーとお散歩ルートの自由配置 */
+/* Christmas preview v5: Sketch調の新素材、自由配置はそのまま */
 .preview-notice{padding:11px 13px;margin:0 0 16px;background:#fff1bb;border-left:5px solid #9f8151;font-size:12px;color:#4e6d45}
 .preview-notice strong{letter-spacing:.12em}
 .christmas-front{position:absolute;inset:0;pointer-events:none;z-index:3}
 .christmas-front.is-hidden{display:none}
 .decor-item{
  position:absolute;display:block;top:var(--decor-y);left:var(--decor-x);
- width:var(--decor-size);aspect-ratio:1;height:auto;
- background-image:url('../holiday/christmas-sprites.png');
+ width:var(--decor-size);aspect-ratio:190 / 315;height:auto;
+ background-image:url('../holiday/sketch-christmas-atlas.png');
  background-repeat:no-repeat;background-size:500% 100%;
  filter:drop-shadow(0 3px 2px #3b4f3560);
 }
-.decor-tree{--decor-size:28%;background-position:0% 0%}
+.decor-tree{--decor-size:18%;background-position:0% 0%}
 .decor-gift{--decor-size:12%;background-position:25% 0%}
-.decor-snowman{--decor-size:15%;background-position:50% 0%}
-.decor-cane{--decor-size:12%;background-position:75% 0%}
+.decor-snowman{--decor-size:14%;background-position:50% 0%}
+.decor-cane{--decor-size:11%;background-position:75% 0%}
 .decor-wreath{--decor-size:11%;background-position:100% 0%}
 /* まるは常に飾りよりも前のレイヤーを歩く */
 .world .walker{z-index:6}
