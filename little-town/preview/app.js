@@ -183,6 +183,9 @@ const decorDefaults={
  cane:{x:66,y:68},wreath:{x:69,y:41}
 };
 const decorStoreKey='little-town-preview-decor-v1';
+const decorHiddenKey='little-town-preview-decor-hidden-v1';
+let decorHidden={};
+try{const savedHidden=JSON.parse(localStorage.getItem(decorHiddenKey)||'{}');if(savedHidden&&typeof savedHidden==='object')decorHidden=savedHidden}catch(error){console.warn('飾りの収納状態を読み込めませんでした',error)}
 const decorLayer=$('christmasFront');
 let decorEditing=false,activePointer=null,decorPositions=JSON.parse(JSON.stringify(decorDefaults));
 const decorElements={
@@ -201,6 +204,44 @@ try{
   }
  }
 }catch(err){console.warn('プレビューの装飾位置を読み込めませんでした',err)}
+// 成長段階に応じて建物の密集する位置を避ける。配置を変える操作はこれまでどおり優先する。
+const decorSuggestions=[
+ {max:8,positions:{tree:{x:12,y:40},gift:{x:34,y:67},snowman:{x:77,y:53},cane:{x:66,y:72},wreath:{x:47,y:52}}},
+ {max:24,positions:{tree:{x:7,y:43},gift:{x:26,y:72},snowman:{x:79,y:62},cane:{x:65,y:75},wreath:{x:55,y:48}}},
+ {max:41,positions:{tree:{x:5,y:48},gift:{x:25,y:73},snowman:{x:81,y:64},cane:{x:67,y:76},wreath:{x:70,y:43}}},
+ {max:74,positions:{tree:{x:7,y:46},gift:{x:27,y:74},snowman:{x:81,y:64},cane:{x:67,y:77},wreath:{x:72,y:42}}},
+ {max:Infinity,positions:{tree:{x:9,y:46},gift:{x:29,y:67},snowman:{x:76,y:62},cane:{x:66,y:68},wreath:{x:69,y:41}}}
+];
+function getSuggestedDecorPositions(){
+ const n=preview?75:count();
+ return structuredClone(decorSuggestions.find(entry=>n<=entry.max).positions);
+}
+function refreshDecorShelf(){
+ for(const [key,element] of Object.entries(decorElements)){
+  element.hidden=decorHidden[key]===true;
+  const button=$('decorShelfItems').querySelector('[data-decor-shelf="'+key+'"]');
+  if(!button)continue;
+  const visible=decorHidden[key]!==true;
+  button.classList.toggle('is-stored',!visible);
+  button.setAttribute('aria-pressed',String(visible));
+  button.querySelector('small').textContent=visible?'表示中':'収納中';
+ }
+}
+$('decorShelfItems').addEventListener('click',event=>{
+ const button=event.target.closest('button[data-decor-shelf]');
+ if(!button)return;
+ const key=button.dataset.decorShelf;
+ if(!decorElements[key])return;
+ decorHidden[key]=!(decorHidden[key]===true);
+ try{localStorage.setItem(decorHiddenKey,JSON.stringify(decorHidden))}catch(error){toast('収納状態を保存できませんでした')}
+ refreshDecorShelf();
+ toast(decorHidden[key]?'飾りをしまったよ':'飾りを出したよ');
+});
+$('suggestDecor').addEventListener('click',()=>{
+ decorPositions=getSuggestedDecorPositions();
+ renderDecorPositions();saveDecorPositions();
+ toast((preview?'完成した街':'現在の街')+'に合わせておすすめ配置にしたよ');
+});
 function renderDecorPositions(){
  const bounds=decorLayer.getBoundingClientRect();
  for(const [key,element] of Object.entries(decorElements)){
@@ -282,7 +323,7 @@ $('winterToggle').addEventListener('click',()=>{
  $('winterToggle').setAttribute('aria-pressed',String(townTheme==='winter'));
  paint();
 });
-renderDecorPositions();setDecorEditing(false);
+renderDecorPositions();refreshDecorShelf();setDecorEditing(false);
 load();preview=true;render();loadImages();$('previewButton').textContent='MAPに戻る';
 if(reduce){$('walker').style.left='40%'}else requestAnimationFrame(walk);
 })();
