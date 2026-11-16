@@ -36,7 +36,7 @@
     ctx.drawImage(img,x+(w-dw)/2,y+(h-dh)/2,dw,dh);
   }
   function drawRoundRect(ctx,x,y,w,h,r){
-    ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill();
+    ctx.fillRect(x,y,w,h);
   }
   async function buildPostcard(includeCharacter){
     const output=document.createElement('canvas');output.width=W;output.height=H;
@@ -61,6 +61,7 @@
     // Overlay the user's actual placement, not a default decoration arrangement.
     const deco=$('christmasFront');
     if(deco&&!deco.classList.contains('is-hidden')){
+      status.textContent='装飾の画像を読み込んでいます…';
       const atlas=await getAsset('../holiday/sketch-christmas-atlas.png');
       const parts=['tree','gift','snowman','cane','wreath'];
       const cropW=atlas.naturalWidth/5,cropH=atlas.naturalHeight;
@@ -68,7 +69,7 @@
         const part=deco.querySelector('.decor-'+parts[i]);
         if(!part)continue;
         placeRect(ctx,part,rect,bounds,(x,y,w,h)=>{
-          ctx.drawImage(atlas,i*cropW,0,cropW,cropH,x,y,w,h);
+          if(w>0&&h>0)ctx.drawImage(atlas,i*cropW,0,cropW,cropH,x,y,w,h);
         });
       }
     }
@@ -98,8 +99,16 @@
     ctx.textAlign='right';ctx.fillText(stamp,1148,907);
     ctx.textAlign='left';
     return await new Promise((resolve,reject)=>{
-      output.toBlob(blob=>blob?resolve(blob):reject(new Error('PNGの作成に失敗しました')),'image/png');
+      try {
+        if(typeof output.toBlob==='function') output.toBlob(blob=>blob?resolve(blob):reject(new Error('PNGの作成に失敗しました')),'image/png');
+        else resolve(dataURLToBlob(output.toDataURL('image/png')));
+      }catch(e){reject(e)}
     });
+  }
+  function dataURLToBlob(dataURL){
+    const raw=atob(dataURL.split(',')[1]),out=new Uint8Array(raw.length);
+    for(let i=0;i<raw.length;i++)out[i]=raw.charCodeAt(i);
+    return new Blob([out],{type:'image/png'});
   }
   async function refresh(){
     const seq=++renderSequence;currentBlob=null;
@@ -114,7 +123,8 @@
       status.textContent='現在の街・装飾の配置・冬モードが反映されています。';
     }catch(error){
       if(seq!==renderSequence)return;
-      status.textContent=error.message||'画像を作成できませんでした';
+      status.textContent='画像の作成に失敗しました：'+(error?.message||String(error));
+      console.error('Postcard preview failed',error);
     }
   }
   function close(){
