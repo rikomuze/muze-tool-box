@@ -170,10 +170,21 @@ function drawPond(n){
  }
  ctx.restore();ctx.restore();
 }
+const pondBankImages={};
+function drawPondBankFlowers(n){
+ if(n<20)return;
+ const image=pondBankImages[townTheme==='winter'?'winter':'normal'];
+ if(!image||!image.complete||!image.naturalWidth)return;
+ // 池の手前左寄りの岸。背の高い木より先に描くので、木の後ろに自然に隠れる。
+ const w=960*.09,h=w*78/150;
+ const x=115,y=366;
+ ctx.drawImage(image,x-w/2,y-h,w,h);
+}
 function paint(){const n=displayedCount();ctx.clearRect(0,0,960,640);let gr=ctx.createLinearGradient(0,0,0,640);gr.addColorStop(0,townTheme==='winter'?'#dce8f0':'#e1e6d8');gr.addColorStop(1,townTheme==='winter'?'#f1f5f7':'#f6e9d7');ctx.fillStyle=gr;ctx.fillRect(0,0,960,640);ctx.fillStyle='rgba(140,151,125,.13)';ctx.beginPath();ctx.ellipse(480,555,380,43,0,0,Math.PI*2);ctx.fill();
  for(let z=0;z<=10;z++)for(let i=0;i<6;i++){let j=z-i;if(j<0||j>5)continue;drawTile('grass_center_N',i,j)}
  drawConnectedPaths(n);
  drawPond(n);
+ drawPondBankFlowers(n);
  // 奥のタイルにあるオブジェクトから順に描くことで、重なり方が自然になる。
  for(let z=0;z<=10;z++)for(let i=0;i<6;i++){let j=z-i;if(j<0||j>5)continue;for(const p of props){const [at,id,x,y,roof]=p;if(x!==i||y!==j||at>n)continue;if(n>=12&&at===5&&id==='tree_single_N'&&x===0&&y===5)continue;drawTile(id,i,j,'prop');if(roof)drawTile(roof,i,j,'prop',54)}}
  renderFlowers(n);
@@ -216,6 +227,13 @@ $('townStagePicker').addEventListener('click',event=>{
 $('backupButton').addEventListener('click',()=>{const data=JSON.stringify({...state,version:1,exportedAt:new Date().toISOString()},null,2);const blob=new Blob([data],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='little-town-backup-'+nowDate()+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),6000);toast('記録を書き出したよ')});
 $('restoreFile').addEventListener('change',e=>{let f=e.target.files?.[0];e.target.value='';if(!f)return;if(f.size>3*1024*1024)return toast('ファイルは3MB以下にしてね');const fr=new FileReader();fr.onload=()=>{try{const data=JSON.parse(String(fr.result));if(!Array.isArray(data.tasks)||!Array.isArray(data.log))throw Error('形式が違います');if(!confirm('今のタスクと記録をバックアップの内容で置き換える？'))return;const tasks=data.tasks.filter(t=>t&&typeof t.name==='string'&&typeof t.id==='string').slice(0,3).map(t=>({id:t.id.slice(0,64),name:t.name.slice(0,32)}));const log=data.log.filter(x=>x&&typeof x.id==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x.day)).slice(-4000).map(x=>({id:x.id.slice(0,64),name:String(x.name||'').slice(0,32),day:x.day,at:Number(x.at)||0}));state={tasks,log,avatar:typeof data.avatar==='string'&&/^data:image\/(png|jpeg|webp|gif);base64,/.test(data.avatar)?data.avatar:'',name:typeof data.name==='string'?data.name.slice(0,18):'まる'};let ok=persist();preview=false;render();toast(ok?'記録を復元したよ':'復元したよ。ただし保存できない環境です')}catch(err){toast('JSONファイルを確認してね')}};fr.readAsText(f)});
 function loadImages(){
+ for(const [season,src] of Object.entries({normal:'garden/tiny-bloom-pink.svg?v=2',winter:'garden/snow-berry.svg?v=3'})){
+  const img=new Image();
+  img.onload=()=>{pondBankImages[season]=img;paint()};
+  img.onerror=()=>console.warn('池の岸の花を読み込めませんでした',season);
+  img.src=src;
+ }
+
  for(const name of tiles){
   const img=new Image();
   img.onload=()=>{images[name]=img;try{winterImages[name]=window.littleTownWinterTile?.(name,img)}catch(error){console.warn('冬用画像の加工に失敗',name,error)}paint()};
