@@ -65,7 +65,17 @@
         const type=flower.dataset.flower==='pink'?'pink':'white';
         const winter=flowers.classList.contains('is-winter');
         const img=await getAsset(winter?(type==='pink'?'garden/snow-berry.svg?v=3':'garden/snow-shrub.svg'):'garden/tiny-bloom-'+type+'.svg?v=2');
-        placeRect(ctx,flower,rect,bounds,(x,y,w,h)=>drawContain(ctx,img,x,y,w,h));
+        const style=getComputedStyle(flower),angle=parseFloat(style.getPropertyValue('--fa'))||0;
+        if(!angle){placeRect(ctx,flower,rect,bounds,(x,y,w,h)=>drawContain(ctx,img,x,y,w,h));}
+        else{
+          // 同じ斜めの基準線で描画。変形後の外接矩形で画像を伸縮させない。
+          const r=flower.getBoundingClientRect(),scale=bounds.w/rect.width;
+          const w=parseFloat(style.width)*scale,h=parseFloat(style.height)*scale;
+          const x=bounds.x+(r.left+r.width/2-rect.left)*scale;
+          const y=bounds.y+(r.top+r.height/2-rect.top)*scale+h/2;
+          ctx.save();ctx.translate(x,y);ctx.transform(1,Math.tan(angle*Math.PI/180),0,1,0,0);
+          drawContain(ctx,img,-w/2,-h,w,h);ctx.restore();
+        }
       }
     }
     const deco=$('christmasFront');

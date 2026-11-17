@@ -114,7 +114,7 @@
 /* 小花：地面に直接咲く、低い群れ。全達成段階で同じサイズ。 */
 .flower-ground{position:absolute;inset:0;z-index:2;pointer-events:none}
 .flower-ground[hidden],.flower-cluster[hidden]{display:none!important}
-.flower-cluster{position:absolute;display:block;left:var(--fx);top:var(--fy);width:9%;aspect-ratio:150/78;transform:translate(-50%,-100%);background-position:center;background-repeat:no-repeat;background-size:contain}
+.flower-cluster{position:absolute;display:block;left:var(--fx);top:var(--fy);width:9%;aspect-ratio:150/78;transform:translate(-50%,-100%) skewY(var(--fa,0deg));transform-origin:center bottom;background-position:center;background-repeat:no-repeat;background-size:contain}
 .flower-pink{background-image:url('garden/tiny-bloom-pink.svg?v=2')}
 .flower-white{background-image:url('garden/tiny-bloom-white.svg?v=2')}
 
