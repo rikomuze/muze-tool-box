@@ -34,44 +34,45 @@ button:focus-visible{outline:3px solid #56794e;outline-offset:3px}
 <body>
 <main>
 <header>
-<div><span class="kicker">LITTLE TOWN. / GROWTH VISION</span><h1>75回 完成系プレビュー</h1><p>実際の街を使って、4隅に花が少しずつ育つ配置を試せる専用ページです。</p></div>
+<div><span class="kicker">LITTLE TOWN. / GROWTH VISION</span><h1>75回 完成系プレビュー</h1><p>実際の街にピンクの花木と白いバラを置いた、4隅の完成系プレビューです。</p></div>
 <a class="toplink" href="../?v=garden-polish1">通常のプレビューへ</a>
 </header>
 <div class="toolbar">
 <div class="toolgroup" id="stages"><strong>達成回数</strong><button data-stage="15" aria-pressed="false">15</button><button data-stage="25" aria-pressed="false">25</button><button data-stage="40" aria-pressed="false">40</button><button data-stage="60" aria-pressed="false">60</button><button data-stage="75" aria-pressed="true">75</button></div>
 <div class="toolgroup" id="seasons"><strong>季節</strong><button data-season="normal" aria-pressed="true">通常</button><button data-season="winter" aria-pressed="false">冬</button></div>
 </div>
-<div class="viewer"><iframe id="sceneFrame" title="成長中のlittle town.を実際の描画でプレビュー" src="../?v=garden-polish1" loading="eager"></iframe><div class="loading" id="loading">街のパーツを読み込んでいます…</div></div>
-<div class="bottom"><div class="note">4隅の余白に、小さな花が20・35・50・65回で順番に咲く試作です。花壇のような板は使いません。冬は花を隠し、雪の積もった街を優先します。<strong>本番サイト・タスク・達成履歴は変更されません。</strong></div><div class="notice">完成イメージの配置確認用</div></div>
+<div class="viewer"><iframe id="sceneFrame" title="成長中のlittle town.を実際の描画でプレビュー" src="../?v=flowers1" loading="eager"></iframe><div class="loading" id="loading">街のパーツを読み込んでいます…</div></div>
+<div class="bottom"><div class="note">ピンクの花木と白いバラが、20・35・50・65回で4隅に順番に咲きます。75回で花が少し大きく育ちます。花壇の板は使わず、冬は雪景色を優先します。<strong>本番サイト・タスク・達成履歴は変更されません。</strong></div><div class="notice">完成イメージの配置確認用</div></div>
 </main>
 <script>
 (()=>{
 'use strict';
 const $=id=>document.getElementById(id);
 const iframe=$('sceneFrame');let stage=75,season='normal',doc=null;
-const cluster=(seed)=>{
- let petals='',leaves='';
- const dots=[[13,47],[34,29],[55,43],[77,24],[96,48],[114,31],[136,51],[150,17]];
- for(let i=0;i<dots.length;i++){
-  const [x,y]=dots[i],n=i+seed;
-  if(n%3===0)continue;
-  const r=5+(n%3),t=(n%4===0?'#f3c3d0':n%4===1?'#ffffff':n%4===2?'#efb8d1':'#fef2c7');
-  petals+='<g transform="translate('+x+' '+y+')"><path d="M0 -'+r+' C'+r+' -'+(r+4)+' '+(r+5)+' -2 '+r+' 0 C'+(r+4)+' '+r+' '+r+' '+(r+5)+' 0 '+r+' C-'+r+' '+(r+4)+' -'+(r+5)+' '+r+' -'+r+' 0 C-'+(r+4)+' -'+r+' -'+r+' -'+(r+5)+' 0 -'+r+'Z" fill="'+t+'" stroke="#d1b7a0" stroke-width="1.4"/><circle r="2.8" fill="#e5bb73"/></g>';
-  leaves+='<path d="M'+(x-4)+' '+(y+6)+'q-15-9-14 3q12 8 18 7M'+(x+5)+' '+(y+8)+'q15-11 16 0q-10 8-19 7" fill="#8db86a" stroke="#688e4f" stroke-width="1.4"/>';
- }
- return '<svg viewBox="0 0 168 90" xmlns="http://www.w3.org/2000/svg" role="presentation" aria-hidden="true"><g>'+leaves+'</g>'+petals+'</svg>';
-};
+// 気に入ってもらった2種類の透過素材を交互に配置。
+const flowers=[
+ {corner:'nw',type:'pink',at:20},
+ {corner:'ne',type:'white',at:35},
+ {corner:'sw',type:'white',at:50},
+ {corner:'se',type:'pink',at:65}
+];
 function decorate(d){
  const world=d.getElementById('world');
  if(!world)return;
  if(world.dataset.completionDecorated)return;
  world.dataset.completionDecorated='true';
  const style=d.createElement('style');
- style.textContent='html,body{padding:0!important;margin:0!important;overflow:hidden!important;background:#e4ecea!important}body>#world{width:100vw!important;height:100vh!important;aspect-ratio:960/640!important;margin:0!important;border:0!important;border-radius:0!important}body>#world canvas{width:100%!important;height:100%!important}body>*:not(#world):not(style){display:none!important}.little-bloom{position:absolute;z-index:2;pointer-events:none;filter:drop-shadow(0 2px 1px #506a473b)}.little-bloom svg{display:block;width:100%;height:auto}.little-bloom[data-corner="nw"]{left:7%;top:27%;width:19%;transform:rotate(-12deg)}.little-bloom[data-corner="ne"]{right:5%;top:28%;width:19%;transform:rotate(10deg)}.little-bloom[data-corner="sw"]{left:8%;bottom:17%;width:21%;transform:rotate(3deg)}.little-bloom[data-corner="se"]{right:7%;bottom:17%;width:21%;transform:rotate(-6deg)}.little-bloom[hidden]{display:none!important}';
+ style.textContent="html,body{padding:0!important;margin:0!important;overflow:hidden!important;background:#e4ecea!important}\nbody>#world{width:100vw!important;height:100vh!important;aspect-ratio:960/640!important;margin:0!important;border:0!important;border-radius:0!important}\nbody>#world canvas{width:100%!important;height:100%!important}\nbody>*:not(#world):not(style){display:none!important}\n.little-bloom{position:absolute;pointer-events:none;z-index:2;aspect-ratio:1/1;background-image:url(./completion/flowers-atlas.webp);background-repeat:no-repeat;background-size:200% 100%;filter:drop-shadow(0 3px 2px #45664732);transition:width .3s ease,left .3s ease,top .3s ease}\n.little-bloom[data-type=\"pink\"]{background-position:0 0}\n.little-bloom[data-type=\"white\"]{background-position:100% 0}\n.little-bloom[data-corner=\"nw\"]{left:12%;top:19%;width:15%}\n.little-bloom[data-corner=\"ne\"]{left:73%;top:21%;width:15%}\n.little-bloom[data-corner=\"sw\"]{left:24%;top:69%;width:16%}\n.little-bloom[data-corner=\"se\"]{left:70%;top:69%;width:17%}\n.little-bloom.is-full[data-corner=\"nw\"]{left:11%;top:17%;width:17%}\n.little-bloom.is-full[data-corner=\"ne\"]{left:72%;top:18%;width:18%}\n.little-bloom.is-full[data-corner=\"sw\"]{left:23%;top:67%;width:19%}\n.little-bloom.is-full[data-corner=\"se\"]{left:69%;top:67%;width:20%}\n.little-bloom[hidden]{display:none!important}\nbody>#world .walker{width:clamp(60px,9vw,99px)!important;height:clamp(75px,11vw,123px)!important}\n";
  d.head.appendChild(style);
  d.body.appendChild(world);
- const corners=['nw','ne','sw','se'];
- corners.forEach((corner,i)=>{const el=d.createElement('div');el.className='little-bloom';el.dataset.corner=corner;el.innerHTML=cluster(i+3);world.appendChild(el)});
+ for(const flower of flowers){
+  const el=d.createElement('div');
+  el.className='little-bloom';
+  el.dataset.corner=flower.corner;
+  el.dataset.type=flower.type;
+  el.setAttribute('aria-hidden','true');
+  world.appendChild(el);
+ }
 }
 function apply(){
  document.querySelectorAll('[data-stage]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.stage)===stage)));
@@ -83,7 +84,11 @@ function apply(){
   const winterBtn=doc.getElementById('winterToggle');
   const currentlyWinter=winterBtn?.getAttribute('aria-pressed')==='true';
   if(winterBtn&&currentlyWinter!==(season==='winter'))winterBtn.click();
-  doc.querySelectorAll('.little-bloom').forEach((flower,i)=>{flower.hidden=(stage<[20,35,50,65][i])||season==='winter'});
+  doc.querySelectorAll('.little-bloom').forEach(flower=>{
+   const config=flowers.find(x=>x.corner===flower.dataset.corner);
+   flower.hidden=season==='winter'||stage<config.at;
+   flower.classList.toggle('is-full',stage>=75);
+  });
  }catch(error){console.error('Completion preview control',error)}
 }
 iframe.addEventListener('load',()=>{
