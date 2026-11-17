@@ -109,3 +109,25 @@
 .garden-review-link a{display:inline-block;border:2px solid #719271;background:#fff1c5;padding:10px 13px;text-decoration:none;font-weight:900;color:#3d6645}
 .garden-review-link a:focus-visible{outline:3px solid #4a7551;outline-offset:3px}
 .garden-review-link small{font-size:10px;color:#6b816b}
+
+/* 4隅の花：承認されたピンクの花木・白いバラの透過素材を使用。板や鉢は置かない。 */
+.flower-ground{position:absolute;inset:0;z-index:2;pointer-events:none}
+.flower-ground[hidden],.flower-cluster[hidden]{display:none!important}
+.flower-cluster{
+ position:absolute;display:block;aspect-ratio:1/1;
+ background-image:url('completion/flowers-atlas.webp');
+ background-repeat:no-repeat;background-size:200% 100%;
+ filter:drop-shadow(0 3px 2px #47674630);
+ transition:width .25s ease,left .25s ease,top .25s ease;
+}
+.flower-pink{background-position:0% 0%}
+.flower-rose{background-position:100% 0%}
+.flower-nw{left:12%;top:19%;width:15%}
+.flower-ne{left:73%;top:21%;width:15%}
+.flower-sw{left:24%;top:69%;width:16%}
+.flower-se{left:70%;top:69%;width:17%}
+.flower-nw.is-full{left:11%;top:17%;width:17%}
+.flower-ne.is-full{left:72%;top:18%;width:18%}
+.flower-sw.is-full{left:23%;top:67%;width:19%}
+.flower-se.is-full{left:69%;top:67%;width:20%}
+@media(prefers-reduced-motion:reduce){.flower-cluster{transition:none}}
