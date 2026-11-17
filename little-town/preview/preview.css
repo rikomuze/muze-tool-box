@@ -102,3 +102,10 @@
 .town-stage-options button.is-selected{background:#ffda80;box-shadow:3px 3px 0 #a1b58c;border-color:#476d4b}
 .town-stage-picker small{font-size:10px;color:#587559;line-height:1.5}
 @media(max-width:520px){.town-stage-picker{padding:8px}.town-stage-options{gap:4px}.town-stage-options button{padding:7px 1px;font-size:10px;min-height:35px}}
+
+
+/* 新パーツを一つずつ確認するための入口 */
+.garden-review-link{margin:14px 0 5px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:12px;line-height:1.5}
+.garden-review-link a{display:inline-block;border:2px solid #719271;background:#fff1c5;padding:10px 13px;text-decoration:none;font-weight:900;color:#3d6645}
+.garden-review-link a:focus-visible{outline:3px solid #4a7551;outline-offset:3px}
+.garden-review-link small{font-size:10px;color:#6b816b}
