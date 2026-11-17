@@ -134,3 +134,10 @@
  .layout{gap:22px}
  .board>.tasks-panel{margin:20px 0 16px}
 }
+
+/* 冬の縁専用：斜めの基準線に沿って描いた立体素材。画像のせん断はしない。 */
+.flower-ground.is-winter .flower-cluster[data-edge]{aspect-ratio:150/112;transform:translate(-50%,-100%);background-size:contain}
+.flower-ground.is-winter .flower-pink[data-edge="up"]{background-image:url('garden/berry-edge-up.svg')}
+.flower-ground.is-winter .flower-pink[data-edge="down"]{background-image:url('garden/berry-edge-down.svg')}
+.flower-ground.is-winter .flower-white[data-edge="up"]{background-image:url('garden/shrub-edge-up.svg')}
+.flower-ground.is-winter .flower-white[data-edge="down"]{background-image:url('garden/shrub-edge-down.svg')}

@@ -64,8 +64,9 @@
         if(flower.hidden||getComputedStyle(flower).display==='none')continue;
         const type=flower.dataset.flower==='pink'?'pink':'white';
         const winter=flowers.classList.contains('is-winter');
-        const img=await getAsset(winter?(type==='pink'?'garden/snow-berry.svg?v=3':'garden/snow-shrub.svg'):'garden/tiny-bloom-'+type+'.svg?v=2');
-        const style=getComputedStyle(flower),angle=parseFloat(style.getPropertyValue('--fa'))||0;
+        const edge=winter&&flower.dataset.edge;
+        const img=await getAsset(edge?'garden/'+(type==='pink'?'berry':'shrub')+'-edge-'+edge+'.svg':winter?(type==='pink'?'garden/snow-berry.svg?v=3':'garden/snow-shrub.svg'):'garden/tiny-bloom-'+type+'.svg?v=2');
+        const style=getComputedStyle(flower),angle=edge?0:(parseFloat(style.getPropertyValue('--fa'))||0);
         if(!angle){placeRect(ctx,flower,rect,bounds,(x,y,w,h)=>drawContain(ctx,img,x,y,w,h));}
         else{
           // 同じ斜めの基準線で描画。変形後の外接矩形で画像を伸縮させない。
