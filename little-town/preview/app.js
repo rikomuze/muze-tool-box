@@ -118,11 +118,22 @@ const milestones=[{at:1,label:'ちいさな木'},{at:9,label:'はじめのおう
 const gardenTiles=['market_stall_N','market_green_N','fountain_N','windmill_N'];
 let previewStage=75;
 const displayedCount=()=>preview?previewStage:count();
+function renderFlowers(n){
+ const container=$('flowerGround');
+ if(!container)return;
+ container.hidden=townTheme==='winter';
+ for(const flower of container.querySelectorAll('.flower-cluster')){
+  const at=Number(flower.dataset.bloomAt);
+  flower.hidden=n<at;
+  flower.classList.toggle('is-full',n>=75);
+ }
+}
 function paint(){const n=displayedCount();ctx.clearRect(0,0,960,640);let gr=ctx.createLinearGradient(0,0,0,640);gr.addColorStop(0,townTheme==='winter'?'#dce8f0':'#e1e6d8');gr.addColorStop(1,townTheme==='winter'?'#f1f5f7':'#f6e9d7');ctx.fillStyle=gr;ctx.fillRect(0,0,960,640);ctx.fillStyle='rgba(140,151,125,.13)';ctx.beginPath();ctx.ellipse(480,555,380,43,0,0,Math.PI*2);ctx.fill();
  const pathSet=new Set(n>=4?['3,5','3,4','3,3','2,3','1,3','3,2','4,3']:[]);
  for(let z=0;z<=10;z++)for(let i=0;i<6;i++){let j=z-i;if(j<0||j>5)continue;let id='grass_center_N';if(n>=12&&i===0&&j===5)id='grass_water_N';else if(n>=18&&i===0&&j===4)id='grass_river_N';else if(pathSet.has(i+','+j))id=(i===3&&j===3)?'grass_pathCrossing_N':'grass_path_N';drawTile(id,i,j)}
  // 奥のタイルにあるオブジェクトから順に描くことで、重なり方が自然になる。
  for(let z=0;z<=10;z++)for(let i=0;i<6;i++){let j=z-i;if(j<0||j>5)continue;for(const p of props){const [at,id,x,y,roof]=p;if(x!==i||y!==j||at>n)continue;drawTile(id,i,j,'prop');if(roof)drawTile(roof,i,j,'prop',54)}}
+ renderFlowers(n);
 }
 function renderProgress(){
  const actual=count(),n=displayedCount(),next=milestones.find(x=>x.at>n);
