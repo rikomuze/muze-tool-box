@@ -26,7 +26,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="little town.">
-  <link rel="stylesheet" href="../style.css?v=20261116-preview2"><link rel="stylesheet" href="preview.css?v=winter-berry3">
+  <link rel="stylesheet" href="../style.css?v=20261116-preview2"><link rel="stylesheet" href="preview.css?v=quest-first1">
   <title>little town. | CHRISTMAS PREVIEW</title>
 </head>
 <body>
@@ -36,7 +36,7 @@
       <a class="home-link" href="https://rikomuze.github.io/muze-tool-box/">MUZE TOOL BOX に戻る ↗</a>
     </header>
 
-    <p class="preview-notice"><strong>CHRISTMAS PREVIEW</strong> ｜ これは試作サイトです。本番のタスク・記録には影響しません。飾りの位置は調整中です。</p>
+    <p class="preview-notice"><strong>TOWN PREVIEW</strong> ｜ 新しい街と冬景色の試作サイトです。本番のタスク・記録には影響しません。</p>
     <main class="layout">
       <section class="board panel" aria-label="あなたの街">
         <div class="board-header">
@@ -60,18 +60,13 @@
           <div class="walker" id="walker" aria-hidden="true"><div class="walker-image" id="walkerImage"></div></div>
           <div class="preview-tag" id="previewTag" hidden>未来の街を見学中</div>
         </div>
-        <p class="garden-review-link"><a href="completion/?v=winter-berry3">4隅の花・75回完成系を見る ↗</a> <a href="garden-review.html?v=garden-polish1">お店・噴水・風車を1個ずつ見る ↗</a></p>
-        <div class="town-stage-picker" id="townStagePicker" aria-label="街の成長段階を確認">
-          <span class="kicker">GROWTH PREVIEW</span>
-          <div class="town-stage-options" role="group" aria-label="累計達成回数">
-            <button type="button" data-stage="15" aria-pressed="false">15回</button>
-            <button type="button" data-stage="25" aria-pressed="false">25回</button>
-            <button type="button" data-stage="40" aria-pressed="false">40回</button>
-            <button type="button" data-stage="60" aria-pressed="false">60回</button>
-            <button type="button" data-stage="75" aria-pressed="true">75回</button>
-          </div>
-          <small>実際の達成回数や履歴は変わりません。15回までは元の街のままです。</small>
-        </div>
+        <section class="panel tasks-panel">
+          <div class="section-title"><div><span class="kicker">DAILY QUEST</span><h2>TODAY</h2></div><div class="count"><strong id="todayDone">0</strong><span id="todayMax"> / 0</span></div></div>
+          
+          <div class="task-list" id="taskList"></div>
+          <div id="saveStatus" class="status checking" role="status" aria-live="polite">保存先を確認しています…</div>
+          
+        </section>
         <div class="world-footer">
           <div class="next"><strong id="nextTitle">NEXT</strong><span id="nextDescription"></span><div class="progress" aria-hidden="true"><span id="progressFill"></span></div></div>
           <div class="preview-controls" aria-label="街の操作">
@@ -98,16 +93,21 @@
             <button type="button" data-decor-shelf="tree" aria-pressed="true"><span class="shelf-thumb shelf-tree"></span><span>ツリー</span><small>表示中</small></button>
           </div>
         </section>
+        <div class="town-stage-picker" id="townStagePicker" aria-label="街の成長段階を確認">
+          <span class="kicker">GROWTH PREVIEW</span>
+          <div class="town-stage-options" role="group" aria-label="累計達成回数">
+            <button type="button" data-stage="15" aria-pressed="false">15回</button>
+            <button type="button" data-stage="25" aria-pressed="false">25回</button>
+            <button type="button" data-stage="40" aria-pressed="false">40回</button>
+            <button type="button" data-stage="60" aria-pressed="false">60回</button>
+            <button type="button" data-stage="75" aria-pressed="true">75回</button>
+          </div>
+          <small>実際の達成回数や履歴は変わりません。15回までは元の街のままです。</small>
+        </div>
+        <p class="garden-review-link"><a href="completion/?v=quest-first1">4隅の花・75回完成系を見る ↗</a> <a href="garden-review.html?v=garden-polish1">お店・噴水・風車を1個ずつ見る ↗</a></p>
         <div class="art-credit">街の素材：<a href="https://kenney.nl/assets/sketch-town" target="_blank" rel="noopener noreferrer">Kenney / Sketch Town</a>（CC0）</div>
       </section>
       <aside class="sidebar">
-        <section class="panel tasks-panel">
-          <div class="section-title"><div><span class="kicker">DAILY QUEST</span><h2>TODAY</h2></div><div class="count"><strong id="todayDone">0</strong><span id="todayMax"> / 0</span></div></div>
-          
-          <div class="task-list" id="taskList"></div>
-          <div id="saveStatus" class="status checking" role="status" aria-live="polite">保存先を確認しています…</div>
-          
-        </section>
         <section class="panel avatar-panel">
           <div class="section-title"><div><span class="kicker">CHARACTER</span><h2>MY FRIEND</h2></div></div>
           <div class="avatar-row"><div class="avatar-sample" id="avatarSample"></div><div class="avatar-meta"><label for="avatarName">名前</label><input id="avatarName" maxlength="18" aria-label="キャラクターの名前" value="まる"></div></div>

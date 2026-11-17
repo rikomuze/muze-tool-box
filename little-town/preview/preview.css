@@ -121,3 +121,16 @@
 /* 冬は花がなくなる代わりに、同じ場所に雪をかぶった小さな低木が育つ。 */
 .flower-ground.is-winter .flower-pink{background-image:url('garden/snow-berry.svg?v=3')}
 .flower-ground.is-winter .flower-white{background-image:url('garden/snow-shrub.svg')}
+
+/* DAILY QUEST はマップの直後。プレビュー用の操作はタスクより下へ。 */
+.layout{grid-template-columns:minmax(0,1fr);max-width:820px;margin-inline:auto;gap:26px}
+.layout .board{min-width:0}
+.board>.tasks-panel{padding:0;margin:25px 0 21px;min-width:0}
+.layout .sidebar{display:block;margin:0;min-width:0}
+.layout .sidebar>.avatar-panel{padding:0!important}
+.board>.world-footer{padding-top:8px!important}
+.board .preview-controls{max-width:none}
+@media(max-width:650px){
+ .layout{gap:22px}
+ .board>.tasks-panel{margin:20px 0 16px}
+}
