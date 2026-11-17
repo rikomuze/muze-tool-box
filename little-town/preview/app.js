@@ -175,7 +175,7 @@ function paint(){const n=displayedCount();ctx.clearRect(0,0,960,640);let gr=ctx.
  drawConnectedPaths(n);
  drawPond(n);
  // 奥のタイルにあるオブジェクトから順に描くことで、重なり方が自然になる。
- for(let z=0;z<=10;z++)for(let i=0;i<6;i++){let j=z-i;if(j<0||j>5)continue;for(const p of props){const [at,id,x,y,roof]=p;if(x!==i||y!==j||at>n)continue;drawTile(id,i,j,'prop');if(roof)drawTile(roof,i,j,'prop',54)}}
+ for(let z=0;z<=10;z++)for(let i=0;i<6;i++){let j=z-i;if(j<0||j>5)continue;for(const p of props){const [at,id,x,y,roof]=p;if(x!==i||y!==j||at>n)continue;if(n>=12&&at===5&&id==='tree_single_N'&&x===0&&y===5)continue;drawTile(id,i,j,'prop');if(roof)drawTile(roof,i,j,'prop',54)}}
  renderFlowers(n);
 }
 function renderProgress(){
