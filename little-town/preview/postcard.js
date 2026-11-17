@@ -8,7 +8,7 @@
   const image = $('postcardImage');
   const status = $('postcardStatus');
   const withAvatar = $('postcardWithAvatar');
-  const save = $('savePostcard'), share = $('sharePostcard'), openImage=$('openPostcardImage'), shareX=$('sharePostcardX');
+  const share = $('sharePostcard');
   const siteUrl='https://rikomuze.github.io/muze-tool-box/little-town/';
   const shareText='little town.';
   const W=1200,H=800;
@@ -121,14 +121,14 @@
   }
   async function refresh(){
     const seq=++renderSequence;currentBlob=null;
-    save.disabled=true;share.disabled=true;openImage.disabled=true;shareX.disabled=true;
+    share.disabled=true;
     status.textContent='画像を準備しています…';
     try{
       const blob=await buildPostcard(withAvatar.checked);
       if(seq!==renderSequence||modal.hidden)return;
       if(previewURL)URL.revokeObjectURL(previewURL);
       currentBlob=blob;previewURL=URL.createObjectURL(blob);image.src=previewURL;
-      save.disabled=false;share.disabled=false;openImage.disabled=false;shareX.disabled=false;
+      share.disabled=false;
       status.textContent='現在の街・装飾の配置・冬モードが反映されています。';
     }catch(error){
       if(seq!==renderSequence)return;
@@ -157,12 +157,6 @@
   modal.addEventListener('click',e=>{if(e.target===modal)close()});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden)close()});
   withAvatar.addEventListener('change',refresh);
-  save.addEventListener('click',download);
-  openImage.addEventListener('click',()=>{
-    if(!previewURL)return;
-    const opened=window.open(previewURL,'_blank');
-    if(!opened)status.textContent='画像を開けなかったので「PNGを保存」を試してください。';
-  });
   share.addEventListener('click',async()=>{
     if(!currentBlob)return;
     const file=new File([currentBlob],fileName(),{type:'image/png'});
@@ -170,12 +164,5 @@
       try{await navigator.share({files:[file],title:shareText,text:shareText+'\n'+siteUrl,url:siteUrl})}
       catch(error){if(error.name!=='AbortError')status.textContent='共有できませんでした。PNGを保存して共有してね。'}
     }else download();
-  });
-  // Xの投稿画面はサイト名とURLを確実に入力。画像は端末側から添付してもらう。
-  shareX.addEventListener('click',()=>{
-    const url='https://twitter.com/intent/tweet?text='+encodeURIComponent(shareText)+'&url='+encodeURIComponent(siteUrl);
-    const opened=window.open(url,'_blank','noopener,noreferrer');
-    if(!opened)location.href=url;
-    status.textContent='Xの投稿画面を開きました。画像も載せるときは保存したPNGを添付してね。';
   });
 })();
