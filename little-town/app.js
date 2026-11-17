@@ -296,7 +296,7 @@ const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;let b
 // このプレビュー専用の配置データ。本番サイトやタスク記録に干渉しない。
 const decorDefaults={
  tree:{x:9,y:46},gift:{x:29,y:67},snowman:{x:76,y:62},
- cane:{x:34.5,y:6},wreath:{x:31.2,y:32.8}
+ cane:{x:34.5,y:6},wreath:{x:29.1,y:54.5}
 };
 // 装飾の位置は既存の本番データの townDecor.map01 に保存。
 const decorLayer=$('christmasFront');
@@ -339,13 +339,14 @@ const decorSuggestions=[
  {max:8,positions:{tree:{x:12,y:40},gift:{x:34,y:67},snowman:{x:77,y:53},cane:{x:34.5,y:6},wreath:{x:55,y:47}}},
  {max:24,positions:{tree:{x:7,y:43},gift:{x:26,y:72},snowman:{x:79,y:62},cane:{x:34.5,y:6},wreath:{x:55,y:47}}},
  {max:41,positions:{tree:{x:5,y:48},gift:{x:25,y:73},snowman:{x:81,y:64},cane:{x:34.5,y:6},wreath:{x:55,y:47}}},
- {max:74,positions:{tree:{x:7,y:46},gift:{x:27,y:74},snowman:{x:81,y:64},cane:{x:34.5,y:6},wreath:{x:31.2,y:32.8}}},
- {max:Infinity,positions:{tree:{x:9,y:46},gift:{x:29,y:67},snowman:{x:76,y:62},cane:{x:34.5,y:6},wreath:{x:31.2,y:32.8}}}
+ {max:74,positions:{tree:{x:7,y:46},gift:{x:27,y:74},snowman:{x:81,y:64},cane:{x:34.5,y:6},wreath:{x:29.1,y:54.5}}},
+ {max:Infinity,positions:{tree:{x:9,y:46},gift:{x:29,y:67},snowman:{x:76,y:62},cane:{x:34.5,y:6},wreath:{x:29.1,y:54.5}}}
 ];
 function getSuggestedDecorPositions(){
  const n=displayedCount();
  const positions=JSON.parse(JSON.stringify(decorSuggestions.find(entry=>n<=entry.max).positions));
- positions.wreath=n>=48?{x:31.2,y:32.8}:{x:55,y:47};
+ // リースは紫の屋根の家（16回〜）の左の壁に掛ける。
+ positions.wreath=n>=16?{x:29.1,y:54.5}:{x:55,y:47};
  return positions;
 }
 function readStoredDecor(){

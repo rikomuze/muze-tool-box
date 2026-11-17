@@ -72,20 +72,19 @@
     const deco=$('christmasFront');
     if(deco&&!deco.classList.contains('is-hidden')){
       status.textContent='装飾の画像を読み込んでいます…';
-      const atlas=await getAsset('holiday/sketch-christmas-atlas.png');
-      const parts=['tree','gift','snowman','cane','wreath'];
-      const cropW=atlas.naturalWidth/5,cropH=atlas.naturalHeight;
-      for(let i=0;i<parts.length;i++){
-        const part=deco.querySelector('.decor-'+parts[i]);
-        if(!part||part.hidden||getComputedStyle(part).display==='none')continue;
-        if(parts[i]==='wreath'){
-          const wreath=await getAsset('garden/wreath-v2.svg');
-          placeRect(ctx,part,rect,bounds,(x,y,w,h)=>drawContain(ctx,wreath,x,y,w,h));
-        }else{
-          placeRect(ctx,part,rect,bounds,(x,y,w,h)=>{
-            if(w>0&&h>0)ctx.drawImage(atlas,i*cropW,0,cropW,cropH,x,y,w,h);
-          });
-        }
+      // 画面と同じ素材（1点ずつのSVG）を、同じ枠に描く。
+      for(const part of deco.querySelectorAll('.decor-item')){
+        if(part.hidden||getComputedStyle(part).display==='none')continue;
+        const src=(getComputedStyle(part).backgroundImage.match(/url\(["']?(.*?)["']?\)/)||[])[1];
+        if(!src)continue;
+        const img=await getAsset(src);
+        // 5点並びの画像（ツリー・雪だるま）は、その絵の部分だけを切り出す。
+        const atlasIndex=/christmas-atlas/.test(src)?['tree','gift','snowman','cane'].findIndex(k=>part.classList.contains('decor-'+k)):-1;
+        placeRect(ctx,part,rect,bounds,(x,y,w,h)=>{
+          if(!(w>0&&h>0))return;
+          if(atlasIndex>=0){const cw=img.naturalWidth/5;ctx.drawImage(img,atlasIndex*cw,0,cw,img.naturalHeight,x,y,w,h)}
+          else ctx.drawImage(img,x,y,w,h);
+        });
       }
     }
     if(includeCharacter){
