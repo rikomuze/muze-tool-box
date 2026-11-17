@@ -11,7 +11,7 @@ function checkStorage(){try{let t=KEY+'-probe';localStorage.setItem(t,'ok');let 
 function showSave(ok){const el=$('saveStatus');el.className='status '+(ok?'ok':'error');el.textContent=ok?'✓ このブラウザへの保存を確認できました':'⚠ この表示環境では保存できません。ブラウザで公開URLを開くか、記録を書き出してください。'}
 function load(){storageOK=checkStorage();if(storageOK){try{let j=JSON.parse(localStorage.getItem(KEY)||'null');if(j&&Array.isArray(j.tasks)&&Array.isArray(j.log))state={tasks:j.tasks.slice(0,3),log:j.log,avatar:typeof j.avatar==='string'?j.avatar:'',name:typeof j.name==='string'?(j.name==='まるこ'&&!j.avatar?'まる':j.name):'まる',townDecor:j.townDecor&&typeof j.townDecor==='object'&&!Array.isArray(j.townDecor)?j.townDecor:{},settings:j.settings&&typeof j.settings==='object'&&!Array.isArray(j.settings)?j.settings:{}}}catch(e){console.warn('保存データを読めません',e)}}showSave(storageOK)}
 function persist(){if(!storageOK){showSave(false);return false}try{let j=JSON.stringify(state);localStorage.setItem(KEY,j);if(localStorage.getItem(KEY)!==j)throw Error('保存の検証に失敗');showSave(true);return true}catch(e){storageOK=false;showSave(false);console.warn('保存失敗',e);return false}}
-function renderTasks(){const list=$('taskList');list.innerHTML='';state.tasks.forEach((t,i)=>{let done=finished(t.id),el=document.createElement('div');el.className='task'+(done?' done':'');el.innerHTML=`<span class="task-icon">${['✿','♫','✦'][i]}</span><div class="task-title"><strong>${escaped(t.name)}</strong><small>${done?'DONE':'NOT YET'}</small></div><button type="button" class="edit-button" title="編集" aria-label="${escaped(t.name)}を編集" data-edit="${escaped(t.id)}">⋯</button><button type="button" class="complete-button" data-done="${escaped(t.id)}" ${done?'disabled':''}>${done?'✓ 完了':'できた！'}</button>`;list.append(el)});if(state.tasks.length<3){let el=document.createElement('button');el.className='empty-slot';el.textContent='＋ ADD TASK';el.type='button';el.dataset.add='1';list.append(el)}$('todayDone').textContent=dayCount();$('todayMax').textContent=' / '+state.tasks.length}
+function renderTasks(){const list=$('taskList');list.innerHTML='';state.tasks.forEach((t,i)=>{let done=finished(t.id),el=document.createElement('div');el.className='task'+(done?' done':'');el.innerHTML=`<span class="task-icon">${['✿','♫','✦'][i]}</span><div class="task-title"><strong>${escaped(t.name)}</strong><small>${done?'DONE':'NOT YET'}</small></div><button type="button" class="edit-button" title="編集" aria-label="${escaped(t.name)}を編集" data-edit="${escaped(t.id)}">⋯</button><button type="button" class="complete-button" data-done="${escaped(t.id)}" ${done?'disabled':''}>${done?'✓ 完了':'できた！'}</button>`;list.append(el)});if(state.tasks.length<3){let el=document.createElement('button');el.className='empty-slot';el.textContent='＋ ADD TASK';el.type='button';el.dataset.add='1';list.append(el)}$('todayDone').textContent=dayCount();$('todayMax').textContent=' / '+state.tasks.length;$('todayMax').parentElement.hidden=!state.tasks.length}
 function openTask(id){editing=id||null;const t=state.tasks.find(x=>x.id===editing);$('taskName').value=t?t.name:'';$('modalTitle').textContent=t?'タスクを編集':'タスクを追加';$('deleteTask').hidden=!t;$('taskModal').hidden=false;$('taskName').focus()}
 function closeTask(){$('taskModal').hidden=true;editing=null}
 $('taskList').addEventListener('click',e=>{let btn=e.target.closest('button');if(!btn)return;if(btn.dataset.add)openTask(null);else if(btn.dataset.edit)openTask(btn.dataset.edit);else if(btn.dataset.done)complete(btn.dataset.done)});
@@ -127,20 +127,104 @@ function renderFlowers(n){
   // 花のサイズは固定。成長は新しい群れの追加だけ。
  }
 }
+// 地面の上面座標。タイル間の小さな隙間を道の描画でつなぐ。
+function groundPoint(i,j){const p=tilePosition(i,j);return {x:p.x,y:p.y+74}}
+function terrainLine(points,width,color){
+ ctx.beginPath();points.forEach(([i,j],k)=>{const p=groundPoint(i,j);if(k===0)ctx.moveTo(p.x,p.y);else ctx.lineTo(p.x,p.y)});
+ ctx.lineWidth=width;ctx.strokeStyle=color;ctx.lineCap='round';ctx.lineJoin='round';ctx.stroke();
+}
+function drawConnectedPaths(n){
+ if(n<4)return;
+ ctx.save();
+ // 手前から街の中心へ。建物を増やすと枝道も伸びる。
+ const paths=[[[3,5.32],[3,4],[3,3],[3,2]],[[3,3],[2,3],[1,3]]];
+ if(n>=13)paths.push([[3,3],[4,3]]);
+ for(const p of paths)terrainLine(p,35,townTheme==='winter'?'#d6a887':'#ca8c63');
+ for(const p of paths)terrainLine(p,29,'#efad80');
+ ctx.restore();
+}
+function drawPond(n){
+ if(n<12)return;
+ ctx.save();
+ const p=groundPoint(0,5);
+ // 既存の水タイルではなく雪や芝の岸を残す、浅い小さな池。
+ ctx.translate(p.x+8,p.y+9);
+ if(n>=18)ctx.translate(31,-14);
+ const rx=n>=18?79:47,ry=n>=18?24:19;
+ const winter=townTheme==='winter';
+ ctx.beginPath();
+ ctx.moveTo(-rx,1);
+ ctx.bezierCurveTo(-rx-2,-ry*.75,-rx*.52,-ry*1.08,-rx*.17,-ry*.84);
+ ctx.bezierCurveTo(rx*.25,-ry*1.23,rx*.85,-ry*.82,rx,-ry*.07);
+ ctx.bezierCurveTo(rx*1.04,ry*.73,rx*.32,ry*1.07,0,ry*.82);
+ ctx.bezierCurveTo(-rx*.55,ry*1.16,-rx,ry*.65,-rx,1);
+ ctx.closePath();
+ ctx.fillStyle=winter?'#acdce9':'#89cddd';ctx.fill();
+ ctx.strokeStyle=winter?'#8baebc':'#779d93';ctx.lineWidth=3;ctx.stroke();
+ ctx.save();ctx.clip();
+ ctx.strokeStyle=winter?'#e6f7fd':'#bcebf1';ctx.lineWidth=2.5;ctx.lineCap='round';
+ for(const [x,y,len] of [[-.61,-.2,.24],[-.06,.28,.30],[.38,-.38,.25]]){
+  ctx.beginPath();ctx.moveTo(rx*x,ry*y);ctx.quadraticCurveTo(rx*(x+len*.5),ry*y-2,rx*(x+len),ry*y);ctx.stroke();
+ }
+ ctx.restore();ctx.restore();
+}
+const pondBankImages={};
+function drawPondBankFlowers(n){
+ if(n<20)return;
+ const image=pondBankImages[townTheme==='winter'?'winter':'normal'];
+ if(!image||!image.complete||!image.naturalWidth)return;
+ // 池の手前左寄りの岸。背の高い木より先に描くので、木の後ろに自然に隠れる。
+ // 冬は立体の低木（左の角用）。素材の縦横比のまま、足元を同じ位置に合わせる。
+ const winter=townTheme==='winter';
+ const w=960*(winter?.059:.09),h=w*image.naturalHeight/image.naturalWidth;
+ const x=winter?66:115,y=winter?364:366;
+ ctx.drawImage(image,x-w/2,y-h,w,h);
+}
 function paint(){const n=displayedCount();ctx.clearRect(0,0,960,640);let gr=ctx.createLinearGradient(0,0,0,640);gr.addColorStop(0,townTheme==='winter'?'#dce8f0':'#e1e6d8');gr.addColorStop(1,townTheme==='winter'?'#f1f5f7':'#f6e9d7');ctx.fillStyle=gr;ctx.fillRect(0,0,960,640);ctx.fillStyle='rgba(140,151,125,.13)';ctx.beginPath();ctx.ellipse(480,555,380,43,0,0,Math.PI*2);ctx.fill();
- const pathSet=new Set(n>=4?['3,5','3,4','3,3','2,3','1,3','3,2','4,3']:[]);
- for(let z=0;z<=10;z++)for(let i=0;i<6;i++){let j=z-i;if(j<0||j>5)continue;let id='grass_center_N';if(n>=12&&i===0&&j===5)id='grass_water_N';else if(n>=18&&i===0&&j===4)id='grass_river_N';else if(pathSet.has(i+','+j))id=(i===3&&j===3)?'grass_pathCrossing_N':'grass_path_N';drawTile(id,i,j)}
+ for(let z=0;z<=10;z++)for(let i=0;i<6;i++){let j=z-i;if(j<0||j>5)continue;drawTile('grass_center_N',i,j)}
+ drawConnectedPaths(n);
+ drawPond(n);
+ drawPondBankFlowers(n);
  // 奥のタイルにあるオブジェクトから順に描くことで、重なり方が自然になる。
- for(let z=0;z<=10;z++)for(let i=0;i<6;i++){let j=z-i;if(j<0||j>5)continue;for(const p of props){const [at,id,x,y,roof]=p;if(x!==i||y!==j||at>n)continue;drawTile(id,i,j,'prop');if(roof)drawTile(roof,i,j,'prop',54)}}
+ for(let z=0;z<=10;z++)for(let i=0;i<6;i++){let j=z-i;if(j<0||j>5)continue;for(const p of props){const [at,id,x,y,roof]=p;if(x!==i||y!==j||at>n)continue;if(n>=12&&at===5&&id==='tree_single_N'&&x===0&&y===5)continue;drawTile(id,i,j,'prop');if(roof)drawTile(roof,i,j,'prop',54)}}
  renderFlowers(n);
 }
-function renderProgress(){const n=count(),next=milestones.find(x=>x.at>n);$('totalDone').textContent=n;$('level').textContent=String(1+Math.floor(n/8)).padStart(2,'0');$('worldNote').textContent=preview?'PREVIEW':n===0?'START':`${n} CLEAR`;if(next){$('nextTitle').textContent=`NEXT：${next.label} まであと ${next.at-n}`;$('nextDescription').textContent='NEW ITEM';const prev=milestones.filter(x=>x.at<=n).at(-1)?.at||0;$('progressFill').style.width=((n-prev)/(next.at-prev)*100)+'%'}else{$('nextTitle').textContent='LEVEL MAX';$('nextDescription').textContent='ALL UNLOCKED';$('progressFill').style.width='100%'}$('milestones').innerHTML=milestones.map(x=>`<div class="milestone ${n>=x.at?'done':''}"><span>${n>=x.at?'✓':'○'} ${x.label}</span><strong>${x.at} 回</strong></div>`).join('');$('previewTag').hidden=!preview}
+function renderProgress(){
+ const actual=count(),n=displayedCount(),next=milestones.find(x=>x.at>n);
+ $('totalDone').textContent=actual;
+ $('level').textContent=String(1+Math.floor(n/8)).padStart(2,'0');
+ $('worldNote').textContent=preview?n+' CLEAR / PREVIEW':n===0?'START':n+' CLEAR';
+ // 見学中は「見学中の街」の話だと分かる表示にして、下の実際の記録と食い違って見えないようにする。
+ $('levelLabel').textContent=preview?'見学中 LV':'TOWN LEVEL';
+ if(preview){
+  $('nextTitle').textContent='見学中：'+n+'回の街';
+  $('nextDescription').textContent='実際の達成は '+actual+' 回。見学しても記録は変わりません';
+  $('progressFill').style.width=Math.min(100,n/75*100)+'%';
+ }else if(next){
+  $('nextTitle').textContent='NEXT：'+next.label+' まであと '+(next.at-n);
+  $('nextDescription').textContent='NEW ITEM';
+  const prev=milestones.filter(x=>x.at<=n).at(-1)?.at||0;
+  $('progressFill').style.width=((n-prev)/(next.at-prev)*100)+'%';
+ }else{
+  $('nextTitle').textContent='LEVEL MAX';$('nextDescription').textContent='ALL UNLOCKED';
+  $('progressFill').style.width='100%';
+ }
+ $('milestones').innerHTML=milestones.map(x=>'<div class="milestone '+(actual>=x.at?'done':'')+'"><span>'+(actual>=x.at?'✓':'○')+' '+x.label+'</span><strong>'+x.at+' 回</strong></div>').join('');
+ $('previewTag').hidden=!preview;
+}
 function render(){renderTasks();renderProgress();renderAvatar();paint();renderHistory();updateDecorUnlocks()}
-$('previewButton').addEventListener('click',()=>{preview=!preview;$('previewButton').textContent=preview?'MAP に戻る':'PREVIEW';renderProgress();paint()});
+$('previewButton').addEventListener('click',()=>{preview=!preview;$('previewButton').textContent=preview?'自分の街に戻る':'未来の街を見る';renderProgress();paint()});
 // 専用の保存データを JSON としてエクスポート/復元できる。
 $('backupButton').addEventListener('click',()=>{const data=JSON.stringify({...state,version:1,exportedAt:new Date().toISOString()},null,2);const blob=new Blob([data],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='little-town-backup-'+nowDate()+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),6000);toast('記録を書き出したよ')});
 $('restoreFile').addEventListener('change',e=>{let f=e.target.files?.[0];e.target.value='';if(!f)return;if(f.size>3*1024*1024)return toast('ファイルは3MB以下にしてね');const fr=new FileReader();fr.onload=()=>{try{const data=JSON.parse(String(fr.result));if(!Array.isArray(data.tasks)||!Array.isArray(data.log))throw Error('形式が違います');if(!confirm('今のタスクと記録をバックアップの内容で置き換える？'))return;const tasks=data.tasks.filter(t=>t&&typeof t.name==='string'&&typeof t.id==='string').slice(0,3).map(t=>({id:t.id.slice(0,64),name:t.name.slice(0,32)}));const log=data.log.filter(x=>x&&typeof x.id==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x.day)).slice(-4000).map(x=>({id:x.id.slice(0,64),name:String(x.name||'').slice(0,32),day:x.day,at:Number(x.at)||0}));state={tasks,log,avatar:typeof data.avatar==='string'&&/^data:image\/(png|jpeg|webp|gif);base64,/.test(data.avatar)?data.avatar:'',name:typeof data.name==='string'?data.name.slice(0,18):'まる',townDecor:data.townDecor&&typeof data.townDecor==='object'&&!Array.isArray(data.townDecor)?data.townDecor:{},settings:data.settings&&typeof data.settings==='object'&&!Array.isArray(data.settings)?data.settings:{}};let ok=persist();preview=false;readSavedDecor();decorStored=readStoredDecor();renderDecorPositions();render();toast(ok?'記録を復元したよ':'復元したよ。ただし保存できない環境です')}catch(err){toast('JSONファイルを確認してね')}};fr.readAsText(f)});
 function loadImages(){
+ for(const [season,src] of Object.entries({normal:'garden/tiny-bloom-pink.svg?v=2',winter:'garden/bush-left-snow-pink.svg?v=1'})){
+  const img=new Image();
+  img.onload=()=>{pondBankImages[season]=img;paint()};
+  img.onerror=()=>console.warn('池の岸の花を読み込めませんでした',season);
+  img.src=src;
+ }
+
  for(const name of tiles){
   const img=new Image();
   img.onload=()=>{images[name]=img;try{winterImages[name]=window.littleTownWinterTile?.(name,img)}catch(error){console.warn('冬用画像の加工に失敗',name,error)}paint()};
@@ -152,7 +236,7 @@ function loadImages(){
    const img=new Image();
    img.onload=()=>{(winter?winterImages:images)[name]=img;paint()};
    img.onerror=()=>console.warn('街のパーツの読み込みに失敗',name,winter);
-   img.src='garden/'+name+(winter?'_winter':'')+'.svg';
+   img.src='garden/'+name+(winter?'_winter':'')+'.svg?v=iso2';
   }
  }
 }
@@ -175,7 +259,7 @@ function historyStats(){
 function renderDayLog(){
  const panel=$('selectedDayLog');const entries=state.log.filter(x=>x.day===selectedDay);
  $('selectedDayTitle').textContent=selectedDay.replace(/^(\d{4})-(\d{2})-(\d{2})$/,(_,y,m,d)=>y+' / '+Number(m)+' / '+Number(d));
- if(!entries.length){panel.innerHTML='<p class="log-empty">NO RECORDS</p>';return}
+ if(!entries.length){panel.innerHTML='<p class="log-empty">この日の記録はまだありません</p>';return}
  panel.innerHTML=entries.map((e,i)=>'<div class="day-log-item"><span class="log-check">✓</span><span>'+escaped(e.name||state.tasks.find(t=>t.id===e.id)?.name||'タスク')+'</span></div>').join('');
 }
 function renderHistory(){
@@ -373,6 +457,7 @@ for(const [key,element] of Object.entries(decorElements)){
 }
 $('editDecor').addEventListener('click',()=>setDecorEditing(!decorEditing));
 $('resetDecor').addEventListener('click',()=>{
+ if(!confirm('飾りの配置を最初の位置に戻す？\n今の配置は元に戻せません。'))return;
  decorPositions=JSON.parse(JSON.stringify(decorDefaults));
  renderDecorPositions();saveDecorPositions();toast('飾りの配置を戻したよ');
 });

@@ -25,7 +25,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="little town.">
-  <link rel="stylesheet" href="style.css?v=20261117-avatar2"><link rel="stylesheet" href="seasonal.css?v=20261117-garden1">
+  <link rel="stylesheet" href="style.css?v=20261117-avatar2"><link rel="stylesheet" href="seasonal.css?v=20261117-iso1">
   <title>little town. | MY TOWN</title>
 </head>
 <body>
@@ -39,19 +39,19 @@
       <section class="board panel" aria-label="あなたの街">
         <div class="board-header">
           <div><span class="kicker">TOWN MAP</span><h1>MY TOWN</h1></div>
-          <div class="level" aria-label="街のレベル"><small>TOWN LEVEL</small><strong id="level">01</strong></div>
+          <div class="level" aria-label="街のレベル"><small id="levelLabel">TOWN LEVEL</small><strong id="level">01</strong></div>
         </div>
         <div class="world" id="world">
           <canvas id="townCanvas" width="960" height="640" role="img" aria-label="習慣の達成回数に応じて建物や木が増えていく立体的な街"></canvas>
           <div class="flower-ground" id="flowerGround" aria-hidden="true">
-            <span class="flower-cluster flower-pink" data-bloom-at="20" data-flower="pink" style="--fx:18%;--fy:48%" hidden></span>
-            <span class="flower-cluster flower-white" data-bloom-at="35" data-flower="white" style="--fx:82%;--fy:49%" hidden></span>
-            <span class="flower-cluster flower-white" data-bloom-at="50" data-flower="white" style="--fx:33%;--fy:89%" hidden></span>
-            <span class="flower-cluster flower-pink" data-bloom-at="65" data-flower="pink" style="--fx:73%;--fy:88%" hidden></span>
-            <span class="flower-cluster flower-white" data-bloom-at="68" data-flower="white" style="--fx:11%;--fy:52%" hidden></span>
-            <span class="flower-cluster flower-pink" data-bloom-at="70" data-flower="pink" style="--fx:89%;--fy:55%" hidden></span>
-            <span class="flower-cluster flower-pink" data-bloom-at="73" data-flower="pink" style="--fx:25%;--fy:85%" hidden></span>
-            <span class="flower-cluster flower-white" data-bloom-at="75" data-flower="white" style="--fx:82%;--fy:83%" hidden></span>
+            <!-- 池の手前の花（20回）はCanvasの地形レイヤーで描画 -->
+            <span class="flower-cluster flower-white" data-bloom-at="35" data-flower="white" data-side="right" style="--fx:84.4%;--fy:48.6%" hidden></span>
+            <span class="flower-cluster flower-white" data-bloom-at="50" data-flower="white" data-edge="down" style="--fx:33.1%;--fy:88.3%;z-index:2" hidden></span>
+            <span class="flower-cluster flower-pink" data-bloom-at="65" data-flower="pink" data-edge="up" style="--fx:73.6%;--fy:83.2%;z-index:2" hidden></span>
+            <span class="flower-cluster flower-white" data-bloom-at="68" data-flower="white" data-side="left" style="--fx:11%;--fy:52%" hidden></span>
+            <span class="flower-cluster flower-pink" data-bloom-at="70" data-flower="pink" data-side="right" style="--fx:89%;--fy:55%" hidden></span>
+            <span class="flower-cluster flower-pink" data-bloom-at="73" data-flower="pink" data-edge="down" style="--fx:24%;--fy:81.4%;z-index:1" hidden></span>
+            <span class="flower-cluster flower-white" data-bloom-at="75" data-flower="white" data-edge="up" style="--fx:82.6%;--fy:76.5%;z-index:1" hidden></span>
           </div>
           <div class="world-note" id="worldNote">小さな街のはじまり</div>
           <div class="christmas-front" id="christmasFront" aria-label="クリスマス装飾"><span class="decor-item decor-tree" hidden title="ツリー"></span><span class="decor-item decor-gift" hidden title="プレゼント"></span><span class="decor-item decor-snowman" hidden title="雪だるま"></span><span class="decor-item decor-cane" hidden title="キャンディケイン"></span><span class="decor-item decor-wreath" hidden title="リース"></span></div>
@@ -70,8 +70,6 @@
           <div class="preview-controls" aria-label="街の操作">
             <button class="secondary" type="button" id="winterToggle" aria-pressed="true">冬モード：ON</button>
             <button class="secondary" type="button" id="decorToggle" aria-pressed="true">飾り：ON</button>
-            <button class="secondary" type="button" id="editDecor" aria-pressed="false">配置を変える</button>
-            <button class="secondary" type="button" id="resetDecor">配置をリセット</button>
             <button class="secondary" type="button" id="previewButton">未来の街を見る</button>
             <button class="secondary" type="button" id="openPostcard"><span aria-hidden="true">✉</span> ポストカード</button>
           </div>
@@ -81,7 +79,10 @@
         <section class="decor-shelf" aria-labelledby="decorShelfTitle">
           <div class="decor-shelf-head">
             <div><span class="kicker">HOLIDAY COLLECTION</span><h3 id="decorShelfTitle">飾りの収納</h3></div>
-            <button class="secondary" type="button" id="suggestDecor">おすすめ配置</button>
+            <div class="decor-shelf-actions">
+              <button class="secondary" type="button" id="editDecor" aria-pressed="false">配置を変える</button>
+              <button class="secondary" type="button" id="suggestDecor">おすすめ配置</button>
+            </div>
           </div>
           <p class="decor-shelf-help">獲得した飾りをタップして、街に出す／しまうを切り替えられます。</p>
           <div class="decor-shelf-items" id="decorShelfItems" aria-label="飾りの出し入れ">
@@ -91,6 +92,7 @@
             <button type="button" data-decor-shelf="snowman" aria-pressed="false"><span class="shelf-thumb shelf-snowman"></span><span>雪だるま</span><small>未解放</small></button>
             <button type="button" data-decor-shelf="tree" aria-pressed="false"><span class="shelf-thumb shelf-tree"></span><span>ツリー</span><small>未解放</small></button>
           </div>
+          <p class="decor-reset"><button class="text-button" type="button" id="resetDecor">配置を最初の位置に戻す</button></p>
         </section>
         <div class="art-credit">街の素材：<a href="https://kenney.nl/assets/sketch-town" target="_blank" rel="noopener noreferrer">Kenney / Sketch Town</a>（CC0）</div>
       </section>
@@ -167,9 +169,8 @@
       <div class="postcard-image-area"><img id="postcardImage" alt="街のポストカード画像のプレビュー"></div>
       <p class="postcard-help" id="postcardStatus" role="status" aria-live="polite">画像を準備しています…</p>
       <div class="postcard-actions">
-        <button type="button" id="cancelPostcard" class="text-button">閉じる</button>
-        <button type="button" id="openPostcardImage" class="secondary" disabled>画像を開く</button>
-        <button type="button" id="sharePostcard" class="primary" disabled>画像を共有</button><button type="button" id="sharePostcardX" class="secondary" disabled>Xで投稿</button>
+        <button type="button" id="sharePostcard" class="primary" disabled>画像を共有</button>
+        <div class="postcard-sub"><button type="button" id="cancelPostcard" class="secondary">閉じる</button></div>
       </div>
     </section>
   </div>
@@ -190,8 +191,8 @@
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="winter.js?v=20261116-season1"></script>
-  <script src="app.js?v=20261117-garden1" defer></script>
-  <script src="postcard.js?v=20261117-garden1" defer></script>
+  <script src="app.js?v=20261117-iso1" defer></script>
+  <script src="postcard.js?v=20261117-iso1" defer></script>
   <script src="notice.js?v=20261116-notice1" defer></script>
 </body>
 </html>
