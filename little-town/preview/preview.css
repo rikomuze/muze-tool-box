@@ -92,3 +92,13 @@
  .decor-shelf-items button span:not(.shelf-thumb){font-size:9px}
  .shelf-thumb{width:25px;height:41px}
 }
+
+
+/* 15回の街を保護しつつ完成まで確認できるプレビュー専用の段階切り替え */
+.town-stage-picker{margin:10px 0 4px;padding:13px;border:2px solid #a8bd95;background:#f4f4e9;display:grid;gap:8px}
+.town-stage-picker[hidden]{display:none!important}
+.town-stage-options{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.town-stage-options button{min-width:0;min-height:39px;border:2px solid #809d78;background:#fff9e3;color:#416a49;border-radius:3px;font-size:12px;font-weight:900;cursor:pointer}
+.town-stage-options button.is-selected{background:#ffda80;box-shadow:3px 3px 0 #a1b58c;border-color:#476d4b}
+.town-stage-picker small{font-size:10px;color:#587559;line-height:1.5}
+@media(max-width:520px){.town-stage-picker{padding:8px}.town-stage-options{gap:4px}.town-stage-options button{padding:7px 1px;font-size:10px;min-height:35px}}
