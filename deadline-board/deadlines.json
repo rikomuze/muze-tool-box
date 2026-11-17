@@ -735,6 +735,17 @@
       "url": "https://www.nhk.or.jp/radio/player/ondemand.html?p=Z9WGYY3GP5_01_4338312&e-param=94W6VPB4WN&cid=jp-Z9WGYY3GP5",
       "note": "DJ：NAOYA・RYUKI／ゲスト：Billyrrom",
       "source": "NHKらじる★らじる"
+    },
+    {
+      "id": "muzeum-broadcast-kairyu-eiki-20261124",
+      "short": "MUZEUM館内放送（KAIRYU・EIKI）",
+      "title": "11/17実施 MUZEUM館内放送（KAIRYU・EIKI）アーカイブ視聴期限",
+      "category": "stream",
+      "tag": "MUZEUM",
+      "end": "2026-11-24T23:59:00+09:00",
+      "url": "https://mazzel.tokyo/",
+      "note": "FC会員限定",
+      "source": "MUZEUMアーカイブ画面"
     }
   ]
 }
