@@ -245,7 +245,7 @@ const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;let b
 // このプレビュー専用の配置データ。本番サイトやタスク記録に干渉しない。
 const decorDefaults={
  tree:{x:9,y:46},gift:{x:29,y:67},snowman:{x:76,y:62},
- cane:{x:66,y:68},wreath:{x:31.2,y:32.8}
+ cane:{x:34.5,y:6},wreath:{x:31.2,y:32.8}
 };
 const decorStoreKey='little-town-preview-decor-v1';
 const decorHiddenKey='little-town-preview-decor-hidden-v1';
@@ -271,11 +271,11 @@ try{
 }catch(err){console.warn('プレビューの装飾位置を読み込めませんでした',err)}
 // 成長段階に応じて建物の密集する位置を避ける。配置を変える操作はこれまでどおり優先する。
 const decorSuggestions=[
- {max:8,positions:{tree:{x:12,y:40},gift:{x:34,y:67},snowman:{x:77,y:53},cane:{x:66,y:72},wreath:{x:55,y:47}}},
- {max:24,positions:{tree:{x:7,y:43},gift:{x:26,y:72},snowman:{x:79,y:62},cane:{x:65,y:75},wreath:{x:55,y:47}}},
- {max:41,positions:{tree:{x:5,y:48},gift:{x:25,y:73},snowman:{x:81,y:64},cane:{x:67,y:76},wreath:{x:55,y:47}}},
- {max:74,positions:{tree:{x:7,y:46},gift:{x:27,y:74},snowman:{x:81,y:64},cane:{x:67,y:77},wreath:{x:31.2,y:32.8}}},
- {max:Infinity,positions:{tree:{x:9,y:46},gift:{x:29,y:67},snowman:{x:76,y:62},cane:{x:66,y:68},wreath:{x:31.2,y:32.8}}}
+ {max:8,positions:{tree:{x:12,y:40},gift:{x:34,y:67},snowman:{x:77,y:53},cane:{x:34.5,y:6},wreath:{x:55,y:47}}},
+ {max:24,positions:{tree:{x:7,y:43},gift:{x:26,y:72},snowman:{x:79,y:62},cane:{x:34.5,y:6},wreath:{x:55,y:47}}},
+ {max:41,positions:{tree:{x:5,y:48},gift:{x:25,y:73},snowman:{x:81,y:64},cane:{x:34.5,y:6},wreath:{x:55,y:47}}},
+ {max:74,positions:{tree:{x:7,y:46},gift:{x:27,y:74},snowman:{x:81,y:64},cane:{x:34.5,y:6},wreath:{x:31.2,y:32.8}}},
+ {max:Infinity,positions:{tree:{x:9,y:46},gift:{x:29,y:67},snowman:{x:76,y:62},cane:{x:34.5,y:6},wreath:{x:31.2,y:32.8}}}
 ];
 function getSuggestedDecorPositions(){
  const n=displayedCount();
