@@ -26,7 +26,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="little town.">
-  <link rel="stylesheet" href="../style.css?v=20261116-preview2"><link rel="stylesheet" href="preview.css?v=garden-polish1">
+  <link rel="stylesheet" href="../style.css?v=20261116-preview2"><link rel="stylesheet" href="preview.css?v=flower4">
   <title>little town. | CHRISTMAS PREVIEW</title>
 </head>
 <body>
@@ -45,6 +45,12 @@
         </div>
         <div class="world" id="world">
           <canvas id="townCanvas" width="960" height="640" role="img" aria-label="習慣の達成回数に応じて建物や木が増えていく立体的な街"></canvas>
+          <div class="flower-ground" id="flowerGround" aria-hidden="true">
+            <span class="flower-cluster flower-nw flower-pink" data-bloom-at="20" hidden></span>
+            <span class="flower-cluster flower-ne flower-rose" data-bloom-at="35" hidden></span>
+            <span class="flower-cluster flower-sw flower-rose" data-bloom-at="50" hidden></span>
+            <span class="flower-cluster flower-se flower-pink" data-bloom-at="65" hidden></span>
+          </div>
           <div class="world-note" id="worldNote">小さな街のはじまり</div>
           <div class="christmas-front" id="christmasFront" aria-label="クリスマス装飾"><span class="decor-item decor-tree" title="ツリー"></span><span class="decor-item decor-gift" title="プレゼント"></span><span class="decor-item decor-snowman" title="雪だるま"></span><span class="decor-item decor-cane" title="キャンディケイン"></span><span class="decor-item decor-wreath" title="リース"></span></div>
           <div class="walker" id="walker" aria-hidden="true"><div class="walker-image" id="walkerImage"></div></div>
@@ -178,7 +184,7 @@
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="winter.js?v=1"></script>
-  <script src="app.js?v=garden-polish1" defer></script>
-  <script src="postcard.js?v=decor-shelf1" defer></script>
+  <script src="app.js?v=flower4" defer></script>
+  <script src="postcard.js?v=flower4" defer></script>
 </body>
 </html>
