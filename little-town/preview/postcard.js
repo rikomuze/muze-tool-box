@@ -78,7 +78,13 @@
         const src=(getComputedStyle(part).backgroundImage.match(/url\(["']?(.*?)["']?\)/)||[])[1];
         if(!src)continue;
         const img=await getAsset(src);
-        placeRect(ctx,part,rect,bounds,(x,y,w,h)=>{if(w>0&&h>0)ctx.drawImage(img,x,y,w,h)});
+        // 5点並びの画像（ツリー・雪だるま）は、その絵の部分だけを切り出す。
+        const atlasIndex=/christmas-atlas/.test(src)?['tree','gift','snowman','cane'].findIndex(k=>part.classList.contains('decor-'+k)):-1;
+        placeRect(ctx,part,rect,bounds,(x,y,w,h)=>{
+          if(!(w>0&&h>0))return;
+          if(atlasIndex>=0){const cw=img.naturalWidth/5;ctx.drawImage(img,atlasIndex*cw,0,cw,img.naturalHeight,x,y,w,h)}
+          else ctx.drawImage(img,x,y,w,h);
+        });
       }
     }
     if(includeCharacter){
