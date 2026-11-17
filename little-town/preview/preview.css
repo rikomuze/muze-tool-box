@@ -110,24 +110,10 @@
 .garden-review-link a:focus-visible{outline:3px solid #4a7551;outline-offset:3px}
 .garden-review-link small{font-size:10px;color:#6b816b}
 
-/* 4隅の花：承認されたピンクの花木・白いバラの透過素材を使用。板や鉢は置かない。 */
+
+/* 小花：地面に直接咲く、低い群れ。全達成段階で同じサイズ。 */
 .flower-ground{position:absolute;inset:0;z-index:2;pointer-events:none}
 .flower-ground[hidden],.flower-cluster[hidden]{display:none!important}
-.flower-cluster{
- position:absolute;display:block;aspect-ratio:1/1;
- background-image:url('completion/flowers-atlas.webp');
- background-repeat:no-repeat;background-size:200% 100%;
- filter:drop-shadow(0 3px 2px #47674630);
- transition:width .25s ease,left .25s ease,top .25s ease;
-}
-.flower-pink{background-position:0% 0%}
-.flower-rose{background-position:100% 0%}
-.flower-nw{left:12%;top:19%;width:15%}
-.flower-ne{left:73%;top:21%;width:15%}
-.flower-sw{left:24%;top:69%;width:16%}
-.flower-se{left:70%;top:69%;width:17%}
-.flower-nw.is-full{left:11%;top:17%;width:17%}
-.flower-ne.is-full{left:72%;top:18%;width:18%}
-.flower-sw.is-full{left:23%;top:67%;width:19%}
-.flower-se.is-full{left:69%;top:67%;width:20%}
-@media(prefers-reduced-motion:reduce){.flower-cluster{transition:none}}
+.flower-cluster{position:absolute;display:block;left:var(--fx);top:var(--fy);width:9%;aspect-ratio:150/78;transform:translate(-50%,-100%);background-position:center;background-repeat:no-repeat;background-size:contain}
+.flower-pink{background-image:url('garden/tiny-bloom-pink.svg?v=2')}
+.flower-white{background-image:url('garden/tiny-bloom-white.svg?v=2')}
