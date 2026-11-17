@@ -107,15 +107,15 @@ const props=[
  [13,'building_doorBeige_N',4,3,'roof_roundedGreen_N'],
  [16,'building_window_N',2,4,'roof_pointPurple_N'],
  [19,'tree_single_N',2,0],[22,'building_windowBeige_N',4,1,'roof_gableGreen_N'],
- [25,'fountain_N',2,2],[27,'flowerbed_N',0,3],[29,'market_stall_N',2,1],
+ [25,'fountain_N',2,2],[27,'tree_single_N',0,3],[29,'market_stall_N',2,1],
  [33,'tree_multiple_N',0,4],[36,'building_door_N',5,2,'roof_slantPurple_N'],
- [39,'market_stall_N',4,4],[42,'flowerbed_N',3,2],
+ [39,'market_green_N',4,4],[42,'tree_single_N',3,2],
  [48,'building_window_N',1,3,'roof_roundedGreen_N'],
- [52,'flowerbed_N',5,3],[55,'windmill_N',1,1],[60,'flowerbed_N',2,5],
- [65,'tree_multiple_N',4,5],[70,'flowerbed_N',1,5],[75,'flowerbed_N',0,0]
+ [52,'tree_single_N',5,3],[55,'windmill_N',1,1],[60,'tree_single_N',2,5],
+ [65,'tree_multiple_N',4,5],[70,'tree_single_N',1,5],[75,'tree_multiple_N',0,0]
 ];
-const milestones=[{at:1,label:'ちいさな木'},{at:9,label:'はじめのおうち'},{at:25,label:'広場と噴水'},{at:42,label:'お店のある街'},{at:55,label:'風車の丘'},{at:75,label:'花いっぱいの街'}];
-const gardenTiles=['market_stall_N','fountain_N','windmill_N','flowerbed_N'];
+const milestones=[{at:1,label:'ちいさな木'},{at:9,label:'はじめのおうち'},{at:25,label:'広場と噴水'},{at:42,label:'お店のある街'},{at:55,label:'風車の丘'},{at:75,label:'にぎやかな街'}];
+const gardenTiles=['market_stall_N','market_green_N','fountain_N','windmill_N'];
 let previewStage=75;
 const displayedCount=()=>preview?previewStage:count();
 function paint(){const n=displayedCount();ctx.clearRect(0,0,960,640);let gr=ctx.createLinearGradient(0,0,0,640);gr.addColorStop(0,townTheme==='winter'?'#dce8f0':'#e1e6d8');gr.addColorStop(1,townTheme==='winter'?'#f1f5f7':'#f6e9d7');ctx.fillStyle=gr;ctx.fillRect(0,0,960,640);ctx.fillStyle='rgba(140,151,125,.13)';ctx.beginPath();ctx.ellipse(480,555,380,43,0,0,Math.PI*2);ctx.fill();
