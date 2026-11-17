@@ -153,3 +153,63 @@
 .flower-ground.is-winter .flower-pink[data-side="left"]{background-image:url('garden/bush-left-snow-pink.svg?v=1')}
 .flower-ground.is-winter .flower-white[data-side="right"]{background-image:url('garden/bush-right-snow-white.svg?v=1')}
 .flower-ground.is-winter .flower-pink[data-side="right"]{background-image:url('garden/bush-right-snow-pink.svg?v=1')}
+
+/* ===== UIの見直し（プレビューのみ）===== */
+/* 1. 小さすぎる文字を11〜12px以上に。 */
+.app .kicker{font-size:11px}
+.app .level small{font-size:10.5px;letter-spacing:.04em;white-space:nowrap}
+.app .world-note,.app .preview-tag{font-size:11px}
+.app .preview-notice{font-size:12px}
+.app .next span{font-size:12px;line-height:1.5}
+.app .preview-controls button{font-size:12.5px!important}
+.app .decor-shelf-head .secondary{font-size:12px}
+.app .decor-shelf-help{font-size:12px}
+.app .decor-shelf-items button>span:not(.shelf-thumb),.app .decor-shelf-items button>small{font-size:11px}
+.app .town-stage-options button{font-size:12.5px}
+.app .town-stage-picker small{font-size:12px;line-height:1.6}
+.app .art-credit{font-size:11px}
+.app .avatar-meta label{font-size:12px}
+.app .small-buttons .secondary,.app .small-buttons .text-button{font-size:12px}
+.app .history-stats span{font-size:11px}
+.app .calendar-weekdays span,.app .calendar-legend span{font-size:11px}
+.app .history-bottom>strong{font-size:12px}
+.app .milestone span{font-size:12.5px}.app .milestone strong{font-size:12px}
+.app .backup-row .secondary{font-size:12px}.app .backup-row>span{font-size:12px;line-height:1.6}
+.app footer,.app footer a{font-size:11px}
+.app .home-link{font-size:12px}
+/* 2. 押しにくいボタン・リンクを高さ44px以上に。 */
+.app .home-link{display:inline-flex;align-items:center;min-height:44px}
+.app .town-stage-options button{min-height:44px}
+.app .calendar-head button{width:44px;height:44px}
+.app .calendar-head .calendar-today{width:auto;height:44px;padding:0 13px;font-size:12px}
+.app .calendar-head h3{margin:0 6px}
+.app .avatar-meta input{min-height:44px}
+.app .small-buttons .secondary,.app .small-buttons .text-button,.app .backup-row .secondary,.app .decor-shelf-head .secondary{min-height:44px;display:inline-flex;align-items:center;justify-content:center}
+.app .garden-review-link a{min-height:44px;display:inline-flex;align-items:center}
+.app .art-credit a,.app footer a{display:inline-block;padding:15px 0}
+.app footer{align-items:center}
+/* 3. 街の操作：切り替え（ON/OFF）と、開く・移動するボタンを見分けやすく。配置の操作は「飾りの収納」へ。 */
+.app .preview-controls button{min-height:46px}
+.app .preview-controls button[aria-pressed="true"]{background:#d9eebd;border-color:#5f8a52;color:#2f5a38}
+.app .preview-controls button[aria-pressed="false"]{background:#fffdf2;border-color:#a9b99b;color:#5f7a5f;box-shadow:none}
+.decor-shelf-actions{display:flex;gap:8px;flex-wrap:wrap}
+.decor-shelf-actions #editDecor{border:2px solid #76966e;background:#fff5c8;color:#476947}
+.decor-shelf-actions #editDecor[aria-pressed="true"]{background:#d9eebd;border-color:#5f8a52}
+.decor-reset{margin:10px 0 0;text-align:right}
+.decor-reset .text-button{font-size:12px;min-height:44px;padding:0 4px;color:#6b7f69}
+.decor-reset .text-button:disabled{opacity:.45}
+/* 4. ポストカード：いちばん使う「共有」を上に大きく。「閉じる」は保存系と分けて一番下。 */
+#postcardModal .postcard-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;align-items:stretch}
+#postcardModal .postcard-actions button{width:100%;min-width:0;min-height:46px;font-size:13px;white-space:normal}
+#postcardModal .postcard-actions #sharePostcard{grid-column:1/-1;min-height:50px;font-size:14px}
+.postcard-sub{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:5px;padding-top:11px;border-top:2px dashed #c3d2b3}
+#postcardModal .postcard-sub button{width:auto;min-height:44px;font-size:12.5px}
+#postcardModal .postcard-sub #cancelPostcard{min-width:108px}
+#postcardModal .postcard-sub .text-button{padding-left:0;text-align:left}
+#postcardModal .postcard-actions button:disabled{opacity:.45}
+#postcardModal .postcard-help{font-size:12px}
+/* 5. タスクがないときは「0 / 0」を出さない。 */
+.count[hidden]{display:none}
+/* 6. 記録がない日の余白を詰める。 */
+.app .day-log{min-height:0}
+.app .log-empty{font-size:12.5px;letter-spacing:.02em;padding:14px 2px 18px}

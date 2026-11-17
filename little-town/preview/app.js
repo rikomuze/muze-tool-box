@@ -11,7 +11,7 @@ function checkStorage(){try{let t=KEY+'-probe';localStorage.setItem(t,'ok');let 
 function showSave(ok){const el=$('saveStatus');el.className='status '+(ok?'ok':'error');el.textContent=ok?'✓ このブラウザへの保存を確認できました':'⚠ この表示環境では保存できません。ブラウザで公開URLを開くか、記録を書き出してください。'}
 function load(){storageOK=checkStorage();if(storageOK){try{let j=JSON.parse(localStorage.getItem(KEY)||'null');if(j&&Array.isArray(j.tasks)&&Array.isArray(j.log))state={tasks:j.tasks.slice(0,3),log:j.log,avatar:typeof j.avatar==='string'?j.avatar:'',name:typeof j.name==='string'?(j.name==='まるこ'&&!j.avatar?'まる':j.name):'まる'}}catch(e){console.warn('保存データを読めません',e)}}showSave(storageOK)}
 function persist(){if(!storageOK){showSave(false);return false}try{let j=JSON.stringify(state);localStorage.setItem(KEY,j);if(localStorage.getItem(KEY)!==j)throw Error('保存の検証に失敗');showSave(true);return true}catch(e){storageOK=false;showSave(false);console.warn('保存失敗',e);return false}}
-function renderTasks(){const list=$('taskList');list.innerHTML='';state.tasks.forEach((t,i)=>{let done=finished(t.id),el=document.createElement('div');el.className='task'+(done?' done':'');el.innerHTML=`<span class="task-icon">${['✿','♫','✦'][i]}</span><div class="task-title"><strong>${escaped(t.name)}</strong><small>${done?'DONE':'NOT YET'}</small></div><button type="button" class="edit-button" title="編集" aria-label="${escaped(t.name)}を編集" data-edit="${escaped(t.id)}">⋯</button><button type="button" class="complete-button" data-done="${escaped(t.id)}" ${done?'disabled':''}>${done?'✓ 完了':'できた！'}</button>`;list.append(el)});if(state.tasks.length<3){let el=document.createElement('button');el.className='empty-slot';el.textContent='＋ ADD TASK';el.type='button';el.dataset.add='1';list.append(el)}$('todayDone').textContent=dayCount();$('todayMax').textContent=' / '+state.tasks.length}
+function renderTasks(){const list=$('taskList');list.innerHTML='';state.tasks.forEach((t,i)=>{let done=finished(t.id),el=document.createElement('div');el.className='task'+(done?' done':'');el.innerHTML=`<span class="task-icon">${['✿','♫','✦'][i]}</span><div class="task-title"><strong>${escaped(t.name)}</strong><small>${done?'DONE':'NOT YET'}</small></div><button type="button" class="edit-button" title="編集" aria-label="${escaped(t.name)}を編集" data-edit="${escaped(t.id)}">⋯</button><button type="button" class="complete-button" data-done="${escaped(t.id)}" ${done?'disabled':''}>${done?'✓ 完了':'できた！'}</button>`;list.append(el)});if(state.tasks.length<3){let el=document.createElement('button');el.className='empty-slot';el.textContent='＋ ADD TASK';el.type='button';el.dataset.add='1';list.append(el)}$('todayDone').textContent=dayCount();$('todayMax').textContent=' / '+state.tasks.length;$('todayMax').parentElement.hidden=!state.tasks.length}
 function openTask(id){editing=id||null;const t=state.tasks.find(x=>x.id===editing);$('taskName').value=t?t.name:'';$('modalTitle').textContent=t?'タスクを編集':'タスクを追加';$('deleteTask').hidden=!t;$('taskModal').hidden=false;$('taskName').focus()}
 function closeTask(){$('taskModal').hidden=true;editing=null}
 $('taskList').addEventListener('click',e=>{let btn=e.target.closest('button');if(!btn)return;if(btn.dataset.add)openTask(null);else if(btn.dataset.edit)openTask(btn.dataset.edit);else if(btn.dataset.done)complete(btn.dataset.done)});
@@ -196,7 +196,13 @@ function renderProgress(){
  $('totalDone').textContent=actual;
  $('level').textContent=String(1+Math.floor(n/8)).padStart(2,'0');
  $('worldNote').textContent=preview?n+' CLEAR / PREVIEW':n===0?'START':n+' CLEAR';
- if(next){
+ // 見学中は「見学中の街」の話だと分かる表示にして、下の実際の記録と食い違って見えないようにする。
+ $('levelLabel').textContent=preview?'見学中 LV':'TOWN LEVEL';
+ if(preview){
+  $('nextTitle').textContent='見学中：'+n+'回の街';
+  $('nextDescription').textContent='実際の達成は '+actual+' 回。見学しても記録は変わりません';
+  $('progressFill').style.width=Math.min(100,n/75*100)+'%';
+ }else if(next){
   $('nextTitle').textContent='NEXT：'+next.label+' まであと '+(next.at-n);
   $('nextDescription').textContent='NEW ITEM';
   const prev=milestones.filter(x=>x.at<=n).at(-1)?.at||0;
@@ -216,7 +222,7 @@ function renderProgress(){
 function render(){renderTasks();renderProgress();renderAvatar();paint();renderHistory()}
 $('previewButton').addEventListener('click',()=>{
  preview=!preview;
- $('previewButton').textContent=preview?'MAP に戻る':'PREVIEW';
+ $('previewButton').textContent=preview?'自分の街に戻る':'未来の街を見る';
  renderProgress();paint();
 });
 $('townStagePicker').addEventListener('click',event=>{
@@ -270,7 +276,7 @@ function historyStats(){
 function renderDayLog(){
  const panel=$('selectedDayLog');const entries=state.log.filter(x=>x.day===selectedDay);
  $('selectedDayTitle').textContent=selectedDay.replace(/^(\d{4})-(\d{2})-(\d{2})$/,(_,y,m,d)=>y+' / '+Number(m)+' / '+Number(d));
- if(!entries.length){panel.innerHTML='<p class="log-empty">NO RECORDS</p>';return}
+ if(!entries.length){panel.innerHTML='<p class="log-empty">この日の記録はまだありません</p>';return}
  panel.innerHTML=entries.map((e,i)=>'<div class="day-log-item"><span class="log-check">✓</span><span>'+escaped(e.name||state.tasks.find(t=>t.id===e.id)?.name||'タスク')+'</span></div>').join('');
 }
 function renderHistory(){
@@ -437,6 +443,7 @@ for(const [key,element] of Object.entries(decorElements)){
 }
 $('editDecor').addEventListener('click',()=>setDecorEditing(!decorEditing));
 $('resetDecor').addEventListener('click',()=>{
+ if(!confirm('飾りの配置を最初の位置に戻す？\n今の配置は元に戻せません。'))return;
  decorPositions=JSON.parse(JSON.stringify(decorDefaults));
  renderDecorPositions();saveDecorPositions();toast('飾りの配置を戻したよ');
 });
@@ -461,6 +468,6 @@ try{
  }
 }catch(error){console.warn('リースの位置を更新できませんでした',error)}
 renderDecorPositions();refreshDecorShelf();setDecorEditing(false);
-load();preview=true;render();loadImages();$('previewButton').textContent='MAPに戻る';
+load();preview=true;render();loadImages();$('previewButton').textContent='自分の街に戻る';
 if(reduce){$('walker').style.left='40%'}else requestAnimationFrame(walk);
 })();
