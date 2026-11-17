@@ -114,7 +114,7 @@
 /* 小花：地面に直接咲く、低い群れ。全達成段階で同じサイズ。 */
 .flower-ground{position:absolute;inset:0;z-index:2;pointer-events:none}
 .flower-ground[hidden],.flower-cluster[hidden]{display:none!important}
-.flower-cluster{position:absolute;display:block;left:var(--fx);top:var(--fy);width:9%;aspect-ratio:150/78;transform:translate(-50%,-100%) skewY(var(--fa,0deg));transform-origin:center bottom;background-position:center;background-repeat:no-repeat;background-size:contain}
+.flower-cluster{position:absolute;display:block;left:var(--fx);top:var(--fy);width:9%;aspect-ratio:150/78;transform:translate(-50%,-100%);background-position:center;background-repeat:no-repeat;background-size:contain}
 .flower-pink{background-image:url('garden/tiny-bloom-pink.svg?v=2')}
 .flower-white{background-image:url('garden/tiny-bloom-white.svg?v=2')}
 
@@ -135,9 +135,21 @@
  .board>.tasks-panel{margin:20px 0 16px}
 }
 
-/* 冬の縁専用：斜めの基準線に沿って描いた立体素材。画像のせん断はしない。 */
-.flower-ground.is-winter .flower-cluster[data-edge]{aspect-ratio:150/112;transform:translate(-50%,-100%);background-size:contain}
-.flower-ground.is-winter .flower-pink[data-edge="up"]{background-image:url('garden/berry-edge-up.svg')}
-.flower-ground.is-winter .flower-pink[data-edge="down"]{background-image:url('garden/berry-edge-down.svg')}
-.flower-ground.is-winter .flower-white[data-edge="up"]{background-image:url('garden/shrub-edge-up.svg')}
-.flower-ground.is-winter .flower-white[data-edge="down"]{background-image:url('garden/shrub-edge-down.svg')}
+/* 外周の低木：マス目の斜線（2:1）に沿って立体で描いた専用素材。
+   左手前の辺用(down)と右手前の辺用(up)は別々の絵で、画像の反転・回転・せん断はしない。
+   --fx / --fy は低木の接地面の中心。 */
+.flower-cluster[data-edge]{width:12.57%;aspect-ratio:142/103;transform:translate(-50%,-65.05%)}
+.flower-white[data-edge="down"]{background-image:url('garden/hedge-down-flower-white.svg?v=1')}
+.flower-pink[data-edge="down"]{background-image:url('garden/hedge-down-flower-pink.svg?v=1')}
+.flower-white[data-edge="up"]{background-image:url('garden/hedge-up-flower-white.svg?v=1')}
+.flower-pink[data-edge="up"]{background-image:url('garden/hedge-up-flower-pink.svg?v=1')}
+.flower-ground.is-winter .flower-white[data-edge="down"]{background-image:url('garden/hedge-down-snow-white.svg?v=1')}
+.flower-ground.is-winter .flower-pink[data-edge="down"]{background-image:url('garden/hedge-down-snow-pink.svg?v=1')}
+.flower-ground.is-winter .flower-white[data-edge="up"]{background-image:url('garden/hedge-up-snow-white.svg?v=1')}
+.flower-ground.is-winter .flower-pink[data-edge="up"]{background-image:url('garden/hedge-up-snow-pink.svg?v=1')}
+/* 冬の角の低木：同じ立体の描き方で、左の角用・右の角用を別々に用意。 */
+.flower-ground.is-winter .flower-cluster[data-side]{width:5.9%;aspect-ratio:82/81;transform:translate(-50%,-80%)}
+.flower-ground.is-winter .flower-white[data-side="left"]{background-image:url('garden/bush-left-snow-white.svg?v=1')}
+.flower-ground.is-winter .flower-pink[data-side="left"]{background-image:url('garden/bush-left-snow-pink.svg?v=1')}
+.flower-ground.is-winter .flower-white[data-side="right"]{background-image:url('garden/bush-right-snow-white.svg?v=1')}
+.flower-ground.is-winter .flower-pink[data-side="right"]{background-image:url('garden/bush-right-snow-pink.svg?v=1')}

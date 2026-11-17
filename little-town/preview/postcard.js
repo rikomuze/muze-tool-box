@@ -62,21 +62,11 @@
     if(flowers&&!flowers.hidden){
       for(const flower of flowers.querySelectorAll('.flower-cluster')){
         if(flower.hidden||getComputedStyle(flower).display==='none')continue;
-        const type=flower.dataset.flower==='pink'?'pink':'white';
-        const winter=flowers.classList.contains('is-winter');
-        const edge=winter&&flower.dataset.edge;
-        const img=await getAsset(edge?'garden/'+(type==='pink'?'berry':'shrub')+'-edge-'+edge+'.svg':winter?(type==='pink'?'garden/snow-berry.svg?v=3':'garden/snow-shrub.svg'):'garden/tiny-bloom-'+type+'.svg?v=2');
-        const style=getComputedStyle(flower),angle=edge?0:(parseFloat(style.getPropertyValue('--fa'))||0);
-        if(!angle){placeRect(ctx,flower,rect,bounds,(x,y,w,h)=>drawContain(ctx,img,x,y,w,h));}
-        else{
-          // 同じ斜めの基準線で描画。変形後の外接矩形で画像を伸縮させない。
-          const r=flower.getBoundingClientRect(),scale=bounds.w/rect.width;
-          const w=parseFloat(style.width)*scale,h=parseFloat(style.height)*scale;
-          const x=bounds.x+(r.left+r.width/2-rect.left)*scale;
-          const y=bounds.y+(r.top+r.height/2-rect.top)*scale+h/2;
-          ctx.save();ctx.translate(x,y);ctx.transform(1,Math.tan(angle*Math.PI/180),0,1,0,0);
-          drawContain(ctx,img,-w/2,-h,w,h);ctx.restore();
-        }
+        // 画面と同じ素材をそのまま使う（左右専用の低木・季節の切替もCSSの指定どおり）。変形はしない。
+        const src=(getComputedStyle(flower).backgroundImage.match(/url\(["']?(.*?)["']?\)/)||[])[1];
+        if(!src)continue;
+        const img=await getAsset(src);
+        placeRect(ctx,flower,rect,bounds,(x,y,w,h)=>drawContain(ctx,img,x,y,w,h));
       }
     }
     const deco=$('christmasFront');
