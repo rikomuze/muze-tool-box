@@ -63,7 +63,8 @@
       for(const flower of flowers.querySelectorAll('.flower-cluster')){
         if(flower.hidden||getComputedStyle(flower).display==='none')continue;
         const type=flower.dataset.flower==='pink'?'pink':'white';
-        const img=await getAsset('garden/tiny-bloom-'+type+'.svg?v=2');
+        const winter=flowers.classList.contains('is-winter');
+        const img=await getAsset(winter?(type==='pink'?'garden/snow-berry.svg':'garden/snow-shrub.svg'):'garden/tiny-bloom-'+type+'.svg?v=2');
         placeRect(ctx,flower,rect,bounds,(x,y,w,h)=>drawContain(ctx,img,x,y,w,h));
       }
     }
@@ -76,9 +77,14 @@
       for(let i=0;i<parts.length;i++){
         const part=deco.querySelector('.decor-'+parts[i]);
         if(!part||part.hidden||getComputedStyle(part).display==='none')continue;
-        placeRect(ctx,part,rect,bounds,(x,y,w,h)=>{
-          if(w>0&&h>0)ctx.drawImage(atlas,i*cropW,0,cropW,cropH,x,y,w,h);
-        });
+        if(parts[i]==='wreath'){
+          const wreath=await getAsset('garden/wreath-v2.svg');
+          placeRect(ctx,part,rect,bounds,(x,y,w,h)=>drawContain(ctx,wreath,x,y,w,h));
+        }else{
+          placeRect(ctx,part,rect,bounds,(x,y,w,h)=>{
+            if(w>0&&h>0)ctx.drawImage(atlas,i*cropW,0,cropW,cropH,x,y,w,h);
+          });
+        }
       }
     }
     if(includeCharacter){

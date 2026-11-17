@@ -121,7 +121,8 @@ const displayedCount=()=>preview?previewStage:count();
 function renderFlowers(n){
  const container=$('flowerGround');
  if(!container)return;
- container.hidden=townTheme==='winter';
+ container.hidden=false;
+ container.classList.toggle('is-winter',townTheme==='winter');
  for(const flower of container.querySelectorAll('.flower-cluster')){
   const at=Number(flower.dataset.bloomAt);
   flower.hidden=n<at;
@@ -244,7 +245,7 @@ const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;let b
 // このプレビュー専用の配置データ。本番サイトやタスク記録に干渉しない。
 const decorDefaults={
  tree:{x:9,y:46},gift:{x:29,y:67},snowman:{x:76,y:62},
- cane:{x:66,y:68},wreath:{x:69,y:41}
+ cane:{x:66,y:68},wreath:{x:31.2,y:32.8}
 };
 const decorStoreKey='little-town-preview-decor-v1';
 const decorHiddenKey='little-town-preview-decor-hidden-v1';
@@ -270,15 +271,17 @@ try{
 }catch(err){console.warn('プレビューの装飾位置を読み込めませんでした',err)}
 // 成長段階に応じて建物の密集する位置を避ける。配置を変える操作はこれまでどおり優先する。
 const decorSuggestions=[
- {max:8,positions:{tree:{x:12,y:40},gift:{x:34,y:67},snowman:{x:77,y:53},cane:{x:66,y:72},wreath:{x:47,y:52}}},
- {max:24,positions:{tree:{x:7,y:43},gift:{x:26,y:72},snowman:{x:79,y:62},cane:{x:65,y:75},wreath:{x:55,y:48}}},
- {max:41,positions:{tree:{x:5,y:48},gift:{x:25,y:73},snowman:{x:81,y:64},cane:{x:67,y:76},wreath:{x:70,y:43}}},
- {max:74,positions:{tree:{x:7,y:46},gift:{x:27,y:74},snowman:{x:81,y:64},cane:{x:67,y:77},wreath:{x:72,y:42}}},
- {max:Infinity,positions:{tree:{x:9,y:46},gift:{x:29,y:67},snowman:{x:76,y:62},cane:{x:66,y:68},wreath:{x:69,y:41}}}
+ {max:8,positions:{tree:{x:12,y:40},gift:{x:34,y:67},snowman:{x:77,y:53},cane:{x:66,y:72},wreath:{x:55,y:47}}},
+ {max:24,positions:{tree:{x:7,y:43},gift:{x:26,y:72},snowman:{x:79,y:62},cane:{x:65,y:75},wreath:{x:55,y:47}}},
+ {max:41,positions:{tree:{x:5,y:48},gift:{x:25,y:73},snowman:{x:81,y:64},cane:{x:67,y:76},wreath:{x:55,y:47}}},
+ {max:74,positions:{tree:{x:7,y:46},gift:{x:27,y:74},snowman:{x:81,y:64},cane:{x:67,y:77},wreath:{x:31.2,y:32.8}}},
+ {max:Infinity,positions:{tree:{x:9,y:46},gift:{x:29,y:67},snowman:{x:76,y:62},cane:{x:66,y:68},wreath:{x:31.2,y:32.8}}}
 ];
 function getSuggestedDecorPositions(){
  const n=displayedCount();
- return JSON.parse(JSON.stringify(decorSuggestions.find(entry=>n<=entry.max).positions));
+ const positions=JSON.parse(JSON.stringify(decorSuggestions.find(entry=>n<=entry.max).positions));
+ positions.wreath=n>=48?{x:31.2,y:32.8}:{x:55,y:47};
+ return positions;
 }
 function refreshDecorShelf(){
  for(const [key,element] of Object.entries(decorElements)){
@@ -387,6 +390,14 @@ $('winterToggle').addEventListener('click',()=>{
  $('winterToggle').setAttribute('aria-pressed',String(townTheme==='winter'));
  paint();
 });
+// Preview-only migration of the old floating wreath; retain every other decoration position.
+try{
+ if(localStorage.getItem('little-town-preview-wreath-v2')!=='1'){
+  decorPositions.wreath={...decorDefaults.wreath};
+  localStorage.setItem(decorStoreKey,JSON.stringify(decorPositions));
+  localStorage.setItem('little-town-preview-wreath-v2','1');
+ }
+}catch(error){console.warn('リースの位置を更新できませんでした',error)}
 renderDecorPositions();refreshDecorShelf();setDecorEditing(false);
 load();preview=true;render();loadImages();$('previewButton').textContent='MAPに戻る';
 if(reduce){$('walker').style.left='40%'}else requestAnimationFrame(walk);
