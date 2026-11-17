@@ -100,7 +100,7 @@ let townTheme='winter';const winterImages={};
 const canvas=$('townCanvas'),ctx=canvas.getContext('2d');const S=.62,W=256*S,H=352*S;
 function tilePosition(i,j){return {x:480+(i-j)*75,y:83+(i+j)*37.5}}
 function drawTile(id,i,j,layer='ground',rise=0){const image=(townTheme==='winter'&&winterImages[id])||images[id];if(!image||(!image.complete&&!image.width)||!(image.naturalWidth||image.width))return;const pos=tilePosition(i,j);const top=layer==='ground'?pos.y-38:pos.y-104-rise;ctx.drawImage(image,pos.x-W/2,top,W,H)}
-// 15回までの既存の街は完全に同じ。16回から先だけ新しい成長ルート。
+// 建物と木の解放順は維持。道と池の新しい地形はプレビューのみ。
 const props=[
  [1,'tree_single_N',0,2],[2,'rocks_grass_N',5,0],[3,'tree_multiple_N',1,0],[5,'tree_single_N',0,5],
  [7,'tree_single_N',5,5],[9,'building_door_N',3,1,'roof_gableBrown_N'],[11,'tree_multiple_N',1,4],
@@ -129,9 +129,51 @@ function renderFlowers(n){
   // 花のサイズは固定。成長は新しい群れの追加だけ。
  }
 }
+// 地面の上面座標。タイル間の小さな隙間を道の描画でつなぐ。
+function groundPoint(i,j){const p=tilePosition(i,j);return {x:p.x,y:p.y+74}}
+function terrainLine(points,width,color){
+ ctx.beginPath();points.forEach(([i,j],k)=>{const p=groundPoint(i,j);if(k===0)ctx.moveTo(p.x,p.y);else ctx.lineTo(p.x,p.y)});
+ ctx.lineWidth=width;ctx.strokeStyle=color;ctx.lineCap='round';ctx.lineJoin='round';ctx.stroke();
+}
+function drawConnectedPaths(n){
+ if(n<4)return;
+ ctx.save();
+ // 手前から街の中心へ。建物を増やすと枝道も伸びる。
+ const paths=[[[3,5.32],[3,4],[3,3],[3,2]],[[3,3],[2,3],[1,3]]];
+ if(n>=13)paths.push([[3,3],[4,3]]);
+ for(const p of paths)terrainLine(p,35,townTheme==='winter'?'#d6a887':'#ca8c63');
+ for(const p of paths)terrainLine(p,29,'#efad80');
+ ctx.restore();
+}
+function drawPond(n){
+ if(n<12)return;
+ ctx.save();
+ const p=groundPoint(0,5);
+ // 既存の水タイルではなく雪や芝の岸を残す、浅い小さな池。
+ ctx.translate(p.x+8,p.y+9);
+ if(n>=18)ctx.translate(31,-14);
+ const rx=n>=18?79:47,ry=n>=18?24:19;
+ const winter=townTheme==='winter';
+ ctx.beginPath();
+ ctx.moveTo(-rx,1);
+ ctx.bezierCurveTo(-rx-2,-ry*.75,-rx*.52,-ry*1.08,-rx*.17,-ry*.84);
+ ctx.bezierCurveTo(rx*.25,-ry*1.23,rx*.85,-ry*.82,rx,-ry*.07);
+ ctx.bezierCurveTo(rx*1.04,ry*.73,rx*.32,ry*1.07,0,ry*.82);
+ ctx.bezierCurveTo(-rx*.55,ry*1.16,-rx,ry*.65,-rx,1);
+ ctx.closePath();
+ ctx.fillStyle=winter?'#acdce9':'#89cddd';ctx.fill();
+ ctx.strokeStyle=winter?'#8baebc':'#779d93';ctx.lineWidth=3;ctx.stroke();
+ ctx.save();ctx.clip();
+ ctx.strokeStyle=winter?'#e6f7fd':'#bcebf1';ctx.lineWidth=2.5;ctx.lineCap='round';
+ for(const [x,y,len] of [[-.61,-.2,.24],[-.06,.28,.30],[.38,-.38,.25]]){
+  ctx.beginPath();ctx.moveTo(rx*x,ry*y);ctx.quadraticCurveTo(rx*(x+len*.5),ry*y-2,rx*(x+len),ry*y);ctx.stroke();
+ }
+ ctx.restore();ctx.restore();
+}
 function paint(){const n=displayedCount();ctx.clearRect(0,0,960,640);let gr=ctx.createLinearGradient(0,0,0,640);gr.addColorStop(0,townTheme==='winter'?'#dce8f0':'#e1e6d8');gr.addColorStop(1,townTheme==='winter'?'#f1f5f7':'#f6e9d7');ctx.fillStyle=gr;ctx.fillRect(0,0,960,640);ctx.fillStyle='rgba(140,151,125,.13)';ctx.beginPath();ctx.ellipse(480,555,380,43,0,0,Math.PI*2);ctx.fill();
- const pathSet=new Set(n>=4?['3,5','3,4','3,3','2,3','1,3','3,2','4,3']:[]);
- for(let z=0;z<=10;z++)for(let i=0;i<6;i++){let j=z-i;if(j<0||j>5)continue;let id='grass_center_N';if(n>=12&&i===0&&j===5)id='grass_water_N';else if(n>=18&&i===0&&j===4)id='grass_river_N';else if(pathSet.has(i+','+j))id=(i===3&&j===3)?'grass_pathCrossing_N':'grass_path_N';drawTile(id,i,j)}
+ for(let z=0;z<=10;z++)for(let i=0;i<6;i++){let j=z-i;if(j<0||j>5)continue;drawTile('grass_center_N',i,j)}
+ drawConnectedPaths(n);
+ drawPond(n);
  // 奥のタイルにあるオブジェクトから順に描くことで、重なり方が自然になる。
  for(let z=0;z<=10;z++)for(let i=0;i<6;i++){let j=z-i;if(j<0||j>5)continue;for(const p of props){const [at,id,x,y,roof]=p;if(x!==i||y!==j||at>n)continue;drawTile(id,i,j,'prop');if(roof)drawTile(roof,i,j,'prop',54)}}
  renderFlowers(n);
