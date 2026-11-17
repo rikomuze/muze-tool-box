@@ -57,6 +57,17 @@
     ctx.drawImage(original,sx,sy,sw,sh);
     const bounds={x:sx,y:sy,w:sw,h:sh};
     // Overlay the user's actual placement, not a default decoration arrangement.
+    // 表示中の小花だけを、街と同じ座標・サイズで合成する。
+    const flowers=$('flowerGround');
+    if(flowers&&!flowers.hidden){
+      for(const flower of flowers.querySelectorAll('.flower-cluster')){
+        if(flower.hidden||getComputedStyle(flower).display==='none')continue;
+        const type=flower.dataset.flower==='pink'?'pink':'white';
+        const winter=flowers.classList.contains('is-winter');
+        const img=await getAsset(winter?(type==='pink'?'garden/snow-berry.svg?v=3':'garden/snow-shrub.svg'):'garden/tiny-bloom-'+type+'.svg?v=2');
+        placeRect(ctx,flower,rect,bounds,(x,y,w,h)=>drawContain(ctx,img,x,y,w,h));
+      }
+    }
     const deco=$('christmasFront');
     if(deco&&!deco.classList.contains('is-hidden')){
       status.textContent='装飾の画像を読み込んでいます…';
@@ -66,9 +77,14 @@
       for(let i=0;i<parts.length;i++){
         const part=deco.querySelector('.decor-'+parts[i]);
         if(!part||part.hidden||getComputedStyle(part).display==='none')continue;
-        placeRect(ctx,part,rect,bounds,(x,y,w,h)=>{
-          if(w>0&&h>0)ctx.drawImage(atlas,i*cropW,0,cropW,cropH,x,y,w,h);
-        });
+        if(parts[i]==='wreath'){
+          const wreath=await getAsset('garden/wreath-v2.svg');
+          placeRect(ctx,part,rect,bounds,(x,y,w,h)=>drawContain(ctx,wreath,x,y,w,h));
+        }else{
+          placeRect(ctx,part,rect,bounds,(x,y,w,h)=>{
+            if(w>0&&h>0)ctx.drawImage(atlas,i*cropW,0,cropW,cropH,x,y,w,h);
+          });
+        }
       }
     }
     if(includeCharacter){

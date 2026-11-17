@@ -25,7 +25,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="little town.">
-  <link rel="stylesheet" href="style.css?v=20261116-season1"><link rel="stylesheet" href="seasonal.css?v=20261116-shelf1">
+  <link rel="stylesheet" href="style.css?v=20261116-season1"><link rel="stylesheet" href="seasonal.css?v=20261117-garden1">
   <title>little town. | MY TOWN</title>
 </head>
 <body>
@@ -43,11 +43,28 @@
         </div>
         <div class="world" id="world">
           <canvas id="townCanvas" width="960" height="640" role="img" aria-label="習慣の達成回数に応じて建物や木が増えていく立体的な街"></canvas>
+          <div class="flower-ground" id="flowerGround" aria-hidden="true">
+            <span class="flower-cluster flower-pink" data-bloom-at="20" data-flower="pink" style="--fx:18%;--fy:48%" hidden></span>
+            <span class="flower-cluster flower-white" data-bloom-at="35" data-flower="white" style="--fx:82%;--fy:49%" hidden></span>
+            <span class="flower-cluster flower-white" data-bloom-at="50" data-flower="white" style="--fx:33%;--fy:89%" hidden></span>
+            <span class="flower-cluster flower-pink" data-bloom-at="65" data-flower="pink" style="--fx:73%;--fy:88%" hidden></span>
+            <span class="flower-cluster flower-white" data-bloom-at="68" data-flower="white" style="--fx:11%;--fy:52%" hidden></span>
+            <span class="flower-cluster flower-pink" data-bloom-at="70" data-flower="pink" style="--fx:89%;--fy:55%" hidden></span>
+            <span class="flower-cluster flower-pink" data-bloom-at="73" data-flower="pink" style="--fx:25%;--fy:85%" hidden></span>
+            <span class="flower-cluster flower-white" data-bloom-at="75" data-flower="white" style="--fx:82%;--fy:83%" hidden></span>
+          </div>
           <div class="world-note" id="worldNote">小さな街のはじまり</div>
           <div class="christmas-front" id="christmasFront" aria-label="クリスマス装飾"><span class="decor-item decor-tree" hidden title="ツリー"></span><span class="decor-item decor-gift" hidden title="プレゼント"></span><span class="decor-item decor-snowman" hidden title="雪だるま"></span><span class="decor-item decor-cane" hidden title="キャンディケイン"></span><span class="decor-item decor-wreath" hidden title="リース"></span></div>
           <div class="walker" id="walker" aria-hidden="true"><div class="walker-image" id="walkerImage"></div></div>
           <div class="preview-tag" id="previewTag" hidden>未来の街を見学中</div>
         </div>
+        <section class="panel tasks-panel">
+          <div class="section-title"><div><span class="kicker">DAILY QUEST</span><h2>TODAY</h2></div><div class="count"><strong id="todayDone">0</strong><span id="todayMax"> / 0</span></div></div>
+          
+          <div class="task-list" id="taskList"></div>
+          <div id="saveStatus" class="status checking" role="status" aria-live="polite">保存先を確認しています…</div>
+          
+        </section>
         <div class="world-footer">
           <div class="next"><strong id="nextTitle">NEXT</strong><span id="nextDescription"></span><div class="progress" aria-hidden="true"><span id="progressFill"></span></div></div>
           <div class="preview-controls" aria-label="街の操作">
@@ -78,13 +95,6 @@
         <div class="art-credit">街の素材：<a href="https://kenney.nl/assets/sketch-town" target="_blank" rel="noopener noreferrer">Kenney / Sketch Town</a>（CC0）</div>
       </section>
       <aside class="sidebar">
-        <section class="panel tasks-panel">
-          <div class="section-title"><div><span class="kicker">DAILY QUEST</span><h2>TODAY</h2></div><div class="count"><strong id="todayDone">0</strong><span id="todayMax"> / 0</span></div></div>
-          
-          <div class="task-list" id="taskList"></div>
-          <div id="saveStatus" class="status checking" role="status" aria-live="polite">保存先を確認しています…</div>
-          
-        </section>
         <section class="panel avatar-panel">
           <div class="section-title"><div><span class="kicker">CHARACTER</span><h2>MY FRIEND</h2></div></div>
           <div class="avatar-row"><div class="avatar-sample" id="avatarSample"></div><div class="avatar-meta"><label for="avatarName">名前</label><input id="avatarName" maxlength="18" aria-label="キャラクターの名前" value="まる"></div></div>
@@ -167,9 +177,9 @@
     <section class="modal-card update-notice-card" role="dialog" aria-modal="true" aria-labelledby="updateNoticeTitle" aria-describedby="updateNoticeDesc">
       <span class="kicker">WHAT'S NEW</span>
       <h2 id="updateNoticeTitle">little town. が新しくなりました！</h2>
-      <p id="updateNoticeDesc">冬の街と、クリスマスの飾り付けが楽しめるようになったよ。</p>
+      <p id="updateNoticeDesc">新しい街の成長と、冬の景色を楽しんでね。</p>
       <ul>
-        <li>冬モードで街が雪景色に</li>
+        <li>お店・噴水・風車と、四隅に育つ花や冬の低木</li>
         <li>累計20回から、10回ごとに新しい飾りをGET！</li>
         <li>獲得した飾りは好きな場所に配置できる</li>
         <li>ポストカードで街を画像にして共有できる</li>
@@ -180,8 +190,8 @@
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="winter.js?v=20261116-season1"></script>
-  <script src="app.js?v=20261116-shelf1" defer></script>
-  <script src="postcard.js?v=20261116-shelf1" defer></script>
+  <script src="app.js?v=20261117-garden1" defer></script>
+  <script src="postcard.js?v=20261117-garden1" defer></script>
   <script src="notice.js?v=20261116-notice1" defer></script>
 </body>
 </html>
