@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>little town.｜75回完成系プレビュー</title>
+<style>
+:root{color-scheme:light}*{box-sizing:border-box}
+body{margin:0;background:#f5f3e8;color:#43674a;font:14px/1.65 -apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN",sans-serif}
+main{max-width:1080px;margin:auto;padding:20px 14px 35px}
+header{display:flex;gap:14px;justify-content:space-between;align-items:end;flex-wrap:wrap;margin-bottom:15px}
+.kicker{display:block;font-size:11px;letter-spacing:.18em;color:#5f825f;font-weight:900}
+h1{font-size:clamp(28px,6vw,44px);line-height:1.1;margin:5px 0}
+p{margin:5px 0 0;font-size:12px;color:#6c7e6c}
+a{color:#496d4e}
+.toplink{display:inline-block;padding:8px 10px;border:2px solid #739570;background:#fff5cf;text-decoration:none;font-weight:800}
+.toolbar{border:2px solid #799979;background:#fffef5;padding:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.toolgroup{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.toolgroup strong{font-size:11px;letter-spacing:.07em;margin-right:5px}
+button{background:#fff8e5;border:2px solid #9ab38a;color:#46694a;padding:9px 13px;min-width:52px;cursor:pointer;font:800 12px/1.2 inherit;border-radius:3px}
+button[aria-pressed="true"]{background:#ffda7a;border-color:#587a57;box-shadow:2px 3px 0 #b2c6a2}
+button:focus-visible{outline:3px solid #56794e;outline-offset:3px}
+.viewer{border:5px solid #557f57;box-shadow:6px 6px 0 #bed1ae;background:#e8eff0;position:relative;margin-top:15px;aspect-ratio:960/640;overflow:hidden}
+.viewer iframe{display:block;border:0;width:100%;height:100%;background:#e5e9e0}
+.loading{position:absolute;inset:0;display:grid;place-items:center;color:#527558;font-size:12px;background:#e6ede8;z-index:2}
+.loading[hidden]{display:none}
+.bottom{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap;justify-content:space-between;margin-top:15px}
+.note{font-size:12px;line-height:1.9;max-width:700px;color:#648064}
+.notice{border:1px solid #b6c6a8;background:#fff9e8;padding:8px 10px;color:#527557;font-weight:800}
+@media(max-width:600px){main{padding:12px 8px}.toolbar{padding:9px;gap:9px}.toolgroup{width:100%;justify-content:center}.toolgroup strong{margin-right:auto}button{padding:9px 8px;font-size:11px}.viewer{border-width:3px}.bottom{margin-top:10px}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<div><span class="kicker">LITTLE TOWN. / GROWTH VISION</span><h1>75回 完成系プレビュー</h1><p>実際の街を使って、4隅に花が少しずつ育つ配置を試せる専用ページです。</p></div>
+<a class="toplink" href="../?v=garden-polish1">通常のプレビューへ</a>
+</header>
+<div class="toolbar">
+<div class="toolgroup" id="stages"><strong>達成回数</strong><button data-stage="15" aria-pressed="false">15</button><button data-stage="25" aria-pressed="false">25</button><button data-stage="40" aria-pressed="false">40</button><button data-stage="60" aria-pressed="false">60</button><button data-stage="75" aria-pressed="true">75</button></div>
+<div class="toolgroup" id="seasons"><strong>季節</strong><button data-season="normal" aria-pressed="true">通常</button><button data-season="winter" aria-pressed="false">冬</button></div>
+</div>
+<div class="viewer"><iframe id="sceneFrame" title="成長中のlittle town.を実際の描画でプレビュー" src="../?v=garden-polish1" loading="eager"></iframe><div class="loading" id="loading">街のパーツを読み込んでいます…</div></div>
+<div class="bottom"><div class="note">4隅の余白に、小さな花が20・35・50・65回で順番に咲く試作です。花壇のような板は使いません。冬は花を隠し、雪の積もった街を優先します。<strong>本番サイト・タスク・達成履歴は変更されません。</strong></div><div class="notice">完成イメージの配置確認用</div></div>
+</main>
+<script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id);
+const iframe=$('sceneFrame');let stage=75,season='normal',doc=null;
+const cluster=(seed)=>{
+ let petals='',leaves='';
+ const dots=[[13,47],[34,29],[55,43],[77,24],[96,48],[114,31],[136,51],[150,17]];
+ for(let i=0;i<dots.length;i++){
+  const [x,y]=dots[i],n=i+seed;
+  if(n%3===0)continue;
+  const r=5+(n%3),t=(n%4===0?'#f3c3d0':n%4===1?'#ffffff':n%4===2?'#efb8d1':'#fef2c7');
+  petals+='<g transform="translate('+x+' '+y+')"><path d="M0 -'+r+' C'+r+' -'+(r+4)+' '+(r+5)+' -2 '+r+' 0 C'+(r+4)+' '+r+' '+r+' '+(r+5)+' 0 '+r+' C-'+r+' '+(r+4)+' -'+(r+5)+' '+r+' -'+r+' 0 C-'+(r+4)+' -'+r+' -'+r+' -'+(r+5)+' 0 -'+r+'Z" fill="'+t+'" stroke="#d1b7a0" stroke-width="1.4"/><circle r="2.8" fill="#e5bb73"/></g>';
+  leaves+='<path d="M'+(x-4)+' '+(y+6)+'q-15-9-14 3q12 8 18 7M'+(x+5)+' '+(y+8)+'q15-11 16 0q-10 8-19 7" fill="#8db86a" stroke="#688e4f" stroke-width="1.4"/>';
+ }
+ return '<svg viewBox="0 0 168 90" xmlns="http://www.w3.org/2000/svg" role="presentation" aria-hidden="true"><g>'+leaves+'</g>'+petals+'</svg>';
+};
+function decorate(d){
+ const world=d.getElementById('world');
+ if(!world)return;
+ if(world.dataset.completionDecorated)return;
+ world.dataset.completionDecorated='true';
+ const style=d.createElement('style');
+ style.textContent='html,body{padding:0!important;margin:0!important;overflow:hidden!important;background:#e4ecea!important}body>#world{width:100vw!important;height:100vh!important;aspect-ratio:960/640!important;margin:0!important;border:0!important;border-radius:0!important}body>#world canvas{width:100%!important;height:100%!important}body>*:not(#world):not(style){display:none!important}.little-bloom{position:absolute;z-index:2;pointer-events:none;filter:drop-shadow(0 2px 1px #506a473b)}.little-bloom svg{display:block;width:100%;height:auto}.little-bloom[data-corner="nw"]{left:7%;top:27%;width:19%;transform:rotate(-12deg)}.little-bloom[data-corner="ne"]{right:5%;top:28%;width:19%;transform:rotate(10deg)}.little-bloom[data-corner="sw"]{left:8%;bottom:17%;width:21%;transform:rotate(3deg)}.little-bloom[data-corner="se"]{right:7%;bottom:17%;width:21%;transform:rotate(-6deg)}.little-bloom[hidden]{display:none!important}';
+ d.head.appendChild(style);
+ d.body.appendChild(world);
+ const corners=['nw','ne','sw','se'];
+ corners.forEach((corner,i)=>{const el=d.createElement('div');el.className='little-bloom';el.dataset.corner=corner;el.innerHTML=cluster(i+3);world.appendChild(el)});
+}
+function apply(){
+ document.querySelectorAll('[data-stage]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.stage)===stage)));
+ document.querySelectorAll('[data-season]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.season===season)));
+ if(!doc)return;
+ try{
+  const stageButton=doc.querySelector('[data-stage="'+stage+'"]');
+  if(stageButton)stageButton.click();
+  const winterBtn=doc.getElementById('winterToggle');
+  const currentlyWinter=winterBtn?.getAttribute('aria-pressed')==='true';
+  if(winterBtn&&currentlyWinter!==(season==='winter'))winterBtn.click();
+  doc.querySelectorAll('.little-bloom').forEach((flower,i)=>{flower.hidden=(stage<[20,35,50,65][i])||season==='winter'});
+ }catch(error){console.error('Completion preview control',error)}
+}
+iframe.addEventListener('load',()=>{
+ try{doc=iframe.contentDocument;if(!doc||!doc.getElementById('world'))throw Error('地図を取得できません');decorate(doc);apply();$('loading').hidden=true;}
+ catch(error){$('loading').textContent='表示を読み込めません。上の「通常のプレビューへ」から直接開いてください。';console.error(error)}
+});
+document.querySelectorAll('[data-stage]').forEach(b=>b.addEventListener('click',()=>{stage=Number(b.dataset.stage);apply()}));
+document.querySelectorAll('[data-season]').forEach(b=>b.addEventListener('click',()=>{season=b.dataset.season;apply()}));
+})();
+</script>
+</body></html>
