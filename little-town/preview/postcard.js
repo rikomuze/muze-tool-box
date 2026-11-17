@@ -57,6 +57,19 @@
     ctx.drawImage(original,sx,sy,sw,sh);
     const bounds={x:sx,y:sy,w:sw,h:sh};
     // Overlay the user's actual placement, not a default decoration arrangement.
+    // ポストカードも現在の街と同じ4隅の花を合成する。
+    const flowers=$('flowerGround');
+    if(flowers&&!flowers.hidden){
+      const flowerAtlas=await getAsset('completion/flowers-atlas.webp');
+      const half=flowerAtlas.naturalWidth/2;
+      for(const flower of flowers.querySelectorAll('.flower-cluster')){
+        if(flower.hidden||getComputedStyle(flower).display==='none')continue;
+        const isPink=flower.classList.contains('flower-pink');
+        placeRect(ctx,flower,rect,bounds,(x,y,w,h)=>{
+          if(w>0&&h>0)ctx.drawImage(flowerAtlas,isPink?0:half,0,half,flowerAtlas.naturalHeight,x,y,w,h);
+        });
+      }
+    }
     const deco=$('christmasFront');
     if(deco&&!deco.classList.contains('is-hidden')){
       status.textContent='装飾の画像を読み込んでいます…';
