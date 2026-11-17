@@ -119,5 +119,5 @@
 .flower-white{background-image:url('garden/tiny-bloom-white.svg?v=2')}
 
 /* 冬は花がなくなる代わりに、同じ場所に雪をかぶった小さな低木が育つ。 */
-.flower-ground.is-winter .flower-pink{background-image:url('garden/snow-berry.svg')}
+.flower-ground.is-winter .flower-pink{background-image:url('garden/snow-berry.svg?v=3')}
 .flower-ground.is-winter .flower-white{background-image:url('garden/snow-shrub.svg')}

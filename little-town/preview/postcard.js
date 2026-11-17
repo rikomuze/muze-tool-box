@@ -64,7 +64,7 @@
         if(flower.hidden||getComputedStyle(flower).display==='none')continue;
         const type=flower.dataset.flower==='pink'?'pink':'white';
         const winter=flowers.classList.contains('is-winter');
-        const img=await getAsset(winter?(type==='pink'?'garden/snow-berry.svg':'garden/snow-shrub.svg'):'garden/tiny-bloom-'+type+'.svg?v=2');
+        const img=await getAsset(winter?(type==='pink'?'garden/snow-berry.svg?v=3':'garden/snow-shrub.svg'):'garden/tiny-bloom-'+type+'.svg?v=2');
         placeRect(ctx,flower,rect,bounds,(x,y,w,h)=>drawContain(ctx,img,x,y,w,h));
       }
     }
