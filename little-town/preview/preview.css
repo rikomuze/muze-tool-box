@@ -213,3 +213,31 @@
 /* 6. 記録がない日の余白を詰める。 */
 .app .day-log{min-height:0}
 .app .log-empty{font-size:12.5px;letter-spacing:.02em;padding:14px 2px 18px}
+
+/* ===== クリスマスの飾り：マス目に沿った立体の新素材（1点ずつのSVG）=====
+   枠の大きさと保存位置の意味はこれまでと同じ。絵は枠の下辺＝これまでの足元にそろえてある。
+   配置の編集中は、点線枠とつかめる範囲を絵の大きさに合わせる（::after）。 */
+.christmas-front .decor-item{background-size:100% 100%;background-position:center;filter:none}
+.decor-tree{background-image:url('garden/decor-tree.svg?v=1')}
+.decor-gift{background-image:url('garden/decor-gift.svg?v=1')}
+.decor-snowman{background-image:url('garden/decor-snowman.svg?v=1')}
+.decor-cane{background-image:url('garden/decor-cane.svg?v=1')}
+.christmas-front .decor-wreath{background-image:url('garden/decor-wreath.svg?v=2');background-size:100% 100%}
+.decor-item::after{content:"";position:absolute;pointer-events:none;border-radius:6px}
+.decor-tree::after{inset:41.9% 15.3% 0.3% 15.4%}
+.decor-gift::after{inset:61.6% 15.3% 0.3% 15.6%}
+.decor-snowman::after{inset:45.1% 8.1% 0.3% 8.1%}
+.decor-cane::after{inset:46.6% 29.7% 0.3% 22.0%}
+.decor-wreath::after{inset:16.1% 19.0% 16.1% 19.0%}
+.christmas-front.is-editing .decor-item{pointer-events:none;outline:none;touch-action:none}
+.christmas-front.is-editing .decor-item::after{pointer-events:auto;cursor:grab;touch-action:none;outline:2px dashed #f4e4ac;outline-offset:2px}
+.christmas-front.is-editing .decor-item:focus-visible{outline:none}
+.christmas-front.is-editing .decor-item:focus-visible::after{outline:3px solid #4f7b48}
+.christmas-front.is-editing .decor-item.is-dragging{outline:none;filter:drop-shadow(0 6px 4px #3b4f3550)}
+.christmas-front.is-editing .decor-item.is-dragging::after{cursor:grabbing;outline-color:#4f7b48}
+.shelf-thumb{background-size:contain!important;background-position:center bottom!important;background-repeat:no-repeat}
+.shelf-tree{background-image:url('garden/decor-tree-icon.svg?v=1')}
+.shelf-gift{background-image:url('garden/decor-gift-icon.svg?v=1')}
+.shelf-snowman{background-image:url('garden/decor-snowman-icon.svg?v=1')}
+.shelf-cane{background-image:url('garden/decor-cane-icon.svg?v=1')}
+.shelf-wreath{background-image:url('garden/decor-wreath-icon.svg?v=2')!important;background-position:center!important}
