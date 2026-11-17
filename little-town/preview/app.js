@@ -100,30 +100,83 @@ let townTheme='winter';const winterImages={};
 const canvas=$('townCanvas'),ctx=canvas.getContext('2d');const S=.62,W=256*S,H=352*S;
 function tilePosition(i,j){return {x:480+(i-j)*75,y:83+(i+j)*37.5}}
 function drawTile(id,i,j,layer='ground',rise=0){const image=(townTheme==='winter'&&winterImages[id])||images[id];if(!image||(!image.complete&&!image.width)||!(image.naturalWidth||image.width))return;const pos=tilePosition(i,j);const top=layer==='ground'?pos.y-38:pos.y-104-rise;ctx.drawImage(image,pos.x-W/2,top,W,H)}
+// 15回までの既存の街は完全に同じ。16回から先だけ新しい成長ルート。
 const props=[
  [1,'tree_single_N',0,2],[2,'rocks_grass_N',5,0],[3,'tree_multiple_N',1,0],[5,'tree_single_N',0,5],
  [7,'tree_single_N',5,5],[9,'building_door_N',3,1,'roof_gableBrown_N'],[11,'tree_multiple_N',1,4],
- [13,'building_doorBeige_N',4,3,'roof_roundedGreen_N'],[16,'building_window_N',2,4,'roof_pointPurple_N'],
+ [13,'building_doorBeige_N',4,3,'roof_roundedGreen_N'],
+ [16,'building_window_N',2,4,'roof_pointPurple_N'],
  [19,'tree_single_N',2,0],[22,'building_windowBeige_N',4,1,'roof_gableGreen_N'],
- [25,'castle_gateOpen_N',2,2],[29,'castle_tower_N',2,1],[33,'tree_multiple_N',0,4],
- [36,'building_door_N',5,2,'roof_slantPurple_N'],[42,'castle_towerGreen_N',3,2],
- [48,'building_window_N',1,3,'roof_roundedGreen_N'],[55,'castle_towerBrown_N',1,1],
- [65,'tree_multiple_N',4,5],[75,'castle_wall_N',3,3]
+ [25,'fountain_N',2,2],[27,'flowerbed_N',0,3],[29,'market_stall_N',2,1],
+ [33,'tree_multiple_N',0,4],[36,'building_door_N',5,2,'roof_slantPurple_N'],
+ [39,'market_stall_N',4,4],[42,'flowerbed_N',3,2],
+ [48,'building_window_N',1,3,'roof_roundedGreen_N'],
+ [52,'flowerbed_N',5,3],[55,'windmill_N',1,1],[60,'flowerbed_N',2,5],
+ [65,'tree_multiple_N',4,5],[70,'flowerbed_N',1,5],[75,'flowerbed_N',0,0]
 ];
-const milestones=[{at:1,label:'ちいさな木'},{at:9,label:'はじめのおうち'},{at:25,label:'街の門'},{at:42,label:'お城のある街'},{at:75,label:'にぎやかな街'}];
-function paint(){const n=preview?75:count();ctx.clearRect(0,0,960,640);let gr=ctx.createLinearGradient(0,0,0,640);gr.addColorStop(0,townTheme==='winter'?'#dce8f0':'#e1e6d8');gr.addColorStop(1,townTheme==='winter'?'#f1f5f7':'#f6e9d7');ctx.fillStyle=gr;ctx.fillRect(0,0,960,640);ctx.fillStyle='rgba(140,151,125,.13)';ctx.beginPath();ctx.ellipse(480,555,380,43,0,0,Math.PI*2);ctx.fill();
+const milestones=[{at:1,label:'ちいさな木'},{at:9,label:'はじめのおうち'},{at:25,label:'広場と噴水'},{at:42,label:'お店のある街'},{at:55,label:'風車の丘'},{at:75,label:'花いっぱいの街'}];
+const gardenTiles=['market_stall_N','fountain_N','windmill_N','flowerbed_N'];
+let previewStage=75;
+const displayedCount=()=>preview?previewStage:count();
+function paint(){const n=displayedCount();ctx.clearRect(0,0,960,640);let gr=ctx.createLinearGradient(0,0,0,640);gr.addColorStop(0,townTheme==='winter'?'#dce8f0':'#e1e6d8');gr.addColorStop(1,townTheme==='winter'?'#f1f5f7':'#f6e9d7');ctx.fillStyle=gr;ctx.fillRect(0,0,960,640);ctx.fillStyle='rgba(140,151,125,.13)';ctx.beginPath();ctx.ellipse(480,555,380,43,0,0,Math.PI*2);ctx.fill();
  const pathSet=new Set(n>=4?['3,5','3,4','3,3','2,3','1,3','3,2','4,3']:[]);
  for(let z=0;z<=10;z++)for(let i=0;i<6;i++){let j=z-i;if(j<0||j>5)continue;let id='grass_center_N';if(n>=12&&i===0&&j===5)id='grass_water_N';else if(n>=18&&i===0&&j===4)id='grass_river_N';else if(pathSet.has(i+','+j))id=(i===3&&j===3)?'grass_pathCrossing_N':'grass_path_N';drawTile(id,i,j)}
  // 奥のタイルにあるオブジェクトから順に描くことで、重なり方が自然になる。
  for(let z=0;z<=10;z++)for(let i=0;i<6;i++){let j=z-i;if(j<0||j>5)continue;for(const p of props){const [at,id,x,y,roof]=p;if(x!==i||y!==j||at>n)continue;drawTile(id,i,j,'prop');if(roof)drawTile(roof,i,j,'prop',54)}}
 }
-function renderProgress(){const n=count(),next=milestones.find(x=>x.at>n);$('totalDone').textContent=n;$('level').textContent=String(1+Math.floor(n/8)).padStart(2,'0');$('worldNote').textContent=preview?'PREVIEW':n===0?'START':`${n} CLEAR`;if(next){$('nextTitle').textContent=`NEXT：${next.label} まであと ${next.at-n}`;$('nextDescription').textContent='NEW ITEM';const prev=milestones.filter(x=>x.at<=n).at(-1)?.at||0;$('progressFill').style.width=((n-prev)/(next.at-prev)*100)+'%'}else{$('nextTitle').textContent='LEVEL MAX';$('nextDescription').textContent='ALL UNLOCKED';$('progressFill').style.width='100%'}$('milestones').innerHTML=milestones.map(x=>`<div class="milestone ${n>=x.at?'done':''}"><span>${n>=x.at?'✓':'○'} ${x.label}</span><strong>${x.at} 回</strong></div>`).join('');$('previewTag').hidden=!preview}
+function renderProgress(){
+ const actual=count(),n=displayedCount(),next=milestones.find(x=>x.at>n);
+ $('totalDone').textContent=actual;
+ $('level').textContent=String(1+Math.floor(n/8)).padStart(2,'0');
+ $('worldNote').textContent=preview?n+' CLEAR / PREVIEW':n===0?'START':n+' CLEAR';
+ if(next){
+  $('nextTitle').textContent='NEXT：'+next.label+' まであと '+(next.at-n);
+  $('nextDescription').textContent='NEW ITEM';
+  const prev=milestones.filter(x=>x.at<=n).at(-1)?.at||0;
+  $('progressFill').style.width=((n-prev)/(next.at-prev)*100)+'%';
+ }else{
+  $('nextTitle').textContent='LEVEL MAX';$('nextDescription').textContent='ALL UNLOCKED';
+  $('progressFill').style.width='100%';
+ }
+ $('milestones').innerHTML=milestones.map(x=>'<div class="milestone '+(actual>=x.at?'done':'')+'"><span>'+(actual>=x.at?'✓':'○')+' '+x.label+'</span><strong>'+x.at+' 回</strong></div>').join('');
+ $('previewTag').hidden=!preview;
+ const selector=$('townStagePicker');if(selector)selector.hidden=!preview;
+ if(selector)for(const b of selector.querySelectorAll('[data-stage]')){
+  const selected=Number(b.dataset.stage)===previewStage;
+  b.classList.toggle('is-selected',selected);b.setAttribute('aria-pressed',String(selected));
+ }
+}
 function render(){renderTasks();renderProgress();renderAvatar();paint();renderHistory()}
-$('previewButton').addEventListener('click',()=>{preview=!preview;$('previewButton').textContent=preview?'MAP に戻る':'PREVIEW';renderProgress();paint()});
+$('previewButton').addEventListener('click',()=>{
+ preview=!preview;
+ $('previewButton').textContent=preview?'MAP に戻る':'PREVIEW';
+ renderProgress();paint();
+});
+$('townStagePicker').addEventListener('click',event=>{
+ const b=event.target.closest('button[data-stage]');
+ if(!b)return;
+ preview=true;previewStage=Math.max(0,Math.min(75,Number(b.dataset.stage)));
+ renderProgress();paint();
+});
 // 専用の保存データを JSON としてエクスポート/復元できる。
 $('backupButton').addEventListener('click',()=>{const data=JSON.stringify({...state,version:1,exportedAt:new Date().toISOString()},null,2);const blob=new Blob([data],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='little-town-backup-'+nowDate()+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),6000);toast('記録を書き出したよ')});
 $('restoreFile').addEventListener('change',e=>{let f=e.target.files?.[0];e.target.value='';if(!f)return;if(f.size>3*1024*1024)return toast('ファイルは3MB以下にしてね');const fr=new FileReader();fr.onload=()=>{try{const data=JSON.parse(String(fr.result));if(!Array.isArray(data.tasks)||!Array.isArray(data.log))throw Error('形式が違います');if(!confirm('今のタスクと記録をバックアップの内容で置き換える？'))return;const tasks=data.tasks.filter(t=>t&&typeof t.name==='string'&&typeof t.id==='string').slice(0,3).map(t=>({id:t.id.slice(0,64),name:t.name.slice(0,32)}));const log=data.log.filter(x=>x&&typeof x.id==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x.day)).slice(-4000).map(x=>({id:x.id.slice(0,64),name:String(x.name||'').slice(0,32),day:x.day,at:Number(x.at)||0}));state={tasks,log,avatar:typeof data.avatar==='string'&&/^data:image\/(png|jpeg|webp|gif);base64,/.test(data.avatar)?data.avatar:'',name:typeof data.name==='string'?data.name.slice(0,18):'まる'};let ok=persist();preview=false;render();toast(ok?'記録を復元したよ':'復元したよ。ただし保存できない環境です')}catch(err){toast('JSONファイルを確認してね')}};fr.readAsText(f)});
-function loadImages(){let pending=tiles.length;for(const name of tiles){const img=new Image();img.onload=()=>{images[name]=img;try{winterImages[name]=window.littleTownWinterTile?.(name,img)}catch(error){console.warn('冬用画像の加工に失敗',name,error)}paint()};img.onerror=()=>console.warn('タイルの読み込みに失敗',name);img.src='../tiles/'+name+'.png';pending--}}
+function loadImages(){
+ for(const name of tiles){
+  const img=new Image();
+  img.onload=()=>{images[name]=img;try{winterImages[name]=window.littleTownWinterTile?.(name,img)}catch(error){console.warn('冬用画像の加工に失敗',name,error)}paint()};
+  img.onerror=()=>console.warn('タイルの読み込みに失敗',name);
+  img.src='../tiles/'+name+'.png';
+ }
+ for(const name of gardenTiles){
+  for(const winter of [false,true]){
+   const img=new Image();
+   img.onload=()=>{(winter?winterImages:images)[name]=img;paint()};
+   img.onerror=()=>console.warn('街のパーツの読み込みに失敗',name,winter);
+   img.src='garden/'+name+(winter?'_winter':'')+'.svg';
+  }
+ }
+}
 
 const monthCursor={year:new Date().getFullYear(),month:new Date().getMonth()};
 let selectedDay=nowDate();
@@ -213,7 +266,7 @@ const decorSuggestions=[
  {max:Infinity,positions:{tree:{x:9,y:46},gift:{x:29,y:67},snowman:{x:76,y:62},cane:{x:66,y:68},wreath:{x:69,y:41}}}
 ];
 function getSuggestedDecorPositions(){
- const n=preview?75:count();
+ const n=displayedCount();
  return JSON.parse(JSON.stringify(decorSuggestions.find(entry=>n<=entry.max).positions));
 }
 function refreshDecorShelf(){
