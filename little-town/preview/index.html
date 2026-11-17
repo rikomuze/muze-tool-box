@@ -26,7 +26,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="little town.">
-  <link rel="stylesheet" href="../style.css?v=20261116-preview2"><link rel="stylesheet" href="preview.css?v=decor-shelf1">
+  <link rel="stylesheet" href="../style.css?v=20261116-preview2"><link rel="stylesheet" href="preview.css?v=garden-stage1">
   <title>little town. | CHRISTMAS PREVIEW</title>
 </head>
 <body>
@@ -49,6 +49,17 @@
           <div class="christmas-front" id="christmasFront" aria-label="クリスマス装飾"><span class="decor-item decor-tree" title="ツリー"></span><span class="decor-item decor-gift" title="プレゼント"></span><span class="decor-item decor-snowman" title="雪だるま"></span><span class="decor-item decor-cane" title="キャンディケイン"></span><span class="decor-item decor-wreath" title="リース"></span></div>
           <div class="walker" id="walker" aria-hidden="true"><div class="walker-image" id="walkerImage"></div></div>
           <div class="preview-tag" id="previewTag" hidden>未来の街を見学中</div>
+        </div>
+        <div class="town-stage-picker" id="townStagePicker" aria-label="街の成長段階を確認">
+          <span class="kicker">GROWTH PREVIEW</span>
+          <div class="town-stage-options" role="group" aria-label="累計達成回数">
+            <button type="button" data-stage="15" aria-pressed="false">15回</button>
+            <button type="button" data-stage="25" aria-pressed="false">25回</button>
+            <button type="button" data-stage="40" aria-pressed="false">40回</button>
+            <button type="button" data-stage="60" aria-pressed="false">60回</button>
+            <button type="button" data-stage="75" aria-pressed="true">75回</button>
+          </div>
+          <small>実際の達成回数や履歴は変わりません。15回までは元の街のままです。</small>
         </div>
         <div class="world-footer">
           <div class="next"><strong id="nextTitle">NEXT</strong><span id="nextDescription"></span><div class="progress" aria-hidden="true"><span id="progressFill"></span></div></div>
@@ -166,7 +177,7 @@
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="winter.js?v=1"></script>
-  <script src="app.js?v=decor-shelf1" defer></script>
+  <script src="app.js?v=garden-stage1" defer></script>
   <script src="postcard.js?v=decor-shelf1" defer></script>
 </body>
 </html>
