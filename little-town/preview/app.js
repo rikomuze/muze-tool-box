@@ -253,7 +253,7 @@ function loadImages(){
    const img=new Image();
    img.onload=()=>{(winter?winterImages:images)[name]=img;paint()};
    img.onerror=()=>console.warn('街のパーツの読み込みに失敗',name,winter);
-   img.src='garden/'+name+(winter?'_winter':'')+'.svg';
+   img.src='garden/'+name+(winter?'_winter':'')+'.svg?v=iso2';
   }
  }
 }
