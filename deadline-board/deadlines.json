@@ -746,6 +746,19 @@
       "url": "https://mazzel.tokyo/",
       "note": "FC会員限定",
       "source": "MUZEUMアーカイブ画面"
+    },
+    {
+      "id": "cdj2627-front-area-lottery",
+      "short": "CDJ 26/27 前方エリア抽選",
+      "title": "COUNTDOWN JAPAN 26/27 ステージ前方エリア抽選 申込締切",
+      "category": "ticket",
+      "flow": "lottery",
+      "tag": "CDJ",
+      "start": "2026-11-25T16:00:00+09:00",
+      "end": "2026-11-30T16:00:00+09:00",
+      "url": "https://countdownjapan.jp/2627/ticket/",
+      "note": "第2次抽選先行までのチケット購入者対象。代表者・同行者とも本人分のみJフェスアプリから申込。",
+      "source": "JフェスOFFICIAL公式X（11/18）"
     }
   ]
 }
