@@ -786,6 +786,19 @@
       "url": "https://tver.jp/episodes/epdmprzmjw?utm_source=x&utm_medium=social&utm_campaign=official_mp",
       "note": "11/18放送分",
       "source": "TVer"
+    },
+    {
+      "id": "fukuoka-music-fes-2027-presale-20261129",
+      "short": "福フェス 4次先行",
+      "title": "FUKUOKA MUSIC FES. 2027 オフィシャル4次先行 抽選受付締切",
+      "category": "ticket",
+      "flow": "lottery",
+      "tag": "福岡 MUSIC FES.",
+      "start": "2026-11-17T18:00:00+09:00",
+      "end": "2026-11-29T23:59:00+09:00",
+      "note": "MAZZEL出演：2027/1/30 みずほPayPayドーム福岡。紙・電子チケット受付。",
+      "source": "福フェス公式・チケットぴあ",
+      "url": "https://t.pia.jp/pia/event/event.do?eventBundleCd=b2671147"
     }
   ]
 }
