@@ -116,8 +116,61 @@ const props=[
 ];
 const milestones=[{at:1,label:'ちいさな木'},{at:9,label:'はじめのおうち'},{at:25,label:'広場と噴水'},{at:42,label:'お店のある街'},{at:55,label:'風車の丘'},{at:75,label:'にぎやかな街'}];
 const gardenTiles=['market_stall_N','market_green_N','fountain_N','windmill_N'];
+// ---- MAP 02「ちいさなお店」（プレビュー）----
+// 記録は1本のまま。MAP 02 の育ちは「通算 − 75」で数える。
+const MAP02_START=75,MAP02_MAX=100;
+const mapKey='little-town-preview-map-v1';
+let currentMap='map01';
+try{if(localStorage.getItem(mapKey)==='map02')currentMap='map02'}catch(e){}
+const previewStages={map01:75,map02:100};
 let previewStage=75;
-const displayedCount=()=>preview?previewStage:count();
+const stageChoices={map01:[15,25,40,60,75],map02:[1,20,50,75,100]};
+const mapMax=()=>currentMap==='map02'?MAP02_MAX:75;
+const mapCount=()=>currentMap==='map02'?Math.max(0,count()-MAP02_START):count();
+const displayedCount=()=>preview?previewStages[currentMap]:mapCount();
+const milestones02=[{at:1,label:'はじめのお店'},{at:16,label:'店先の黒板'},{at:40,label:'食品の売り場'},{at:65,label:'洋服コーナー'},{at:85,label:'にぎやかな店先'},{at:100,label:'お店の完成'}];
+const activeMilestones=()=>currentMap==='map02'?milestones02:milestones;
+// お店の絵（1300×900 の画面座標）を、今の街と同じ 960×640 の枠に収める。
+const SHOP={s:.785,cx:687,cy:428,dx:480,dy:330,manifest:null,images:{}};
+const shopToCanvas=(x,y)=>({x:(x-SHOP.cx)*SHOP.s+SHOP.dx,y:(y-SHOP.cy)*SHOP.s+SHOP.dy});
+function shopImage(src){
+ if(!SHOP.images[src]){const img=new Image();img.onload=()=>{if(currentMap==='map02')paint()};img.onerror=()=>console.warn('お店の絵を読み込めませんでした',src);img.src=src;SHOP.images[src]=img}
+ return SHOP.images[src];
+}
+function loadShop(){
+ fetch('shop/manifest.json?v=1').then(r=>r.json()).then(m=>{
+  SHOP.manifest=m;
+  for(const l of m.layers){shopImage('shop/'+l.src+'?v=1');if(l.winter)shopImage('shop/'+l.winter+'?v=1')}
+  for(const p of m.plants){shopImage(p.normal);shopImage(p.winter)}
+  if(currentMap==='map02')paint();
+ }).catch(e=>console.warn('お店の設計図を読み込めませんでした',e));
+}
+const ready=img=>img&&((img instanceof HTMLCanvasElement&&img.width)||(img.complete&&img.naturalWidth));
+function paintShop(n){
+ const winter=townTheme==='winter';
+ ctx.clearRect(0,0,960,640);
+ const gr=ctx.createLinearGradient(0,0,0,640);gr.addColorStop(0,winter?'#dce8f0':'#e1e6d8');gr.addColorStop(1,winter?'#f1f5f7':'#f6e9d7');ctx.fillStyle=gr;ctx.fillRect(0,0,960,640);
+ ctx.fillStyle='rgba(140,151,125,.13)';ctx.beginPath();ctx.ellipse(500,580,410,40,0,0,Math.PI*2);ctx.fill();
+ const flowers=$('flowerGround');if(flowers)flowers.hidden=true;
+ const m=SHOP.manifest;if(!m)return;
+ ctx.save();ctx.translate(SHOP.dx,SHOP.dy);ctx.scale(SHOP.s,SHOP.s);ctx.translate(-SHOP.cx,-SHOP.cy);
+ const tileAt=(id,x,y,top)=>{const img=(winter&&winterImages[id])||images[id];if(ready(img))ctx.drawImage(img,x-W/2,y-top,W,H)};
+ const ox=m.scene.ox,oy=m.scene.oy;
+ for(let z=0;z<=13;z++)for(let i=0;i<8;i++){const jj=z-i;if(jj<0||jj>6)continue;tileAt('grass_center_N',ox+(i-jj)*75,oy+(i+jj)*37.5,38)}
+ const list=[];
+ for(const l of m.layers)if(l.at<=n)list.push({key:l.key,draw:()=>{const img=SHOP.images['shop/'+((winter&&l.winter)||l.src)+'?v=1'];if(ready(img))ctx.drawImage(img,0,0,m.scene.w,m.scene.h)}});
+ for(const t of m.tiles)if(t.at<=n)list.push({key:t.key,draw:()=>tileAt(t.tile,t.x,t.y,104)});
+ for(const p of m.plants)if(p.at<=n)list.push({key:p.key,draw:()=>{
+  const img=SHOP.images[winter?p.winter:p.normal];if(!ready(img))return;
+  // 今の街の低木・小花と同じ大きさ・同じ足元の合わせ方
+  let w,ay;
+  if(winter&&p.kind==='bloom'){w=56.6;ay=.8}else if(p.kind==='hedge'){w=120.7;ay=.6505}else{w=86.4;ay=1}
+  const h=w*img.naturalHeight/img.naturalWidth;ctx.drawImage(img,p.fx-w/2,p.fy-h*ay+(p.kind==='bloom'&&!winter?6:0),w,h);
+ }});
+ const cmp=(a,b)=>{for(let k=0;k<3;k++){if(a.key[k]!==b.key[k])return a.key[k]-b.key[k]}return 0};
+ list.sort(cmp).forEach(e=>e.draw());
+ ctx.restore();
+}
 function renderFlowers(n){
  const container=$('flowerGround');
  if(!container)return;
@@ -182,7 +235,7 @@ function drawPondBankFlowers(n){
  const x=winter?66:115,y=winter?364:366;
  ctx.drawImage(image,x-w/2,y-h,w,h);
 }
-function paint(){const n=displayedCount();ctx.clearRect(0,0,960,640);let gr=ctx.createLinearGradient(0,0,0,640);gr.addColorStop(0,townTheme==='winter'?'#dce8f0':'#e1e6d8');gr.addColorStop(1,townTheme==='winter'?'#f1f5f7':'#f6e9d7');ctx.fillStyle=gr;ctx.fillRect(0,0,960,640);ctx.fillStyle='rgba(140,151,125,.13)';ctx.beginPath();ctx.ellipse(480,555,380,43,0,0,Math.PI*2);ctx.fill();
+function paint(){if(currentMap==='map02')return paintShop(displayedCount());const n=displayedCount();ctx.clearRect(0,0,960,640);let gr=ctx.createLinearGradient(0,0,0,640);gr.addColorStop(0,townTheme==='winter'?'#dce8f0':'#e1e6d8');gr.addColorStop(1,townTheme==='winter'?'#f1f5f7':'#f6e9d7');ctx.fillStyle=gr;ctx.fillRect(0,0,960,640);ctx.fillStyle='rgba(140,151,125,.13)';ctx.beginPath();ctx.ellipse(480,555,380,43,0,0,Math.PI*2);ctx.fill();
  for(let z=0;z<=10;z++)for(let i=0;i<6;i++){let j=z-i;if(j<0||j>5)continue;drawTile('grass_center_N',i,j)}
  drawConnectedPaths(n);
  drawPond(n);
@@ -192,30 +245,31 @@ function paint(){const n=displayedCount();ctx.clearRect(0,0,960,640);let gr=ctx.
  renderFlowers(n);
 }
 function renderProgress(){
- const actual=count(),n=displayedCount(),next=milestones.find(x=>x.at>n);
- $('totalDone').textContent=actual;
+ const ms=activeMilestones(),actual=mapCount(),n=displayedCount(),next=ms.find(x=>x.at>n);
+ $('totalDone').textContent=count();
+ const label=currentMap==='map02'?'MAP 02 ':'';
  $('level').textContent=String(1+Math.floor(n/8)).padStart(2,'0');
- $('worldNote').textContent=preview?n+' CLEAR / PREVIEW':n===0?'START':n+' CLEAR';
+ $('worldNote').textContent=label+(preview?n+' CLEAR / PREVIEW':currentMap==='map02'&&count()<MAP02_START?'あと'+(MAP02_START-count())+'回で開店':n===0?'START':n+' CLEAR');
  // 見学中は「見学中の街」の話だと分かる表示にして、下の実際の記録と食い違って見えないようにする。
  $('levelLabel').textContent=preview?'見学中 LV':'TOWN LEVEL';
  if(preview){
-  $('nextTitle').textContent='見学中：'+n+'回の街';
-  $('nextDescription').textContent='実際の達成は '+actual+' 回。見学しても記録は変わりません';
-  $('progressFill').style.width=Math.min(100,n/75*100)+'%';
+  $('nextTitle').textContent='見学中：'+(currentMap==='map02'?n+'回目のお店':n+'回の街');
+  $('nextDescription').textContent='実際の達成は '+count()+' 回。見学しても記録は変わりません';
+  $('progressFill').style.width=Math.min(100,n/mapMax()*100)+'%';
  }else if(next){
   $('nextTitle').textContent='NEXT：'+next.label+' まであと '+(next.at-n);
   $('nextDescription').textContent='NEW ITEM';
-  const prev=milestones.filter(x=>x.at<=n).at(-1)?.at||0;
+  const prev=ms.filter(x=>x.at<=n).at(-1)?.at||0;
   $('progressFill').style.width=((n-prev)/(next.at-prev)*100)+'%';
  }else{
   $('nextTitle').textContent='LEVEL MAX';$('nextDescription').textContent='ALL UNLOCKED';
   $('progressFill').style.width='100%';
  }
- $('milestones').innerHTML=milestones.map(x=>'<div class="milestone '+(actual>=x.at?'done':'')+'"><span>'+(actual>=x.at?'✓':'○')+' '+x.label+'</span><strong>'+x.at+' 回</strong></div>').join('');
+ $('milestones').innerHTML=ms.map(x=>'<div class="milestone '+(actual>=x.at?'done':'')+'"><span>'+(actual>=x.at?'✓':'○')+' '+x.label+'</span><strong>'+x.at+' 回</strong></div>').join('');
  $('previewTag').hidden=!preview;
  const selector=$('townStagePicker');if(selector)selector.hidden=!preview;
  if(selector)for(const b of selector.querySelectorAll('[data-stage]')){
-  const selected=Number(b.dataset.stage)===previewStage;
+  const selected=Number(b.dataset.stage)===previewStages[currentMap];
   b.classList.toggle('is-selected',selected);b.setAttribute('aria-pressed',String(selected));
  }
 }
@@ -228,13 +282,14 @@ $('previewButton').addEventListener('click',()=>{
 $('townStagePicker').addEventListener('click',event=>{
  const b=event.target.closest('button[data-stage]');
  if(!b)return;
- preview=true;previewStage=Math.max(0,Math.min(75,Number(b.dataset.stage)));
+ preview=true;previewStages[currentMap]=Math.max(0,Math.min(mapMax(),Number(b.dataset.stage)));
  renderProgress();paint();
 });
 // 専用の保存データを JSON としてエクスポート/復元できる。
 $('backupButton').addEventListener('click',()=>{const data=JSON.stringify({...state,version:1,exportedAt:new Date().toISOString()},null,2);const blob=new Blob([data],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='little-town-backup-'+nowDate()+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),6000);toast('記録を書き出したよ')});
 $('restoreFile').addEventListener('change',e=>{let f=e.target.files?.[0];e.target.value='';if(!f)return;if(f.size>3*1024*1024)return toast('ファイルは3MB以下にしてね');const fr=new FileReader();fr.onload=()=>{try{const data=JSON.parse(String(fr.result));if(!Array.isArray(data.tasks)||!Array.isArray(data.log))throw Error('形式が違います');if(!confirm('今のタスクと記録をバックアップの内容で置き換える？'))return;const tasks=data.tasks.filter(t=>t&&typeof t.name==='string'&&typeof t.id==='string').slice(0,3).map(t=>({id:t.id.slice(0,64),name:t.name.slice(0,32)}));const log=data.log.filter(x=>x&&typeof x.id==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x.day)).slice(-4000).map(x=>({id:x.id.slice(0,64),name:String(x.name||'').slice(0,32),day:x.day,at:Number(x.at)||0}));state={tasks,log,avatar:typeof data.avatar==='string'&&/^data:image\/(png|jpeg|webp|gif);base64,/.test(data.avatar)?data.avatar:'',name:typeof data.name==='string'?data.name.slice(0,18):'まる'};let ok=persist();preview=false;render();toast(ok?'記録を復元したよ':'復元したよ。ただし保存できない環境です')}catch(err){toast('JSONファイルを確認してね')}};fr.readAsText(f)});
 function loadImages(){
+ loadShop();
  for(const [season,src] of Object.entries({normal:'garden/tiny-bloom-pink.svg?v=2',winter:'garden/bush-left-snow-pink.svg?v=1'})){
   const img=new Image();
   img.onload=()=>{pondBankImages[season]=img;paint()};
@@ -309,34 +364,46 @@ $('thisMonth').addEventListener('click',()=>{const d=new Date();monthCursor.year
 
 // たまに日付が変わると、新しい「今日」を反映する。
 lastDay=nowDate();setInterval(()=>{let d=nowDate();if(d!==lastDay){lastDay=d;renderTasks();renderHistory()}},30000);
-const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;let began=performance.now();function walk(ts){const period=14500,part=((ts-began)%period)/period;const u=part<.5?part*2:(1-part)*2;$('walker').style.left=(23+u*55)+'%';$('walker').classList.toggle('reverse',part>=.5);if(!reduce)requestAnimationFrame(walk)}
+const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;let began=performance.now();function walk(ts){const period=14500,part=((ts-began)%period)/period;const u=part<.5?part*2:(1-part)*2;const wk=$('walker');
+if(currentMap==='map02'&&SHOP.manifest){const [a,b]=SHOP.manifest.walk.map(p=>shopToCanvas(p.x,p.y));const x=a.x+(b.x-a.x)*u,y=a.y+(b.y-a.y)*u;wk.style.left=(x/960*100)+'%';wk.style.bottom=(100-y/640*100)+'%'}
+else{wk.style.left=(23+u*55)+'%';wk.style.bottom=''}$('walker').classList.toggle('reverse',part>=.5);if(!reduce)requestAnimationFrame(walk)}
 // このプレビュー専用の配置データ。本番サイトやタスク記録に干渉しない。
 const decorDefaults={
  tree:{x:9,y:46},gift:{x:29,y:67},snowman:{x:76,y:62},
  cane:{x:34.5,y:6},wreath:{x:29.1,y:54.5}
 };
-const decorStoreKey='little-town-preview-decor-v1';
-const decorHiddenKey='little-town-preview-decor-hidden-v1';
+const decorKeysFor=map=>map==='map02'?{pos:'little-town-preview-decor-map02-v1',hidden:'little-town-preview-decor-hidden-map02-v1'}:{pos:'little-town-preview-decor-v1',hidden:'little-town-preview-decor-hidden-v1'};
+let decorStoreKey=decorKeysFor(currentMap).pos;
+let decorHiddenKey=decorKeysFor(currentMap).hidden;
+// MAP 02 のおすすめ配置（お店のマスに合わせた位置）
+const decorDefaults02={tree:{x:71,y:39},gift:{x:50.2,y:47.1},snowman:{x:11.5,y:43},cane:{x:35.3,y:47.6},wreath:{x:64.8,y:28.9}};
 let decorHidden={};
 try{const savedHidden=JSON.parse(localStorage.getItem(decorHiddenKey)||'{}');if(savedHidden&&typeof savedHidden==='object')decorHidden=savedHidden}catch(error){console.warn('飾りの収納状態を読み込めませんでした',error)}
 const decorLayer=$('christmasFront');
-let decorEditing=false,activePointer=null,decorPositions=JSON.parse(JSON.stringify(decorDefaults));
+let decorEditing=false,activePointer=null,decorPositions=JSON.parse(JSON.stringify(currentMap==='map02'?decorDefaults02:decorDefaults));
 const decorElements={
  tree:decorLayer.querySelector('.decor-tree'),gift:decorLayer.querySelector('.decor-gift'),
  snowman:decorLayer.querySelector('.decor-snowman'),cane:decorLayer.querySelector('.decor-cane'),
  wreath:decorLayer.querySelector('.decor-wreath')
 };
 const clamp=(n,min,max)=>Math.max(min,Math.min(max,n));
-try{
- const stored=JSON.parse(localStorage.getItem(decorStoreKey)||'null');
- if(stored&&typeof stored==='object'){
-  for(const key of Object.keys(decorDefaults)){
-   if(Number.isFinite(stored[key]?.x)&&Number.isFinite(stored[key]?.y)){
-    decorPositions[key]={x:clamp(stored[key].x,0,90),y:clamp(stored[key].y,5,95)};
+function readDecorForMap(){
+ const keys=decorKeysFor(currentMap);decorStoreKey=keys.pos;decorHiddenKey=keys.hidden;
+ decorPositions=JSON.parse(JSON.stringify(currentMap==='map02'?decorDefaults02:decorDefaults));
+ decorHidden={};
+ try{
+  const stored=JSON.parse(localStorage.getItem(decorStoreKey)||'null');
+  if(stored&&typeof stored==='object'){
+   for(const key of Object.keys(decorDefaults)){
+    if(Number.isFinite(stored[key]?.x)&&Number.isFinite(stored[key]?.y)){
+     decorPositions[key]={x:clamp(stored[key].x,0,90),y:clamp(stored[key].y,5,95)};
+    }
    }
   }
- }
-}catch(err){console.warn('プレビューの装飾位置を読み込めませんでした',err)}
+  const h=JSON.parse(localStorage.getItem(decorHiddenKey)||'{}');if(h&&typeof h==='object')decorHidden=h;
+ }catch(err){console.warn('プレビューの装飾位置を読み込めませんでした',err)}
+}
+readDecorForMap();
 // 成長段階に応じて建物の密集する位置を避ける。配置を変える操作はこれまでどおり優先する。
 const decorSuggestions=[
  {max:8,positions:{tree:{x:12,y:40},gift:{x:34,y:67},snowman:{x:77,y:53},cane:{x:34.5,y:6},wreath:{x:55,y:47}}},
@@ -347,6 +414,7 @@ const decorSuggestions=[
 ];
 function getSuggestedDecorPositions(){
  const n=displayedCount();
+ if(currentMap==='map02')return JSON.parse(JSON.stringify(decorDefaults02));
  const positions=JSON.parse(JSON.stringify(decorSuggestions.find(entry=>n<=entry.max).positions));
  // リースは紫の屋根の家（16回〜）の左の壁に掛ける。
  positions.wreath=n>=16?{x:29.1,y:54.5}:{x:55,y:47};
@@ -445,7 +513,7 @@ for(const [key,element] of Object.entries(decorElements)){
 $('editDecor').addEventListener('click',()=>setDecorEditing(!decorEditing));
 $('resetDecor').addEventListener('click',()=>{
  if(!confirm('飾りの配置を最初の位置に戻す？\n今の配置は元に戻せません。'))return;
- decorPositions=JSON.parse(JSON.stringify(decorDefaults));
+ decorPositions=JSON.parse(JSON.stringify(currentMap==='map02'?decorDefaults02:decorDefaults));
  renderDecorPositions();saveDecorPositions();toast('飾りの配置を戻したよ');
 });
 $('decorToggle').addEventListener('click',()=>{
@@ -454,6 +522,22 @@ $('decorToggle').addEventListener('click',()=>{
  $('decorToggle').setAttribute('aria-pressed',String(!hidden));
  if(hidden&&decorEditing)setDecorEditing(false);
 });
+function renderMapSwitch(){
+ for(const b of document.querySelectorAll('#mapSwitch [data-map]')){const on=b.dataset.map===currentMap;b.classList.toggle('is-selected',on);b.setAttribute('aria-pressed',String(on))}
+ $('world').classList.toggle('is-map02',currentMap==='map02');
+ const opts=document.querySelector('#townStagePicker .town-stage-options');
+ if(opts)opts.innerHTML=stageChoices[currentMap].map(v=>'<button type="button" data-stage="'+v+'" aria-pressed="false">'+v+'回</button>').join('');
+ const help=document.querySelector('#townStagePicker small');
+ if(help)help.textContent=currentMap==='map02'?'MAP 02 は通算75回のあとに始まり、MAP 02 の100回目で完成します。見学しても記録は変わりません。':'実際の達成回数や履歴は変わりません。建物と木の解放順はそのまま、道と池の新しい地形を確認できます。';
+}
+function switchMap(map){
+ if(map===currentMap)return;
+ if(decorEditing)setDecorEditing(false);
+ currentMap=map;try{localStorage.setItem(mapKey,map)}catch(e){}
+ readDecorForMap();renderMapSwitch();renderDecorPositions();refreshDecorShelf();renderProgress();paint();
+ toast(map==='map02'?'MAP 02「ちいさなお店」':'MAP 01「ちいさな街」');
+}
+$('mapSwitch').addEventListener('click',e=>{const b=e.target.closest('button[data-map]');if(b)switchMap(b.dataset.map)});
 $('winterToggle').addEventListener('click',()=>{
  townTheme=townTheme==='winter'?'normal':'winter';
  $('winterToggle').textContent=townTheme==='winter'?'冬モード：ON':'冬モード：OFF';
@@ -462,13 +546,13 @@ $('winterToggle').addEventListener('click',()=>{
 });
 // Preview-only migration of the old floating wreath; retain every other decoration position.
 try{
- if(localStorage.getItem('little-town-preview-wreath-v3')!=='1'){
+ if(currentMap==='map01'&&localStorage.getItem('little-town-preview-wreath-v3')!=='1'){
   decorPositions.wreath={...decorDefaults.wreath};
   localStorage.setItem(decorStoreKey,JSON.stringify(decorPositions));
   localStorage.setItem('little-town-preview-wreath-v3','1');
  }
 }catch(error){console.warn('リースの位置を更新できませんでした',error)}
-renderDecorPositions();refreshDecorShelf();setDecorEditing(false);
+renderMapSwitch();renderDecorPositions();refreshDecorShelf();setDecorEditing(false);
 load();preview=true;render();loadImages();$('previewButton').textContent='自分の街に戻る';
 if(reduce){$('walker').style.left='40%'}else requestAnimationFrame(walk);
 })();
