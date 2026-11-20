@@ -608,6 +608,30 @@
       "url": "https://www.ntv.co.jp/best-artist/",
       "note": "放送枠 16:00〜17:00／19:00〜22:54。出演時間未発表",
       "source": "MAZZEL公式X（11/20）"
+    },
+    {
+      "id": "app-20261123-musicline",
+      "short": "ミュージックライン RYUKI・HAYATO",
+      "title": "NHK-FM「ミュージックライン」DJ RYUKI・HAYATO／ゲスト BUDDiiS／SHOW・FUMIYA",
+      "media": "radio",
+      "station": "NHK-FM",
+      "start": "2026-11-23T21:45:00+09:00",
+      "airEnd": "2026-11-23T22:30:00+09:00",
+      "url": "https://www.nhk.jp/p/ml/",
+      "note": "DJ：RYUKI・HAYATO／ゲスト：BUDDiiS／SHOW・FUMIYA",
+      "source": "NHKミュージックライン公式告知（11/20）"
+    },
+    {
+      "id": "app-20261124-musicline",
+      "short": "ミュージックライン RYUKI・HAYATO",
+      "title": "NHK-FM「ミュージックライン」DJ RYUKI・HAYATO／ゲスト 秦 基博",
+      "media": "radio",
+      "station": "NHK-FM",
+      "start": "2026-11-24T21:45:00+09:00",
+      "airEnd": "2026-11-24T22:30:00+09:00",
+      "url": "https://www.nhk.jp/p/ml/",
+      "note": "DJ：RYUKI・HAYATO／ゲスト：秦 基博",
+      "source": "NHKミュージックライン公式告知（11/20）"
     }
   ]
 }
