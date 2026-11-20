@@ -120,6 +120,7 @@ const gardenTiles=['market_stall_N','market_green_N','fountain_N','windmill_N'];
 const MAP02_START=75,MAP02_MAX=100;
 // MAP 02 は通算75回（MAP 01 の完成）で開く。開く前は切り替えも見学もできない。
 const map02Unlocked=()=>count()>=MAP02_START;
+const mapLocked=()=>currentMap==='map02'&&!map02Unlocked();
 let currentMap='map01';
 const previewStages={map01:75,map02:100};
 const mapMax=()=>currentMap==='map02'?MAP02_MAX:75;
@@ -249,7 +250,12 @@ function renderProgress(){
  $('worldNote').textContent=label+(preview?n+' CLEAR / PREVIEW':n===0?'START':n+' CLEAR');
  // 見学中は「見学中の街」の話だと分かる表示にして、下の実際の記録と食い違って見えないようにする。
  $('levelLabel').textContent=preview?'見学中 LV':'TOWN LEVEL';
- if(preview){
+ if(mapLocked()){
+  $('worldNote').textContent='MAP 02 COMING SOON';
+  $('nextTitle').textContent='MAP 02 オープンまで あと '+(MAP02_START-count())+' 回';
+  $('nextDescription').textContent='MAP 01 を完成させると、となりにお店ができるよ';
+  $('progressFill').style.width=Math.min(100,count()/MAP02_START*100)+'%';
+ }else if(preview){
   $('nextTitle').textContent='見学中：'+(currentMap==='map02'?n+'回目のお店':n+'回の街');
   $('nextDescription').textContent='実際の達成は '+count()+' 回。見学しても記録は変わりません';
   $('progressFill').style.width=Math.min(100,n/mapMax()*100)+'%';
@@ -267,10 +273,10 @@ function renderProgress(){
  renderMapSwitch();
 }
 function render(){renderTasks();renderProgress();renderAvatar();paint();renderHistory();updateDecorUnlocks()}
-$('previewButton').addEventListener('click',()=>{preview=!preview;$('previewButton').textContent=preview?'自分の街に戻る':'未来の街を見る';renderProgress();paint()});
+$('previewButton').addEventListener('click',()=>{if(mapLocked())return;preview=!preview;$('previewButton').textContent=preview?'自分の街に戻る':'未来の街を見る';renderProgress();paint()});
 // 専用の保存データを JSON としてエクスポート/復元できる。
 $('backupButton').addEventListener('click',()=>{const data=JSON.stringify({...state,version:1,exportedAt:new Date().toISOString()},null,2);const blob=new Blob([data],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='little-town-backup-'+nowDate()+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),6000);toast('記録を書き出したよ')});
-$('restoreFile').addEventListener('change',e=>{let f=e.target.files?.[0];e.target.value='';if(!f)return;if(f.size>3*1024*1024)return toast('ファイルは3MB以下にしてね');const fr=new FileReader();fr.onload=()=>{try{const data=JSON.parse(String(fr.result));if(!Array.isArray(data.tasks)||!Array.isArray(data.log))throw Error('形式が違います');if(!confirm('今のタスクと記録をバックアップの内容で置き換える？'))return;const tasks=data.tasks.filter(t=>t&&typeof t.name==='string'&&typeof t.id==='string').slice(0,3).map(t=>({id:t.id.slice(0,64),name:t.name.slice(0,32)}));const log=data.log.filter(x=>x&&typeof x.id==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x.day)).slice(-4000).map(x=>({id:x.id.slice(0,64),name:String(x.name||'').slice(0,32),day:x.day,at:Number(x.at)||0}));state={tasks,log,avatar:typeof data.avatar==='string'&&/^data:image\/(png|jpeg|webp|gif);base64,/.test(data.avatar)?data.avatar:'',name:typeof data.name==='string'?data.name.slice(0,18):'まる',townDecor:data.townDecor&&typeof data.townDecor==='object'&&!Array.isArray(data.townDecor)?data.townDecor:{},settings:data.settings&&typeof data.settings==='object'&&!Array.isArray(data.settings)?data.settings:{}};let ok=persist();preview=false;if(currentMap==='map02'&&!map02Unlocked())currentMap='map01';readSavedDecor();decorStored=readStoredDecor();applyDecorVisibility();renderDecorPositions();render();toast(ok?'記録を復元したよ':'復元したよ。ただし保存できない環境です')}catch(err){toast('JSONファイルを確認してね')}};fr.readAsText(f)});
+$('restoreFile').addEventListener('change',e=>{let f=e.target.files?.[0];e.target.value='';if(!f)return;if(f.size>3*1024*1024)return toast('ファイルは3MB以下にしてね');const fr=new FileReader();fr.onload=()=>{try{const data=JSON.parse(String(fr.result));if(!Array.isArray(data.tasks)||!Array.isArray(data.log))throw Error('形式が違います');if(!confirm('今のタスクと記録をバックアップの内容で置き換える？'))return;const tasks=data.tasks.filter(t=>t&&typeof t.name==='string'&&typeof t.id==='string').slice(0,3).map(t=>({id:t.id.slice(0,64),name:t.name.slice(0,32)}));const log=data.log.filter(x=>x&&typeof x.id==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x.day)).slice(-4000).map(x=>({id:x.id.slice(0,64),name:String(x.name||'').slice(0,32),day:x.day,at:Number(x.at)||0}));state={tasks,log,avatar:typeof data.avatar==='string'&&/^data:image\/(png|jpeg|webp|gif);base64,/.test(data.avatar)?data.avatar:'',name:typeof data.name==='string'?data.name.slice(0,18):'まる',townDecor:data.townDecor&&typeof data.townDecor==='object'&&!Array.isArray(data.townDecor)?data.townDecor:{},settings:data.settings&&typeof data.settings==='object'&&!Array.isArray(data.settings)?data.settings:{}};let ok=persist();preview=false;readSavedDecor();decorStored=readStoredDecor();applyDecorVisibility();renderDecorPositions();render();toast(ok?'記録を復元したよ':'復元したよ。ただし保存できない環境です')}catch(err){toast('JSONファイルを確認してね')}};fr.readAsText(f)});
 function loadImages(){
  loadShop();
  for(const [season,src] of Object.entries({normal:'garden/tiny-bloom-pink.svg?v=2',winter:'garden/bush-left-snow-pink.svg?v=1'})){
@@ -397,6 +403,7 @@ function updateDecorUnlocks(){
  $('decorStatus').textContent=upcoming?
   'HOLIDAY COLLECTION  '+got.length+'/5 GET ・ 次は'+upcoming.name+'（あと'+(upcoming.at-n)+'回）':
   'HOLIDAY COLLECTION  5/5 GET！すべての飾りが解放されました';
+ applyLockState();
 }
 // 街の成長段階に合わせた配置案。本人がボタンを押すまで位置は変わらない。
 const decorSuggestions=[
@@ -440,7 +447,7 @@ function persistStoredDecor(){
 }
 $('decorShelfItems').addEventListener('click',event=>{
  const button=event.target.closest('button[data-decor-shelf]');
- if(!button||button.disabled)return;
+ if(!button||button.disabled||mapLocked())return;
  const key=button.dataset.decorShelf;
  if(!unlocks.some(item=>item.key===key&&count()>=item.at))return;
  decorStored[key]=decorStored[key]!==true;
@@ -537,12 +544,29 @@ function applyDecorVisibility(){
 }
 function renderMapSwitch(){
  const sw=$('mapSwitch');if(!sw)return;
- sw.hidden=!map02Unlocked();
+ sw.hidden=false;
+ const open=map02Unlocked(),rest=MAP02_START-count();
  for(const b of sw.querySelectorAll('[data-map]')){const on=b.dataset.map===currentMap;b.classList.toggle('is-selected',on);b.setAttribute('aria-pressed',String(on))}
+ const b2=sw.querySelector('[data-map="map02"]');
+ b2.classList.toggle('is-locked',!open);
+ b2.querySelector('small').textContent=open?'ちいさなお店':'あと'+rest+'回でオープン';
+ b2.setAttribute('aria-label',open?'MAP 02 ちいさなお店':'MAP 02 ちいさなお店（まだ開いていません。あと'+rest+'回）');
  $('world').classList.toggle('is-map02',currentMap==='map02');
+ applyLockState();
+}
+// 解放前の MAP 02：空き地とお知らせだけを見せ、飾り・見学・ポストカードは使えない
+function applyLockState(){
+ const locked=mapLocked();
+ const card=$('mapLocked');
+ if(card){card.hidden=!locked;if(locked){$('mapLockedRest').textContent=MAP02_START-count();$('mapLockedFill').style.width=Math.min(100,count()/MAP02_START*100)+'%'}}
+ decorLayer.classList.toggle('is-locked-map',locked);
+ for(const id of ['previewButton','openPostcard','decorToggle','editDecor','suggestDecor','resetDecor'])if(locked&&$(id))$(id).disabled=true;
+ if(!locked){$('previewButton').disabled=false;$('openPostcard').disabled=false}
+ $('decorShelfItems').classList.toggle('is-locked-map',locked);
 }
 function switchMap(map){
- if(map===currentMap||(map==='map02'&&!map02Unlocked()))return;
+ if(map===currentMap)return;
+ if(preview){preview=false;$('previewButton').textContent='未来の街を見る'}
  if(decorEditing)setDecorEditing(false);
  currentMap=map;state.settings.map=map;persist();
  readSavedDecor();decorStored=readStoredDecor();applyDecorVisibility();
@@ -558,7 +582,7 @@ $('winterToggle').addEventListener('click',()=>{
  paint();
 });
 load();preview=false;
-if(state.settings?.map==='map02'&&map02Unlocked())currentMap='map02';
+if(state.settings?.map==='map02')currentMap='map02';
 if(state.settings?.theme==='normal')townTheme='normal';
 $('winterToggle').textContent=townTheme==='winter'?'冬モード：ON':'冬モード：OFF';
 $('winterToggle').setAttribute('aria-pressed',String(townTheme==='winter'));

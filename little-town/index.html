@@ -25,7 +25,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="little town.">
-  <link rel="stylesheet" href="style.css?v=20261117-avatar2"><link rel="stylesheet" href="seasonal.css?v=20261120-shop1">
+  <link rel="stylesheet" href="style.css?v=20261117-avatar2"><link rel="stylesheet" href="seasonal.css?v=20261120-shop2">
   <title>little town. | MY TOWN</title>
 </head>
 <body>
@@ -38,7 +38,7 @@
     <main class="layout">
       <section class="board panel" aria-label="あなたの街">
         <div class="board-header">
-          <div><span class="kicker">TOWN MAP</span><h1>MY TOWN</h1><div class="map-switch" id="mapSwitch" role="group" aria-label="見る街を選ぶ" hidden><button type="button" data-map="map01" aria-pressed="true">MAP 01<small>ちいさな街</small></button><button type="button" data-map="map02" aria-pressed="false">MAP 02<small>ちいさなお店</small></button></div></div>
+          <div><span class="kicker">TOWN MAP</span><h1>MY TOWN</h1><div class="map-switch" id="mapSwitch" role="group" aria-label="見る街を選ぶ"><button type="button" data-map="map01" aria-pressed="true">MAP 01<small>ちいさな街</small></button><button type="button" data-map="map02" aria-pressed="false">MAP 02<small>ちいさなお店</small></button></div></div>
           <div class="level" aria-label="街のレベル"><small id="levelLabel">TOWN LEVEL</small><strong id="level">01</strong></div>
         </div>
         <div class="world" id="world">
@@ -57,6 +57,7 @@
           <div class="christmas-front" id="christmasFront" aria-label="クリスマス装飾"><span class="decor-item decor-tree" hidden title="ツリー"></span><span class="decor-item decor-gift" hidden title="プレゼント"></span><span class="decor-item decor-snowman" hidden title="雪だるま"></span><span class="decor-item decor-cane" hidden title="キャンディケイン"></span><span class="decor-item decor-wreath" hidden title="リース"></span></div>
           <div class="walker" id="walker" aria-hidden="true"><div class="walker-image" id="walkerImage"></div></div>
           <div class="preview-tag" id="previewTag" hidden>未来の街を見学中</div>
+          <div class="map-locked" id="mapLocked" hidden><div class="map-locked-card"><span class="map-locked-kicker">COMING SOON</span><strong>MAP 02 ちいさなお店</strong><p>通算75回で、となりにお店がオープン</p><div class="map-locked-rest">あと <b id="mapLockedRest">75</b> 回</div><div class="map-locked-bar" aria-hidden="true"><span id="mapLockedFill"></span></div></div></div>
         </div>
         <section class="panel tasks-panel">
           <div class="section-title"><div><span class="kicker">DAILY QUEST</span><h2>TODAY</h2></div><div class="count"><strong id="todayDone">0</strong><span id="todayMax"> / 0</span></div></div>
@@ -191,8 +192,8 @@
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="winter.js?v=20261116-season1"></script>
-  <script src="app.js?v=20261120-shop1" defer></script>
-  <script src="postcard.js?v=20261120-shop1" defer></script>
+  <script src="app.js?v=20261120-shop2" defer></script>
+  <script src="postcard.js?v=20261120-shop2" defer></script>
   <script src="notice.js?v=20261116-notice1" defer></script>
 </body>
 </html>
