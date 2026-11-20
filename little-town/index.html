@@ -25,7 +25,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="little town.">
-  <link rel="stylesheet" href="style.css?v=20261117-avatar2"><link rel="stylesheet" href="seasonal.css?v=20261117-decor1">
+  <link rel="stylesheet" href="style.css?v=20261117-avatar2"><link rel="stylesheet" href="seasonal.css?v=20261120-shop1">
   <title>little town. | MY TOWN</title>
 </head>
 <body>
@@ -38,7 +38,7 @@
     <main class="layout">
       <section class="board panel" aria-label="あなたの街">
         <div class="board-header">
-          <div><span class="kicker">TOWN MAP</span><h1>MY TOWN</h1></div>
+          <div><span class="kicker">TOWN MAP</span><h1>MY TOWN</h1><div class="map-switch" id="mapSwitch" role="group" aria-label="見る街を選ぶ" hidden><button type="button" data-map="map01" aria-pressed="true">MAP 01<small>ちいさな街</small></button><button type="button" data-map="map02" aria-pressed="false">MAP 02<small>ちいさなお店</small></button></div></div>
           <div class="level" aria-label="街のレベル"><small id="levelLabel">TOWN LEVEL</small><strong id="level">01</strong></div>
         </div>
         <div class="world" id="world">
@@ -94,7 +94,7 @@
           </div>
           <p class="decor-reset"><button class="text-button" type="button" id="resetDecor">配置を最初の位置に戻す</button></p>
         </section>
-        <div class="art-credit">街の素材：<a href="https://kenney.nl/assets/sketch-town" target="_blank" rel="noopener noreferrer">Kenney / Sketch Town</a>（CC0）</div>
+        <div class="art-credit">街の素材：<a href="https://kenney.nl/assets/sketch-town" target="_blank" rel="noopener noreferrer">Kenney / Sketch Town</a>（CC0）・お店の家具は <a href="https://kenney.nl/assets" target="_blank" rel="noopener noreferrer">Kenney / Mini Shop</a>（CC0）を参考に描き下ろし</div>
       </section>
       <aside class="sidebar">
         <section class="panel avatar-panel">
@@ -191,8 +191,8 @@
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="winter.js?v=20261116-season1"></script>
-  <script src="app.js?v=20261117-decor1" defer></script>
-  <script src="postcard.js?v=20261117-decor1" defer></script>
+  <script src="app.js?v=20261120-shop1" defer></script>
+  <script src="postcard.js?v=20261120-shop1" defer></script>
   <script src="notice.js?v=20261116-notice1" defer></script>
 </body>
 </html>

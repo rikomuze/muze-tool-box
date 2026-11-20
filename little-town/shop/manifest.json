@@ -1,0 +1,439 @@
+{
+ "scene": {
+  "w": 1300,
+  "h": 900,
+  "ox": 650,
+  "oy": 150
+ },
+ "layers": [
+  {
+   "id": "floor",
+   "at": 0,
+   "key": [
+    -9,
+    0,
+    0
+   ],
+   "src": "floor.svg"
+  },
+  {
+   "id": "floor-wear",
+   "at": 45,
+   "key": [
+    -8,
+    0,
+    0
+   ],
+   "src": "floor-wear.svg"
+  },
+  {
+   "id": "sidewalk",
+   "at": 0,
+   "key": [
+    -7,
+    0,
+    0
+   ],
+   "src": "sidewalk.svg",
+   "winter": "sidewalk-winter.svg"
+  },
+  {
+   "id": "walls",
+   "at": 0,
+   "key": [
+    -2,
+    0,
+    0
+   ],
+   "src": "walls.svg",
+   "winter": "walls-winter.svg"
+  },
+  {
+   "id": "windows",
+   "at": 10,
+   "key": [
+    -2,
+    0,
+    2
+   ],
+   "src": "windows.svg"
+  },
+  {
+   "id": "garland",
+   "at": 100,
+   "key": [
+    -1,
+    0,
+    0
+   ],
+   "src": "garland.svg"
+  },
+  {
+   "id": "fridge",
+   "at": 40,
+   "key": [
+    0,
+    0,
+    0
+   ],
+   "src": "fridge.svg"
+  },
+  {
+   "id": "bread",
+   "at": 8,
+   "key": [
+    1,
+    0,
+    0
+   ],
+   "src": "bread.svg"
+  },
+  {
+   "id": "shelf1",
+   "at": 28,
+   "key": [
+    1,
+    1,
+    0
+   ],
+   "src": "shelf1.svg"
+  },
+  {
+   "id": "fruit",
+   "at": 5,
+   "key": [
+    2,
+    0,
+    0
+   ],
+   "src": "fruit.svg"
+  },
+  {
+   "id": "shelf2",
+   "at": 32,
+   "key": [
+    2,
+    2,
+    0
+   ],
+   "src": "shelf2.svg"
+  },
+  {
+   "id": "flowers",
+   "at": 13,
+   "key": [
+    3,
+    0,
+    0
+   ],
+   "src": "flowers.svg"
+  },
+  {
+   "id": "baskets",
+   "at": 20,
+   "key": [
+    4,
+    0,
+    0
+   ],
+   "src": "baskets.svg"
+  },
+  {
+   "id": "cans",
+   "at": 24,
+   "key": [
+    4,
+    2,
+    0
+   ],
+   "src": "cans.svg"
+  },
+  {
+   "id": "boxes",
+   "at": 95,
+   "key": [
+    4,
+    4,
+    0
+   ],
+   "src": "boxes.svg"
+  },
+  {
+   "id": "vending",
+   "at": 85,
+   "key": [
+    5,
+    0,
+    0
+   ],
+   "src": "vending.svg",
+   "winter": "vending-winter.svg"
+  },
+  {
+   "id": "freezer",
+   "at": 36,
+   "key": [
+    5,
+    3,
+    0
+   ],
+   "src": "freezer.svg"
+  },
+  {
+   "id": "plant1",
+   "at": 12,
+   "key": [
+    5,
+    4,
+    0
+   ],
+   "src": "plant1.svg"
+  },
+  {
+   "id": "rack",
+   "at": 50,
+   "key": [
+    5,
+    5,
+    0
+   ],
+   "src": "rack.svg"
+  },
+  {
+   "id": "gacha",
+   "at": 90,
+   "key": [
+    6,
+    1,
+    0
+   ],
+   "src": "gacha.svg",
+   "winter": "gacha-winter.svg"
+  },
+  {
+   "id": "jam",
+   "at": 44,
+   "key": [
+    6,
+    2,
+    0
+   ],
+   "src": "jam.svg"
+  },
+  {
+   "id": "ctable",
+   "at": 60,
+   "key": [
+    6,
+    5,
+    0
+   ],
+   "src": "ctable.svg"
+  },
+  {
+   "id": "hats",
+   "at": 55,
+   "key": [
+    6,
+    6,
+    0
+   ],
+   "src": "hats.svg"
+  },
+  {
+   "id": "chalk",
+   "at": 16,
+   "key": [
+    8,
+    3,
+    0
+   ],
+   "src": "chalk.svg",
+   "winter": "chalk-winter.svg"
+  },
+  {
+   "id": "register",
+   "at": 3,
+   "key": [
+    8,
+    4,
+    0
+   ],
+   "src": "register.svg"
+  },
+  {
+   "id": "accessory",
+   "at": 65,
+   "key": [
+    8,
+    6,
+    0
+   ],
+   "src": "accessory.svg"
+  },
+  {
+   "id": "plant2",
+   "at": 58,
+   "key": [
+    9,
+    6,
+    0
+   ],
+   "src": "plant2.svg"
+  },
+  {
+   "id": "bench",
+   "at": 70,
+   "key": [
+    10,
+    7,
+    0
+   ],
+   "src": "bench.svg",
+   "winter": "bench-winter.svg"
+  },
+  {
+   "id": "cart",
+   "at": 80,
+   "key": [
+    10.719999999999999,
+    5.72,
+    0
+   ],
+   "src": "cart.svg",
+   "winter": "cart-winter.svg"
+  }
+ ],
+ "tiles": [
+  {
+   "id": "tile-tree_single_N-7-0",
+   "at": 0,
+   "key": [
+    7,
+    7,
+    1
+   ],
+   "tile": "tree_single_N",
+   "x": 1175,
+   "y": 412.5
+  },
+  {
+   "id": "tile-tree_multiple_N-7-2",
+   "at": 20,
+   "key": [
+    9,
+    7,
+    1
+   ],
+   "tile": "tree_multiple_N",
+   "x": 1025,
+   "y": 487.5
+  },
+  {
+   "id": "tile-rocks_grass_N-7-4",
+   "at": 40,
+   "key": [
+    11,
+    7,
+    1
+   ],
+   "tile": "rocks_grass_N",
+   "x": 875,
+   "y": 562.5
+  },
+  {
+   "id": "tile-tree_single_N-7-1",
+   "at": 75,
+   "key": [
+    8,
+    7,
+    1
+   ],
+   "tile": "tree_single_N",
+   "x": 1100,
+   "y": 450.0
+  }
+ ],
+ "plants": [
+  {
+   "id": "bloom-white",
+   "at": 0,
+   "key": [
+    7.5,
+    1,
+    2
+   ],
+   "kind": "bloom",
+   "normal": "garden/tiny-bloom-white.svg?v=2",
+   "winter": "garden/bush-left-snow-white.svg?v=1",
+   "fx": 274.9,
+   "fy": 486.57
+  },
+  {
+   "id": "hedge-white",
+   "at": 30,
+   "key": [
+    9.55,
+    3,
+    2
+   ],
+   "kind": "hedge",
+   "normal": "garden/hedge-down-flower-white.svg?v=1",
+   "winter": "garden/hedge-down-snow-white.svg?v=1",
+   "fx": 421.19,
+   "fy": 563.47
+  },
+  {
+   "id": "hedge-up",
+   "at": 50,
+   "key": [
+    13,
+    7,
+    2
+   ],
+   "kind": "hedge",
+   "normal": "garden/hedge-up-flower-pink.svg?v=1",
+   "winter": "garden/hedge-up-snow-pink.svg?v=1",
+   "fx": 762.53,
+   "fy": 692.88
+  },
+  {
+   "id": "bloom-pink",
+   "at": 65,
+   "key": [
+    11.5,
+    5,
+    2
+   ],
+   "kind": "bloom",
+   "normal": "garden/tiny-bloom-pink.svg?v=2",
+   "winter": "garden/bush-right-snow-pink.svg?v=1",
+   "fx": 574.98,
+   "fy": 636.61
+  },
+  {
+   "id": "hedge-pink",
+   "at": 85,
+   "key": [
+    12.55,
+    6,
+    2
+   ],
+   "kind": "hedge",
+   "normal": "garden/hedge-down-flower-pink.svg?v=1",
+   "winter": "garden/hedge-down-snow-pink.svg?v=1",
+   "fx": 646.25,
+   "fy": 676.0
+  }
+ ],
+ "walk": [
+  {
+   "x": 316.2,
+   "y": 435.9
+  },
+  {
+   "x": 751.3,
+   "y": 653.5
+  }
+ ]
+}
