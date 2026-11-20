@@ -596,6 +596,18 @@
       "url": "https://mazzel.tokyo/",
       "note": "FC限定・館内放送",
       "source": "MUZEUM公式お知らせ"
+    },
+    {
+      "id": "app-20261128-best-artist-2026",
+      "short": "ベストアーティスト2026 MAZZEL",
+      "title": "日本テレビ「ベストアーティスト2026」MAZZEL出演",
+      "media": "tv",
+      "station": "日本テレビ",
+      "start": "2026-11-28T16:00:00+09:00",
+      "end": "2026-11-28T22:54:00+09:00",
+      "url": "https://www.ntv.co.jp/best-artist/",
+      "note": "放送枠 16:00〜17:00／19:00〜22:54。出演時間未発表",
+      "source": "MAZZEL公式X（11/20）"
     }
   ]
 }
