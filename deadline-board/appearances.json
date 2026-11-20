@@ -161,6 +161,17 @@
       "source": "ニッポン放送公式（ポッドキャスト配信案内）"
     },
     {
+      "id": "app-20261103-fc-kannai-live",
+      "short": "MUZEUM 館内放送（NAOYA・RYUKI）",
+      "title": "MUZEUM 館内放送（NAOYA・RYUKI出演）",
+      "media": "stream",
+      "station": "MUZEUM（FC）",
+      "start": "2026-11-03T15:30:00+09:00",
+      "url": "https://mazzel.tokyo/",
+      "note": "NAOYA・RYUKI出演。FC限定",
+      "source": "MUZEUMアーカイブ画面（ユーザー提供・11/3）"
+    },
+    {
       "id": "app-20261103-lucky7-takuto-ryuki",
       "short": "LUCKY 7 TAKUTO・RYUKI (3日)",
       "title": "ニッポン放送「大沢あかね LUCKY 7」TAKUTO・RYUKI ゲスト出演（11/3）",
@@ -232,52 +243,16 @@
       "source": "MAZZEL公式X・TVerエピソードURL（ユーザー提供・2026/11/7）"
     },
     {
-      "id": "app-20261115-mtv-vmaj2026",
-      "short": "VMAJ 2026【MTV・TELASA配信】",
-      "title": "MTV VMAJ 2026｜MTV放送・TELASAで視聴可能（MAZZEL出演）",
+      "id": "app-20261107-dunk-tv",
+      "short": "D.U.N.K. 地上波特番",
+      "title": "D.U.N.K. 地上波特別番組（第1週）",
       "media": "tv",
-      "station": "MTV JAPAN／TELASA",
-      "start": "2026-11-15T19:30:00+09:00",
-      "url": "https://www.telasa.jp/videos/278449",
-      "note": "MTV放送・TELASA配信。LIVE・WINNER TALKに出演",
-      "source": "MAZZEL公式X・MTVタイムテーブル（ユーザー提供画像）・TELASA番組ページ",
-      "airEnd": "2026-11-16T00:00:00+09:00"
-    },
-    {
-      "id": "app-20261123-dreamfestival-cs",
-      "short": "ドリフェス2026 CS生中継",
-      "title": "テレビ朝日ドリームフェスティバル2026 CS生中継（MAZZEL出演）",
-      "media": "tv",
-      "station": "CSテレ朝チャンネル1",
-      "start": "2026-11-23T15:00:00+09:00",
-      "url": "https://dreamfestival.jp/",
-      "note": "11/23公演を独占生中継。一部演目のみ放送",
-      "source": "テレビ朝日ドリームフェスティバル公式・スカパー！番組表",
-      "airEnd": "2026-11-23T21:30:00+09:00"
-    },
-    {
-      "id": "app-20261121-inazuma-cs",
-      "short": "イナズマフェス CS放送",
-      "title": "FEST. INAZUMA 2026 DAY1（MAZZEL出演）CS放送",
-      "media": "tv",
-      "station": "フジテレビTWO ドラマ・アニメ",
-      "start": "2026-11-21T20:00:00+09:00",
-      "airEnd": "2026-11-21T23:00:00+09:00",
-      "url": "https://www.skyperfectv.co.jp/program/search/cast/?actorId=TR063493995138",
-      "note": "9/19開催DAY1の後日放送",
-      "source": "スカパー！番組情報"
-    },
-    {
-      "id": "app-20261122-cdtv-thanksfes-day3",
-      "short": "CDTV秋の大感謝祭 DAY3",
-      "title": "CDTVライブ！ライブ！秋の大感謝祭2026 DAY3（MAZZEL出演）",
-      "media": "tv",
-      "station": "CS・TBSチャンネル1",
-      "start": "2026-11-22T21:00:00+09:00",
-      "url": "https://www.tbs.co.jp/tbs-ch/",
-      "note": "DAY3をテレビ初独占放送",
-      "source": "TBSチャンネル公式X（ユーザー提供画像）・公式番組表",
-      "airEnd": "2026-11-22T23:40:00+09:00"
+      "station": "日本テレビ",
+      "start": "2026-11-07T14:30:00+09:00",
+      "airEnd": "2026-11-07T15:00:00+09:00",
+      "url": "https://x.com/dunk_dance",
+      "note": "D.U.N.K.特別番組・第1回",
+      "source": "D.U.N.K.公式X（ユーザー提供告知画像）"
     },
     {
       "id": "app-20261107-talkabout-kairyu",
@@ -287,42 +262,6 @@
       "station": "TBSラジオ",
       "start": "2026-11-07T22:00:00+09:00",
       "airEnd": "2026-11-07T23:30:00+09:00",
-      "url": "https://www.tbsradio.jp/talk/",
-      "note": "",
-      "source": "BMSG公式カレンダー"
-    },
-    {
-      "id": "app-20261114-talkabout-kairyu",
-      "short": "TALK ABOUT KAIRYU",
-      "title": "TBSラジオ「TALK ABOUT」KAIRYU出演（11月14日）",
-      "media": "radio",
-      "station": "TBSラジオ",
-      "start": "2026-11-14T22:00:00+09:00",
-      "airEnd": "2026-11-14T23:30:00+09:00",
-      "url": "https://www.tbsradio.jp/talk/",
-      "note": "",
-      "source": "BMSG公式カレンダー"
-    },
-    {
-      "id": "app-20261121-talkabout-kairyu",
-      "short": "TALK ABOUT KAIRYU",
-      "title": "TBSラジオ「TALK ABOUT」KAIRYU出演（11月21日）",
-      "media": "radio",
-      "station": "TBSラジオ",
-      "start": "2026-11-21T22:00:00+09:00",
-      "airEnd": "2026-11-21T23:30:00+09:00",
-      "url": "https://www.tbsradio.jp/talk/",
-      "note": "",
-      "source": "BMSG公式カレンダー"
-    },
-    {
-      "id": "app-20261128-talkabout-kairyu",
-      "short": "TALK ABOUT KAIRYU",
-      "title": "TBSラジオ「TALK ABOUT」KAIRYU出演（11月28日）",
-      "media": "radio",
-      "station": "TBSラジオ",
-      "start": "2026-11-28T22:00:00+09:00",
-      "airEnd": "2026-11-28T23:30:00+09:00",
       "url": "https://www.tbsradio.jp/talk/",
       "note": "",
       "source": "BMSG公式カレンダー"
@@ -340,65 +279,6 @@
       "source": "スカパー！番組表"
     },
     {
-      "id": "app-20261107-dunk-tv",
-      "short": "D.U.N.K. 地上波特番",
-      "title": "D.U.N.K. 地上波特別番組（第1週）",
-      "media": "tv",
-      "station": "日本テレビ",
-      "start": "2026-11-07T14:30:00+09:00",
-      "airEnd": "2026-11-07T15:00:00+09:00",
-      "url": "https://x.com/dunk_dance",
-      "note": "D.U.N.K.特別番組・第1回",
-      "source": "D.U.N.K.公式X（ユーザー提供告知画像）"
-    },
-    {
-      "id": "app-20261114-dunk-tv",
-      "short": "D.U.N.K. 地上波特番",
-      "title": "D.U.N.K. 地上波特別番組（第2週）",
-      "media": "tv",
-      "station": "日本テレビ",
-      "start": "2026-11-14T14:30:00+09:00",
-      "airEnd": "2026-11-14T15:00:00+09:00",
-      "url": "https://x.com/dunk_dance",
-      "note": "D.U.N.K.特別番組・第2回",
-      "source": "D.U.N.K.公式X（ユーザー提供告知画像）"
-    },
-    {
-      "id": "app-20261121-dunk-tv",
-      "short": "D.U.N.K. in the City",
-      "title": "D.U.N.K. in the City（第3回）",
-      "media": "tv",
-      "station": "日本テレビ",
-      "start": "2026-11-21T14:30:00+09:00",
-      "airEnd": "2026-11-21T15:00:00+09:00",
-      "url": "https://x.com/dunk_dance",
-      "note": "MAZZEL出演",
-      "source": "MAZZEL公式X"
-    },
-    {
-      "id": "app-20261128-dunk-tv",
-      "short": "D.U.N.K. 地上波特番",
-      "title": "D.U.N.K. 地上波特別番組（第4週）",
-      "media": "tv",
-      "station": "日本テレビ",
-      "start": "2026-11-28T14:30:00+09:00",
-      "airEnd": "2026-11-28T15:00:00+09:00",
-      "url": "https://x.com/dunk_dance",
-      "note": "D.U.N.K.特別番組・第4回",
-      "source": "D.U.N.K.公式X（ユーザー提供告知画像）"
-    },
-    {
-      "id": "app-20261103-fc-kannai-live",
-      "short": "MUZEUM 館内放送（NAOYA・RYUKI）",
-      "title": "MUZEUM 館内放送（NAOYA・RYUKI出演）",
-      "media": "stream",
-      "station": "MUZEUM（FC）",
-      "start": "2026-11-03T15:30:00+09:00",
-      "url": "https://mazzel.tokyo/",
-      "note": "NAOYA・RYUKI出演。FC限定",
-      "source": "MUZEUMアーカイブ画面（ユーザー提供・11/3）"
-    },
-    {
       "id": "app-20261109-cdtv-livelive",
       "short": "CDTVライブ！ライブ！",
       "title": "TBS「CDTVライブ！ライブ！」MAZZEL『Touch』フルサイズ披露／KAIRYU・NAOYA「奏」",
@@ -411,29 +291,6 @@
       "source": "MAZZEL公式X（2026年11月2日投稿・ユーザー提供画像）"
     },
     {
-      "id": "app-20261112-dayday-eiki",
-      "short": "DayDay. EIKI 生出演",
-      "title": "日本テレビ「DayDay.」EIKI 生出演",
-      "media": "tv",
-      "station": "日本テレビ",
-      "start": "2026-11-12T09:00:00+09:00",
-      "airEnd": "2026-11-12T11:10:00+09:00",
-      "url": "https://www.ntv.co.jp/dayday/",
-      "note": "",
-      "source": "MAZZEL公式X（ユーザー提供画像・2026/11/7）"
-    },
-    {
-      "id": "app-20261205-saiseinouzume-eiki",
-      "short": "再生のウズメ EIKI カメオ",
-      "title": "東海テレビ・フジテレビ系全国ネット「再生のウズメ」最終回 EIKI カメオ出演",
-      "media": "tv",
-      "station": "東海テレビ・フジテレビ系全国ネット",
-      "start": "2026-12-05T23:40:00+09:00",
-      "url": "https://www.tokai-tv.com/saiseinouzume/",
-      "note": "最終回にカメオ出演",
-      "source": "MAZZEL公式X（ユーザー提供画像・2026/11/7）"
-    },
-    {
       "id": "app-20261109-musicline",
       "short": "ミュージックライン TAKUTO・HAYATO",
       "title": "NHK-FM「ミュージックライン」DJ TAKUTO・HAYATO／ゲスト sanetii",
@@ -444,6 +301,18 @@
       "url": "https://www.nhk.jp/p/ml/",
       "note": "DJ：TAKUTO・HAYATO／ゲスト：sanetii",
       "source": "NHK MUSIC公式X（ユーザー提供画像・2026/11/7）"
+    },
+    {
+      "id": "app-20261110-hirunandes-naoya-ran",
+      "short": "ヒルナンデス！ NAOYA・RAN",
+      "title": "日本テレビ「ヒルナンデス！」NAOYA・RAN出演",
+      "media": "tv",
+      "station": "日本テレビ",
+      "start": "2026-11-10T11:55:00+09:00",
+      "airEnd": "2026-11-10T13:55:00+09:00",
+      "url": "https://www.ntv.co.jp/hirunan/",
+      "note": "",
+      "source": "出演告知X投稿（ユーザー提供画像・2026/11/7）"
     },
     {
       "id": "app-20261110-musicline",
@@ -470,75 +339,27 @@
       "source": "NHK MUSIC公式X（ユーザー提供画像・2026/11/7）"
     },
     {
-      "id": "app-20261112-musicline",
-      "short": "ミュージックライン NAOYA・RYUKI",
-      "title": "NHK-FM「ミュージックライン」DJ NAOYA・RYUKI／ゲスト Kroi／内田怜央・長谷部悠生",
-      "media": "radio",
-      "station": "NHK-FM",
-      "start": "2026-11-12T21:45:00+09:00",
-      "airEnd": "2026-11-12T22:30:00+09:00",
-      "url": "https://www.nhk.jp/p/ml/",
-      "note": "DJ：NAOYA・RYUKI／ゲスト：Kroi",
-      "source": "NHK MUSIC公式X（ユーザー提供画像・2026/11/7）"
+      "id": "app-20261112-arinoya-tver",
+      "short": "有野屋書店2号店 TVer見逃し",
+      "title": "「有野屋書店2号店」11/12放送分 EIKI副店長／ゲスト クロちゃん TVer見逃し",
+      "media": "stream",
+      "station": "TVer",
+      "start": "2026-11-12T00:00:00+09:00",
+      "url": "https://tver.jp/episodes/epx4q9bfdy?utm_source=x&utm_medium=social&utm_campaign=official_mp",
+      "source": "TVer当該回ページ（ユーザー提供画像・2026/11/13）",
+      "note": "EIKI出演／ゲスト：クロちゃん"
     },
     {
-      "id": "app-20261113-musicline",
-      "short": "ミュージックライン NAOYA・RYUKI",
-      "title": "NHK-FM「ミュージックライン」DJ NAOYA・RYUKI／ゲスト Billyrrom／Mol・Yuta Hara",
-      "media": "radio",
-      "station": "NHK-FM",
-      "start": "2026-11-13T21:45:00+09:00",
-      "airEnd": "2026-11-13T22:30:00+09:00",
-      "url": "https://www.nhk.jp/p/ml/",
-      "note": "DJ：NAOYA・RYUKI／ゲスト：Billyrrom",
-      "source": "NHK MUSIC公式X（ユーザー提供画像・2026/11/7）"
-    },
-    {
-      "id": "app-20261126-mazzel-switch-m-on",
-      "short": "MAZZEL SWITCH",
-      "title": "MUSIC ON! TV「MAZZEL SWITCH」",
-      "media": "tv",
-      "station": "MUSIC ON! TV（エムオン!）",
-      "start": "2026-11-26T23:00:00+09:00",
-      "airEnd": "2026-11-27T00:00:00+09:00",
-      "url": "https://www.skyperfectv.co.jp/",
-      "note": "8人のONとOFFに迫る特別番組",
-      "source": "スカパー！番組検索（ユーザー提供画像・2026/11/7）"
-    },
-    {
-      "id": "app-20261110-hirunandes-naoya-ran",
-      "short": "ヒルナンデス！ NAOYA・RAN",
-      "title": "日本テレビ「ヒルナンデス！」NAOYA・RAN出演",
+      "id": "app-20261112-dayday-eiki",
+      "short": "DayDay. EIKI 生出演",
+      "title": "日本テレビ「DayDay.」EIKI 生出演",
       "media": "tv",
       "station": "日本テレビ",
-      "start": "2026-11-10T11:55:00+09:00",
-      "airEnd": "2026-11-10T13:55:00+09:00",
-      "url": "https://www.ntv.co.jp/hirunan/",
+      "start": "2026-11-12T09:00:00+09:00",
+      "airEnd": "2026-11-12T11:10:00+09:00",
+      "url": "https://www.ntv.co.jp/dayday/",
       "note": "",
-      "source": "出演告知X投稿（ユーザー提供画像・2026/11/7）"
-    },
-    {
-      "id": "app-20261113-arinoya2-eiki-fuji",
-      "short": "有野屋書店2号店 EIKI",
-      "title": "フジテレビ「有野屋書店2号店」EIKI出演（副店長）",
-      "media": "tv",
-      "station": "フジテレビ",
-      "start": "2026-11-13T02:15:00+09:00",
-      "airEnd": "2026-11-13T02:45:00+09:00",
-      "url": "https://www.fujitv.co.jp/b_hp/arinoya/",
-      "note": "EIKIが副店長として出演／ゲスト：クロちゃん",
-      "source": "フジテレビ公式番組ページ（2026/11/7）"
-    },
-    {
-      "id": "app-20261114-mazzel-room-premiere",
-      "short": "MAZZEL ROOM プレミア公開",
-      "title": "「MAZZEL ROOM」プレミア公開",
-      "media": "stream",
-      "station": "MAZZEL公式YouTube",
-      "start": "2026-11-14T21:00:00+09:00",
-      "url": "https://www.youtube.com/@MAZZEL_official",
-      "note": "",
-      "source": "MAZZEL公式週間スケジュール（ユーザー提供画像・2026/11/9）"
+      "source": "MAZZEL公式X（ユーザー提供画像・2026/11/7）"
     },
     {
       "id": "app-20261112-mtv-vmaj2026-artists-special",
@@ -553,6 +374,30 @@
       "source": "MTV・TELASA公式発表（2026/10/29）"
     },
     {
+      "id": "app-20261112-musicline",
+      "short": "ミュージックライン NAOYA・RYUKI",
+      "title": "NHK-FM「ミュージックライン」DJ NAOYA・RYUKI／ゲスト Kroi／内田怜央・長谷部悠生",
+      "media": "radio",
+      "station": "NHK-FM",
+      "start": "2026-11-12T21:45:00+09:00",
+      "airEnd": "2026-11-12T22:30:00+09:00",
+      "url": "https://www.nhk.jp/p/ml/",
+      "note": "DJ：NAOYA・RYUKI／ゲスト：Kroi",
+      "source": "NHK MUSIC公式X（ユーザー提供画像・2026/11/7）"
+    },
+    {
+      "id": "app-20261113-arinoya2-eiki-fuji",
+      "short": "有野屋書店2号店 EIKI",
+      "title": "フジテレビ「有野屋書店2号店」EIKI出演（副店長）",
+      "media": "tv",
+      "station": "フジテレビ",
+      "start": "2026-11-13T02:15:00+09:00",
+      "airEnd": "2026-11-13T02:45:00+09:00",
+      "url": "https://www.fujitv.co.jp/b_hp/arinoya/",
+      "note": "EIKIが副店長として出演／ゲスト：クロちゃん",
+      "source": "フジテレビ公式番組ページ（2026/11/7）"
+    },
+    {
       "id": "app-20261113-spotify-bmsgfes26-afterparty-ran-eiki",
       "short": "Spotify AFTER PARTY RAN・EIKI",
       "title": "Spotify「BMSG FES'26 AFTER PARTY」リスニングパーティー第1回 RAN・EIKI出演",
@@ -562,6 +407,76 @@
       "url": "https://party.spotify.com/",
       "note": "RAN・EIKIほか出演。Spotify Premium会員限定",
       "source": "Spotify Japan公式X（ユーザー提供画像・2026/11/9）"
+    },
+    {
+      "id": "app-20261113-musicline",
+      "short": "ミュージックライン NAOYA・RYUKI",
+      "title": "NHK-FM「ミュージックライン」DJ NAOYA・RYUKI／ゲスト Billyrrom／Mol・Yuta Hara",
+      "media": "radio",
+      "station": "NHK-FM",
+      "start": "2026-11-13T21:45:00+09:00",
+      "airEnd": "2026-11-13T22:30:00+09:00",
+      "url": "https://www.nhk.jp/p/ml/",
+      "note": "DJ：NAOYA・RYUKI／ゲスト：Billyrrom",
+      "source": "NHK MUSIC公式X（ユーザー提供画像・2026/11/7）"
+    },
+    {
+      "id": "app-20261114-dunk-tv",
+      "short": "D.U.N.K. 地上波特番",
+      "title": "D.U.N.K. 地上波特別番組（第2週）",
+      "media": "tv",
+      "station": "日本テレビ",
+      "start": "2026-11-14T14:30:00+09:00",
+      "airEnd": "2026-11-14T15:00:00+09:00",
+      "url": "https://x.com/dunk_dance",
+      "note": "D.U.N.K.特別番組・第2回",
+      "source": "D.U.N.K.公式X（ユーザー提供告知画像）"
+    },
+    {
+      "id": "app-20261114-mazzel-room-premiere",
+      "short": "MAZZEL ROOM プレミア公開",
+      "title": "「MAZZEL ROOM」プレミア公開",
+      "media": "stream",
+      "station": "MAZZEL公式YouTube",
+      "start": "2026-11-14T21:00:00+09:00",
+      "url": "https://www.youtube.com/@MAZZEL_official",
+      "note": "",
+      "source": "MAZZEL公式週間スケジュール（ユーザー提供画像・2026/11/9）"
+    },
+    {
+      "id": "app-20261114-talkabout-kairyu",
+      "short": "TALK ABOUT KAIRYU",
+      "title": "TBSラジオ「TALK ABOUT」KAIRYU出演（11月14日）",
+      "media": "radio",
+      "station": "TBSラジオ",
+      "start": "2026-11-14T22:00:00+09:00",
+      "airEnd": "2026-11-14T23:30:00+09:00",
+      "url": "https://www.tbsradio.jp/talk/",
+      "note": "",
+      "source": "BMSG公式カレンダー"
+    },
+    {
+      "id": "app-20261115-mtv-vmaj2026",
+      "short": "VMAJ 2026【MTV・TELASA配信】",
+      "title": "MTV VMAJ 2026｜MTV放送・TELASAで視聴可能（MAZZEL出演）",
+      "media": "tv",
+      "station": "MTV JAPAN／TELASA",
+      "start": "2026-11-15T19:30:00+09:00",
+      "url": "https://www.telasa.jp/videos/278449",
+      "note": "MTV放送・TELASA配信。LIVE・WINNER TALKに出演",
+      "source": "MAZZEL公式X・MTVタイムテーブル（ユーザー提供画像）・TELASA番組ページ",
+      "airEnd": "2026-11-16T00:00:00+09:00"
+    },
+    {
+      "id": "app-20261117-muzeum-kannai",
+      "short": "MUZEUM館内放送",
+      "title": "MUZEUM館内放送（FC限定）",
+      "media": "stream",
+      "station": "MUZEUM（FC）",
+      "start": "2026-11-17T16:10:00+09:00",
+      "url": "https://mazzel.tokyo/",
+      "note": "FC限定・館内放送",
+      "source": "MUZEUM公式お知らせ"
     },
     {
       "id": "app-20261118-ueda-onna-naoya",
@@ -576,38 +491,64 @@
       "source": "日本テレビ番組情報"
     },
     {
-      "id": "app-20261112-arinoya-tver",
-      "short": "有野屋書店2号店 TVer見逃し",
-      "title": "「有野屋書店2号店」11/12放送分 EIKI副店長／ゲスト クロちゃん TVer見逃し",
-      "media": "stream",
-      "station": "TVer",
-      "start": "2026-11-12T00:00:00+09:00",
-      "url": "https://tver.jp/episodes/epx4q9bfdy?utm_source=x&utm_medium=social&utm_campaign=official_mp",
-      "source": "TVer当該回ページ（ユーザー提供画像・2026/11/13）",
-      "note": "EIKI出演／ゲスト：クロちゃん"
-    },
-    {
-      "id": "app-20261117-muzeum-kannai",
-      "short": "MUZEUM館内放送",
-      "title": "MUZEUM館内放送（FC限定）",
-      "media": "stream",
-      "station": "MUZEUM（FC）",
-      "start": "2026-11-17T16:10:00+09:00",
-      "url": "https://mazzel.tokyo/",
-      "note": "FC限定・館内放送",
-      "source": "MUZEUM公式お知らせ"
-    },
-    {
-      "id": "app-20261128-best-artist-2026",
-      "short": "ベストアーティスト2026 MAZZEL",
-      "title": "日本テレビ「ベストアーティスト2026」MAZZEL出演",
+      "id": "app-20261121-dunk-tv",
+      "short": "D.U.N.K. in the City",
+      "title": "D.U.N.K. in the City（第3回）",
       "media": "tv",
       "station": "日本テレビ",
-      "start": "2026-11-28T16:00:00+09:00",
-      "end": "2026-11-28T22:54:00+09:00",
-      "url": "https://www.ntv.co.jp/best-artist/",
-      "note": "放送枠 16:00〜17:00／19:00〜22:54。出演時間未発表",
-      "source": "MAZZEL公式X（11/20）"
+      "start": "2026-11-21T14:30:00+09:00",
+      "airEnd": "2026-11-21T15:00:00+09:00",
+      "url": "https://x.com/dunk_dance",
+      "note": "MAZZEL出演",
+      "source": "MAZZEL公式X"
+    },
+    {
+      "id": "app-20261121-inazuma-cs",
+      "short": "イナズマフェス CS放送",
+      "title": "FEST. INAZUMA 2026 DAY1（MAZZEL出演）CS放送",
+      "media": "tv",
+      "station": "フジテレビTWO ドラマ・アニメ",
+      "start": "2026-11-21T20:00:00+09:00",
+      "airEnd": "2026-11-21T23:00:00+09:00",
+      "url": "https://www.skyperfectv.co.jp/program/search/cast/?actorId=TR063493995138",
+      "note": "9/19開催DAY1の後日放送",
+      "source": "スカパー！番組情報"
+    },
+    {
+      "id": "app-20261121-talkabout-kairyu",
+      "short": "TALK ABOUT KAIRYU",
+      "title": "TBSラジオ「TALK ABOUT」KAIRYU出演（11月21日）",
+      "media": "radio",
+      "station": "TBSラジオ",
+      "start": "2026-11-21T22:00:00+09:00",
+      "airEnd": "2026-11-21T23:30:00+09:00",
+      "url": "https://www.tbsradio.jp/talk/",
+      "note": "",
+      "source": "BMSG公式カレンダー"
+    },
+    {
+      "id": "app-20261122-cdtv-thanksfes-day3",
+      "short": "CDTV秋の大感謝祭 DAY3",
+      "title": "CDTVライブ！ライブ！秋の大感謝祭2026 DAY3（MAZZEL出演）",
+      "media": "tv",
+      "station": "CS・TBSチャンネル1",
+      "start": "2026-11-22T21:00:00+09:00",
+      "url": "https://www.tbs.co.jp/tbs-ch/",
+      "note": "DAY3をテレビ初独占放送",
+      "source": "TBSチャンネル公式X（ユーザー提供画像）・公式番組表",
+      "airEnd": "2026-11-22T23:40:00+09:00"
+    },
+    {
+      "id": "app-20261123-dreamfestival-cs",
+      "short": "ドリフェス2026 CS生中継",
+      "title": "テレビ朝日ドリームフェスティバル2026 CS生中継（MAZZEL出演）",
+      "media": "tv",
+      "station": "CSテレ朝チャンネル1",
+      "start": "2026-11-23T15:00:00+09:00",
+      "url": "https://dreamfestival.jp/",
+      "note": "11/23公演を独占生中継。一部演目のみ放送",
+      "source": "テレビ朝日ドリームフェスティバル公式・スカパー！番組表",
+      "airEnd": "2026-11-23T21:30:00+09:00"
     },
     {
       "id": "app-20261123-musicline",
@@ -632,6 +573,77 @@
       "url": "https://www.nhk.jp/p/ml/",
       "note": "DJ：RYUKI・HAYATO／ゲスト：秦 基博",
       "source": "NHKミュージックライン公式告知（11/20）"
+    },
+    {
+      "id": "app-20261125-hirunandes-kairyu",
+      "short": "ヒルナンデス！ KAIRYU",
+      "title": "日本テレビ「ヒルナンデス！」KAIRYU出演",
+      "media": "tv",
+      "station": "日本テレビ",
+      "start": "2026-11-25T11:55:00+09:00",
+      "airEnd": "2026-11-25T13:55:00+09:00",
+      "url": "https://bangumi.org/",
+      "note": "KAIRYU×松下由樹が上野で最新グルメ探し。Gガイド番組表の出演説明で確認。",
+      "source": "Gガイド番組表（2026-11-25放送情報）"
+    },
+    {
+      "id": "app-20261126-mazzel-switch-m-on",
+      "short": "MAZZEL SWITCH",
+      "title": "MUSIC ON! TV「MAZZEL SWITCH」",
+      "media": "tv",
+      "station": "MUSIC ON! TV（エムオン!）",
+      "start": "2026-11-26T23:00:00+09:00",
+      "airEnd": "2026-11-27T00:00:00+09:00",
+      "url": "https://www.skyperfectv.co.jp/",
+      "note": "8人のONとOFFに迫る特別番組",
+      "source": "スカパー！番組検索（ユーザー提供画像・2026/11/7）"
+    },
+    {
+      "id": "app-20261128-dunk-tv",
+      "short": "D.U.N.K. 地上波特番",
+      "title": "D.U.N.K. 地上波特別番組（第4週）",
+      "media": "tv",
+      "station": "日本テレビ",
+      "start": "2026-11-28T14:30:00+09:00",
+      "airEnd": "2026-11-28T15:00:00+09:00",
+      "url": "https://x.com/dunk_dance",
+      "note": "D.U.N.K.特別番組・第4回",
+      "source": "D.U.N.K.公式X（ユーザー提供告知画像）"
+    },
+    {
+      "id": "app-20261128-best-artist-2026",
+      "short": "ベストアーティスト2026 MAZZEL",
+      "title": "日本テレビ「ベストアーティスト2026」MAZZEL出演",
+      "media": "tv",
+      "station": "日本テレビ",
+      "start": "2026-11-28T16:00:00+09:00",
+      "end": "2026-11-28T22:54:00+09:00",
+      "url": "https://www.ntv.co.jp/best-artist/",
+      "note": "放送枠 16:00〜17:00／19:00〜22:54。出演時間未発表",
+      "source": "MAZZEL公式X（11/20）"
+    },
+    {
+      "id": "app-20261128-talkabout-kairyu",
+      "short": "TALK ABOUT KAIRYU",
+      "title": "TBSラジオ「TALK ABOUT」KAIRYU出演（11月28日）",
+      "media": "radio",
+      "station": "TBSラジオ",
+      "start": "2026-11-28T22:00:00+09:00",
+      "airEnd": "2026-11-28T23:30:00+09:00",
+      "url": "https://www.tbsradio.jp/talk/",
+      "note": "",
+      "source": "BMSG公式カレンダー"
+    },
+    {
+      "id": "app-20261205-saiseinouzume-eiki",
+      "short": "再生のウズメ EIKI カメオ",
+      "title": "東海テレビ・フジテレビ系全国ネット「再生のウズメ」最終回 EIKI カメオ出演",
+      "media": "tv",
+      "station": "東海テレビ・フジテレビ系全国ネット",
+      "start": "2026-12-05T23:40:00+09:00",
+      "url": "https://www.tokai-tv.com/saiseinouzume/",
+      "note": "最終回にカメオ出演",
+      "source": "MAZZEL公式X（ユーザー提供画像・2026/11/7）"
     }
   ]
 }
