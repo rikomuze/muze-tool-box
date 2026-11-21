@@ -144,6 +144,50 @@ function loadShop(){
  }).catch(e=>console.warn('お店の設計図を読み込めませんでした',e));
 }
 const ready=img=>img&&((img instanceof HTMLCanvasElement&&img.width)||(img.complete&&img.naturalWidth));
+// ---- 時間帯：開いた時刻で、朝・昼・夕方・夜に見た目が変わる ----
+const TIME_SLOTS=['morning','day','evening','night'];
+const TIME_LABELS={morning:'朝',day:'昼',evening:'夕方',night:'夜'};
+function autoTimeSlot(d=new Date()){const h=d.getHours()+d.getMinutes()/60;return h>=5&&h<8.5?'morning':h>=8.5&&h<16?'day':h>=16&&h<18.5?'evening':'night'}
+const timeSlot=()=>autoTimeSlot();
+// 夜に明かりがともる場所（Canvas の座標）。MAP 01 は家の窓、MAP 02 は窓と冷蔵庫・冷凍ケース。
+function lightSpots(n){
+ const spots=[];
+ if(currentMap==='map02'){
+  const P=(U,V,h)=>shopToCanvas(650+.62*(U-V),224+.62*((U+V)/2-h));
+  for(const [U,V] of [[-46.5,121],[-46.5,363],[121,-46.5],[605,-46.5]])spots.push({...P(U,V,84),r:34});
+  if(n>=40)spots.push({...P(0,0,70),r:44});
+  if(n>=36)spots.push({...P(363,242,40),r:30});
+  if(n>=85)spots.push({...P(0,605,70),r:34});
+ }else{
+  for(const [at,id,x,y,roof] of props){if(!roof||at>n)continue;const p=tilePosition(x,y);spots.push({x:p.x-30,y:p.y+66,r:22},{x:p.x+30,y:p.y+66,r:22})}
+  for(const [at,id,x,y] of props){if(at>n||!/market|fountain|windmill/.test(id))continue;const p=tilePosition(x,y);spots.push({x:p.x,y:p.y+58,r:28})}
+ }
+ return spots;
+}
+function drawTimeOfDay(n){
+ const slot=timeSlot();
+ $('world').dataset.time=slot;
+ if(slot==='day')return;
+ ctx.save();
+ const tint={morning:['rgba(255,214,196,.20)','rgba(255,240,214,.10)'],evening:['rgba(255,150,96,.30)','rgba(255,196,140,.16)'],night:['rgba(38,52,104,.62)','rgba(52,66,120,.50)']}[slot];
+ const g=ctx.createLinearGradient(0,0,0,640);g.addColorStop(0,tint[0]);g.addColorStop(1,tint[1]);
+ ctx.globalCompositeOperation='multiply';ctx.fillStyle=g;ctx.fillRect(0,0,960,640);
+ if(slot==='morning'||slot==='evening'){
+  ctx.globalCompositeOperation='screen';
+  const sun=ctx.createRadialGradient(slot==='morning'?120:860,70,0,slot==='morning'?120:860,70,260);
+  sun.addColorStop(0,slot==='morning'?'rgba(255,236,200,.55)':'rgba(255,190,120,.55)');sun.addColorStop(1,'rgba(255,220,180,0)');
+  ctx.fillStyle=sun;ctx.fillRect(0,0,960,640);
+ }
+ if(slot==='night'||slot==='evening'){
+  ctx.globalCompositeOperation='lighter';
+  for(const s of lightSpots(n)){
+   const r=s.r*(slot==='night'?1:.75),gl=ctx.createRadialGradient(s.x,s.y,0,s.x,s.y,r);
+   gl.addColorStop(0,slot==='night'?'rgba(255,214,140,.55)':'rgba(255,214,140,.22)');gl.addColorStop(1,'rgba(255,200,120,0)');
+   ctx.fillStyle=gl;ctx.beginPath();ctx.arc(s.x,s.y,r,0,Math.PI*2);ctx.fill();
+  }
+ }
+ ctx.restore();
+}
 function paintShop(n){
  const winter=townTheme==='winter';
  ctx.clearRect(0,0,960,640);
@@ -168,6 +212,7 @@ function paintShop(n){
  const cmp=(a,b)=>{for(let k=0;k<3;k++){if(a.key[k]!==b.key[k])return a.key[k]-b.key[k]}return 0};
  list.sort(cmp).forEach(e=>e.draw());
  ctx.restore();
+ drawTimeOfDay(n);
 }
 function renderFlowers(n){
  const container=$('flowerGround');
@@ -241,6 +286,7 @@ function paint(){if(currentMap==='map02')return paintShop(displayedCount());cons
  // 奥のタイルにあるオブジェクトから順に描くことで、重なり方が自然になる。
  for(let z=0;z<=10;z++)for(let i=0;i<6;i++){let j=z-i;if(j<0||j>5)continue;for(const p of props){const [at,id,x,y,roof]=p;if(x!==i||y!==j||at>n)continue;if(n>=12&&at===5&&id==='tree_single_N'&&x===0&&y===5)continue;drawTile(id,i,j,'prop');if(roof)drawTile(roof,i,j,'prop',54)}}
  renderFlowers(n);
+ drawTimeOfDay(n);
 }
 function renderProgress(){
  const ms=activeMilestones(),actual=mapCount(),n=displayedCount(),next=ms.find(x=>x.at>n);
@@ -574,6 +620,9 @@ function switchMap(map){
  toast(map==='map02'?'MAP 02「ちいさなお店」':'MAP 01「ちいさな街」');
 }
 $('mapSwitch').addEventListener('click',e=>{const b=e.target.closest('button[data-map]');if(b)switchMap(b.dataset.map)});
+// 開いたままでも、時間帯が変わったら描き直す
+let lastSlot=autoTimeSlot();
+setInterval(()=>{const s=autoTimeSlot();if(s!==lastSlot){lastSlot=s;paint()}},60000);
 $('winterToggle').addEventListener('click',()=>{
  townTheme=townTheme==='winter'?'normal':'winter';
  state.settings.theme=townTheme;persist();

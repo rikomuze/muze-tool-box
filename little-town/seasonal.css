@@ -267,3 +267,20 @@
 .christmas-front.is-locked-map{display:none}
 .decor-shelf-items.is-locked-map{opacity:.5;pointer-events:none}
 @media(max-width:520px){.map-locked-card{min-width:0;width:68%;padding:8px 10px 8px;box-shadow:3px 3px 0 #8aaa7c}.map-locked-kicker{font-size:9px}.map-locked-card strong{font-size:14px;margin:3px 0 2px}.map-locked-card p{font-size:10.5px;margin-bottom:4px}.map-locked-rest{font-size:12px}.map-locked-rest b{font-size:18px}.map-locked-bar{height:6px;margin-top:5px}}
+
+/* ===== 時間帯：朝・昼・夕方・夜 ===== */
+.sky-stars{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0;transition:opacity .6s}
+.world[data-time="night"] .sky-stars{opacity:1}
+.sky-stars i{position:absolute;width:5px;height:5px;margin:-2.5px;border-radius:50%;background:#fff6c8;box-shadow:0 0 6px 2px #fff3b0aa;animation:twinkle 2.6s ease-in-out infinite}
+.sky-stars i:nth-child(2n){animation-delay:-1.1s;width:4px;height:4px}
+.sky-stars i:nth-child(3n){animation-delay:-1.9s}
+.sky-stars .moon{position:absolute;width:30px;height:30px;border-radius:50%;box-shadow:-8px 4px 0 0 #fff1b8;transform:rotate(-20deg);filter:drop-shadow(0 0 8px #fff1b8aa)}
+@keyframes twinkle{0%,100%{opacity:.25;transform:scale(.7)}50%{opacity:1;transform:scale(1.1)}}
+/* キャンバスの外にある飾り・花・キャラも、時間帯に合わせて少し暗く */
+.world[data-time="evening"] :is(.flower-ground,.christmas-front,.walker){filter:brightness(.92) sepia(.12) saturate(1.05)}
+.world[data-time="night"] :is(.flower-ground,.walker){filter:brightness(.62) saturate(.8) hue-rotate(-8deg)}
+.world[data-time="night"] .christmas-front .decor-item{filter:brightness(.7) saturate(.85)}
+/* 夜のツリーは明かりがともる */
+.world[data-time="night"] .christmas-front .decor-tree{animation:treeglow 2.4s ease-in-out infinite}
+@keyframes treeglow{0%,100%{filter:brightness(.9) drop-shadow(0 0 6px #ffe08a99)}50%{filter:brightness(1.08) drop-shadow(0 0 14px #ffe08add)}}
+@media (prefers-reduced-motion:reduce){.sky-stars i,.world[data-time="night"] .christmas-front .decor-tree{animation:none}}
