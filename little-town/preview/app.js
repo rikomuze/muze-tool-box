@@ -170,6 +170,7 @@ function lightSpots(n){
 function drawTimeOfDay(n){
  const slot=timeSlot();
  $('world').dataset.time=slot;
+ renderVisitors();
  if(slot==='day')return;
  ctx.save();
  const tint={morning:['rgba(255,214,196,.20)','rgba(255,240,214,.10)'],evening:['rgba(255,150,96,.30)','rgba(255,196,140,.16)'],night:['rgba(38,52,104,.62)','rgba(52,66,120,.50)']}[slot];
@@ -191,6 +192,83 @@ function drawTimeOfDay(n){
  }
  ctx.restore();
 }
+// ---- まちの図鑑：たまに遊びに来る子たち ----
+// その日に来る子は日付で決まる（読み込み直しても同じ）。時間帯が合うと街に現れ、タップで図鑑に登録。
+const VISITORS=[
+ {id:'cat',name:'さんぽネコ',note:'街をのんびり見回っている。',slots:['morning','day','evening','night'],chance:.55,maps:['map01','map02'],kind:'ground',hint:'いつでも会えるかも'},
+ {id:'butterfly',name:'ちょうちょ',note:'花のにおいにさそわれて。',slots:['morning','day'],chance:.45,maps:['map01','map02'],kind:'air',hint:'朝〜昼に会えるかも'},
+ {id:'duck',name:'池のカモ',note:'噴水より池が好き。',slots:['morning','day','evening'],chance:.4,maps:['map01'],need:12,kind:'water',hint:'MAP 01 の池で、朝〜夕方'},
+ {id:'owl',name:'夜ふかしフクロウ',note:'木の上から街を見守っている。',slots:['night'],chance:.35,maps:['map01','map02'],kind:'perch',hint:'夜に会えるかも'},
+ {id:'star',name:'流れ星',note:'見つけたら、ねがいごと。',slots:['night'],chance:.15,maps:['map01','map02'],kind:'sky',hint:'夜・ときどき'},
+ {id:'balloon',name:'熱気球',note:'遠くの街からの旅人。',slots:['morning','day','evening'],chance:.06,maps:['map01','map02'],kind:'sky',hint:'昼間・とてもまれ'}
+];
+const VISITOR_BY_ID=Object.fromEntries(VISITORS.map(v=>[v.id,v]));
+// 街ごとの出る場所（%）。x=中心、y=足元、w=幅
+const VISITOR_SPOTS={
+ map01:{cat:{x:72,y:73,w:6.5},butterfly:{x:36,y:31,w:5.5},duck:{x:13,y:57,w:6},owl:{x:24,y:31,w:6},star:{x:77,y:15,w:9},balloon:{x:10,y:31,w:7.5}},
+ map02:{cat:{x:30,y:75,w:5.5},butterfly:{x:25,y:41,w:5},owl:{x:91,y:44,w:5.5},star:{x:70,y:14,w:9},balloon:{x:8,y:26,w:7}}
+};
+const zukanKey='little-town-preview-zukan-v1';
+let zukan={};
+try{const z=JSON.parse(localStorage.getItem(zukanKey)||'{}');if(z&&typeof z==='object')zukan=z}catch(e){}
+function saveZukan(){try{localStorage.setItem(zukanKey,JSON.stringify(zukan))}catch(e){toast('図鑑を保存できませんでした')}}
+let visitorDebug=false;
+function roll(s){let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return (h>>>0)/4294967296}
+function todaysVisitors(){
+ const day=nowDate(),n=displayedCount();
+ return VISITORS.filter(v=>v.maps.includes(currentMap)&&(!v.need||n>=v.need))
+  .map(v=>({v,r:roll(day+'|'+v.id+'|'+currentMap)})).filter(x=>visitorDebug||x.r<x.v.chance)
+  .sort((a,b)=>a.r-b.r).slice(0,visitorDebug?9:3).map(x=>x.v);
+}
+let visitorSig='';
+function renderVisitors(){
+ const layer=$('visitorLayer');if(!layer)return;
+ const slot=timeSlot(),day=nowDate(),list=todaysVisitors(),now=list.filter(v=>visitorDebug||v.slots.includes(slot));
+ const sig=currentMap+slot+day+now.map(v=>v.id).join()+Object.keys(zukan).length;
+ if(sig!==visitorSig){
+  visitorSig=sig;const spots=VISITOR_SPOTS[currentMap]||{};
+  layer.innerHTML=now.filter(v=>spots[v.id]).map(v=>{const p=spots[v.id];return '<button type="button" class="visitor kind-'+v.kind+' v-'+v.id+(zukan[v.id]?.last===day?' is-found':'')+'" data-visitor="'+v.id+'" style="left:'+p.x+'%;top:'+p.y+'%;width:'+p.w+'%" aria-label="'+v.name+'をみつける"><img src="friends/'+v.id+'.svg" alt=""></button>'}).join('');
+ }
+ // 今日のヒント：まだ現れていない時間帯に来る子がいれば、そっと知らせる
+ const later=list.find(v=>!v.slots.includes(slot));
+ const hint=$('zukanHint');
+ if(hint)hint.textContent=now.length?'いま街に '+now.length+' ひき（つ）遊びに来ているよ。タップしてみてね':later?'今日は'+TIME_LABELS[later.slots[0]]+'に、だれかが来るかも…':'今日はしずかな日。明日はだれか来るかも';
+}
+$('visitorLayer').addEventListener('click',e=>{
+ const b=e.target.closest('[data-visitor]');if(!b)return;
+ const v=VISITOR_BY_ID[b.dataset.visitor],day=nowDate(),rec=zukan[v.id]||{count:0};
+ b.classList.remove('is-catch');void b.offsetWidth;b.classList.add('is-catch','is-found');
+ if(rec.last===day){toast(v.name+'は、今日はもう図鑑にのってるよ');return}
+ const first=!rec.first;rec.first=rec.first||day;rec.last=day;rec.count=(rec.count||0)+1;zukan[v.id]=rec;saveZukan();
+ toast(first?'✨ みつけた！ '+v.name+' を図鑑に登録したよ':'みつけた！ '+v.name+'（'+rec.count+'回目）');
+ renderZukan();
+});
+function renderZukan(){
+ const grid=$('zukanGrid');if(!grid)return;
+ const found=VISITORS.filter(v=>zukan[v.id]);
+ $('zukanCount').textContent=found.length+' / '+VISITORS.length;
+ grid.innerHTML=VISITORS.map(v=>{const r=zukan[v.id];return r?
+  '<div class="zukan-card is-found"><img src="friends/'+v.id+'.svg" alt=""><strong>'+v.name+'</strong><small>'+v.note+'</small><span>はじめて：'+r.first.slice(5).replace('-','/')+'　'+r.count+'回</span></div>':
+  '<div class="zukan-card"><img src="friends/'+v.id+'.svg" alt="" class="is-shadow"><strong>？？？</strong><small>'+v.hint+'</small></div>'}).join('');
+}
+// ポストカード：図鑑にのった子を3つまでのせられる
+const postcardFriends=new Set();
+function renderPostcardFriends(){
+ const box=$('postcardFriends');if(!box)return;
+ for(const id of [...postcardFriends])if(!zukan[id])postcardFriends.delete(id);
+ box.innerHTML=VISITORS.map(v=>zukan[v.id]?
+  '<button type="button" data-friend="'+v.id+'" aria-pressed="'+postcardFriends.has(v.id)+'"><img src="friends/'+v.id+'.svg" alt="">'+v.name+'</button>':
+  '<button type="button" disabled title="図鑑で見つけるとのせられます"><img src="friends/'+v.id+'.svg" alt="" class="is-shadow">？？？</button>').join('');
+}
+$('postcardFriends').addEventListener('click',e=>{
+ const b=e.target.closest('button[data-friend]');if(!b)return;const id=b.dataset.friend;
+ if(postcardFriends.has(id))postcardFriends.delete(id);else{if(postcardFriends.size>=3){toast('のせられるのは3つまでだよ');return}postcardFriends.add(id)}
+ renderPostcardFriends();document.dispatchEvent(new Event('littletown:postcard-friends'));
+});
+$('openPostcard').addEventListener('click',renderPostcardFriends);
+// 街で出る場所と同じ位置に描く。その街に出ない子（MAP 02 のカモなど）は手前の空いた場所へ。
+window.littleTownPostcardFriends=()=>{const spots=VISITOR_SPOTS[currentMap]||{},spare=[{x:50,y:93,w:6},{x:80,y:90,w:6}];let k=0;
+ return [...postcardFriends].map(id=>({src:'friends/'+id+'.svg',...(spots[id]||spare[k++%2])}))};
 function paintShop(n){
  const winter=townTheme==='winter';
  ctx.clearRect(0,0,960,640);
@@ -593,6 +671,8 @@ $('timeToggle').addEventListener('click',()=>{
  renderTimeButton();paint();
 });
 renderTimeButton();
+renderZukan();
+$('visitorDebug').addEventListener('click',()=>{visitorDebug=!visitorDebug;$('visitorDebug').textContent=visitorDebug?'来客：ぜんぶ':'来客：今日の分';visitorSig='';renderVisitors()});
 $('winterToggle').addEventListener('click',()=>{
  townTheme=townTheme==='winter'?'normal':'winter';
  $('winterToggle').textContent=townTheme==='winter'?'冬モード：ON':'冬モード：OFF';

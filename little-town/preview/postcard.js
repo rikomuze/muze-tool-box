@@ -87,6 +87,11 @@
         });
       }
     }
+    // 図鑑から選んだ子：街で出る場所と同じ位置・同じ大きさで描く
+    for(const f of (window.littleTownPostcardFriends?.()||[])){
+      const img=await getAsset(f.src),w=sw*f.w/100,h=w*img.naturalHeight/img.naturalWidth;
+      ctx.drawImage(img,sx+sw*f.x/100-w/2,sy+sh*f.y/100-h,w,h);
+    }
     if(includeCharacter){
       const walker=$('walker'),avatar=$('walkerImage')?.querySelector('img');
       if(walker&&avatar){
@@ -156,6 +161,7 @@
   modal.addEventListener('click',e=>{if(e.target===modal)close()});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden)close()});
   withAvatar.addEventListener('change',refresh);
+  document.addEventListener('littletown:postcard-friends',()=>{if(!modal.hidden)refresh()});
   share.addEventListener('click',async()=>{
     if(!currentBlob)return;
     const file=new File([currentBlob],fileName(),{type:'image/png'});
