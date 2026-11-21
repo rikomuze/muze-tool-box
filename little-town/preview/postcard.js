@@ -90,7 +90,7 @@
     // 図鑑から選んだ子：街で出る場所と同じ位置・同じ大きさで描く
     for(const f of (window.littleTownPostcardFriends?.()||[])){
       const img=await getAsset(f.src),w=sw*f.w/100,h=w*img.naturalHeight/img.naturalWidth;
-      ctx.drawImage(img,sx+sw*f.x/100-w/2,sy+sh*f.y/100-h,w,h);
+      ctx.drawImage(img,sx+sw*f.x/100-w/2,sy+sh*f.y/100-h*.89,w,h);
     }
     if(includeCharacter){
       const walker=$('walker'),avatar=$('walkerImage')?.querySelector('img');

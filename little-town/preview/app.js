@@ -205,8 +205,8 @@ const VISITORS=[
 const VISITOR_BY_ID=Object.fromEntries(VISITORS.map(v=>[v.id,v]));
 // 街ごとの出る場所（%）。x=中心、y=足元、w=幅
 const VISITOR_SPOTS={
- map01:{cat:{x:72,y:73,w:6.5},butterfly:{x:36,y:31,w:5.5},duck:{x:13,y:57,w:6},owl:{x:24,y:31,w:6},star:{x:77,y:15,w:9},balloon:{x:10,y:31,w:7.5}},
- map02:{cat:{x:30,y:75,w:5.5},butterfly:{x:25,y:41,w:5},owl:{x:91,y:44,w:5.5},star:{x:70,y:14,w:9},balloon:{x:8,y:26,w:7}}
+ map01:{cat:{x:72,y:75,w:10},butterfly:{x:36,y:33,w:8},duck:{x:13,y:59,w:10},owl:{x:24,y:33,w:10},star:{x:78,y:19,w:12},balloon:{x:10,y:33,w:11}},
+ map02:{cat:{x:30,y:77,w:8},butterfly:{x:25,y:43,w:7},owl:{x:91,y:46,w:8},star:{x:70,y:17,w:11},balloon:{x:8,y:29,w:10}}
 };
 const zukanKey='little-town-preview-zukan-v1';
 let zukan={};
@@ -227,7 +227,7 @@ function renderVisitors(){
  const sig=currentMap+slot+day+now.map(v=>v.id).join()+Object.keys(zukan).length;
  if(sig!==visitorSig){
   visitorSig=sig;const spots=VISITOR_SPOTS[currentMap]||{};
-  layer.innerHTML=now.filter(v=>spots[v.id]).map(v=>{const p=spots[v.id];return '<button type="button" class="visitor kind-'+v.kind+' v-'+v.id+(zukan[v.id]?.last===day?' is-found':'')+'" data-visitor="'+v.id+'" style="left:'+p.x+'%;top:'+p.y+'%;width:'+p.w+'%" aria-label="'+v.name+'をみつける"><img src="friends/'+v.id+'.svg" alt=""></button>'}).join('');
+  layer.innerHTML=now.filter(v=>spots[v.id]).map(v=>{const p=spots[v.id];return '<button type="button" class="visitor kind-'+v.kind+' v-'+v.id+(zukan[v.id]?.last===day?' is-found':'')+'" data-visitor="'+v.id+'" style="left:'+p.x+'%;top:'+p.y+'%;width:'+p.w+'%" aria-label="'+v.name+'をみつける"><img src="friends/'+v.id+'.svg?v=2" alt=""></button>'}).join('');
  }
  // 今日のヒント：まだ現れていない時間帯に来る子がいれば、そっと知らせる
  const later=list.find(v=>!v.slots.includes(slot));
@@ -248,8 +248,8 @@ function renderZukan(){
  const found=VISITORS.filter(v=>zukan[v.id]);
  $('zukanCount').textContent=found.length+' / '+VISITORS.length;
  grid.innerHTML=VISITORS.map(v=>{const r=zukan[v.id];return r?
-  '<div class="zukan-card is-found"><img src="friends/'+v.id+'.svg" alt=""><strong>'+v.name+'</strong><small>'+v.note+'</small><span>はじめて：'+r.first.slice(5).replace('-','/')+'　'+r.count+'回</span></div>':
-  '<div class="zukan-card"><img src="friends/'+v.id+'.svg" alt="" class="is-shadow"><strong>？？？</strong><small>'+v.hint+'</small></div>'}).join('');
+  '<div class="zukan-card is-found"><img src="friends/'+v.id+'.svg?v=2" alt=""><strong>'+v.name+'</strong><small>'+v.note+'</small><span>はじめて：'+r.first.slice(5).replace('-','/')+'　'+r.count+'回</span></div>':
+  '<div class="zukan-card"><img src="friends/'+v.id+'.svg?v=2" alt="" class="is-shadow"><strong>？？？</strong><small>'+v.hint+'</small></div>'}).join('');
 }
 // ポストカード：図鑑にのった子を3つまでのせられる
 const postcardFriends=new Set();
@@ -257,8 +257,8 @@ function renderPostcardFriends(){
  const box=$('postcardFriends');if(!box)return;
  for(const id of [...postcardFriends])if(!zukan[id])postcardFriends.delete(id);
  box.innerHTML=VISITORS.map(v=>zukan[v.id]?
-  '<button type="button" data-friend="'+v.id+'" aria-pressed="'+postcardFriends.has(v.id)+'"><img src="friends/'+v.id+'.svg" alt="">'+v.name+'</button>':
-  '<button type="button" disabled title="図鑑で見つけるとのせられます"><img src="friends/'+v.id+'.svg" alt="" class="is-shadow">？？？</button>').join('');
+  '<button type="button" data-friend="'+v.id+'" aria-pressed="'+postcardFriends.has(v.id)+'"><img src="friends/'+v.id+'.svg?v=2" alt="">'+v.name+'</button>':
+  '<button type="button" disabled title="図鑑で見つけるとのせられます"><img src="friends/'+v.id+'.svg?v=2" alt="" class="is-shadow">？？？</button>').join('');
 }
 $('postcardFriends').addEventListener('click',e=>{
  const b=e.target.closest('button[data-friend]');if(!b)return;const id=b.dataset.friend;
@@ -267,8 +267,8 @@ $('postcardFriends').addEventListener('click',e=>{
 });
 $('openPostcard').addEventListener('click',renderPostcardFriends);
 // 街で出る場所と同じ位置に描く。その街に出ない子（MAP 02 のカモなど）は手前の空いた場所へ。
-window.littleTownPostcardFriends=()=>{const spots=VISITOR_SPOTS[currentMap]||{},spare=[{x:50,y:93,w:6},{x:80,y:90,w:6}];let k=0;
- return [...postcardFriends].map(id=>({src:'friends/'+id+'.svg',...(spots[id]||spare[k++%2])}))};
+window.littleTownPostcardFriends=()=>{const spots=VISITOR_SPOTS[currentMap]||{},spare=[{x:50,y:95,w:9},{x:80,y:92,w:9}];let k=0;
+ return [...postcardFriends].map(id=>({src:'friends/'+id+'.svg?v=2',...(spots[id]||spare[k++%2])}))};
 function paintShop(n){
  const winter=townTheme==='winter';
  ctx.clearRect(0,0,960,640);
