@@ -1,16 +1,6 @@
 {
-  "updatedAt": "2026-11-13",
+  "updatedAt": "2026-11-22",
   "items": [
-    {
-      "id": "auto-20261013-01",
-      "short": "FES'26 PPV アーカイブ視聴",
-      "title": "BMSG FES'26 Prime Video PPV アーカイブ視聴期限",
-      "category": "stream",
-      "tag": "BMSG FES",
-      "end": "2026-10-26T23:59:00+09:00",
-      "url": "https://www.thefirsttimes.jp/news/0000891248/",
-      "source": "THE FIRST TIMES"
-    },
     {
       "id": "auto-20261013-02",
       "short": "Touch プリセーブ応募",
@@ -248,24 +238,6 @@
       "source": "B with U（MUZEUM）"
     },
     {
-      "id": "auto-20261019-01",
-      "short": "ラブJ TVer（KAIRYU）",
-      "title": "ラブ!!Jリーグ MAZZEL KAIRYU 推しからサプライズ！ TVer配信期限",
-      "category": "stream",
-      "tag": "TVer",
-      "end": "2026-10-26T18:00:00+09:00",
-      "url": "https://mazzel.tokyo/media/5668/"
-    },
-    {
-      "id": "auto-20261020-01",
-      "short": "VS.超特急 TVer",
-      "title": "VS.超特急 ついにスタジオ初登場!MAZZELと遊び開発ガチ夢中!! TVer配信期限",
-      "category": "stream",
-      "tag": "TVer",
-      "end": "2026-10-27T00:58:00+09:00",
-      "url": "https://mazzel.tokyo/media/5666/"
-    },
-    {
       "id": "auto-20261021-01",
       "short": "ドリフェス アップグレード",
       "title": "ドリフェス アップグレードチケット受付（抽選・追加¥7,000）",
@@ -278,24 +250,6 @@
       "resultNote": "",
       "url": "https://dreamfestival.jp/information/#p10",
       "note": "同じ日の全席指定を買った人だけ。MAZZELは11/23"
-    },
-    {
-      "id": "auto-20261021-02",
-      "short": "バズ英語 NHK ONE",
-      "title": "＃バズ英語〜SNSで世界をみよう〜 ピックアップ!世界の“混〜ぜる”（NAOYA・HAYATO出演）NHK ONE 見逃し配信期限",
-      "category": "stream",
-      "tag": "NHK ONE",
-      "end": "2026-10-27T19:59:00+09:00",
-      "url": "https://www.web.nhk/tv/pl/series-tep-88W6Q3ZKYL/ep/6YZ1H7NFXI"
-    },
-    {
-      "id": "auto-20261023-01",
-      "short": "よるのブランチ TVer",
-      "title": "よるのブランチ MAZZELとガチンコ対決！ TVer配信期限",
-      "category": "stream",
-      "tag": "TVer",
-      "end": "2026-10-28T23:55:00+09:00",
-      "url": "https://tver.jp/episodes/ep554sfoct"
     },
     {
       "id": "auto-20261023-02",
@@ -311,67 +265,6 @@
       "source": "BMSG SHOP"
     },
     {
-      "id": "auto-20261025-01",
-      "short": "沼ハマ NHK ONE",
-      "title": "沼にハマってきいてみた 白熱！ドッジボール沼（EIKI・RYUKI出演）NHK ONE 見逃し配信期限",
-      "category": "stream",
-      "tag": "NHK ONE",
-      "end": "2026-10-31T20:29:00+09:00",
-      "url": "https://www.web.nhk/tv/an/hamatta/pl/series-tep-KNY2YKWLG9/ep/YCWBRIRTKS"
-    },
-    {
-      "id": "auto-20261026-takuto-birthday",
-      "short": "TAKUTO誕生日配信 アーカイブ",
-      "title": "TAKUTO BIRTHDAY生配信 アーカイブ視聴期限",
-      "category": "stream",
-      "tag": "TAKUTO",
-      "start": "2026-10-25T16:00:00+09:00",
-      "end": "2026-11-01T23:59:00+09:00",
-      "source": "公式告知スクリーンショット（ユーザー提供）"
-    },
-    {
-      "id": "auto-20261026-ariyoshi-tver",
-      "short": "有吉ゼミ TVer",
-      "title": "有吉ゼミ ギャル曽根に最強の刺客ギガ盛りマーラータン＆相撲部屋 秋鮭で昇進祝い（RYUKI・TAKUTO出演）TVer配信期限",
-      "category": "stream",
-      "tag": "TVer",
-      "end": "2026-11-02T18:59:00+09:00",
-      "url": "https://tver.jp/episodes/eplmnvieem",
-      "source": "TVer（ユーザー提供の配信画面）"
-    },
-    {
-      "id": "kairyu-birthday-archive-20261029",
-      "short": "KAIRYU誕生日配信 アーカイブ",
-      "title": "KAIRYU BIRTHDAY生配信 FCアーカイブ視聴期限",
-      "category": "stream",
-      "tag": "MUZEUM",
-      "end": "2026-10-29T23:59:00+09:00",
-      "url": "https://bmsg.to/4lxpVNU",
-      "note": "FC会員限定",
-      "source": "MAZZEL公式X"
-    },
-    {
-      "id": "muzeum-broadcast-archive-20261029",
-      "short": "MUZEUM館内放送（SEITO・TAKUTO）",
-      "title": "10/22実施 MUZEUM館内放送（SEITO・TAKUTO）アーカイブ視聴期限",
-      "category": "stream",
-      "tag": "MUZEUM",
-      "end": "2026-10-29T23:59:00+09:00",
-      "url": "https://bmsg.to/4lxpVNU",
-      "note": "FC会員限定",
-      "source": "MAZZEL公式X"
-    },
-    {
-      "id": "muzeum-broadcast-ran-hayato-20261101",
-      "short": "MUZEUM館内放送（RAN・HAYATO）",
-      "title": "10/25実施 MUZEUM館内放送（RAN・HAYATO）アーカイブ視聴期限",
-      "category": "stream",
-      "tag": "MUZEUM",
-      "end": "2026-11-01T23:59:00+09:00",
-      "note": "FC会員限定",
-      "source": "MUZEUMアーカイブ画面（ユーザー提供）"
-    },
-    {
       "id": "fukuoka-music-fes-2027-presale-20261108",
       "short": "福フェス 3次先行",
       "title": "FUKUOKA MUSIC FES. 2027 オフィシャル3次先行 抽選受付締切",
@@ -385,16 +278,6 @@
       "note": "MAZZEL出演：2027/1/30 みずほPayPayドーム福岡",
       "source": "チケット受付画面（ユーザー提供）",
       "url": "https://t.pia.jp/pia/event/event.do?eventBundleCd=b2671147"
-    },
-    {
-      "id": "utacon-nhk-one-archive-20261103",
-      "short": "うたコン NHK ONE",
-      "title": "NHK「うたコン」MAZZEL出演回 見逃し配信期限",
-      "category": "stream",
-      "tag": "NHK ONE",
-      "end": "2026-11-03T20:42:00+09:00",
-      "url": "https://www.web.nhk/tv/an/utacon/pl/series-tep-1J9MXY5QX2/ep/QD7EMZF1U1",
-      "source": "NHK ONE（配信画面）"
     },
     {
       "id": "mazzel-autumn2026-merch-ec-20261104",
@@ -434,17 +317,6 @@
       "source": "ツリービレッジ公式"
     },
     {
-      "id": "chinmoku-radiko-20261030",
-      "short": "沈黙の金曜日 radiko",
-      "title": "FM FUJI「沈黙の金曜日」HAYATO・EIKI出演回 タイムフリー聴取期限",
-      "category": "stream",
-      "tag": "radiko",
-      "end": "2026-11-06T23:00:00+09:00",
-      "url": "https://radiko.jp/mobile/events/14091943",
-      "note": "HAYATO・EIKIは22時台に出演。無料聴取は対象エリア内のみ",
-      "source": "radiko番組ページ・radiko公式ヘルプ"
-    },
-    {
       "id": "dreamfes-upgrade-2-20261104",
       "short": "ドリフェス アプグレ2次",
       "title": "ドリフェス2026 アップグレードチケット2次抽選受付",
@@ -458,17 +330,6 @@
       "source": "公式X（ユーザー提供画像）",
       "resultAt": "2026-11-07T12:00:00+09:00",
       "resultNote": "11/7(土)昼12:00頃（予定）。申込状況照会から結果を確認。"
-    },
-    {
-      "id": "arino-ep2-20261115",
-      "short": "有野屋書店 第2回 無料終了",
-      "title": "有野屋書店2号店 第2回 EIKI・RYUKI 無料視聴期限",
-      "category": "stream",
-      "tag": "FOD",
-      "end": "2026-11-15T23:59:00+09:00",
-      "url": "https://fod.fujitv.co.jp/title/502r/",
-      "note": "第2回（27分）",
-      "source": "FOD配信画面"
     },
     {
       "id": "cdj2627-second-lottery",
@@ -501,28 +362,6 @@
       "source": "MAZZEL公式サイト（ユーザー提供画像）"
     },
     {
-      "id": "muzeum-broadcast-naoya-ryuki-20261110",
-      "short": "MUZEUM館内放送（NAOYA・RYUKI）",
-      "title": "11/3実施 MUZEUM館内放送（NAOYA・RYUKI）アーカイブ視聴期限",
-      "category": "stream",
-      "tag": "MUZEUM",
-      "end": "2026-11-10T23:59:00+09:00",
-      "url": "https://mazzel.tokyo/",
-      "note": "FC会員限定",
-      "source": "MUZEUMアーカイブ画面（ユーザー提供・11/3）"
-    },
-    {
-      "id": "sundayq-naoya-tver-20261109",
-      "short": "サンデーQ NAOYA TVer",
-      "title": "上田晋也のサンデーQ NAOYA出演回 TVer見逃し配信期限",
-      "category": "stream",
-      "tag": "TVer",
-      "end": "2026-11-09T17:00:00+09:00",
-      "url": "https://tver.jp/episodes/epifg41wne",
-      "note": "11/1(日)放送分。「マネー白井に聞け！今週の“マネーニュース”は違和感あり？」。",
-      "source": "TVer配信画面（ユーザー提供・11/3）"
-    },
-    {
       "id": "cdj2627-second-payment-20261109",
       "short": "CDJ 2次先行 入金",
       "title": "COUNTDOWN JAPAN 26/27 第2次抽選先行 当選者入金締切",
@@ -535,19 +374,6 @@
       "note": "第2次抽選先行の当選者のみ対象",
       "source": "COUNTDOWN JAPAN 26/27公式",
       "parentId": "cdj2627-second-lottery"
-    },
-    {
-      "id": "hyakuyoufu-ep5-tver-20261112",
-      "short": "百妖譜5話 TVer",
-      "title": "「百妖譜 第3期京師篇」第5話「雲陽（上）」NAOYA・HAYATO出演回 TVer見逃し配信期限",
-      "category": "stream",
-      "flow": "watch",
-      "tag": "TVer",
-      "start": "2026-11-05T00:00:00+09:00",
-      "end": "2026-11-12T11:59:00+09:00",
-      "url": "https://tver.jp/episodes/epyonzccu0",
-      "note": "NAOYA・HAYATOがゲスト声優出演",
-      "source": "TVer配信画面（ユーザー提供・2026/11/5）"
     },
     {
       "id": "mazzel-zip-cardigan-second-order-20261109",
@@ -574,30 +400,6 @@
       "source": "ユーザー提供のDL期限案内（2026/11/6）",
       "parentId": "auto-20261013-04",
       "parentVisibility": "participated"
-    },
-    {
-      "id": "buzzrhythm02-mazzel-tver-20261114",
-      "short": "バズリズム02 TVer",
-      "title": "「バズリズム02」MAZZEL出演回 TVer見逃し配信期限",
-      "category": "stream",
-      "flow": "watch",
-      "tag": "TVer",
-      "end": "2026-11-14T00:58:00+09:00",
-      "url": "https://tver.jp/episodes/epqcdhnr56",
-      "note": "11/6放送「MAZZEL 直筆履歴書で深掘り」",
-      "source": "TVer配信画面（ユーザー提供・2026/11/7）"
-    },
-    {
-      "id": "dunk-special-01-tver-20261114",
-      "short": "D.U.N.K.特番 #1 TVer",
-      "title": "日本テレビ「D.U.N.K.」特番 第1回 TVer見逃し配信期限",
-      "category": "stream",
-      "flow": "watch",
-      "tag": "TVer",
-      "end": "2026-11-14T14:29:00+09:00",
-      "url": "https://tver.jp/episodes/epydkh3u65",
-      "note": "11/7放送・第1回",
-      "source": "TVer配信画面（ユーザー提供・2026/11/8）"
     },
     {
       "id": "dreamfes2026-general-sale-20261110",
@@ -627,78 +429,6 @@
       "source": "MAZZEL公式サイト（ユーザー提供スクリーンショット・2026/11/10）"
     },
     {
-      "id": "cdtv-20261109-tver-1",
-      "short": "CDTV「奏」TVer",
-      "title": "CDTVライブ！ライブ！ KAIRYU・NAOYA「奏」TVer見逃し",
-      "category": "stream",
-      "flow": "watch",
-      "tag": "TVer",
-      "end": "2026-11-16T18:59:00+09:00",
-      "url": "https://tver.jp/episodes/epbc5y1a3l",
-      "note": "",
-      "source": "TVer"
-    },
-    {
-      "id": "cdtv-20261109-tver-2",
-      "short": "CDTV「Touch」TVer",
-      "title": "CDTVライブ！ライブ！ MAZZEL「Touch」TVer見逃し",
-      "category": "stream",
-      "flow": "watch",
-      "tag": "TVer",
-      "end": "2026-11-16T18:59:00+09:00",
-      "url": "https://tver.jp/episodes/epp9ivbbs4",
-      "note": "",
-      "source": "TVer"
-    },
-    {
-      "id": "musicline-20261109-nhk-ondemand",
-      "short": "ミュージックライン 聴き逃し",
-      "title": "NHK-FM「ミュージックライン」11/9放送 TAKUTO・HAYATO出演 聴き逃し期限",
-      "category": "stream",
-      "flow": "watch",
-      "tag": "らじる★らじる",
-      "end": "2026-11-16T22:30:00+09:00",
-      "url": "https://www.nhk.or.jp/radio/player/ondemand.html?p=Z9WGYY3GP5_01_4337766&e-param=WXCD29M3T8&cid=jp-Z9WGYY3GP5",
-      "note": "DJ：TAKUTO・HAYATO／ゲスト：sanetii",
-      "source": "NHKらじる★らじる配信画面（ユーザー提供・2026/11/10）"
-    },
-    {
-      "id": "musicline-20261111-nhk-ondemand",
-      "short": "ミュージックライン 11/11 聴き逃し",
-      "title": "NHK-FM「ミュージックライン」11/11放送 TAKUTO・HAYATO／ゲスト 原因は自分にある。 聴き逃し期限",
-      "category": "stream",
-      "flow": "watch",
-      "tag": "らじる★らじる",
-      "end": "2026-11-18T22:30:00+09:00",
-      "url": "https://www.nhk.or.jp/radio/player/ondemand.html?p=Z9WGYY3GP5_01_4338022&e-param=LJT6B8NARG&cid=jp-Z9WGYY3GP5",
-      "note": "DJ：TAKUTO・HAYATO／ゲスト：原因は自分にある。",
-      "source": "NHKらじる★らじる当該回配信画面（ユーザー提供・2026/11/13）"
-    },
-    {
-      "id": "musicline-20261112-nhk-ondemand",
-      "short": "ミュージックライン 11/12 聴き逃し",
-      "title": "NHK-FM「ミュージックライン」11/12放送 NAOYA・RYUKI／ゲスト Kroi 聴き逃し期限",
-      "category": "stream",
-      "flow": "watch",
-      "tag": "らじる★らじる",
-      "end": "2026-11-19T22:30:00+09:00",
-      "url": "https://www.nhk.or.jp/radio/player/ondemand.html?p=Z9WGYY3GP5_01_4338191&cid=jp-Z9WGYY3GP5",
-      "note": "DJ：NAOYA・RYUKI／ゲスト：Kroi",
-      "source": "NHKらじる★らじる当該回配信画面（ユーザー提供・2026/11/13）"
-    },
-    {
-      "id": "musicline-20261110-nhk-ondemand",
-      "short": "ミュージックライン 11/10 聴き逃し",
-      "title": "NHK-FM「ミュージックライン」11/10放送 TAKUTO・HAYATO／ゲスト 森大翔 聴き逃し期限",
-      "category": "stream",
-      "flow": "watch",
-      "tag": "らじる★らじる",
-      "end": "2026-11-17T22:30:00+09:00",
-      "url": "https://www.nhk.or.jp/radio/player/ondemand.html?p=Z9WGYY3GP5_01_4337880&cid=jp-Z9WGYY3GP5",
-      "note": "DJ：TAKUTO・HAYATO／ゲスト：森大翔",
-      "source": "NHKらじる★らじる当該回配信画面（ユーザー提供・2026/11/13）"
-    },
-    {
       "id": "wandance-ran-stage-20261116",
       "short": "ワンダンス 舞台挨拶抽選",
       "title": "映画『ワンダンス』11/28 RAN登壇 公開記念舞台挨拶 プレリク抽選申込締切",
@@ -712,29 +442,6 @@
       "url": "https://l-tike.com/wamdance/",
       "note": "11/28 TOHOシネマズ六本木ヒルズ、8:55上映後／12:35上映前。RAN登壇予定",
       "source": "映画『ワンダンス』公式サイト（2026/11/14発表）"
-    },
-    {
-      "id": "dunk-tv-ep2-tver-20261121",
-      "short": "D.U.N.K.特番 #2 TVer",
-      "title": "D.U.N.K. 地上波特別番組 第2回 TVer見逃し配信期限",
-      "category": "stream",
-      "tag": "TVer",
-      "end": "2026-11-21T14:29:00+09:00",
-      "url": "https://tver.jp/episodes/eplg2w0haf",
-      "note": "11/14放送・第2回",
-      "source": "TVer配信画面（ユーザー提供・2026/11/14）"
-    },
-    {
-      "id": "musicline-20261113-nhk-ondemand",
-      "short": "ミュージックライン 11/13 聴き逃し",
-      "title": "NHK-FM「ミュージックライン」11/13放送 NAOYA・RYUKI／ゲスト Billyrrom 聴き逃し期限",
-      "category": "stream",
-      "flow": "watch",
-      "tag": "らじる★らじる",
-      "end": "2026-11-20T22:30:00+09:00",
-      "url": "https://www.nhk.or.jp/radio/player/ondemand.html?p=Z9WGYY3GP5_01_4338312&e-param=94W6VPB4WN&cid=jp-Z9WGYY3GP5",
-      "note": "DJ：NAOYA・RYUKI／ゲスト：Billyrrom",
-      "source": "NHKらじる★らじる"
     },
     {
       "id": "muzeum-broadcast-kairyu-eiki-20261124",
