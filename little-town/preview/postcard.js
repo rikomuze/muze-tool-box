@@ -56,6 +56,26 @@
     ctx.save();ctx.beginPath();ctx.rect(sx,sy,sw,sh);ctx.clip();
     ctx.drawImage(original,sx,sy,sw,sh);
     const bounds={x:sx,y:sy,w:sw,h:sh};
+    // 夜は、画面に出ている月と星も同じ位置に描く（月は三日月の形をそのまま再現）
+    const world=$('world'),sky=world&&world.dataset.time==='night'?world.querySelector('.sky-stars'):null;
+    if(sky){
+      const k=bounds.w/rect.width;
+      for(const star of sky.querySelectorAll('i')){
+        const r=star.getBoundingClientRect(),x=bounds.x+(r.left+r.width/2-rect.left)*k,y=bounds.y+(r.top+r.height/2-rect.top)*k;
+        ctx.save();ctx.fillStyle='#fff6c8';ctx.shadowColor='rgba(255,243,176,.8)';ctx.shadowBlur=8*k;
+        ctx.beginPath();ctx.arc(x,y,2.4*k,0,Math.PI*2);ctx.fill();ctx.restore();
+      }
+      const moon=sky.querySelector('.moon');
+      if(moon){
+        const r=moon.getBoundingClientRect(),cx=bounds.x+(r.left+r.width/2-rect.left)*k,cy=bounds.y+(r.top+r.height/2-rect.top)*k;
+        const R=15*k,ang=-20*Math.PI/180,ox=-8*k,oy=4*k;
+        const dx=ox*Math.cos(ang)-oy*Math.sin(ang),dy=ox*Math.sin(ang)+oy*Math.cos(ang);
+        const c=document.createElement('canvas');c.width=c.height=Math.ceil(R*6);const g=c.getContext('2d'),m=c.width/2;
+        g.fillStyle='#fff1b8';g.beginPath();g.arc(m+dx,m+dy,R,0,Math.PI*2);g.fill();
+        g.globalCompositeOperation='destination-out';g.beginPath();g.arc(m,m,R,0,Math.PI*2);g.fill();
+        ctx.save();ctx.shadowColor='rgba(255,241,184,.75)';ctx.shadowBlur=10*k;ctx.drawImage(c,cx-m,cy-m);ctx.restore();
+      }
+    }
     // Overlay the user's actual placement, not a default decoration arrangement.
     // 表示中の小花だけを、街と同じ座標・サイズで合成する。
     const flowers=$('flowerGround');
@@ -86,11 +106,6 @@
           else ctx.drawImage(img,x,y,w,h);
         });
       }
-    }
-    // 図鑑から選んだ子：街で出る場所と同じ位置・同じ大きさで描く
-    for(const f of (window.littleTownPostcardFriends?.()||[])){
-      const img=await getAsset(f.src),w=sw*f.w/100,h=w*img.naturalHeight/img.naturalWidth;
-      ctx.drawImage(img,sx+sw*f.x/100-w/2,sy+sh*f.y/100-h*.89,w,h);
     }
     if(includeCharacter){
       const walker=$('walker'),avatar=$('walkerImage')?.querySelector('img');
@@ -161,7 +176,6 @@
   modal.addEventListener('click',e=>{if(e.target===modal)close()});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden)close()});
   withAvatar.addEventListener('change',refresh);
-  document.addEventListener('littletown:postcard-friends',()=>{if(!modal.hidden)refresh()});
   share.addEventListener('click',async()=>{
     if(!currentBlob)return;
     const file=new File([currentBlob],fileName(),{type:'image/png'});
