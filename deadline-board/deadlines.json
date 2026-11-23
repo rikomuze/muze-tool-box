@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-22",
+  "updatedAt": "2026-11-24",
   "items": [
     {
       "id": "auto-20261013-02",
@@ -546,6 +546,18 @@
       "url": "https://tver.jp/episodes/epby46e8fy",
       "note": "11/21放送・第3回。MAZZEL出演「D.U.N.K. in the City」。",
       "source": "TVer配信画面（ユーザー提供・2026/11/21）"
+    },
+    {
+      "id": "musicline-20261123-nhk-ondemand",
+      "short": "ミュージックライン 11/23 聴き逃し",
+      "title": "NHK-FM「ミュージックライン」11/23放送 RYUKI・HAYATO／ゲスト BUDDiiS 聴き逃し期限",
+      "category": "stream",
+      "flow": "watch",
+      "tag": "らじる★らじる",
+      "end": "2026-11-30T22:30:00+09:00",
+      "url": "https://www.nhk.or.jp/radio/player/ondemand.html?p=Z9WGYY3GP5_01_4339440&cid=jp-Z9WGYY3GP5",
+      "note": "11/23(月)21:45〜22:30放送。DJ：RYUKI・HAYATO（MAZZEL）、ゲスト：BUDDiiS（SHOW・FUMIYA）。11/30(月)22:30配信終了（NHKらじる★らじる公式画面で確認済み）。",
+      "source": "NHKらじる★らじる当該回配信画面（ユーザー提供・2026/11/24）"
     }
   ]
 }
