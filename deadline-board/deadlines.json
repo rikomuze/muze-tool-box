@@ -559,6 +559,18 @@
       "url": "https://www.nhk.or.jp/radio/ondemand/detail.html?p=Z9WGYY3GP5_01",
       "note": "11/24(火)21:45〜22:30放送。12/1(火)22:30配信終了（NHK公式画面で確認）。リンクは番組の聴き逃し一覧。個別配信URL未確認。",
       "source": "NHKらじる★らじる公式配信画面（ユーザー提供・2026/11/25）／秦 基博公式サイト"
+    },
+    {
+      "id": "koiraji-20261124-nhk-ondemand",
+      "short": "ひろしまコイらじ NAOYA・RAN 聴き逃し",
+      "title": "NHKラジオ「ひろしまコイらじ」NAOYA・RAN 聴き逃し期限",
+      "category": "stream",
+      "flow": "watch",
+      "tag": "らじる★らじる",
+      "end": "2026-12-01T17:55:00+09:00",
+      "url": "https://www.nhk.or.jp/radio/player/ondemand.html",
+      "note": "11/24(火)17:05〜17:55放送。インタビュー出演。個別配信URL未確認。",
+      "source": "NHKらじる★らじる配信画面（ユーザー提供・2026/11/25）"
     }
   ]
 }
