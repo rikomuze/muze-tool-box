@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-13",
+  "updatedAt": "2026-11-25",
   "note": "MAZZELのテレビ・ラジオ・配信の出演。start=放送・配信の開始、airEnd=放送の終了（なければ放送中の表示はしない）。見逃し・聴き逃しの期限は deadlines.json に入れる。",
   "items": [
     {
@@ -563,6 +563,18 @@
       "source": "NHKミュージックライン公式告知（11/20）"
     },
     {
+      "id": "app-20261124-koiraji",
+      "short": "ひろしま コイらじ RAN・NAOYA",
+      "title": "NHK広島「ひろしま コイらじ」RAN・NAOYA出演",
+      "media": "radio",
+      "station": "NHK広島",
+      "start": "2026-11-24T17:05:00+09:00",
+      "airEnd": "2026-11-24T17:55:00+09:00",
+      "url": "https://radiko.jp/mobile/events/14247080",
+      "note": "インタビュー出演",
+      "source": "MAZZEL公式週間スケジュール（ユーザー提供画像）"
+    },
+    {
       "id": "app-20261124-musicline",
       "short": "ミュージックライン RYUKI・HAYATO",
       "title": "NHK-FM「ミュージックライン」DJ RYUKI・HAYATO／ゲスト 秦 基博",
@@ -621,6 +633,29 @@
       "url": "https://www.ntv.co.jp/best-artist/",
       "note": "放送枠 16:00〜17:00／19:00〜22:54。出演時間未発表",
       "source": "MAZZEL公式X（11/20）"
+    },
+    {
+      "id": "app-20261128-mazzel-room-premiere",
+      "short": "MAZZEL ROOM プレミア公開",
+      "title": "「MAZZEL ROOM」プレミア公開",
+      "media": "stream",
+      "station": "MAZZEL公式YouTube",
+      "start": "2026-11-28T21:00:00+09:00",
+      "url": "https://www.youtube.com/@MAZZEL_official",
+      "note": "",
+      "source": "MAZZEL公式週間スケジュール（ユーザー提供画像）"
+    },
+    {
+      "id": "app-20261128-talkabout-kairyu",
+      "short": "TALK ABOUT KAIRYU",
+      "title": "TBSラジオ「TALK ABOUT」KAIRYU コーナー出演",
+      "media": "radio",
+      "station": "TBSラジオ",
+      "start": "2026-11-28T22:00:00+09:00",
+      "airEnd": "2026-11-28T23:30:00+09:00",
+      "url": "https://www.tbsradio.jp/talk/",
+      "note": "公式週間スケジュールに出演記載あり。Venue101と時間帯が重複。",
+      "source": "MAZZEL公式週間スケジュール（ユーザー提供画像）"
     },
     {
       "id": "app-20261128-venue101",
