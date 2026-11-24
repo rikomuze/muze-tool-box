@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-24",
+  "updatedAt": "2026-11-25",
   "items": [
     {
       "id": "auto-20261013-02",
@@ -442,17 +442,6 @@
       "url": "https://l-tike.com/wamdance/",
       "note": "11/28 TOHOシネマズ六本木ヒルズ、8:55上映後／12:35上映前。RAN登壇予定",
       "source": "映画『ワンダンス』公式サイト（2026/11/14発表）"
-    },
-    {
-      "id": "muzeum-broadcast-kairyu-eiki-20261124",
-      "short": "MUZEUM館内放送（KAIRYU・EIKI）",
-      "title": "11/17実施 MUZEUM館内放送（KAIRYU・EIKI）アーカイブ視聴期限",
-      "category": "stream",
-      "tag": "MUZEUM",
-      "end": "2026-11-24T23:59:00+09:00",
-      "url": "https://mazzel.tokyo/",
-      "note": "FC会員限定",
-      "source": "MUZEUMアーカイブ画面"
     },
     {
       "id": "cdj2627-front-area-lottery",
