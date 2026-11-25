@@ -599,6 +599,17 @@
       "source": "Gガイド番組表（2026-11-25放送情報）"
     },
     {
+      "id": "app-20261126-muzeum-kannai",
+      "short": "MUZEUM館内放送",
+      "title": "MUZEUM館内放送（FC限定）",
+      "media": "stream",
+      "station": "MUZEUM（FC）",
+      "start": "2026-11-26T16:10:00+09:00",
+      "url": "https://mazzel.tokyo/",
+      "note": "FC限定ラジオ生放送。出演メンバーは後日発表。開始時刻は前後する可能性あり。",
+      "source": "MUZEUM公式お知らせ（ユーザー提供画像）"
+    },
+    {
       "id": "app-20261126-mazzel-switch-m-on",
       "short": "MAZZEL SWITCH",
       "title": "MUSIC ON! TV「MAZZEL SWITCH」",
