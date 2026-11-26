@@ -610,6 +610,17 @@
       "source": "MUZEUM公式お知らせ（ユーザー提供画像）"
     },
     {
+      "id": "app-20261126-instagram-live",
+      "short": "MAZZEL Instagram Live",
+      "title": "MAZZEL Instagram Live",
+      "media": "stream",
+      "station": "MAZZEL公式Instagram",
+      "start": "2026-11-26T16:45:00+09:00",
+      "url": "https://www.instagram.com/mazzel_official/",
+      "note": "16:45頃から配信予定。",
+      "source": "MAZZEL公式X（ユーザー提供画像）"
+    },
+    {
       "id": "app-20261126-mazzel-switch-m-on",
       "short": "MAZZEL SWITCH",
       "title": "MUSIC ON! TV「MAZZEL SWITCH」",
