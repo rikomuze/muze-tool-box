@@ -559,6 +559,18 @@
       "url": "https://www.nhk.or.jp/radio/player/ondemand.html",
       "note": "11/24(火)17:05〜17:55放送。インタビュー出演。個別配信URL未確認。",
       "source": "NHKらじる★らじる配信画面（ユーザー提供・2026/11/25）"
+    },
+    {
+      "id": "muzeum-archive-20261126",
+      "short": "MUZEUM館内放送（NAOYA・SEITO）",
+      "title": "MUZEUM館内放送 11/26 NAOYA・SEITO アーカイブ公開期限",
+      "category": "stream",
+      "flow": "watch",
+      "tag": "アーカイブ",
+      "end": "2026-12-03T23:59:00+09:00",
+      "url": "https://mazzel.tokyo/",
+      "note": "FC限定。11/26放送回。",
+      "source": "MUZEUM公式アーカイブ画面（ユーザー提供）"
     }
   ]
 }
