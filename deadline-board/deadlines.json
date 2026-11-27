@@ -487,17 +487,6 @@
       "resultNote": "12/3(木)18:00頃から順次"
     },
     {
-      "id": "fc-program-audience-20261122",
-      "short": "FC限定 番組観覧",
-      "title": "FC限定 番組観覧 応募締切",
-      "category": "event",
-      "flow": "lottery",
-      "tag": "FC",
-      "end": "2026-11-22T23:59:00+09:00",
-      "note": "当選者に詳細案内。参加可能な方のみ応募",
-      "source": "FC募集案内（11/20）"
-    },
-    {
       "id": "fanmeet-vol2-postshow-goods-line-20261122",
       "short": "ファンミ開演後 グッズ整理券",
       "title": "MAZZEL 2nd Fan Meeting Vol.2 兵庫・埼玉・栃木 開演後グッズ販売 整理券抽選申込締切",
